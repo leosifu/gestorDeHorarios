@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function Bloque({title, bloque, id, onDrop}) {
+export default function Bloque({title, bloque, id, onDrop, color}) {
   const ref = useRef(null)
   const classes = useStyles();
   const [{ isDragging }, drag] = useDrag({
@@ -54,10 +54,11 @@ export default function Bloque({title, bloque, id, onDrop}) {
   } else if (canDrop) {
     backgroundColor = 'darkkhaki'
   }
+  backgroundColor = color
   drop(drag(ref))
 
   return (
-    <Card  ref={ref} className={classes.card} style={{backgroundColor }} padding="none">
+    <Card  ref={ref} className={classes.card} style={{ backgroundColor }} padding="none">
       <CardContent className={classes.contenido}>
 
         <Typography >

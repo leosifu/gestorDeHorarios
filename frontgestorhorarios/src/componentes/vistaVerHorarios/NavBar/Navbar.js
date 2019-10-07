@@ -16,6 +16,8 @@ import Grid from '@material-ui/core/Grid';
 import { spacing } from '@material-ui/system';
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
+import Horario from '../Horarios/horarios'
+import ListadoSecciones from '../listaRamos/listado'
 
 
 const drawerWidth = 140;
@@ -45,7 +47,7 @@ const useStyles = makeStyles(theme => ({
   spacing:8,
 }));
 
-export default function SideBar({component}) {
+export default function SideBar() {
   const classes = useStyles();
 
   return (
@@ -79,17 +81,17 @@ export default function SideBar({component}) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Grid container >
-            <Grid item xs={2}>
-              Hola
-            </Grid>
-            <Grid item xs={9}>
-              <DndProvider backend={HTML5Backend}>
-                {component}
-              </DndProvider>
-            </Grid>
-            <Grid item xs={1}>
-              <button> Hola </button>
-            </Grid>
+            <DndProvider backend={HTML5Backend}>
+              <Grid item xs={2}>
+                <ListadoSecciones />
+              </Grid>
+              <Grid item xs={9}>
+                  <Horario/>
+              </Grid>
+              <Grid item xs={1}>
+                <button> Hola </button>
+              </Grid>
+            </DndProvider>
           </Grid>
       </main>
     </div>

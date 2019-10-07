@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 
 const horarios = ['08:00 - 09:30', '09:40 - 11:10', '11:20 - 12:50', '13:50 - 15:20', '15:30 - 17:00', '17:10 - 18:40', '19:00 - 20:10', '20:20 - 22:00', '22:00 - 23:00']
 
-
+const colores = ['#FFA07A', '	#F0E68C', '#00FF00', '#AFEEEE', '#D8BFD8', '#FFD700', '#90EE90']
 
 export default function Horario() {
   const classes = useStyles();
@@ -47,35 +47,16 @@ export default function Horario() {
   const [bloques, setBloques] = useState([])
 
   useEffect(() =>{
+
     const obtenerData = () =>{
       console.log("asd");
       setData([{id: 0, title: 'Algo', bloque:1}, {id: 1, title: 'nada', bloque: 5}, {id: 2, title: 'Algo', bloque: 7}, {id:3, title: 'nada', bloque: 14}, {id:4, title: 'Algo', bloque: 22}, {id:5, title: 'nada', bloque: 24},
       {id:6, title: 'Algo', bloque:30}, {id:7, title: 'nada', bloque:40}, {id:8, title: 'Algo', bloque: 50}])
-      console.log(data);
     }
     obtenerData()
   }, []);
 
   useEffect(()=>{
-
-  })
-
-  const handleDrop = useCallback(
-    (x, y, item) => {
-      let miBloque = x*6 + y;
-      setData(
-        update(data,{
-          [item.id]:{
-            bloque:{
-              $set: miBloque
-            }
-          }
-        })
-      )
-    }, [data]
-  )
-
-  const GenerarHorario = () => {
     var matrix = []
     for ( var y = 0; y < 9; y++ ) {
       matrix[ y ] = [];
@@ -89,14 +70,41 @@ export default function Horario() {
       let y = parseInt(data[i].bloque /ancho)
       matrix[y][x] = data[i]
     }
-    console.log(data);
-    const Tabla = matrix.map((fila, i)=>{
-      const Dia = fila.map((dia, j)=>{
-        return(
-        <TableCell padding="none" className={classes.grilla}  >
-          <Bloque title={dia.title} bloque={dia.bloque} id={dia.id} onDrop={item => handleDrop(i, j, item)}/>
-        </TableCell>
+    setBloques(matrix)
+  },[data])
+
+  const handleDrop = useCallback(
+    (x, y, item) => {
+      let nuevoBloque = x*6 + y;
+      if(bloques[x][y].title){
+        console.log("asdasd");
+      }
+      setData(
+        update(data,{
+          [item.id]:{
+            bloque:{
+              $set: nuevoBloque
+            }
+          }
+        })
       )
+      console.log(bloques);
+    }, [data]
+  )
+
+  const GenerarHorario = () => {
+
+    console.log(data);
+    let x = 0
+    const Tabla = bloques.map((fila, i)=>{
+      const Dia = fila.map((dia, j)=>{
+        let backgroundColor = dia.title ? colores[x]: ''
+        if(dia.title) x++
+        return(
+          <TableCell padding="none" className={classes.grilla} >
+            <Bloque title={dia.title} bloque={dia.bloque} id={dia.id} color={ backgroundColor } onDrop={item => handleDrop(i, j, item)}/>
+          </TableCell>
+        )
       })
       return (
         <TableRow key={i}>
@@ -123,26 +131,6 @@ export default function Horario() {
             ))}
           </TableRow>
         </TableHead>
-        {/*<TableBody>
-          bloques.map((fila, i)=>{
-            const Dia = fila.map((dia, j)=>{
-              return(
-              <TableCell padding="none" className={classes.grilla}  >
-                <Bloque title={dia.title} bloque={dia.bloque} onDrop={item => handleDrop(i, j, item)}/>
-              </TableCell>
-            )
-            })
-            return (
-              <TableRow key={i}>
-                <TableCell className={classes.hora} component="th" scope="row" >
-                  {horarios[i]}
-                </TableCell>
-                {Dia}
-              </TableRow>
-            )
-          })
-          <GenerarHorario data={data} classes={classes} handleDrop={handleDrop} />
-        </TableBody>*/}
         <GenerarHorario data={data} handleDrop={handleDrop} />
       </Table>
     </Paper>

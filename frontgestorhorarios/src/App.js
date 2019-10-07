@@ -8,7 +8,7 @@ import SideBar from './componentes/vistaVerHorarios/NavBar/Navbar'
 function App({children}) {
   return(
     <div>
-      <SideBar component={children}/>
+      <SideBar/>
       {/*<Content body={children} />*/}
     </div>
   )
