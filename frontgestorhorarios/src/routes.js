@@ -1,16 +1,15 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Horarios from './componentes/vistaVerHorarios/Horarios/horarios'
-import Malla from './componentes/Malla/Malla'
-import ClippedDrawer from './componentes/vistaVerHorarios/NavBar/Navbar'
+import SideBar from './componentes/vistaVerHorarios/sideBar/sideBar'
 import App from './App'
+import ListadoCarreras from './componentes/vistaPrincipal/mostrarCarreras/listadoCarreras'
 
 const AppRoutes = () =>
   <App>
     <Switch>
-      <Route exact path="/" component={Horarios} />
-      <Route exact path="/contact" component={Malla} />
+      <Route exact path="/" component={ListadoCarreras}/>
+      <Route exact path="/horario" component={SideBar} />
     </Switch>
   </App>;
 
