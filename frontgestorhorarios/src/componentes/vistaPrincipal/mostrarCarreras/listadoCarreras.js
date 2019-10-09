@@ -47,7 +47,23 @@ export default function ListadoCarreras(){
         ))}
       </Grid>
       <br/>
-      <h2>Carreras Vespertinas</h2>
+      <Grid container>
+        <Grid item xs={11}>
+          <h2>Carreras Vespertinas</h2>
+        </Grid>
+        <Grid item xs={1}>
+          <Fab color="primary" size="small" aria-label="add" className={classes.margin}>
+            <AddIcon />
+          </Fab>
+        </Grid>
+      </Grid>
+      <Grid container>
+        {carrerasV.map((carrera)=>(
+          <Grid item xs={6}>
+            <Carrera title={carrera.NombreC} mallas={carrera.Mallas}/>
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
 }

@@ -70,10 +70,7 @@ export default function SideBar() {
         <div className={classes.toolbar} />
           <Grid container >
             <DndProvider backend={HTML5Backend}>
-              <Grid item xs={2}>
-                <ListadoSecciones />
-              </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={11}>
                   <Horario/>
               </Grid>
               <Grid item xs={1}>
