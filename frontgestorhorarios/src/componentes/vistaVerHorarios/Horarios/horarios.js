@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,6 +16,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
 import Bloque from './bloque'
 import update from 'immutability-helper'
+import { useDrag, useDrop } from 'react-dnd'
+import ItemTypes from '../itemTypes/ItemTypes'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,6 +45,7 @@ const useStyles = makeStyles(theme => ({
     width: '90%',
     maxWidth: 330,
     backgroundColor: theme.palette.background.paper,
+    minHeight: 500,
   },
   nested: {
     paddingLeft: theme.spacing(4),
@@ -128,7 +131,33 @@ export default function Horario() {
     }, [data]
   )
 
+  const dropLista = useCallback(
+    (item) => {
+      console.log("asdad");
+      setData(
+        update(data,{
+          [item.id]:{
+            asignado:{
+              $set: false
+            },
+            bloque:{
+              $set: -1
+            }
+          }
+        })
+      )
+    }, [data]
+  )
+
   function ListadoSecciones() {
+
+    const ref = useRef(null)
+
+    const [{ }, drop] = useDrop({
+      accept: ItemTypes.BOX,
+      drop: dropLista,
+    })
+
     const classes = useStyles();
     const [open, setOpen] = useState(true);
 
@@ -136,25 +165,28 @@ export default function Horario() {
       setOpen(!open);
     };
 
+    drop(ref)
+
     return (
       <List
         component="nav"
         aria-labelledby="nested-list-subheader"
         subheader={
           <ListSubheader component="div" id="nested-list-subheader">
-            Nested List Items
+            Asignaturas
           </ListSubheader>
         }
         className={classes.lista}
+        ref={ref}
       >
         <ListItem button>
-          <ListItemText primary="Sent mail" />
+          <ListItemText primary="EDA" />
         </ListItem>
         <ListItem button>
-          <ListItemText primary="Drafts" />
+          <ListItemText primary="Análisis" />
         </ListItem>
         <ListItem button onClick={handleClick}>
-          <ListItemText primary="Inbox" />
+          <ListItemText primary="Paradigmas" />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
