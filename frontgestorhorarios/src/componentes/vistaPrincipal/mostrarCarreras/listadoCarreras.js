@@ -6,6 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import axios from 'axios';
 
 import Carrera from './carrera'
+import CrearCarrera from '../formularios/formCarrera/crearCarreraDialog'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,12 +25,25 @@ export default function ListadoCarreras(){
   const [carrerasV, setCarrerasV] = useState([])
 
   useEffect(()=>{
-    axios.get('http://localhost:8000/api/carrera/1')
+    axios.get('http://localhost:8000/api/carrera')
     .then(res => {
       console.log(res.data);
+      var vesp = []
+      var diur = []
+      const data = res.data
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].jornada == "Vespertino") {
+          vesp.push(data[i])
+        }
+        else{
+          diur.push(data[i])
+        }
+      }
+      console.log(vesp);
+      setCarrerasD(diur)
+      setCarrerasV(vesp)
     })
-    setCarrerasD(Carreras[0].Diurnas)
-    setCarrerasV(Carreras[1].Vespertinas)
+
   }, [])
 
   return (
@@ -39,15 +53,13 @@ export default function ListadoCarreras(){
           <h2>Carreras Diurnas</h2>
         </Grid>
         <Grid item xs={1}>
-          <Fab color="primary" size="small" aria-label="add" className={classes.margin}>
-            <AddIcon />
-          </Fab>
+          <CrearCarrera />
         </Grid>
       </Grid>
       <Grid container>
         {carrerasD.map((carrera)=>(
           <Grid item xs={6}>
-            <Carrera title={carrera.NombreC} mallas={carrera.Mallas}/>
+            <Carrera title={carrera.nombre_carrera} carreraId={carrera.id} mallas={carrera.mallas}/>
           </Grid>
         ))}
       </Grid>
@@ -56,16 +68,11 @@ export default function ListadoCarreras(){
         <Grid item xs={11}>
           <h2>Carreras Vespertinas</h2>
         </Grid>
-        <Grid item xs={1}>
-          <Fab color="primary" size="small" aria-label="add" className={classes.margin}>
-            <AddIcon />
-          </Fab>
-        </Grid>
       </Grid>
       <Grid container>
         {carrerasV.map((carrera)=>(
           <Grid item xs={6}>
-            <Carrera title={carrera.NombreC} mallas={carrera.Mallas}/>
+            <Carrera title={carrera.nombre_carrera} carreraId={carrera.id} mallas={carrera.Mallas}/>
           </Grid>
         ))}
       </Grid>

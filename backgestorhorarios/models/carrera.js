@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     jornada:{
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     }
   }, {});

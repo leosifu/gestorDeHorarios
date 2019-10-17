@@ -17,6 +17,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
+import CrearMalla from '../formularios/formMalla/crearMallaDialog'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -55,7 +56,7 @@ function Mallas(mallas){
         <CardContent>
           <Grid container>
             <Grid item xs={10}>
-              {malla.NombreM}
+              {malla.nombre_malla}
             </Grid>
             <Grid item xs={2}>
               <Fab color="secondary" size="small" aria-label="edit">
@@ -84,13 +85,14 @@ function Mallas(mallas){
   }
 }
 
-export default function Carrera({title, mallas}) {
+export default function Carrera({title, mallas, carreraId}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  console.log("HOLA", carreraId);
 
 
   return (
@@ -102,9 +104,7 @@ export default function Carrera({title, mallas}) {
                 {title}
               </Grid>
               <Grid item xs={3}>
-                <Fab color="primary" size="small" aria-label="add" className={classes.margin}>
-                  <AddIcon />
-                </Fab>
+                <CrearMalla carreraId={carreraId}/>
                 <Fab color="secondary" size="small" aria-label="edit" className={classes.margin}>
                   <EditIcon />
                 </Fab>

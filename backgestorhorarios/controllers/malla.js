@@ -3,7 +3,7 @@ const Carrera = require('../models').Carrera
 
 module.exports = {
   create(req,res){
-    console.log(req);
+    console.log(req.body);
     return Malla
       .create({
         cod_malla: req.body.cod_malla,
@@ -17,8 +17,6 @@ module.exports = {
   findAll(req,res){
     return Malla
       .findAll({
-          where: {carreraId: 0}
-
       }).then(malla =>res.json(malla))
   }
 }
