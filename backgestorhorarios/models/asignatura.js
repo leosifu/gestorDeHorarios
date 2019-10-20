@@ -1,8 +1,14 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Asignatura = sequelize.define('Asignatura', {
-    cod_ramo: DataTypes.STRING,
-    nombre_ramo: DataTypes.STRING,
+    cod_asignatura:{
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    nombre_asignatura:{
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     tel_T: DataTypes.INTEGER,
     tel_E: DataTypes.INTEGER,
     tel_L: DataTypes.INTEGER

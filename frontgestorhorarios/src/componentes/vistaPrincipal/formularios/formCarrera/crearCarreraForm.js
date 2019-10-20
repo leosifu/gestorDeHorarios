@@ -72,7 +72,7 @@ const CrearCarreraForm = props => {
     .then(res => {
       console.log(res.data);
     })
-    console.log(state);
+
   }
 
   const { state, handleOnChange, handleOnSubmit, disable } = useForm(

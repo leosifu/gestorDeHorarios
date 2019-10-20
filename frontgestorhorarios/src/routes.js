@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import SideBar from './componentes/vistaVerHorarios/sideBar/sideBar'
 import App from './App'
 import ListadoCarreras from './componentes/vistaPrincipal/mostrarCarreras/listadoCarreras'
+import VistaVerRamos from './componentes/vistaVerRamos'
+import EditRamo from './componentes/vistaVerRamos/editRamo'
 
 const AppRoutes = ({store}) =>
   <Provider store = {store}>
@@ -12,6 +14,8 @@ const AppRoutes = ({store}) =>
       <Switch>
         <Route exact path="/" component={ListadoCarreras}/>
         <Route exact path="/horario" component={SideBar} />
+        <Route exact path="/ramos" component={VistaVerRamos} />
+        <Route exact path="/ramos/edit" component={EditRamo} />
       </Switch>
     </App>
   </Provider>;

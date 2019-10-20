@@ -9,10 +9,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       cod_ramo: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       nombre_ramo: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       tel_T: {
         type: Sequelize.INTEGER

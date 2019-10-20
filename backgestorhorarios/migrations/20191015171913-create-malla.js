@@ -9,10 +9,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       cod_malla: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       nombre_malla: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       n_niveles: {
         type: Sequelize.INTEGER

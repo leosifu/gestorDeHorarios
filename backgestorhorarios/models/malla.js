@@ -4,10 +4,17 @@ module.exports = (sequelize, DataTypes) => {
     cod_malla: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     nombre_malla: {
       type:DataTypes.STRING,
       allowNull: false,
+      unique: true,
+    },
+    fecha_resolucion_malla:{
+      type:DataTypes.DATE,
+      allowNull: false,
+      unique: true,
     },
     n_niveles: {
       type: DataTypes.INTEGER,

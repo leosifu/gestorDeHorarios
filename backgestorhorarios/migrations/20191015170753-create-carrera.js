@@ -9,10 +9,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       cod_carrera: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       nombre_carrera: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       jornada:{
         type: Sequelize.STRING

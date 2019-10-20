@@ -4,10 +4,12 @@ module.exports = (sequelize, DataTypes) => {
     cod_carrera: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     nombre_carrera: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     jornada:{
       type: DataTypes.STRING,

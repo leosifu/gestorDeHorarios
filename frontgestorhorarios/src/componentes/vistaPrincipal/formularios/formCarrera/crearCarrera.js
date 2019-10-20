@@ -61,6 +61,7 @@ function CrearCarrera() {
     // print the form values to the console
     event.preventDefault()
     console.log(JSON.stringify(values))
+    setOpen(false)
   }
 
   return (

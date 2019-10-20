@@ -14,6 +14,10 @@ module.exports = {
       tipo_coord: {
         type: Sequelize.STRING
       },
+      num_asociacion:{
+        Sequelize.INTEGER,
+        autoIncrement: true,
+      },
       asignaturaId:{
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',

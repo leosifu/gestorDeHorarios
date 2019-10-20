@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import axios from 'axios';
 
 import Carrera from './carrera'
-import CrearCarrera from '../formularios/formCarrera/crearCarreraDialog'
+import CrearCarrera from '../formularios/formCarrera/crearCarrera'
 
 const useStyles = makeStyles(theme => ({
   root: {
