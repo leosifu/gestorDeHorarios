@@ -36,9 +36,8 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function CrearMalla({carreraId}) {
+function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState('sm');
 
@@ -57,11 +56,6 @@ function CrearMalla({carreraId}) {
   const handleFullWidthChange = event => {
     setFullWidth(event.target.checked);
   };
-  const submit = (event, values) => {
-    // print the form values to the console
-    event.preventDefault()
-    console.log(JSON.stringify(values))
-  }
 
   return (
     <React.Fragment>
@@ -77,7 +71,7 @@ function CrearMalla({carreraId}) {
       >
         <DialogTitle id="max-width-dialog-title">Crear Malla</DialogTitle>
         <DialogContent>
-          <CrearMallaForm carreraId={carreraId} onSubmit={submit}/>
+          <CrearMallaForm carreraId={carreraId} open={open} setOpen={setOpen} estado={estado} setEstado={setEstado}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

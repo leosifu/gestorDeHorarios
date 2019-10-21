@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from "react-router-dom";
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -47,14 +47,15 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Carrera({title, mallas, carreraId}) {
+export default function Carrera({title, mallas, carreraId, estado, setEstado}) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  const [openM, setOpenM] = useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  console.log("HOLA", carreraId);
 
 
   return (
@@ -66,7 +67,7 @@ export default function Carrera({title, mallas, carreraId}) {
                 {title}
               </Grid>
               <Grid item xs={3}>
-                <CrearMalla carreraId={carreraId}/>
+                <CrearMalla carreraId={carreraId} open={openM} setOpen={setOpenM} estado={estado} setEstado={setEstado}/>
                 <Fab color="secondary" size="small" aria-label="edit" className={classes.margin}>
                   <EditIcon />
                 </Fab>

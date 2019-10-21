@@ -18,16 +18,18 @@ const useStyles = makeStyles(theme => ({
 export default function ListadoCarreras(){
   const classes = useStyles();
 
-  const Carreras = [{'Diurnas': [{'NombreC': 'Ing Civil Informatica', 'Mallas': [{'NombreM':'Malla1'}, {'NombreM':'Malla2'}]}, {'NombreC': 'Ingenieria de Ejecución en Computacion e Informatica'}]},{'Vespertinas':[{'NombreC':'Nose'}]}]
+  const [openC, setOpenC] = useState(false);
+
+  const [estado, setEstado] = useState(false);
 
   const [carrerasD, setCarrerasD] = useState([])
 
   const [carrerasV, setCarrerasV] = useState([])
 
   useEffect(()=>{
+    console.log("asdsad");
     axios.get('http://localhost:8000/api/carrera')
     .then(res => {
-      console.log(res.data);
       var vesp = []
       var diur = []
       const data = res.data
@@ -39,12 +41,11 @@ export default function ListadoCarreras(){
           diur.push(data[i])
         }
       }
-      console.log(vesp);
+      console.log("wer");
       setCarrerasD(diur)
       setCarrerasV(vesp)
     })
-
-  }, [])
+  }, [openC, estado])
 
   return (
     <div className={classes.root}>
@@ -53,13 +54,13 @@ export default function ListadoCarreras(){
           <h2>Carreras Diurnas</h2>
         </Grid>
         <Grid item xs={1}>
-          <CrearCarrera />
+          <CrearCarrera open={openC} setOpen={setOpenC}/>
         </Grid>
       </Grid>
       <Grid container>
         {carrerasD.map((carrera)=>(
           <Grid item xs={6}>
-            <Carrera title={carrera.nombre_carrera} carreraId={carrera.id} mallas={carrera.mallas}/>
+            <Carrera title={carrera.nombre_carrera} carreraId={carrera.id} mallas={carrera.mallas} estado={estado} setEstado={setEstado}/>
           </Grid>
         ))}
       </Grid>
@@ -72,7 +73,7 @@ export default function ListadoCarreras(){
       <Grid container>
         {carrerasV.map((carrera)=>(
           <Grid item xs={6}>
-            <Carrera title={carrera.nombre_carrera} carreraId={carrera.id} mallas={carrera.Mallas}/>
+            <Carrera title={carrera.nombre_carrera} carreraId={carrera.id} mallas={carrera.Mallas} estado={estado} setEstado={setEstado}/>
           </Grid>
         ))}
       </Grid>

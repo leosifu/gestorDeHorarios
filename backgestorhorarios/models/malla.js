@@ -11,11 +11,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
-    fecha_resolucion_malla:{
-      type:DataTypes.DATE,
-      allowNull: false,
-      unique: true,
-    },
     n_niveles: {
       type: DataTypes.INTEGER,
     }

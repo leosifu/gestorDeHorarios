@@ -36,9 +36,8 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function CrearCarrera() {
+function CrearCarrera({open, setOpen}) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState('sm');
 
@@ -57,12 +56,6 @@ function CrearCarrera() {
   const handleFullWidthChange = event => {
     setFullWidth(event.target.checked);
   };
-  const submit = (event, values) => {
-    // print the form values to the console
-    event.preventDefault()
-    console.log(JSON.stringify(values))
-    setOpen(false)
-  }
 
   return (
     <React.Fragment>
@@ -78,7 +71,7 @@ function CrearCarrera() {
       >
         <DialogTitle id="max-width-dialog-title">Crear Carrera</DialogTitle>
         <DialogContent>
-          <CrearCarreraForm onSubmit={submit}/>
+          <CrearCarreraForm open={open} setOpen={setOpen}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

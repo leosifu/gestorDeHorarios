@@ -63,7 +63,7 @@ const CrearMallaForm = props => {
     },
   };
   function onSubmitForm(state) {
-    const {carreraId} = props
+    const {carreraId, setOpen, estado, setEstado} = props
     const num_niveles = parseInt(state.n_niveles.value)
     const data = {
       carreraId,
@@ -74,6 +74,11 @@ const CrearMallaForm = props => {
     axios.post('http://localhost:8000/api/malla', data)
     .then(res => {
       console.log(res.data);
+      setOpen(false)
+      setEstado(!estado)
+    })
+    .catch((error)=>{
+      alert("error al crear la malla")
     })
     console.log(data);
   }
@@ -95,7 +100,7 @@ const CrearMallaForm = props => {
         <TextField
           error = {state.cod_malla.error ? true : false}
           id="standard-name"
-          label="Código de la malla"
+          label="Resolución de la malla"
           name="cod_malla"
           className={classes.textField}
           value={state.cod_malla.value}

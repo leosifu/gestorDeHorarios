@@ -37,7 +37,7 @@ export default function Mallas(mallas){
             color="primary"
             aria-label="full-width contained primary button group"
           >
-            <Button>Ver Ramos</Button>
+            <Button><Link style={{ textDecoration: 'none', color:'white' }} to="/ramos">Ver Ramos</Link></Button>
             <Button><Link style={{ textDecoration: 'none', color:'white' }} to="/horario">Horarios</Link></Button>
           </ButtonGroup>
         </CardActions>

@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const CrearCarreraForm = props => {
+const CrearCarreraForm = ({open, setOpen}) => {
   const stateSchema = {
     cod_carrera: { value: '', error: '' },
     nombre_carrera: { value: '', error: '' },
@@ -71,8 +71,8 @@ const CrearCarreraForm = props => {
     axios.post('http://localhost:8000/api/carrera', data)
     .then(res => {
       console.log(res.data);
+      setOpen(false)
     })
-
   }
 
   const { state, handleOnChange, handleOnSubmit, disable } = useForm(
@@ -84,7 +84,6 @@ const CrearCarreraForm = props => {
     color: 'red',
     fontSize: '13px',
   };
-  const { onSubmit } = props;
   const classes = useStyles();
   return (
     <div>
