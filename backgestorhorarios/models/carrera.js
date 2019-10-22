@@ -14,7 +14,17 @@ module.exports = (sequelize, DataTypes) => {
     jornada:{
       type: DataTypes.STRING,
       allowNull: false,
-    }
+    },
+    carrera_activa:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
+    mostrar_carrera: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
   }, {});
   Carrera.associate = function(models) {
     // associations can be defined here

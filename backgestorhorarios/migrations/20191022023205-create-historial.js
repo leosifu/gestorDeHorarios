@@ -1,37 +1,32 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Asignaturas', {
+    return queryInterface.createTable('Historials', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cod_ramo: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      nombre_ramo: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      tel_T: {
+      cupos_pasados: {
         type: Sequelize.INTEGER
       },
-      tel_E: {
+      tasa_reprobacion: {
         type: Sequelize.INTEGER
       },
-      tel_L: {
+      cupos_estimados: {
         type: Sequelize.INTEGER
       },
-      mallaId:{
+      tasa_reprobacion_pre: {
+        type: Sequelize.INTEGER
+      },
+      asignaturaId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references:{
-          model: 'Mallas',
+          model: 'Asignaturas',
           key: 'id',
-          as: 'mallaId'
+          as: 'asignaturaId'
         }
       },
       createdAt: {
@@ -45,6 +40,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Asignaturas');
+    return queryInterface.dropTable('Historials');
   }
 };

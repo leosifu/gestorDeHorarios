@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,6 +18,14 @@ const useStyles = makeStyles(theme => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
+  icon:{
+    color: 'blue',
+    border: 1,
+    m: 1,
+    '&:hover': {
+       backgroundColor: '#C8C6C6',
+    },
+  },
 }));
 
 export default function ListadoSecciones() {
@@ -26,6 +35,10 @@ export default function ListadoSecciones() {
   const handleClick = () => {
     setOpen(!open);
   };
+
+  const unClick = () => {
+    alert("hola")
+  }
 
   return (
     <List
@@ -42,9 +55,11 @@ export default function ListadoSecciones() {
       <ListItem button>
         <ListItemText primary="Nivel 3" />
       </ListItem>
-      <ListItem button onClick={handleClick}>
-        <ListItemText primary="Nivel 4" />
-        {open ? <ExpandLess /> : <ExpandMore />}
+      <ListItem button>
+        <ListItemText primary="Nivel 4" onClick={unClick}/>
+        <Box className={classes.icon} borderRadius="50%" onClick={handleClick}>
+          {open ? <ExpandLess  /> : <ExpandMore/>}
+        </Box>
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
       <List component="div" disablePadding>

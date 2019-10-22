@@ -10,12 +10,14 @@ module.exports = {
       },
       cod_malla: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       nombre_malla: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       n_niveles: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       carreraId:{
         type: Sequelize.INTEGER,

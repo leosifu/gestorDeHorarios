@@ -10,12 +10,23 @@ module.exports = {
       },
       cod_carrera: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       nombre_carrera: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       jornada:{
         type: Sequelize.STRING
+        allowNull: false,
+      },
+      carrera_activa: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      mostrar_carrera: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

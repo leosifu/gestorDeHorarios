@@ -14,9 +14,9 @@ import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import CrearMallaForm from './crearMallaForm'
-import { connect } from 'react-redux'
+import MallaForm from './mallaForm'
 
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -57,6 +57,26 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
     setFullWidth(event.target.checked);
   };
 
+  function onSubmitForm(state) {
+    const num_niveles = parseInt(state.n_niveles.value)
+    const data = {
+      carreraId,
+      nombre_malla: state.nombre_malla.value,
+      cod_malla: state.cod_malla.value,
+      n_niveles: state.n_niveles.value
+    }
+    axios.post('http://localhost:8000/api/malla', data)
+    .then(res => {
+      console.log(res.data);
+      setOpen(false)
+      setEstado(!estado)
+    })
+    .catch((error)=>{
+      alert("error al crear la malla")
+    })
+    console.log(data);
+  }
+
   return (
     <React.Fragment>
       <Fab color="primary" size="small" aria-label="add" className={classes.margin} onClick={handleClickOpen}>
@@ -71,7 +91,7 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
       >
         <DialogTitle id="max-width-dialog-title">Crear Malla</DialogTitle>
         <DialogContent>
-          <CrearMallaForm carreraId={carreraId} open={open} setOpen={setOpen} estado={estado} setEstado={setEstado}/>
+          <MallaForm nombre_malla={''} cod_malla={''} n_niveles={0} estado={estado} setEstado={setEstado} onSubmitForm={onSubmitForm}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

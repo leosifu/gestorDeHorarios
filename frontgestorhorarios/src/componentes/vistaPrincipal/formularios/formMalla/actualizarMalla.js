@@ -13,8 +13,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import CarreraForm from './carreraForm'
+import EditIcon from '@material-ui/icons/Edit';
+import MallaForm from './mallaForm'
 
 import axios from 'axios';
 
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function CrearCarrera({open, setOpen}) {
+function ActualizarMalla({malla, open, setOpen, estado, setEstado}) {
   const classes = useStyles();
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState('sm');
@@ -58,23 +58,29 @@ function CrearCarrera({open, setOpen}) {
   };
 
   function onSubmitForm(state) {
+    const num_niveles = parseInt(state.n_niveles.value)
     const data = {
-      nombre_carrera: state.nombre_carrera.value,
-      cod_carrera: state.cod_carrera.value,
-      jornada: state.jornada.value
+      nombre_malla: state.nombre_malla.value,
+      cod_malla: state.cod_malla.value,
+      n_niveles: state.n_niveles.value
     }
-    axios.post('http://localhost:8000/api/carrera', data)
+    let link = 'http://localhost:8000/api/malla/' + malla.id
+    axios.put(link, data)
     .then(res => {
       console.log(res.data);
       setOpen(false)
+      setEstado(!estado)
     })
-
+    .catch((error)=>{
+      console.log(error);
+    })
+    console.log(data);
   }
 
   return (
     <React.Fragment>
-      <Fab color="primary" size="small" aria-label="add" className={classes.margin} onClick={handleClickOpen}>
-        <AddIcon />
+      <Fab color="secondary" size="small" aria-label="add" className={classes.margin} onClick={handleClickOpen}>
+        <EditIcon />
       </Fab>
       <Dialog
         fullWidth={fullWidth}
@@ -83,11 +89,9 @@ function CrearCarrera({open, setOpen}) {
         onClose={handleClose}
         aria-labelledby="max-width-dialog-title"
       >
-        <DialogTitle id="max-width-dialog-title">
-          Crear Carrera
-        </DialogTitle>
+        <DialogTitle id="max-width-dialog-title">Crear Malla</DialogTitle>
         <DialogContent>
-          <CarreraForm cod_carrera={''} nombre_carrera={''} jornada={"Vespertino"} open={open} setOpen={setOpen} onSubmitForm={onSubmitForm}/>
+          <MallaForm nombre_malla={malla.nombre_malla} cod_malla={malla.cod_malla} n_niveles={malla.n_niveles} estado={estado} setEstado={setEstado} onSubmitForm={onSubmitForm}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
@@ -99,4 +103,4 @@ function CrearCarrera({open, setOpen}) {
   );
 }
 
-export default CrearCarrera
+export default ActualizarMalla

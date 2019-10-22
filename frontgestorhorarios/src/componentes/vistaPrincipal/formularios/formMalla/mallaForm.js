@@ -1,16 +1,8 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 import useForm from '../useForm'
 
-import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -33,28 +25,28 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const CrearCarreraForm = ({open, setOpen}) => {
+const MallaForm = ({nombre_malla, cod_malla, n_niveles, estado, setEstado, onSubmitForm}) => {
   const stateSchema = {
-    cod_carrera: { value: '', error: '' },
-    nombre_carrera: { value: '', error: '' },
-    jornada: { value: "Vespertino", error: '' },
+    cod_malla: { value: cod_malla, error: '' },
+    nombre_malla: { value: nombre_malla, error: '' },
+    n_niveles: { value: n_niveles, error: '' },
   };
   const validationStateSchema = {
-    cod_carrera: {
+    cod_malla: {
       required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid first name format.',
       },
     },
-    nombre_carrera: {
+    nombre_malla: {
       required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
       },
     },
-    jornada: {
+    n_niveles: {
       required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
@@ -62,18 +54,6 @@ const CrearCarreraForm = ({open, setOpen}) => {
       },
     },
   };
-  function onSubmitForm(state) {
-    const data = {
-      nombre_carrera: state.nombre_carrera.value,
-      cod_carrera: state.cod_carrera.value,
-      jornada: state.jornada.value
-    }
-    axios.post('http://localhost:8000/api/carrera', data)
-    .then(res => {
-      console.log(res.data);
-      setOpen(false)
-    })
-  }
 
   const { state, handleOnChange, handleOnSubmit, disable } = useForm(
     stateSchema,
@@ -89,36 +69,43 @@ const CrearCarreraForm = ({open, setOpen}) => {
     <div>
       <form onSubmit={handleOnSubmit}>
         <TextField
-          error = {state.cod_carrera.error ? true : false}
+          error = {state.cod_malla.error ? true : false}
           id="standard-name"
-          label="Código de la carrera"
-          name="cod_carrera"
+          label="Resolución de la malla"
+          name="cod_malla"
           className={classes.textField}
-          value={state.cod_carrera.value}
+          value={state.cod_malla.value}
           onChange={handleOnChange}
           margin="normal"
         />
         <TextField
-          error={state.nombre_carrera.error ? true:false}
+          error={state.nombre_malla.error ? true:false}
           id="standard-required"
-          label="Nombre de la carrera"
-          name="nombre_carrera"
+          label="Nombre de la malla"
+          name="nombre_malla"
           className={classes.textField}
-          value={state.nombre_carrera.value}
+          value={state.nombre_malla.value}
+          onChange={handleOnChange}
+          margin="normal"
+        />
+        <TextField
+          error={state.n_niveles.error ? true:false}
+          id="standard-required"
+          label="Número de niveles"
+          name="n_niveles"
+          type="number"
+          className={classes.textField}
+          value={state.n_niveles.value}
           onChange={handleOnChange}
           margin="normal"
         />
         <br/>
         <br/>
-        <FormLabel component="legend">Jornada</FormLabel>
-        <RadioGroup aria-label="Jornada" name="jornada" value={state.jornada.value} onChange={handleOnChange}>
-          <FormControlLabel value="Vespertino" control={<Radio />} label="Vespertino" />
-          <FormControlLabel value="Diurno" control={<Radio />} label="Diurno" />
-        </RadioGroup>
+
         <input type="submit" name="submit" disabled={disable} />
       </form>
     </div>
   );
 };
 
-export default CrearCarreraForm
+export default MallaForm

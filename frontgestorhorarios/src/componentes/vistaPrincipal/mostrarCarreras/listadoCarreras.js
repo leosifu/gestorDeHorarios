@@ -27,7 +27,6 @@ export default function ListadoCarreras(){
   const [carrerasV, setCarrerasV] = useState([])
 
   useEffect(()=>{
-    console.log("asdsad");
     axios.get('http://localhost:8000/api/carrera')
     .then(res => {
       var vesp = []
@@ -41,9 +40,8 @@ export default function ListadoCarreras(){
           diur.push(data[i])
         }
       }
-      console.log("wer");
-      setCarrerasD(diur)
       setCarrerasV(vesp)
+      setCarrerasD(diur)
     })
   }, [openC, estado])
 
@@ -60,7 +58,7 @@ export default function ListadoCarreras(){
       <Grid container>
         {carrerasD.map((carrera)=>(
           <Grid item xs={6}>
-            <Carrera title={carrera.nombre_carrera} carreraId={carrera.id} mallas={carrera.mallas} estado={estado} setEstado={setEstado}/>
+            <Carrera carrera={carrera} key={carrera.id} estado={estado} setEstado={setEstado}/>
           </Grid>
         ))}
       </Grid>
@@ -73,7 +71,7 @@ export default function ListadoCarreras(){
       <Grid container>
         {carrerasV.map((carrera)=>(
           <Grid item xs={6}>
-            <Carrera title={carrera.nombre_carrera} carreraId={carrera.id} mallas={carrera.Mallas} estado={estado} setEstado={setEstado}/>
+            <Carrera carrera={carrera} key={carrera.id} estado={estado} setEstado={setEstado}/>
           </Grid>
         ))}
       </Grid>

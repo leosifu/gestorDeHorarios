@@ -13,7 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 import CarreraForm from './carreraForm'
 
 import axios from 'axios';
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function CrearCarrera({open, setOpen}) {
+function ActualizarCarrera({carrera, open, setOpen, estado, setEstado}) {
   const classes = useStyles();
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState('sm');
@@ -63,18 +63,18 @@ function CrearCarrera({open, setOpen}) {
       cod_carrera: state.cod_carrera.value,
       jornada: state.jornada.value
     }
-    axios.post('http://localhost:8000/api/carrera', data)
+    var link = 'http://localhost:8000/api/carrera/' + carrera.id
+    axios.put(link, data)
     .then(res => {
-      console.log(res.data);
       setOpen(false)
+      setEstado(!estado)
     })
-
   }
 
   return (
     <React.Fragment>
-      <Fab color="primary" size="small" aria-label="add" className={classes.margin} onClick={handleClickOpen}>
-        <AddIcon />
+      <Fab color="secondary" size="small" aria-label="add" className={classes.margin} onClick={handleClickOpen}>
+        <EditIcon />
       </Fab>
       <Dialog
         fullWidth={fullWidth}
@@ -83,11 +83,9 @@ function CrearCarrera({open, setOpen}) {
         onClose={handleClose}
         aria-labelledby="max-width-dialog-title"
       >
-        <DialogTitle id="max-width-dialog-title">
-          Crear Carrera
-        </DialogTitle>
+        <DialogTitle id="max-width-dialog-title">Crear Carrera</DialogTitle>
         <DialogContent>
-          <CarreraForm cod_carrera={''} nombre_carrera={''} jornada={"Vespertino"} open={open} setOpen={setOpen} onSubmitForm={onSubmitForm}/>
+          <CarreraForm cod_carrera={carrera.cod_carrera} nombre_carrera={carrera.nombre_carrera} jornada={carrera.jornada} open={open} setOpen={setOpen} onSubmitForm={onSubmitForm}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
@@ -99,4 +97,4 @@ function CrearCarrera({open, setOpen}) {
   );
 }
 
-export default CrearCarrera
+export default ActualizarCarrera

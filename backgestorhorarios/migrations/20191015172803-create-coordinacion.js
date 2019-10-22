@@ -9,10 +9,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       cod_coord: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       tipo_coord: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       num_asociacion:{
         Sequelize.INTEGER,

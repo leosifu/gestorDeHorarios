@@ -17,8 +17,9 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
-import Mallas from './mallas'
+import Malla from './mallas'
 import CrearMalla from '../formularios/formMalla/crearMalla'
+import ActualizarCarrera from '../formularios/formCarrera/actualizarCarrera'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -47,16 +48,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Carrera({title, mallas, carreraId, estado, setEstado}) {
+export default function Carrera({carrera, estado, setEstado}) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
 
   const [openM, setOpenM] = useState(false);
 
+  const [openC, setOpenC] = useState(false);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
 
   return (
     <Card className={classes.card}>
@@ -64,13 +66,11 @@ export default function Carrera({title, mallas, carreraId, estado, setEstado}) {
           <Typography gutterBottom variant="h6" component="h6">
             <Grid container>
               <Grid item xs={9}>
-                {title}
+                {carrera.nombre_carrera}
               </Grid>
               <Grid item xs={3}>
-                <CrearMalla carreraId={carreraId} open={openM} setOpen={setOpenM} estado={estado} setEstado={setEstado}/>
-                <Fab color="secondary" size="small" aria-label="edit" className={classes.margin}>
-                  <EditIcon />
-                </Fab>
+                <CrearMalla carreraId={carrera.id} open={openM} setOpen={setOpenM} estado={estado} setEstado={setEstado}/>
+                <ActualizarCarrera carrera={carrera} open={openC} setOpen={setOpenC} estado={estado} setEstado={setEstado}/>
               </Grid>
             </Grid>
           </Typography>
@@ -88,7 +88,17 @@ export default function Carrera({title, mallas, carreraId, estado, setEstado}) {
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        {mallas? <Mallas mallas={mallas}/>:<div/>}
+        {carrera.mallas?
+          <div>
+            {carrera.mallas.map((malla, i)=>{
+              return(
+                <CardContent>
+                  <Malla carreraId={carrera.id} malla={malla} estado={estado} setEstado={setEstado}/>
+                </CardContent>
+              )
+            })}
+           </div>:
+          <div/>}
       </Collapse>
     </Card>
   );
