@@ -16,7 +16,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
 import Bloque from './bloque'
 import update from 'immutability-helper'
-import { useDrag, useDrop } from 'react-dnd'
+import { useDrop } from 'react-dnd'
 import ItemTypes from '../itemTypes/ItemTypes'
 
 const useStyles = makeStyles(theme => ({
@@ -62,8 +62,6 @@ export default function Horario() {
   const dias = ['Hora', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
 
   const [data, setData] = useState([])
-
-  const [lista, setlista] = useState([])
 
   const [bloques, setBloques] = useState([])
 
@@ -112,9 +110,6 @@ export default function Horario() {
       console.log(y);
       console.log(item);
       let nuevoBloque = x*6 + y;
-      if(bloques[x][y].title){
-        console.log("asdasd");
-      }
       if(!data[item.id].asignado){
         data[item.id].asignado = true
       }
@@ -127,33 +122,29 @@ export default function Horario() {
           }
         })
       )
-      console.log(bloques);
     }, [data]
   )
 
-  const dropLista = useCallback(
-    (item) => {
-      console.log("asdad");
-      setData(
-        update(data,{
-          [item.id]:{
-            asignado:{
-              $set: false
-            },
-            bloque:{
-              $set: -1
-            }
+  const dropLista = useCallback((item) => {
+    console.log("asdad");
+    setData(
+      update(data,{
+        [item.id]:{
+          asignado:{
+            $set: false
+          },
+          bloque:{
+            $set: -1
           }
-        })
-      )
-    }, [data]
-  )
+        }
+      })
+    )}, [data])
 
   function ListadoSecciones() {
 
     const ref = useRef(null)
 
-    const [{ }, drop] = useDrop({
+    const [, drop] = useDrop({
       accept: ItemTypes.BOX,
       drop: dropLista,
     })
@@ -198,6 +189,9 @@ export default function Horario() {
                     <Bloque title={seccion.title} bloque={seccion.bloque} id={seccion.id}/>
                   </ListItem>
                 )
+              }
+              else {
+                return(<div/>)
               }
             })}
           </List>

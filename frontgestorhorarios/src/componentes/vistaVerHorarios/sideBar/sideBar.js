@@ -10,7 +10,6 @@ import Grid from '@material-ui/core/Grid';
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import Horario from '../Horarios/horarios'
-import ListadoSecciones from '../listaRamos/listado'
 
 
 const drawerWidth = 140;

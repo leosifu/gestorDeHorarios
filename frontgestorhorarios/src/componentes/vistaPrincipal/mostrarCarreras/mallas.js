@@ -6,12 +6,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import { Button } from '@material-ui/core';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
-import EditIcon from '@material-ui/icons/Edit';
 import ActualizarMalla from '../formularios/formMalla/actualizarMalla'
-
-import axios from 'axios';
 
 export default function Malla({carreraId, malla, estado, setEstado}){
   console.log(malla);

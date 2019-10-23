@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import axios from 'axios';
 
 import Carrera from './carrera'
@@ -33,7 +31,7 @@ export default function ListadoCarreras(){
       var diur = []
       const data = res.data
       for (var i = 0; i < data.length; i++) {
-        if (data[i].jornada == "Vespertino") {
+        if (data[i].jornada === "Vespertino") {
           vesp.push(data[i])
         }
         else{

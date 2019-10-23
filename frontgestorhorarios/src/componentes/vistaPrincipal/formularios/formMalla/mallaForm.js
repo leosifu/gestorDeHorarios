@@ -60,10 +60,7 @@ const MallaForm = ({nombre_malla, cod_malla, n_niveles, estado, setEstado, onSub
     validationStateSchema,
     onSubmitForm
   );
-  const errorStyle = {
-    color: 'red',
-    fontSize: '13px',
-  };
+
   const classes = useStyles();
   return (
     <div>

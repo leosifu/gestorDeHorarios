@@ -16,6 +16,7 @@ function useForm(stateSchema, validationSchema = {}, callback) {
     if (isDirty) {
       setDisable(validateState());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, isDirty]);
 
   // Used to disable submit button if there's an error in state
@@ -76,7 +77,7 @@ function useForm(stateSchema, validationSchema = {}, callback) {
         callback(state);
       }
     },
-    [state]
+    [state, callback, validateState]
   );
 
   return { state, disable, handleOnChange, handleOnSubmit };

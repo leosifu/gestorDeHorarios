@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     tel_T: DataTypes.INTEGER,
     tel_E: DataTypes.INTEGER,
-    tel_L: DataTypes.INTEGER
+    tel_L: DataTypes.INTEGER,
+    nivel: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   }, {});
   Asignatura.associate = function(models) {
     // associations can be defined here

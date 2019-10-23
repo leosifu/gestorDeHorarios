@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 export default function Bloque({title, bloque, id, onDrop, color}) {
   const ref = useRef(null)
   const classes = useStyles();
-  const [{ isDragging }, drag] = useDrag({
+  const [ , drag] = useDrag({
     item: { id, title, bloque, type: ItemTypes.BOX },
     canDrag: title ? true : false,
     collect: monitor => ({

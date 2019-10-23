@@ -3,9 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import useForm from '../useForm'
 
@@ -67,10 +65,7 @@ const CarreraForm = ({cod_carrera, nombre_carrera, jornada, onSubmitForm}) => {
     validationStateSchema,
     onSubmitForm
   );
-  const errorStyle = {
-    color: 'red',
-    fontSize: '13px',
-  };
+  
   const classes = useStyles();
   return (
     <div>

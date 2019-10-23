@@ -25,6 +25,9 @@ module.exports = {
       tel_L: {
         type: Sequelize.INTEGER
       },
+      nivel:{
+        type: Sequelize.INTEGER,
+      },
       mallaId:{
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',

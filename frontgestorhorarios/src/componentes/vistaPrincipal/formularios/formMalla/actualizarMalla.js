@@ -4,14 +4,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Switch from '@material-ui/core/Switch';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import MallaForm from './mallaForm'
@@ -38,8 +31,6 @@ const useStyles = makeStyles(theme => ({
 
 function ActualizarMalla({malla, open, setOpen, estado, setEstado}) {
   const classes = useStyles();
-  const [fullWidth, setFullWidth] = React.useState(true);
-  const [maxWidth, setMaxWidth] = React.useState('sm');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -49,16 +40,7 @@ function ActualizarMalla({malla, open, setOpen, estado, setEstado}) {
     setOpen(false);
   };
 
-  const handleMaxWidthChange = event => {
-    setMaxWidth(event.target.value);
-  };
-
-  const handleFullWidthChange = event => {
-    setFullWidth(event.target.checked);
-  };
-
   function onSubmitForm(state) {
-    const num_niveles = parseInt(state.n_niveles.value)
     const data = {
       nombre_malla: state.nombre_malla.value,
       cod_malla: state.cod_malla.value,
@@ -83,8 +65,7 @@ function ActualizarMalla({malla, open, setOpen, estado, setEstado}) {
         <EditIcon />
       </Fab>
       <Dialog
-        fullWidth={fullWidth}
-        maxWidth={maxWidth}
+        fullWidth={true}
         open={open}
         onClose={handleClose}
         aria-labelledby="max-width-dialog-title"
