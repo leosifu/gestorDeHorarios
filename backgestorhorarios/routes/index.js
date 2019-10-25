@@ -14,9 +14,11 @@ module.exports = (app) => {
 
   //API malla
   app.get('/api/malla', mallaController.findAll)
+  app.get('/api/malla/:id', mallaController.findMallaById)
   app.post('/api/malla', mallaController.create)
   app.put('/api/malla/:id', mallaController.update)
 
   //API asignatura
-  app.get('./api/asignatura', asignaturaController.create)
+  app.get('/api/asignatura', asignaturaController.findAll)
+  app.post('/api/asignatura', asignaturaController.create)
 }

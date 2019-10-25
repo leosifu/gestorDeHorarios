@@ -1,18 +1,11 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
+import axios from 'axios';
+
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 import Ramo from './ramo'
 
@@ -20,49 +13,76 @@ const useStyles = makeStyles({
   root: {
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    overflow: 'hidden',
-    margin: 20,
+    overflow: 'hidden'
   },
   gridList: {
     flexWrap: 'nowrap',
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
-  },
-  table: {
-    minWidth: 650,
+    position:'static',
+
+    overflowY: 'scroll',
+
+
   },
 });
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
+/*const niveles = [
+  {Nivel: '1', asignaturas: [{nombre_asignatura:'Uno', cod_asignatura: 123}, {nombre_asignatura:'Dos', cod_asignatura: 345},
+    {nombre_asignatura:'asda', cod_asignatura: 1223}, {nombre_asignatura:'Unas', cod_asignatura: 1203}, {nombre_asignatura:'Uno', cod_asignatura: 123}]},
+  {Nivel: '2', asignaturas:[{nombre_asignatura:'Uno', cod_asignatura: 124}, {nombre_asignatura:'Tres', cod_asignatura: 123},{nombre_asignatura:'Uno', cod_asignatura: 123},
+    {nombre_asignatura:'qeq', cod_asignatura: 345}]},
+  {Nivel: '3', asignaturas:[{nombre_asignatura:'Uno', cod_asignatura: 124}, {nombre_asignatura:'Tres', cod_asignatura: 123},{nombre_asignatura:'Uno', cod_asignatura: 123},
+    {nombre_asignatura:'qeq', cod_asignatura: 345}]},
+  {Nivel: '4', asignaturas:[{nombre_asignatura:'Uno', cod_asignatura: 124}, {nombre_asignatura:'Tres', cod_asignatura: 123},{nombre_asignatura:'Uno', cod_asignatura: 123},
+    {nombre_asignatura:'qeq', cod_asignatura: 345}]},
+  {Nivel: '5', asignaturas:[{nombre_asignatura:'Uno', cod_asignatura: 124}, {nombre_asignatura:'Tres', cod_asignatura: 123},{nombre_asignatura:'Uno', cod_asignatura: 123},
+    {nombre_asignatura:'qeq', cod_asignatura: 345}]},
+  {Nivel: '6', asignaturas:[{nombre_asignatura:'Uno', cod_asignatura: 124}, {nombre_asignatura:'Tres', cod_asignatura: 123},{nombre_asignatura:'Uno', cod_asignatura: 123},
+    {nombre_asignatura:'qeq', cod_asignatura: 345}]},
+  {Nivel: '7', asignaturas:[{nombre_asignatura:'Uno', cod_asignatura: 124}, {nombre_asignatura:'Tres', cod_asignatura: 123},{nombre_asignatura:'Uno', cod_asignatura: 123},
+    {nombre_asignatura:'qeq', cod_asignatura: 345}]},
+  {Nivel: '8', asignaturas:[{nombre_asignatura:'Uno', cod_asignatura: 124}, {nombre_asignatura:'Tres', cod_asignatura: 123},{nombre_asignatura:'Uno', cod_asignatura: 123},
+    {nombre_asignatura:'qeq', cod_asignatura: 345}]},
+  {Nivel: '9', asignaturas:[{nombre_asignatura:'Uno', cod_asignatura: 124}, {nombre_asignatura:'Tres', cod_asignatura: 123},{nombre_asignatura:'Uno', cod_asignatura: 123},
+    {nombre_asignatura:'qeq', cod_asignatura: 345}]},
+  {Nivel: '10', asignaturas:[{nombre_asignatura:'Uno', cod_asignatura: 124}, {nombre_asignatura:'Tres', cod_asignatura: 123},{nombre_asignatura:'Uno', cod_asignatura: 123},
+    {nombre_asignatura:'qeq', cod_asignatura: 345}]},
+  {Nivel: '11', asignaturas:[{nombre_asignatura:'Uno', cod_asignatura: 124}, {nombre_asignatura:'Tres', cod_asignatura: 123},{nombre_asignatura:'Uno', cod_asignatura: 123},
+    {nombre_asignatura:'qeq', cod_asignatura: 345}]},
+  {Nivel: '12', asignaturas:[{nombre_asignatura:'Uno', cod_asignatura: 124}, {nombre_asignatura:'Tres', cod_asignatura: 123},{nombre_asignatura:'Uno', cod_asignatura: 123},
+    {nombre_asignatura:'qeq', cod_asignatura: 345}]}
+];*/
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
-export default function VerMalla() {
+export default function VerMalla(props) {
+
   const classes = useStyles();
+
+  const [estado, setEstado] = useState(false);
+
+  const [niveles, setNiveles] = useState([])
+
+  useEffect(()=>{
+    var link = 'http://localhost:8000/api/malla/' + props.match.params.id
+    axios.get(link)
+    .then(res => {
+      console.log(res.data[0]);
+      setNiveles(res.data[0].niveles)
+    })
+  },[estado])
 
   return (
     <Paper className={classes.root}>
-        <GridList className={classes.gridList} cols={8} >
-          {rows.map(tile => (
-            <GridListTile key={tile.img}  style={{ height: 'auto' }}>
-              <Ramo />
-            </GridListTile>
-          ))}
+        <GridList className={classes.gridList} cols={8}>
+          {niveles ? niveles.map(nivel => {
+            console.log(nivel);
+            return(<div style={{height:590}}>
+              <GridListTile style={{ height: 'auto', overflow:'auto' }}>
+                <Ramo nivel={nivel.nivel} asignaturas={nivel.asignaturas}/>
+              </GridListTile>
+            </div>
+          )}) : < div/>}
         </GridList>
     </Paper>
   );

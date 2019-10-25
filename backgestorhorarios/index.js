@@ -16,9 +16,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 var models = require("./models")
 models.sequelize.sync().then(function(){
-    console.log("WIIIII");
+    console.log("Conecta2");
 }).catch(function(error){
-  console.log("PUTA BIDA");
+  console.log("Problemas al conectar con la DB");
 })
 require('./routes')(app)
 // Setup a default catch-all route that sends back a welcome message in JSON format.

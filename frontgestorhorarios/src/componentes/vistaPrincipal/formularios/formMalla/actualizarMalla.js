@@ -43,7 +43,7 @@ function ActualizarMalla({malla, open, setOpen, estado, setEstado}) {
   function onSubmitForm(state) {
     const data = {
       nombre_malla: state.nombre_malla.value,
-      cod_malla: state.cod_malla.value,
+      res_malla: state.res_malla.value,
       n_niveles: state.n_niveles.value
     }
     let link = 'http://localhost:8000/api/malla/' + malla.id
@@ -72,7 +72,7 @@ function ActualizarMalla({malla, open, setOpen, estado, setEstado}) {
       >
         <DialogTitle id="max-width-dialog-title">Crear Malla</DialogTitle>
         <DialogContent>
-          <MallaForm nombre_malla={malla.nombre_malla} cod_malla={malla.cod_malla} n_niveles={malla.n_niveles} estado={estado} setEstado={setEstado} onSubmitForm={onSubmitForm}/>
+          <MallaForm nombre_malla={malla.nombre_malla} res_malla={malla.res_malla} n_niveles={malla.n_niveles} estado={estado} setEstado={setEstado} onSubmitForm={onSubmitForm}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

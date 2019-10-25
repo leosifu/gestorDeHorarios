@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Malla = sequelize.define('Malla', {
-    cod_malla: {
+    res_malla: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,

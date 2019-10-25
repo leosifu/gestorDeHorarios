@@ -5,7 +5,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
-import useForm from '../useForm'
+import useForm from '../../../form/useForm'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -65,7 +65,7 @@ const CarreraForm = ({cod_carrera, nombre_carrera, jornada, onSubmitForm}) => {
     validationStateSchema,
     onSubmitForm
   );
-  
+
   const classes = useStyles();
   return (
     <div>

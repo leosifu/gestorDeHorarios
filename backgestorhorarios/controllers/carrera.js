@@ -17,7 +17,8 @@ module.exports = {
     return Carrera
       .findAll({
         include: [{model:Malla, as:'mallas'}]
-      }).then(carrera =>res.json(carrera))
+      }).then(carrera =>res.send(carrera)
+      )
   },
   findByCarreraId(req, res){
     var id = req.params.id

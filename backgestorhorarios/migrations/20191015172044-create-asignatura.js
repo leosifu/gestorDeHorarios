@@ -8,11 +8,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cod_ramo: {
+      cod_asignatura: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      nombre_ramo: {
+      nombre_asignatura: {
         type: Sequelize.STRING,
         allowNull: false,
       },

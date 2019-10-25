@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import useForm from '../useForm'
+import useForm from '../../../form/useForm'
 
 
 const useStyles = makeStyles(theme => ({
@@ -25,14 +25,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const MallaForm = ({nombre_malla, cod_malla, n_niveles, estado, setEstado, onSubmitForm}) => {
+const MallaForm = ({nombre_malla, res_malla, n_niveles, estado, setEstado, onSubmitForm}) => {
   const stateSchema = {
-    cod_malla: { value: cod_malla, error: '' },
+    res_malla: { value: res_malla, error: '' },
     nombre_malla: { value: nombre_malla, error: '' },
     n_niveles: { value: n_niveles, error: '' },
   };
   const validationStateSchema = {
-    cod_malla: {
+    res_malla: {
       required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
@@ -66,12 +66,12 @@ const MallaForm = ({nombre_malla, cod_malla, n_niveles, estado, setEstado, onSub
     <div>
       <form onSubmit={handleOnSubmit}>
         <TextField
-          error = {state.cod_malla.error ? true : false}
+          error = {state.res_malla.error ? true : false}
           id="standard-name"
           label="Resolución de la malla"
-          name="cod_malla"
+          name="res_malla"
           className={classes.textField}
-          value={state.cod_malla.value}
+          value={state.res_malla.value}
           onChange={handleOnChange}
           margin="normal"
         />
