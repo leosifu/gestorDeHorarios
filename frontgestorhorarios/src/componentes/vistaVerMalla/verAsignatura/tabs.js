@@ -7,7 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import ListaCoord from '../listaCoord'
-import InfoRamo from './infoRamo'
+import InfoAsignatura from './infoAsignatura'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function TabsRamo({asignatura}) {
+export default function TabsAsignatura({asignatura}) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -58,13 +58,13 @@ export default function TabsRamo({asignatura}) {
     <div className={classes.root}>
       <AppBar position="static">
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" centered style={{backgroundColor:'orange'}}>
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
+          <Tab label="Información" {...a11yProps(0)} />
+          <Tab label="Coordinaciones" {...a11yProps(1)} />
 
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <InfoRamo asignatura={asignatura}/>
+        <InfoAsignatura asignatura={asignatura}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ListaCoord/>

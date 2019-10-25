@@ -9,7 +9,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import VerRamo from '../verRamo'
+import VerAsignatura from '../verAsignatura'
+import CrearAsignatura from '../crearAsignatura'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -41,12 +42,9 @@ const useStyles = makeStyles(theme => ({
     marginLeft: '20%',
     color:'blue'
   },
-  textoRamo:{
-
-  }
 }));
 
-export default function Ramo({nivel, asignaturas}) {
+export default function Asignatura({nivel, asignaturas}) {
   const classes = useStyles();
   console.log(nivel);
 
@@ -67,7 +65,7 @@ export default function Ramo({nivel, asignaturas}) {
                 </Typography>
               </Grid>
               <Grid item xs={1}>
-                <VerRamo asignatura={asignatura}/>
+                <VerAsignatura asignatura={asignatura}/>
               </Grid>
             </Grid>
             <Typography align="center" style={{fontSize:14, color: 'orange', height: '100%'}}>
@@ -78,9 +76,7 @@ export default function Ramo({nivel, asignaturas}) {
       ))}
       <Card className={classes.card} style={{ display:'flex', justifyContent:'center' }}>
         <Box borderRadius="50%" border={1} className={classes.oval}>
-          <IconButton className={classes.centrarIcon}>
-            <AddCircleOutlineOutlinedIcon fontSize='large'/>
-          </IconButton>
+          <CrearAsignatura open={open} setOpen={setOpen}/>
         </Box>
       </Card>
     </div>

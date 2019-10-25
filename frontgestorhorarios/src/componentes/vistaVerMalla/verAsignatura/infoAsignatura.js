@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InfoRamo({asignatura}){
+export default function InfoAsignatura({asignatura}){
 
   const classes = useStyles();
 

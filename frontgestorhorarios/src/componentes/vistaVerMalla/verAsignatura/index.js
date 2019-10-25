@@ -11,9 +11,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import Fab from '@material-ui/core/Fab';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ListadoSecciones from '../listadoSecciones'
 import ListaCoord from '../listaCoord'
-import TabsRamo from './tabs'
+import TabsAsignatura from './tabs'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const VerRamo = ({estado, setEstado, asignatura}) =>{
+const VerAsignatura = ({estado, setEstado, asignatura}) =>{
 
   const classes = useStyles();
 
@@ -65,9 +64,9 @@ const VerRamo = ({estado, setEstado, asignatura}) =>{
         aria-labelledby="max-width-dialog-title"
         style={{height:630}}
       >
-       <TabsRamo asignatura={asignatura}/>
+       <TabsAsignatura asignatura={asignatura}/>
       </Dialog>
     </>
   )
 }
-export default VerRamo
+export default VerAsignatura
