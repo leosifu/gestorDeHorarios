@@ -12,7 +12,7 @@ const AppRoutes = ({store}) =>
     <App>
       <Switch>
         <Route exact path="/" component={ListadoCarreras}/>
-        <Route exact path="/horario" component={SideBar} />
+        <Route exact path="/horario/:id" component={SideBar} />
         <Route exact path="/malla/:id" component={VerMalla} />
       </Switch>
     </App>

@@ -1,6 +1,7 @@
 const Asignatura = require('../models').Asignatura
 const Malla = require('../models').Malla
 const Historial = require('./historial')
+const Dependecia = require('./dependencia')
 
 module.exports = {
   create(req,res){
@@ -15,7 +16,23 @@ module.exports = {
         mallaId: req.body.mallaId
       })
       .then(asignatura => {
-        Historial.create(req)
+        console.log("\nAsignatura: ");
+        console.log(asignatura.dataValues);
+        console.log("\n Fin asignatura");
+        const dataHistorial = {
+          historial: req.body.historial,
+          asignaturaId: asignatura.dataValues.id
+        }
+        Historial.create(dataHistorial)
+        console.log("LLego");
+        const dataDependencia = [
+          {requisitoId: 1, asignaturaId: asignatura.dataValues.id},
+          {requisitoId: 2, asignaturaId: asignatura.dataValues.id},
+        ]
+        console.log("\ndataDependencia");
+        console.log(dataDependencia);
+        console.log("\nfin data");
+        //Dependecia.create(dataDependencia)
         return(res.status(201).send(asignatura))
       })
       .catch(error=> res.status(400).send(error))
@@ -24,5 +41,8 @@ module.exports = {
     return Asignatura
       .findAll({
       }).then(asignatura =>res.json(asignatura))
+  },
+  getRequisitos(req, res){
+
   }
 }

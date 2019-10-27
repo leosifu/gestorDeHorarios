@@ -1,9 +1,12 @@
 import React, { useRef } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+
 import { useDrag, useDrop } from 'react-dnd'
+
 import ItemTypes from '../itemTypes/ItemTypes'
 
 const useStyles = makeStyles({

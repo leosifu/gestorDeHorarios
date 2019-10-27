@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+
 import VerAsignatura from '../verAsignatura'
 import CrearAsignatura from '../crearAsignatura'
 
@@ -17,14 +15,12 @@ const useStyles = makeStyles(theme => ({
     width: 140,
     margin: 8,
     marginBottom: 13,
-    height: 145
+    height: 145,
+    //border: '1px solid red'
   },
   media: {
     height: 0,
     paddingTop: '56.25%', // 16:9
-  },
-  avatar: {
-    backgroundColor: red[500],
   },
   title: {
     fontSize: 12,
@@ -44,19 +40,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Asignatura({nivel, asignaturas}) {
+export default function Asignatura({nivel, asignaturas, estado, setEstado, mallaId}) {
   const classes = useStyles();
   console.log(nivel);
 
   const [open, setOpen] = useState(false);
 
   return (
-    <div style={{marginTop:20}}>
+    <div style={{paddingTop:20}}>
       <Typography color="textSecondary" align="center">
         Nivel: {nivel}
       </Typography>
       {asignaturas.map(asignatura=>(
-        <Card className={classes.card}>
+        <Card className={classes.card} key={asignatura.cod_asignatura}>
           <CardContent>
             <Grid container>
               <Grid item xs={11}>
@@ -76,7 +72,7 @@ export default function Asignatura({nivel, asignaturas}) {
       ))}
       <Card className={classes.card} style={{ display:'flex', justifyContent:'center' }}>
         <Box borderRadius="50%" border={1} className={classes.oval}>
-          <CrearAsignatura open={open} setOpen={setOpen}/>
+          <CrearAsignatura mallaId={mallaId} nivel={nivel} open={open} setOpen={setOpen} estado={estado} setEstado={setEstado}/>
         </Box>
       </Card>
     </div>

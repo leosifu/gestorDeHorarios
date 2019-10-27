@@ -1,23 +1,17 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
-import Bloque from './bloque'
+
 import update from 'immutability-helper'
-import { useDrop } from 'react-dnd'
-import ItemTypes from '../itemTypes/ItemTypes'
+
+import ListaCoordinaciones from './listaCoordinaciones'
+import TablaHorarios from './tablaHorarios'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,9 +46,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const horarios = ['08:00 - 09:30', '09:40 - 11:10', '11:20 - 12:50', '13:50 - 15:20', '15:30 - 17:00', '17:10 - 18:40', '19:00 - 20:10', '20:20 - 22:00', '22:00 - 23:00']
-
-const colores = ['#FFA07A', '	#F0E68C', '#00FF00', '#AFEEEE', '#D8BFD8', '#FFD700', '#90EE90']
+//const colores = ['#F012BE', '	#0074D9', '#7FDBFF', '#39CCCC', '#3D9970', '#2ECC40', '#FFDC00', '#FF851B', '#FF4136']
 
 export default function Horario() {
   const classes = useStyles();
@@ -65,10 +57,9 @@ export default function Horario() {
 
   const [bloques, setBloques] = useState([])
 
-  useEffect(() =>{
+  useEffect(() => {
 
     const obtenerData = () =>{
-      console.log("asd");
       const Data = [{id: 0, title: 'Algo', bloque:1, asignado:true}, {id: 1, title: 'nada', bloque: 5, asignado:true}, {id: 2, title: 'Algo', bloque: 7, asignado:true}, {id:3, title: 'nada', bloque: 14, asignado:true},
       {id:4, title: 'Algo', bloque: 22, asignado:true}, {id:5, title: 'nada', bloque: 24, asignado:true},
       {id:6, title: 'Algo', bloque:30, asignado:true}, {id:7, title: 'nada', bloque:40, asignado:true}, {id:8, title: 'Algo', bloque: 50, asignado:true}, {id:9, title: 'Otro', bloque:-1, asignado:false}]
@@ -140,114 +131,25 @@ export default function Horario() {
       })
     )}, [data])
 
-  function ListadoSecciones() {
-
-    const ref = useRef(null)
-
-    const [, drop] = useDrop({
-      accept: ItemTypes.BOX,
-      drop: dropLista,
-    })
-
-    const classes = useStyles();
-    const [open, setOpen] = useState(true);
-
-    const handleClick = () => {
-      setOpen(!open);
-    };
-
-    drop(ref)
-
-    return (
-      <List
-        component="nav"
-        aria-labelledby="nested-list-subheader"
-        subheader={
-          <ListSubheader component="div" id="nested-list-subheader">
-            Asignaturas
-          </ListSubheader>
-        }
-        className={classes.lista}
-        ref={ref}
-      >
-        <ListItem button>
-          <ListItemText primary="EDA" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Análisis" />
-        </ListItem>
-        <ListItem button onClick={handleClick}>
-          <ListItemText primary="Paradigmas" />
-          {open ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            {data.map((seccion)=>{
-              if(!seccion.asignado){
-                return(
-                  <ListItem button className={classes.nested}>
-                    <Bloque title={seccion.title} bloque={seccion.bloque} id={seccion.id}/>
-                  </ListItem>
-                )
-              }
-              else {
-                return(<div/>)
-              }
-            })}
-          </List>
-        </Collapse>
-      </List>
-    );
-  }
-
-  const GenerarHorario = () => {
-
-    console.log(bloques);
-    let x = 0
-    const Tabla = bloques.map((fila, i)=>{
-      const Dia = fila.map((dia, j)=>{
-        let backgroundColor = dia.title ? colores[x]: ''
-        if(dia.title) x++
-        return(
-          <TableCell padding="none" className={classes.grilla} >
-            <Bloque title={dia.title} bloque={dia.bloque} id={dia.id} color={ backgroundColor } onDrop={item => handleDrop(i, j, item)}/>
-          </TableCell>
-        )
-      })
-      return (
-        <TableRow key={i}>
-          <TableCell className={classes.hora} component="th" scope="row" >
-            {horarios[i]}
-          </TableCell>
-          {Dia}
-        </TableRow>
-      )
-    })
-
-    return(
-      <TableBody>{Tabla}</TableBody>
-    )
-  }
-
   return (
     <Grid container>
-    <Grid item xs={2}>
-      <ListadoSecciones />
-    </Grid>
-    <Grid item xs={10}>
-    <Paper className={classes.root}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            {dias.map((dia)=>(
-              <TableCell className={classes.encabezado}>{dia}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <GenerarHorario data={data} handleDrop={handleDrop} />
-      </Table>
-    </Paper>
-    </Grid>
+      <Grid item xs={2}>
+        <ListaCoordinaciones data={data} dropLista={dropLista}/>
+      </Grid>
+      <Grid item xs={10}>
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                {dias.map((dia)=>(
+                  <TableCell className={classes.encabezado}>{dia}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TablaHorarios bloques={bloques} handleDrop={handleDrop} />
+          </Table>
+        </Paper>
+      </Grid>
     </Grid>
   );
 }

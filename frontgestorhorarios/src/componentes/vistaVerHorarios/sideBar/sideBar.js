@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,8 +9,10 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
+
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
+
 import Horario from '../Horarios/horarios'
 
 
@@ -40,8 +44,19 @@ const useStyles = makeStyles(theme => ({
   spacing:8,
 }));
 
-export default function SideBar() {
+export default function SideBar(props) {
   const classes = useStyles();
+
+  const [niveles, setNiveles] = useState([])
+
+  useEffect(()=>{
+    var link = 'http://localhost:8000/api/malla/' + props.match.params.id
+    axios.get(link)
+    .then(res => {
+      console.log(res.data[0]);
+      setNiveles(res.data[0].niveles)
+    })
+  },[props.match.params.id])
 
   return (
     <div className={classes.root}>
@@ -54,12 +69,11 @@ export default function SideBar() {
           paper: classes.drawerPaper,
         }}
       >
-        <div className={classes.side} />
         <List>
-          {['Nivel 1', 'Nivel 2', 'Nivel 3', 'Nivel 4', 'Nivel 5', 'Nivel 6', 'Nivel 7', 'Nivel 8'].map((text, index) => (
-            <ListItem button key={text}>
+          {niveles.map((nivel, index) => (
+            <ListItem button key={"Nivel" + nivel.nivel}>
               {index % 2 === 0 && <Divider />}
-              <ListItemText primary={text} />
+              <ListItemText primary={"Nivel " + nivel.nivel} />
             </ListItem>
           ))}
         </List>
@@ -70,7 +84,7 @@ export default function SideBar() {
           <Grid container >
             <DndProvider backend={HTML5Backend}>
               <Grid item xs={11}>
-                  <Horario/>
+                  <Horario />
               </Grid>
               <Grid item xs={1}>
                 <button> Hola </button>

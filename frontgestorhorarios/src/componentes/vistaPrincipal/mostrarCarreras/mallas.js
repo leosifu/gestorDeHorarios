@@ -31,8 +31,8 @@ export default function Malla({carreraId, malla, estado, setEstado}){
           color="primary"
           aria-label="full-width contained primary button group"
         >
-          <Button><Link style={{ textDecoration: 'none', color:'white' }} to={"/malla/" + malla.id}>Ver Ramos</Link></Button>
-          <Button><Link style={{ textDecoration: 'none', color:'white' }} to="/horario">Horarios</Link></Button>
+          <Button><Link style={{ textDecoration: 'none', color:'white' }} to={"/malla/" + malla.id}>Ver Malla</Link></Button>
+          <Button><Link style={{ textDecoration: 'none', color:'white' }} to={"/horario/" + malla.id}>Horarios</Link></Button>
         </ButtonGroup>
       </CardActions>
     </Card>
