@@ -7,7 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import Divider from '@material-ui/core/Divider';
+
 
 import useForm from '../../form/useForm'
 
@@ -129,11 +130,10 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
   return (
     <>
       <DialogContent>
-      <CssBaseline />
         <Typography variant="h6" component="h3" className={classes.campoDes}>
           Datos de la Asignatura
         </Typography>
-        <CssBaseline />
+        <Divider />
         <TextField
           error = {state.cod_asignatura.error ? true : false}
           id="standard-name"
@@ -239,7 +239,7 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
       </DialogContent>
       <DialogActions>
         <Button  color="primary">
-          Close
+          Seleccionar Requisitos
         </Button>
         <Button onClick={handleOnSubmit} disabled={disable} variant="contained" color="primary" className={classes.button}>
           Primary

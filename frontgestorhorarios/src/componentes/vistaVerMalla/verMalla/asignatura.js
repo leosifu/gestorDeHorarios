@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 
+import { connect } from 'react-redux';
+
 import VerAsignatura from '../verAsignatura'
 import CrearAsignatura from '../crearAsignatura'
 
@@ -40,19 +42,32 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Asignatura({nivel, asignaturas, estado, setEstado, mallaId}) {
+function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, mallaId, handleClick,
+  edit, setEdit, activo, setActivo}) {
+
   const classes = useStyles();
-  console.log(nivel);
 
   const [open, setOpen] = useState(false);
 
+  function borde(id){
+    if(activo==id){
+      return {border:'2px solid green'}
+    }
+    else if (requisitos.indexOf(id)>-1){
+      return {border:'2px solid yellow'}
+    }
+    else {
+      return {border:'2px solid white'}
+    }
+  }
+
   return (
     <div style={{paddingTop:20}}>
-      <Typography color="textSecondary" align="center">
+      <Typography color="textSecondary" style={{position:'sticky'}} align="center">
         Nivel: {nivel}
       </Typography>
       {asignaturas.map(asignatura=>(
-        <Card className={classes.card} key={asignatura.cod_asignatura}>
+        <Card className={classes.card} key={asignatura.id} style={ borde(asignatura.id) } onClick={event => {return handleClick(event, asignatura.id)}}>
           <CardContent>
             <Grid container>
               <Grid item xs={11}>
@@ -61,7 +76,9 @@ export default function Asignatura({nivel, asignaturas, estado, setEstado, malla
                 </Typography>
               </Grid>
               <Grid item xs={1}>
-                <VerAsignatura asignatura={asignatura}/>
+                {edit==0?<VerAsignatura asignatura={asignatura} edit={edit} setEdit={setEdit}
+                  activo={activo} setActivo={setActivo}/>:<div/>}
+
               </Grid>
             </Grid>
             <Typography align="center" style={{fontSize:14, color: 'orange', height: '100%'}}>
@@ -78,3 +95,10 @@ export default function Asignatura({nivel, asignaturas, estado, setEstado, malla
     </div>
   );
 }
+const mapStateToProps = state => {
+    return {
+        mallaId: state.mallaId
+    }
+}
+
+export default connect(mapStateToProps)(Asignatura)

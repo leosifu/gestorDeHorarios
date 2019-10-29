@@ -1,18 +1,18 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Dependecia = sequelize.define('Dependecia', {
+  const Dependencia = sequelize.define('Dependencia', {
 
   }, {});
-  Dependecia.associate = function(models) {
+  Dependencia.associate = function(models) {
     // associations can be defined here
-    Dependecia.belongsTo(models.Asignatura,{
+    Dependencia.belongsTo(models.Asignatura,{
       as: 'requisito',
       onDelete: 'CASCADE'
     })
-    Dependecia.belongsTo(models.Asignatura,{
+    Dependencia.belongsTo(models.Asignatura,{
       as: 'asignatura',
       onDelete: 'CASCADE'
     })
   };
-  return Dependecia;
+  return Dependencia;
 };

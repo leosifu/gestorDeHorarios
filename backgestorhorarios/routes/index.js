@@ -2,6 +2,7 @@ const carreraController = require('../controllers').carrera
 const mallaController = require('../controllers').malla
 const asignaturaController = require('../controllers').asignatura
 const historialController = require('../controllers').historial
+const dependenciaController = require('../controllers').dependencia
 
 module.exports = (app) => {
   app.get('/api', (req, res)=>res.status(200).send({
@@ -21,5 +22,10 @@ module.exports = (app) => {
 
   //API asignatura
   app.get('/api/asignatura', asignaturaController.findAll)
+  app.get('/api/asignatura/:id', asignaturaController.findAsignatura)
   app.post('/api/asignatura', asignaturaController.create)
+
+  //Api dependencia
+  app.post('/api/dependencia', dependenciaController.crearDependencia)
+  app.delete('/api/dependencia', dependenciaController.removeDependencia)
 }

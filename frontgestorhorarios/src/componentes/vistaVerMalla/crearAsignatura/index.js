@@ -43,8 +43,6 @@ function CrearAsignatura({open, setOpen, estado, setEstado, nivel, mallaId}){
     setOpen(true);
   };
 
-  console.log(mallaId);
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -57,19 +55,19 @@ function CrearAsignatura({open, setOpen, estado, setEstado, nivel, mallaId}){
       tel_E: parseInt(state.tel_E.value),
       tel_L: parseInt(state.tel_L.value),
       nivel: nivel,
-      mallaId: mallaId,
+      mallaId: mallaId.mallaId,
       historial: {
-        cupos_pasados: state.cupos_pasados,
-        tasa_reprobacion: state.tasa_reprobacion,
+        cupos_pasados: state.cupos_pasados.value,
+        tasa_reprobacion: state.tasa_reprobacion.value,
       }
     }
     console.log(data);
-    /*axios.post('http://localhost:8000/api/asignatura', data)
+    axios.post('http://localhost:8000/api/asignatura', data)
     .then(res => {
       console.log(res.data);
       setOpen(false)
       setEstado(!estado)
-    })*/
+    })
   }
 
   var camposAsignatura = {

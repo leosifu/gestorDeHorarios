@@ -1,19 +1,32 @@
-const Dependecia = require('../models').Dependecia
-const Asignatura = require('../models').Asignatura
+const Dependencia = require('../models').Dependencia
 
 module.exports = {
-  create(req,res){
-    console.log("\nProbando dependencias");
-    console.log(req.dependencias);
-    console.log("\n");
-    return Dependecia
-      .bulkCreate(
-        req
-      )
-      .then(dependecia => {console.log(dependecia)
-        return dependecia})
+  crearDependencia(req, res){
+    return Dependencia
+      .create({
+        requisitoId: req.body.requisitoId,
+        asignaturaId: req.body.asignaturaId
+      })
+      .then(dependencia => {
+        console.log(dependencia)
+        return res.json(dependencia)
+      })
       .catch(error=> {
         console.log(error);
       })
   },
+  removeDependencia(req, res){
+    console.log(req.query);
+    Dependencia.findOne({
+      where: {
+        requisitoId: req.query.requisitoId,
+        asignaturaId: req.query.asignaturaId
+      }
+    })
+    .then(dependencia=>{
+      dependencia.destroy()
+      res.json(dependencia)
+    }
+    )
+  }
 }

@@ -28,16 +28,15 @@ module.exports = (sequelize, DataTypes) => {
       as:'coordinacions'
     })
     Asignatura.belongsToMany(models.Asignatura,{
-      through: models.Dependecia,
-      as: 'asignatura',
+      through: models.Dependencia,
+      as: 'requisitos',
       foreignKey: 'asignaturaId'
     })
     Asignatura.belongsToMany(models.Asignatura,{
-      through: models.Dependecia,
-      as: 'requisito',
+      through: models.Dependencia,
+      as: 'asignaturas',
       foreignKey: 'requisitoId'
     })
-
   };
   return Asignatura;
 };

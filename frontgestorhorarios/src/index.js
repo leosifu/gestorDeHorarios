@@ -6,7 +6,18 @@ import AppRoutes from './routes';
 import {createStore} from 'redux';
 import Reducers from './redux/reducers';
 
-let store = createStore(Reducers);
+import {loadState, saveState} from './localStorage';
+const estadoPer = loadState();
+let store = createStore(Reducers, estadoPer);
+
+store.subscribe( ()=>{
+    saveState(
+      {mallaId: store.getState().mallaId},
+      
+    );
+  }
+);
+
 
 render(
     <Router>

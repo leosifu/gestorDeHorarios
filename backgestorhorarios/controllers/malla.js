@@ -36,7 +36,10 @@ module.exports = {
     return Malla
       .findAll({
         where: {id:id},
-        include: [{model:Asignatura, as:'asignaturas'}]
+        include: [{
+          model:Asignatura,
+          as:'asignaturas',
+        }]
       }).then(malla =>{
         const asignaturas = malla[0].dataValues.asignaturas
         var niveles = []

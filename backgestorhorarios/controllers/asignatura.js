@@ -1,7 +1,6 @@
 const Asignatura = require('../models').Asignatura
 const Malla = require('../models').Malla
 const Historial = require('./historial')
-const Dependecia = require('./dependencia')
 
 module.exports = {
   create(req,res){
@@ -24,15 +23,6 @@ module.exports = {
           asignaturaId: asignatura.dataValues.id
         }
         Historial.create(dataHistorial)
-        console.log("LLego");
-        const dataDependencia = [
-          {requisitoId: 1, asignaturaId: asignatura.dataValues.id},
-          {requisitoId: 2, asignaturaId: asignatura.dataValues.id},
-        ]
-        console.log("\ndataDependencia");
-        console.log(dataDependencia);
-        console.log("\nfin data");
-        //Dependecia.create(dataDependencia)
         return(res.status(201).send(asignatura))
       })
       .catch(error=> res.status(400).send(error))
@@ -40,9 +30,20 @@ module.exports = {
   findAll(req,res){
     return Asignatura
       .findAll({
-      }).then(asignatura =>res.json(asignatura))
+        //include: [{model:Asignatura, as:'requisitos'}]
+      }).then(asignatura =>{
+        asignatura.getAsignaturas()
+        return (res.json(asignatura))
+      })
   },
-  getRequisitos(req, res){
-
-  }
+  findAsignatura(req, res){
+    var id = req.params.id
+    return Asignatura
+      .findAll({
+        where: {id:id},
+        include: [{model:Asignatura, as:'requisitos'}]
+      }).then(asignatura =>{
+        return(res.json(asignatura))
+      })
+  },
 }

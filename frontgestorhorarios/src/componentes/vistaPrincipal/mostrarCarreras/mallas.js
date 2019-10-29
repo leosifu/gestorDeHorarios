@@ -9,9 +9,22 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from '@material-ui/core/Grid';
 import ActualizarMalla from '../formularios/formMalla/actualizarMalla'
 
-export default function Malla({carreraId, malla, estado, setEstado}){
-  console.log(malla);
+import { connect } from 'react-redux';
+import * as actions from '../../../redux/actions'
+
+function Malla(props){
+
+  console.log(props);
+
+  const {carreraId, malla, estado, setEstado} = props
   const [open, setOpen] = useState(false);
+
+  const Link1 = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />);
+  const Link2 = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />);
+
+  function onClick(event, mallaId){
+    props.setMallaId(mallaId)
+  }
 
   return(
     <Card>
@@ -31,10 +44,18 @@ export default function Malla({carreraId, malla, estado, setEstado}){
           color="primary"
           aria-label="full-width contained primary button group"
         >
-          <Button><Link style={{ textDecoration: 'none', color:'white' }} to={"/malla/" + malla.id}>Ver Malla</Link></Button>
-          <Button><Link style={{ textDecoration: 'none', color:'white' }} to={"/horario/" + malla.id}>Horarios</Link></Button>
+          <Button component={Link1} to={"/malla/" + malla.id} onClick={event=>onClick(event,malla.id)}>Ver Malla</Button>
+          <Button component={Link1} to={"/horario/" + malla.id}>Horarios</Button>
         </ButtonGroup>
       </CardActions>
     </Card>
   )
 }
+
+const mapStateToProps = state => {
+    return {
+        mallaId: state.mallaId
+    }
+}
+
+export default connect(mapStateToProps, actions)(Malla)
