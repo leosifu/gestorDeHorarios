@@ -1,35 +1,29 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Coordinacions', {
+    return queryInterface.createTable('Bloques', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cod_coord: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      tipo_coord: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      nombre_coord:{
-        type: Sequelize.STRING,
-        allowNull: false,
-      }
-      num_asociacion:{
+      num_bloque: {
         type: Sequelize.INTEGER
       },
-      asignaturaId:{
+      sala: {
+        type: Sequelize.STRING
+      },
+      asignado: {
+        type: Sequelize.BOOLEAN
+      },
+      coordinacionId:{
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references:{
-          model: 'Asignaturas',
+          model: 'Coordinacions',
           key: 'id',
-          as: 'asignaturaId'
+          as: 'coordinacionId'
         }
       },
       createdAt: {
@@ -43,6 +37,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Coordinacions');
+    return queryInterface.dropTable('Bloques');
   }
 };

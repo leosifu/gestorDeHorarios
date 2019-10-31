@@ -24,7 +24,11 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
-      mostrar_carrera: {
+      mostrar_carrera_prof: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      mostrar_carrera_alum: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },

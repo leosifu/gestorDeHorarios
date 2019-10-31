@@ -38,6 +38,8 @@ module.exports = {
   findAll(req, res){
     return Historial
       .findAll({
-      }).then(historial =>res.json(historial))
+      })
+      .then(historial =>res.json(historial))
+      .catch(error=> res.status(400).send(error))
   }
 }

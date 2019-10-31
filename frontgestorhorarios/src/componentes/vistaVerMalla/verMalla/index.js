@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect, useRef, useLayoutEffect} from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
@@ -39,8 +39,6 @@ const useStyles = makeStyles({
 
 function VerMalla(props) {
 
-  console.log(props);
-
   const classes = useStyles();
 
   const [estado, setEstado] = useState(false);
@@ -53,6 +51,8 @@ function VerMalla(props) {
 
   const [edit, setEdit] = useState(0)
 
+  const firstUpdate = useRef(true);
+
   useEffect(()=>{
     var link = 'http://localhost:8000/api/malla/' + props.match.params.id
     axios.get(link)
@@ -60,36 +60,49 @@ function VerMalla(props) {
       console.log(res.data[0]);
       setNiveles(res.data[0].niveles)
     })
+    .catch((error)=>{
+      console.log(error);
+    })
   },[estado, props.match.params.id])
 
-  function handleClick1(event, algo){
-    event.preventDefault()
-    //event.target.style.border = '1px solid green'
-    console.log(algo);
-    var link = 'http://localhost:8000/api/asignatura/' + algo
+  useEffect(()=>{
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+    var link = 'http://localhost:8000/api/asignaturaReq/' + activo
+    console.log(link);
     axios.get(link)
     .then(res => {
+      console.log(res);
       console.log(res.data[0]);
       setActivo(res.data[0].id)
       var req = res.data[0].requisitos.map(requisito => requisito.id)
       setRequisitos(req)
     })
+    .catch((error)=>{
+
+      console.log(error);
+    })
+  },[activo])
+
+  function handleClick1(event, algo){
+    event.preventDefault()
+    setActivo(algo)
   }
 
   function handleClick2(event, algo){
     event.preventDefault()
-    console.log("hola");
     var copiaRequisitos = requisitos.slice()
-    if(algo == activo){
+    if(algo === activo){
       return
     }
-    if (copiaRequisitos.indexOf(algo)==-1) {
+    if (copiaRequisitos.indexOf(algo)===-1) {
       copiaRequisitos.push(algo)
       const data = {
         asignaturaId: activo,
         requisitoId: algo
       }
-      console.log(data);
       axios.post('http://localhost:8000/api/dependencia', data)
       .then(res => {
         console.log(res.data);
@@ -101,8 +114,6 @@ function VerMalla(props) {
         asignaturaId: activo,
         requisitoId: algo
       }
-      console.log(data);
-
       axios.delete('http://localhost:8000/api/dependencia', {params: data})
       .then(res => {
         console.log(res.data);
@@ -110,7 +121,6 @@ function VerMalla(props) {
       copiaRequisitos.splice(copiaRequisitos.indexOf(algo), 1)
 
     }
-    console.log(copiaRequisitos);
     setRequisitos(copiaRequisitos)
   }
 
@@ -121,20 +131,20 @@ function VerMalla(props) {
 
   return (
     <Paper className={classes.root}>
-      <GridList className={classes.gridList} cols={8}>
+      <GridList className={classes.gridList} cols={4}>
         {niveles ? niveles.map(nivel => {
           return(
             <div style={{height:590}} key={nivel.nivel}>
-              <GridListTile style={{ height: 'auto', overflow:'auto' }}>
+              <GridListTile style={{ height: 'auto', overflow:'auto', padding:0 }}>
                 <Asignatura activo={activo} setActivo={setActivo} requisitos={requisitos}
-                  handleClick={edit==1?handleClick2:handleClick1} nivel={nivel.nivel}
+                  handleClick={edit===1?handleClick2:handleClick1} nivel={nivel.nivel}
                   asignaturas={nivel.asignaturas} edit={edit} setEdit={setEdit}
                   estado={estado} setEstado={setEstado}/>
               </GridListTile>
             </div>
         )}) : < div/>}
       </GridList>
-      {edit==0?
+      {edit===0?
         <Link style={{ textDecoration: 'none', color:'white' }} to={"/horario/" + props.match.params.id}>
           <Button variant="contained" color="primary" className={classes.button}>
               Horarios

@@ -42,6 +42,7 @@ function useForm(stateSchema, validationSchema = {}, callback) {
 
       const name = event.target.name;
       const value = event.target.value;
+      const checked = event.target.checked;
 
       let error = '';
       if (validationSchema[name].required) {
@@ -61,7 +62,7 @@ function useForm(stateSchema, validationSchema = {}, callback) {
 
       setState(prevState => ({
         ...prevState,
-        [name]: { value, error },
+        [name]: { value, checked, error },
       }));
     },
     [validationSchema]

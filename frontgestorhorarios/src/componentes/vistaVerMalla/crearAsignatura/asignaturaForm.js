@@ -8,7 +8,8 @@ import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Divider from '@material-ui/core/Divider';
-
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 import useForm from '../../form/useForm'
 
@@ -60,6 +61,10 @@ const useStyles = makeStyles(theme => ({
 
 const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
 
+  const [stateC, setStateC] = React.useState({
+    checked: camposAsignatura.lab_independiente,
+  });
+
   const stateSchema = {
     cod_asignatura: { value: camposAsignatura.cod_asignatura, error: '' },
     nombre_asignatura: { value: camposAsignatura.nombre_asignatura, error: '' },
@@ -68,6 +73,7 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
     tel_L: { value: camposAsignatura.tel_L, error: '' },
     cupos_pasados: { value: camposAsignatura.cupos_pasados, error: '' },
     tasa_reprobacion: { value: camposAsignatura.tasa_reprobacion, error: '' },
+    lab_independiente: { value: stateC.checked, checked:camposAsignatura.lab_independiente, error: '' },
   };
   const validationStateSchema = {
     cod_asignatura: {
@@ -116,9 +122,13 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
         error: 'Invalid last name format.',
       },
     },
+    lab_independiente:{
+    }
   };
 
-
+  const handleChange = name => event => {
+    setStateC({ ...state, [name]: event.target.checked });
+  };
 
   const { state, handleOnChange, handleOnSubmit, disable } = useForm(
     stateSchema,
@@ -207,6 +217,18 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
             />
           </Grid>
         </Grid>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={state.lab_independiente.checked}
+              onChange={handleOnChange}
+              value={state.lab_independiente.checked}
+              color="primary"
+              name="lab_independiente"
+            />
+          }
+          label="Laboratorio independiente"
+        />
 
         <Typography variant="h6" component="h3" className={classes.campoDes}>
           Historial
@@ -238,11 +260,8 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
         <br/>
       </DialogContent>
       <DialogActions>
-        <Button  color="primary">
-          Seleccionar Requisitos
-        </Button>
         <Button onClick={handleOnSubmit} disabled={disable} variant="contained" color="primary" className={classes.button}>
-          Primary
+          Crear Asignatura
         </Button>
       </DialogActions>
     </>

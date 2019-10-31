@@ -50,7 +50,7 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, mallaId,
   const [open, setOpen] = useState(false);
 
   function borde(id){
-    if(activo==id){
+    if(activo===id){
       return {border:'2px solid green'}
     }
     else if (requisitos.indexOf(id)>-1){
@@ -67,21 +67,23 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, mallaId,
         Nivel: {nivel}
       </Typography>
       {asignaturas.map(asignatura=>(
-        <Card className={classes.card} key={asignatura.id} style={ borde(asignatura.id) } onClick={event => {return handleClick(event, asignatura.id)}}>
-          <CardContent>
-            <Grid container>
+        <Card className={classes.card} key={asignatura.id} style={ borde(asignatura.id) }>
+          <CardContent style={{paddingLeft:0, paddingRight: 0}}>
+            <Grid container style={{paddingLeft:16, paddingRight: 16}}>
               <Grid item xs={11}>
-                <Typography className={classes.title} color="textSecondary" align="center">
+                <Typography className={classes.title} color="textSecondary" align="center" onClick={event => {return handleClick(event, asignatura.id)}}>
                   Código: {asignatura.cod_asignatura}
                 </Typography>
               </Grid>
               <Grid item xs={1}>
-                {edit==0?<VerAsignatura asignatura={asignatura} edit={edit} setEdit={setEdit}
-                  activo={activo} setActivo={setActivo}/>:<div/>}
-
+                {edit===0?
+                  <VerAsignatura asignaturaId={asignatura.id} edit={edit} setEdit={setEdit}
+                  activo={activo} setActivo={setActivo}/>:
+                  <div/>
+                }
               </Grid>
             </Grid>
-            <Typography align="center" style={{fontSize:14, color: 'orange', height: '100%'}}>
+            <Typography align="center" style={{fontSize:14, color: 'orange', height: 110}} onClick={event => {return handleClick(event, asignatura.id)}}>
               {asignatura.nombre_asignatura}
             </Typography>
           </CardContent>

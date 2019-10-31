@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const VerAsignatura = ({estado, setEstado, asignatura, edit, setEdit, activo, setActivo}) =>{
+const VerAsignatura = ({asignaturaId, edit, setEdit, activo, setActivo}) =>{
 
   const classes = useStyles();
 
@@ -25,7 +26,24 @@ const VerAsignatura = ({estado, setEstado, asignatura, edit, setEdit, activo, se
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open2 = Boolean(anchorEl);
 
+  const [estado, setEstado] = useState(false)
+
+  const [asignatura, setAsignatura] = useState([])
+
+  useEffect(()=>{
+    var link = 'http://localhost:8000/api/asignatura/' + asignaturaId
+    axios.get(link)
+    .then(res => {
+      console.log(res.data[0]);
+      setAsignatura(res.data[0])
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  },[asignaturaId, estado])
+
   const handleClickMenu = event => {
+    setActivo(asignatura.id)
     setAnchorEl(event.currentTarget);
   };
 
@@ -85,7 +103,7 @@ const VerAsignatura = ({estado, setEstado, asignatura, edit, setEdit, activo, se
         aria-labelledby="max-width-dialog-title"
         style={{height:630}}
       >
-       <TabsAsignatura asignatura={asignatura}/>
+       <TabsAsignatura asignatura={asignatura} estado={estado} setEstado={setEstado}/>
       </Dialog>
     </>
   )

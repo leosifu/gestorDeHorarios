@@ -55,8 +55,8 @@ export default function ListadoCarreras(){
       </Grid>
       <Grid container>
         {carrerasD.map((carrera)=>(
-          <Grid item xs={6}>
-            <Carrera carrera={carrera} key={carrera.id} estado={estado} setEstado={setEstado}/>
+          <Grid item xs={6}  key={carrera.id}>
+            <Carrera carrera={carrera} estado={estado} setEstado={setEstado}/>
           </Grid>
         ))}
       </Grid>
@@ -68,8 +68,8 @@ export default function ListadoCarreras(){
       </Grid>
       <Grid container>
         {carrerasV.map((carrera)=>(
-          <Grid item xs={6}>
-            <Carrera carrera={carrera} key={carrera.id} estado={estado} setEstado={setEstado}/>
+          <Grid item xs={6}  key={carrera.id}>
+            <Carrera carrera={carrera} estado={estado} setEstado={setEstado}/>
           </Grid>
         ))}
       </Grid>

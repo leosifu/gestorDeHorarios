@@ -16,11 +16,10 @@ function Malla(props){
 
   console.log(props);
 
-  const {carreraId, malla, estado, setEstado} = props
+  const { malla, estado, setEstado} = props
   const [open, setOpen] = useState(false);
 
   const Link1 = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />);
-  const Link2 = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />);
 
   function onClick(event, mallaId){
     props.setMallaId(mallaId)

@@ -5,9 +5,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    tipo_coord: DataTypes.STRING,
-    num_asociacion:{
+    tipo_coord: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    nombre_coord:{
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    num_asociacion:{
+      type: DataTypes.INTEGER,
     }
   }, {});
   Coordinacion.associate = function(models) {
@@ -15,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     Coordinacion.belongsTo(models.Asignatura,{
       foreignKey: 'asignaturaId',
       onDelete:'CASCADE'
+    })
+    Coordinacion.hasMany(models.Bloque,{
+      foreignKey: 'coordinacionId',
+      as:'bloques'
     })
   };
   return Coordinacion;

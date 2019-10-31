@@ -20,7 +20,12 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: true,
       allowNull: false,
     },
-    mostrar_carrera: {
+    mostrar_carrera_prof: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
+    mostrar_carrera_alum: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
       allowNull: false,

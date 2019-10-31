@@ -28,6 +28,10 @@ module.exports = {
       nivel:{
         type: Sequelize.INTEGER,
       },
+      lab_independiente:{
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
       mallaId:{
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',

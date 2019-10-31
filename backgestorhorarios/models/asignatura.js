@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    lab_independiente:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
   }, {});
   Asignatura.associate = function(models) {
     // associations can be defined here
@@ -25,7 +30,11 @@ module.exports = (sequelize, DataTypes) => {
     })
     Asignatura.hasMany(models.Coordinacion,{
       foreignKey: 'asignaturaId',
-      as:'coordinacions'
+      as:'coordinaciones'
+    })
+    Asignatura.hasOne(models.Historial,{
+      foreignKey:'asignaturaId',
+      as: 'historial'
     })
     Asignatura.belongsToMany(models.Asignatura,{
       through: models.Dependencia,

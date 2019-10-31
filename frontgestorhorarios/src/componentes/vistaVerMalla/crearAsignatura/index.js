@@ -2,14 +2,10 @@ import React from 'react';
 import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import CssBaseline from '@material-ui/core/CssBaseline';
 
 import AsignaturaForm from './asignaturaForm'
 
@@ -55,6 +51,7 @@ function CrearAsignatura({open, setOpen, estado, setEstado, nivel, mallaId}){
       tel_E: parseInt(state.tel_E.value),
       tel_L: parseInt(state.tel_L.value),
       nivel: nivel,
+      lab_independiente: state.lab_independiente.checked,
       mallaId: mallaId.mallaId,
       historial: {
         cupos_pasados: state.cupos_pasados.value,
@@ -79,6 +76,7 @@ function CrearAsignatura({open, setOpen, estado, setEstado, nivel, mallaId}){
     tel_L: 0,
     cupos_pasados: 0,
     tasa_reprobacion: 0,
+    lab_independiente: false,
   }
 
   return (

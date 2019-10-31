@@ -3,6 +3,7 @@ const mallaController = require('../controllers').malla
 const asignaturaController = require('../controllers').asignatura
 const historialController = require('../controllers').historial
 const dependenciaController = require('../controllers').dependencia
+const coordinacionController = require('../controllers').coordinacion
 
 module.exports = (app) => {
   app.get('/api', (req, res)=>res.status(200).send({
@@ -21,11 +22,16 @@ module.exports = (app) => {
   app.put('/api/malla/:id', mallaController.update)
 
   //API asignatura
-  app.get('/api/asignatura', asignaturaController.findAll)
+  //app.get('/api/asignatura', asignaturaController.findAll)
   app.get('/api/asignatura/:id', asignaturaController.findAsignatura)
+  app.get('/api/asignaturaReq/:id', asignaturaController.getRequisitos)
   app.post('/api/asignatura', asignaturaController.create)
 
   //Api dependencia
   app.post('/api/dependencia', dependenciaController.crearDependencia)
   app.delete('/api/dependencia', dependenciaController.removeDependencia)
+
+  //Api coordinacion
+  //app.get('/api/coordinacion', coordinacionController.findAll)
+  app.post('/api/coordinacion', coordinacionController.create)
 }

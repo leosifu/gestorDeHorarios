@@ -17,8 +17,9 @@ module.exports = {
     return Carrera
       .findAll({
         include: [{model:Malla, as:'mallas'}]
-      }).then(carrera =>res.send(carrera)
-      )
+      })
+      .then(carrera =>res.send(carrera))
+      .catch(error=> res.status(400).send(error))
   },
   findByCarreraId(req, res){
     var id = req.params.id
@@ -26,7 +27,9 @@ module.exports = {
       .findAll({
         where: {id:id},
         include: [{model:Malla, as:'mallas'}]
-      }).then(carrera =>res.json(carrera))
+      })
+      .then(carrera =>res.json(carrera))
+      .catch(error=> res.status(400).send(error))
   },
   update(req,res){
     return Carrera

@@ -1,5 +1,7 @@
 const Malla = require('../models').Malla
 const Asignatura = require('../models').Asignatura
+const Historial = require('../models').Historial
+const Coordinacion = require('../models').Coordinacion
 
 module.exports = {
   create(req,res){
@@ -17,7 +19,9 @@ module.exports = {
   findAll(req,res){
     return Malla
       .findAll({
-      }).then(malla =>res.json(malla))
+      })
+      .then(malla =>res.json(malla))
+      .catch(error=> res.status(400).send(error))
   },
   update(req, res){
     return Malla
@@ -41,6 +45,7 @@ module.exports = {
           as:'asignaturas',
         }]
       }).then(malla =>{
+        console.log("asd");
         const asignaturas = malla[0].dataValues.asignaturas
         var niveles = []
         for (var i = 1; i <= malla[0].dataValues.n_niveles; i++) {

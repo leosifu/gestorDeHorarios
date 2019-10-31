@@ -46,9 +46,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function TabsAsignatura({asignatura}) {
+export default function TabsAsignatura({asignatura, estado, setEstado}) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+
+  console.log(asignatura.id);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -57,17 +59,18 @@ export default function TabsAsignatura({asignatura}) {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" centered style={{backgroundColor:'orange'}}>
+        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" centered
+          style={{backgroundColor:'orange'}}>
           <Tab label="Información" {...a11yProps(0)} />
           <Tab label="Coordinaciones" {...a11yProps(1)} />
-
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
         <InfoAsignatura asignatura={asignatura}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ListaCoord/>
+        <ListaCoord asignaturaId={asignatura.id} lab_independiente={asignatura.lab_independiente}
+          coordinaciones={asignatura.coordinaciones} estado={estado} setEstado={setEstado}/>
       </TabPanel>
 
     </div>

@@ -86,8 +86,8 @@ export default function Carrera({carrera, estado, setEstado}) {
           <div>
             {carrera.mallas.map((malla, i)=>{
               return(
-                <CardContent>
-                  <Malla carreraId={carrera.id} malla={malla} estado={estado} setEstado={setEstado}/>
+                <CardContent key={malla.id}>
+                  <Malla malla={malla} estado={estado} setEstado={setEstado}/>
                 </CardContent>
               )
             })}

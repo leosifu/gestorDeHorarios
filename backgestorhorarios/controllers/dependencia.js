@@ -26,7 +26,7 @@ module.exports = {
     .then(dependencia=>{
       dependencia.destroy()
       res.json(dependencia)
-    }
-    )
+    })
+    .catch(error=> res.status(400).send(error))
   }
 }

@@ -1,5 +1,8 @@
 const Asignatura = require('../models').Asignatura
 const Malla = require('../models').Malla
+const Coordinacion = require('../models').Coordinacion
+const HistorialM = require('../models').Historial
+const Bloque = require('../models').Bloque
 const Historial = require('./historial')
 
 module.exports = {
@@ -12,7 +15,8 @@ module.exports = {
         tel_E: req.body.tel_E,
         tel_L: req.body.tel_T,
         nivel: req.body.nivel,
-        mallaId: req.body.mallaId
+        mallaId: req.body.mallaId,
+        lab_independiente: req.body.lab_independiente
       })
       .then(asignatura => {
         console.log("\nAsignatura: ");
@@ -31,18 +35,34 @@ module.exports = {
     return Asignatura
       .findAll({
         //include: [{model:Asignatura, as:'requisitos'}]
-      }).then(asignatura =>{
+      })
+      .then(asignatura =>{
         asignatura.getAsignaturas()
         return (res.json(asignatura))
       })
+      .catch(error=> res.status(400).send(error))
   },
   findAsignatura(req, res){
     var id = req.params.id
     return Asignatura
       .findAll({
         where: {id:id},
+        include: [{model:Asignatura, as:'requisitos'},
+          {model:Coordinacion, as:'coordinaciones', include:[{model: Bloque, as:'bloques'}]},
+          {model:HistorialM, as:'historial'}]
+      })
+      .then(asignatura =>{
+        return(res.json(asignatura))
+      })
+  },
+  getRequisitos(req, res){
+    var id = req.params.id
+    return Asignatura
+      .findAll({
+        where: {id:id},
         include: [{model:Asignatura, as:'requisitos'}]
-      }).then(asignatura =>{
+      })
+      .then(asignatura =>{
         return(res.json(asignatura))
       })
   },
