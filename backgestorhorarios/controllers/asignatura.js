@@ -13,7 +13,7 @@ module.exports = {
         nombre_asignatura: req.body.nombre_asignatura,
         tel_T: req.body.tel_T,
         tel_E: req.body.tel_E,
-        tel_L: req.body.tel_T,
+        tel_L: req.body.tel_L,
         nivel: req.body.nivel,
         mallaId: req.body.mallaId,
         lab_independiente: req.body.lab_independiente

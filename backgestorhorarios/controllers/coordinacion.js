@@ -1,8 +1,10 @@
 const Coordinacion = require('../models').Coordinacion
 const Asignatura = require('../models').Asignatura
+const Bloque = require('./bloque')
 
 module.exports = {
   create(req, res){
+    console.log(req.body);
     return Coordinacion
       .create({
         cod_coord: req.body.cod_coord,
@@ -11,6 +13,12 @@ module.exports = {
         asignaturaId: req.body.asignaturaId
       })
       .then(coordinacion => {
+        var bloques = []
+        for (var i = 0; i < req.body.num_bloques; i++) {
+          bloques.push({coordinacionId: coordinacion.dataValues.id})
+        }
+        console.log(bloques);
+        Bloque.create(bloques)
         return(res.status(201).send(coordinacion))
       })
   },

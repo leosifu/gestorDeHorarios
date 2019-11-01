@@ -40,12 +40,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function ListaCoord({coordinaciones, asignaturaId, lab_independiente, estado, setEstado}){
+function ListaCoord({coordinaciones, asignatura, lab_independiente, estado, setEstado}){
   const classes = useStyles();
 
   const [crear, setCrear] = useState(false)
 
-  console.log(coordinaciones);
+  console.log(lab_independiente);
 
   const data = {
     cod_coord: '',
@@ -59,11 +59,33 @@ function ListaCoord({coordinaciones, asignaturaId, lab_independiente, estado, se
   }
 
   function onSubmitForm(state){
+    var n = 3
+    const num_bloques = function(){
+      if(lab_independiente){
+        switch (state.tipo_coord.value) {
+          case "Teoría":
+            return asignatura.tel_T
+            break;
+          case "Ejercicios":
+            return asignatura.tel_E
+            break;
+          case "Laboratorio":
+            return asignatura.tel_L
+            break;
+          default:
+            return 0
+        }
+      }
+      else{
+        return asignatura.tel_T + asignatura.tel_E + asignatura.tel_L
+      }
+    }
     const data = {
       cod_coord: state.cod_coord.value,
       nombre_coord: state.nombre_coord.value,
       tipo_coord: state.tipo_coord.value,
-      asignaturaId: asignaturaId
+      asignaturaId: asignatura.id,
+      num_bloques: num_bloques()
     }
     console.log(data);
     axios.post('http://localhost:8000/api/coordinacion', data)

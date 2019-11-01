@@ -69,10 +69,9 @@ export default function TabsAsignatura({asignatura, estado, setEstado}) {
         <InfoAsignatura asignatura={asignatura}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ListaCoord asignaturaId={asignatura.id} lab_independiente={asignatura.lab_independiente}
+        <ListaCoord asignatura={asignatura} lab_independiente={asignatura.lab_independiente}
           coordinaciones={asignatura.coordinaciones} estado={estado} setEstado={setEstado}/>
       </TabPanel>
-
     </div>
   );
 }
