@@ -66,4 +66,16 @@ module.exports = {
         return(res.json(asignatura))
       })
   },
+  findAsignaturasByNivel(req, res){
+    var id = req.params.id
+    var nivel = req.params.nivel
+    return Asignatura
+      .findAll({
+        where: {mallaId:id, nivel: nivel},
+        include: [{model:Coordinacion, as:'coordinaciones', include:[{model: Bloque, as:'bloques'}]}]
+      })
+      .then(asignatura =>{
+        return(res.json(asignatura))
+      })
+  }
 }

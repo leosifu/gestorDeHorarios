@@ -25,8 +25,8 @@ module.exports = (app) => {
   //app.get('/api/asignatura', asignaturaController.findAll)
   app.get('/api/asignatura/:id', asignaturaController.findAsignatura)
   app.get('/api/asignaturaReq/:id', asignaturaController.getRequisitos)
+  app.get('/api/asignatura/:id/:nivel', asignaturaController.findAsignaturasByNivel)
   app.post('/api/asignatura', asignaturaController.create)
-
   //Api dependencia
   app.post('/api/dependencia', dependenciaController.crearDependencia)
   app.delete('/api/dependencia', dependenciaController.removeDependencia)

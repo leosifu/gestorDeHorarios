@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
+    fecha_resolucion:{
+      type:DataTypes.DATE,
+    },
     n_niveles: {
       type: DataTypes.INTEGER,
     }

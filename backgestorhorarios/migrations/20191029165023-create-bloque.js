@@ -17,6 +17,12 @@ module.exports = {
       asignado: {
         type: Sequelize.BOOLEAN
       },
+      num_asociacion:{
+        type: Sequelize.INTEGER
+      },
+      num_orden_bloque:{
+        type: Sequelize.INTEGER
+      },
       coordinacionId:{
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',

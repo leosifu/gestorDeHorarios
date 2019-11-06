@@ -4,15 +4,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 
 import { useDrag, useDrop } from 'react-dnd'
 
 import ItemTypes from '../itemTypes/ItemTypes'
+import BloqueListaAsign from './bloqueListaAsign'
+import BloqueTablaHorario from './bloqueTablaHorario'
 
 const useStyles = makeStyles({
   card: {
-    width: 110,
-    height: 50,
+    width: '100%',
+    height: '100%',
   },
   bullet: {
     display: 'inline-block',
@@ -30,12 +33,12 @@ const useStyles = makeStyles({
   }
 });
 
-export default function Bloque({title, bloque, id, onDrop, color}) {
+export default function Bloque({nombre_coord, cod_coord, bloque, id, onDrop, color, tipo}) {
   const ref = useRef(null)
   const classes = useStyles();
   const [ , drag] = useDrag({
-    item: { id, title, bloque, type: ItemTypes.BOX },
-    canDrag: title ? true : false,
+    item: { id, nombre_coord, bloque, type: ItemTypes.BOX },
+    canDrag: nombre_coord ? true : false,
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
@@ -55,18 +58,19 @@ export default function Bloque({title, bloque, id, onDrop, color}) {
   } else if (canDrop) {
     backgroundColor = 'darkkhaki'
   }
-  backgroundColor = color
   drop(drag(ref))
 
   return (
-    <Card  ref={ref} className={classes.card} style={{ backgroundColor }} padding="none">
+    <Card ref={ref} className={classes.card} style={{ backgroundColor }} padding="none">
       <CardContent className={classes.contenido}>
-
-        <Typography >
-          {title}
-          {id}
-        </Typography>
-
+        <Grid container>
+          <Grid item xs={11}>
+            <Typography >
+              {nombre_coord}
+              {cod_coord}
+            </Typography>
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );

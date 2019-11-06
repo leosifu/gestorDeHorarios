@@ -8,15 +8,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Bloque from './bloque'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    width: 770,
-    marginTop: theme.spacing(3),
-    overflowX: 'auto',
-  },
-  table: {
-  },
   grilla:{
-    width: 110,
+    width: 150,
     height: 50,
     padding: '0 0 0 0'
   },
@@ -24,16 +17,6 @@ const useStyles = makeStyles(theme => ({
     width: 110,
     height: 50,
     padding: '0 0 0 10px',
-  },
-  encabezado:{
-    maxWidth:100,
-    minWidth: 100
-  },
-  lista:{
-    width: '90%',
-    maxWidth: 330,
-    backgroundColor: theme.palette.background.paper,
-    minHeight: 500,
   },
   nested: {
     paddingLeft: theme.spacing(4),
@@ -53,7 +36,8 @@ export default function TablaHorarios({bloques, handleDrop}){
 
       return(
         <TableCell padding="none" className={classes.grilla} >
-          <Bloque title={dia.title} bloque={dia.bloque} id={dia.id} onDrop={item => handleDrop(i, j, item)}/>
+          <Bloque nombre_coord={dia.nombre_coord} cod_coord={dia.cod_coord}
+            bloque={dia.bloque} id={dia.id} onDrop={item => handleDrop(i, j, item)}/>
         </TableCell>
       )
     })

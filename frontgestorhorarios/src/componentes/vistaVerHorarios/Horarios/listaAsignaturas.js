@@ -13,7 +13,7 @@ import { useDrop } from 'react-dnd'
 
 import ItemTypes from '../itemTypes/ItemTypes'
 import Bloque from './bloque'
-
+import AsignaturaItem from './asignaturaItem'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-function ListaCoordinaciones({data, dropLista}) {
+function ListaAsignaturas({asignaturas, data, dropLista}) {
 
   const ref = useRef(null)
 
@@ -59,6 +59,7 @@ function ListaCoordinaciones({data, dropLista}) {
   })
 
   const classes = useStyles();
+
   const [open, setOpen] = useState(true);
 
   const handleClick = () => {
@@ -79,33 +80,13 @@ function ListaCoordinaciones({data, dropLista}) {
       className={classes.lista}
       ref={ref}
     >
-      <ListItem button>
-        <ListItemText primary="EDA" />
-      </ListItem>
-      <ListItem button>
-        <ListItemText primary="Análisis" />
-      </ListItem>
-      <ListItem button onClick={handleClick}>
-        <ListItemText primary="Paradigmas" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {data.map((seccion)=>{
-            if(!seccion.asignado){
-              return(
-                <ListItem button className={classes.nested}>
-                  <Bloque title={seccion.title} bloque={seccion.bloque} id={seccion.id}/>
-                </ListItem>
-              )
-            }
-            else {
-              return(<div/>)
-            }
-          })}
-        </List>
-      </Collapse>
+      {
+        asignaturas.map(asignatura=>{
+          var coordsAsignatura = data.filter(dato=>dato.cod_asignatura==asignatura.cod_asignatura)
+          return (<AsignaturaItem asignatura={asignatura.nombre_asignatura} data={coordsAsignatura}/>)
+        })
+      }
     </List>
   );
 }
-export default ListaCoordinaciones
+export default ListaAsignaturas

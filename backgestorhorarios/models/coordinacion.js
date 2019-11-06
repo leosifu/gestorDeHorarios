@@ -12,9 +12,6 @@ module.exports = (sequelize, DataTypes) => {
     nombre_coord:{
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    num_asociacion:{
-      type: DataTypes.INTEGER,
     }
   }, {});
   Coordinacion.associate = function(models) {

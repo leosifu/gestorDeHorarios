@@ -19,9 +19,6 @@ module.exports = {
       nombre_coord:{
         type: Sequelize.STRING,
         allowNull: false,
-      }
-      num_asociacion:{
-        type: Sequelize.INTEGER
       },
       asignaturaId:{
         type: Sequelize.INTEGER,

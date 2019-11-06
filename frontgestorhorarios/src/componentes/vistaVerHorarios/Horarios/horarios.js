@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -10,12 +11,14 @@ import Grid from '@material-ui/core/Grid';
 
 import update from 'immutability-helper'
 
-import ListaCoordinaciones from './listaCoordinaciones'
+import { connect } from 'react-redux';
+
+import ListaAsignaturas from './listaAsignaturas'
 import TablaHorarios from './tablaHorarios'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: 770,
+    width: '100%',
     marginTop: theme.spacing(3),
     overflowX: 'auto',
   },
@@ -48,8 +51,10 @@ const useStyles = makeStyles(theme => ({
 
 //const colores = ['#F012BE', '	#0074D9', '#7FDBFF', '#39CCCC', '#3D9970', '#2ECC40', '#FFDC00', '#FF851B', '#FF4136']
 
-export default function Horario() {
+function Horario(props) {
   const classes = useStyles();
+
+  const {mallaId, nivel} = props
 
   const dias = ['Hora', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
 
@@ -57,9 +62,42 @@ export default function Horario() {
 
   const [bloques, setBloques] = useState([])
 
-  useEffect(() => {
+  const [asignaturas, setAsignaturas] = useState([])
 
-    const obtenerData = () =>{
+  useEffect(()=>{
+    var link = 'http://localhost:8000/api/asignatura/' + mallaId.mallaId + '/' + nivel
+    console.log(link);
+    axios.get(link)
+    .then(res => {
+      const data = res.data
+      var asignaturas = data.map(asignatura=>({nombre_asignatura: asignatura.nombre_asignatura,cod_asignatura: asignatura.cod_asignatura}))
+      console.log(res.data);
+      setAsignaturas(asignaturas)
+      var bloquesMatrix = data.map(asignatura=>asignatura.coordinaciones.map(coordinacion=>{
+        coordinacion.bloques.map(bloque=>{
+          bloque.cod_asignatura= asignatura.cod_asignatura
+          bloque.nombre_coord = coordinacion.nombre_coord
+          bloque.cod_coord = coordinacion.cod_coord
+          return bloque
+        })
+        return coordinacion.bloques
+      }))
+      var bloques = []
+      bloquesMatrix.map(bloqueM=>bloques = bloques.concat(...bloqueM))
+      setData(bloques)
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  },[nivel])
+
+  useEffect(()=>{
+
+  })
+
+  /*useEffect(() => {
+
+    const obtenerData = () => {
       const Data = [{id: 0, title: 'Algo', bloque:1, asignado:true}, {id: 1, title: 'nada', bloque: 5, asignado:true}, {id: 2, title: 'Algo', bloque: 7, asignado:true}, {id:3, title: 'nada', bloque: 14, asignado:true},
       {id:4, title: 'Algo', bloque: 22, asignado:true}, {id:5, title: 'nada', bloque: 24, asignado:true},
       {id:6, title: 'Algo', bloque:30, asignado:true}, {id:7, title: 'nada', bloque:40, asignado:true}, {id:8, title: 'Algo', bloque: 50, asignado:true}, {id:9, title: 'Otro', bloque:-1, asignado:false}]
@@ -76,7 +114,7 @@ export default function Horario() {
       setData(Data)
     }
     obtenerData()
-  }, []);
+  }, []);*/
 
   useEffect(()=>{
     var matrix = []
@@ -88,8 +126,8 @@ export default function Horario() {
     }
     var ancho = matrix[0].length
     for (var i = 0; i < data.length; i++) {
-      let x = data[i].bloque % ancho
-      let y = parseInt(data[i].bloque /ancho)
+      let x = data[i].num_bloque % ancho
+      let y = parseInt(data[i].num_bloque /ancho)
       matrix[y][x] = data[i]
     }
     setBloques(matrix)
@@ -101,13 +139,15 @@ export default function Horario() {
       console.log(y);
       console.log(item);
       let nuevoBloque = x*6 + y;
-      if(!data[item.id].asignado){
-        data[item.id].asignado = true
+      const dato = data.find(dato=>dato.id==item.id)
+      const index = data.indexOf(dato)
+      if(!data[index].asignado){
+        data[index].asignado = true
       }
       setData(
         update(data,{
-          [item.id]:{
-            bloque:{
+          [index]:{
+            num_bloque:{
               $set: nuevoBloque
             }
           }
@@ -118,13 +158,15 @@ export default function Horario() {
 
   const dropLista = useCallback((item) => {
     console.log("asdad");
+    const dato = data.find(dato=>dato.id==item.id)
+    const index = data.indexOf(dato)
     setData(
       update(data,{
-        [item.id]:{
+        [index]:{
           asignado:{
             $set: false
           },
-          bloque:{
+          num_bloque:{
             $set: -1
           }
         }
@@ -134,7 +176,7 @@ export default function Horario() {
   return (
     <Grid container>
       <Grid item xs={2}>
-        <ListaCoordinaciones data={data} dropLista={dropLista}/>
+        <ListaAsignaturas asignaturas={asignaturas} data={data} dropLista={dropLista}/>
       </Grid>
       <Grid item xs={10}>
         <Paper className={classes.root}>
@@ -153,3 +195,11 @@ export default function Horario() {
     </Grid>
   );
 }
+
+const mapStateToProps = state => {
+  return {
+    mallaId: state.mallaId
+  }
+}
+
+export default connect(mapStateToProps)(Horario)

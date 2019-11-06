@@ -44,7 +44,7 @@ function Malla(props){
           aria-label="full-width contained primary button group"
         >
           <Button component={Link1} to={"/malla/" + malla.id} onClick={event=>onClick(event,malla.id)}>Ver Malla</Button>
-          <Button component={Link1} to={"/horario/" + malla.id}>Horarios</Button>
+          <Button component={Link1} to={"/horario/" + malla.id} onClick={event=>onClick(event,malla.id)}>Horarios</Button>
         </ButtonGroup>
       </CardActions>
     </Card>

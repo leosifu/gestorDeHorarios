@@ -16,6 +16,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      fecha_resolucion:{
+        type: Sequelize.DATE,
+      },
       n_niveles: {
         type: Sequelize.INTEGER,
       },

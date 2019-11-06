@@ -16,7 +16,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import Horario from '../Horarios/horarios'
 
 
-const drawerWidth = 140;
+const drawerWidth = 100;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,14 +49,17 @@ export default function SideBar(props) {
 
   const [niveles, setNiveles] = useState([])
 
+  const [nivel, setNivel] = useState(1)
+
   useEffect(()=>{
     var link = 'http://localhost:8000/api/malla/' + props.match.params.id
     axios.get(link)
     .then(res => {
       console.log(res.data[0]);
+      console.log("asdasd");
       setNiveles(res.data[0].niveles)
     })
-  },[props.match.params.id])
+  },[])
 
   return (
     <div className={classes.root}>
@@ -65,13 +68,15 @@ export default function SideBar(props) {
       <Drawer
         className={classes.drawer}
         variant="permanent"
+        open={false}
+        anchor="left"
         classes={{
           paper: classes.drawerPaper,
         }}
       >
         <List>
           {niveles.map((nivel, index) => (
-            <ListItem button key={"Nivel" + nivel.nivel}>
+            <ListItem button key={"Nivel" + nivel.nivel} onClick={event=>setNivel(nivel.nivel)}>
               {index % 2 === 0 && <Divider />}
               <ListItemText primary={"Nivel " + nivel.nivel} />
             </ListItem>
@@ -84,7 +89,7 @@ export default function SideBar(props) {
           <Grid container >
             <DndProvider backend={HTML5Backend}>
               <Grid item xs={11}>
-                  <Horario />
+                <Horario nivel={nivel}/>
               </Grid>
               <Grid item xs={1}>
                 <button> Hola </button>
