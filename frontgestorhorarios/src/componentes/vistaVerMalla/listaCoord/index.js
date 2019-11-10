@@ -59,19 +59,15 @@ function ListaCoord({coordinaciones, asignatura, lab_independiente, estado, setE
   }
 
   function onSubmitForm(state){
-    var n = 3
     const num_bloques = function(){
       if(lab_independiente){
         switch (state.tipo_coord.value) {
           case "Teoría":
             return asignatura.tel_T
-            break;
           case "Ejercicios":
             return asignatura.tel_E
-            break;
           case "Laboratorio":
             return asignatura.tel_L
-            break;
           default:
             return 0
         }

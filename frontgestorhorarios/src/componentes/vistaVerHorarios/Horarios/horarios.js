@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-//const colores = ['#F012BE', '	#0074D9', '#7FDBFF', '#39CCCC', '#3D9970', '#2ECC40', '#FFDC00', '#FF851B', '#FF4136']
+const colores = ['#F012BE', '	#0074D9', '#7FDBFF', '#39CCCC', '#3D9970', '#2ECC40', '#FFDC00', '#FF851B', '#FF4136']
 
 function Horario(props) {
   const classes = useStyles();
@@ -73,11 +73,15 @@ function Horario(props) {
       var asignaturas = data.map(asignatura=>({nombre_asignatura: asignatura.nombre_asignatura,cod_asignatura: asignatura.cod_asignatura}))
       console.log(res.data);
       setAsignaturas(asignaturas)
-      var bloquesMatrix = data.map(asignatura=>asignatura.coordinaciones.map(coordinacion=>{
+      var bloquesMatrix = data.map((asignatura, i)=>asignatura.coordinaciones.map(coordinacion=>{
         coordinacion.bloques.map(bloque=>{
           bloque.cod_asignatura= asignatura.cod_asignatura
           bloque.nombre_coord = coordinacion.nombre_coord
           bloque.cod_coord = coordinacion.cod_coord
+          bloque.mostrar = true
+          bloque.size = 1
+          bloque.pos = 1
+          bloque.color = colores[i]
           return bloque
         })
         return coordinacion.bloques
@@ -92,43 +96,29 @@ function Horario(props) {
   },[nivel])
 
   useEffect(()=>{
-
-  })
-
-  /*useEffect(() => {
-
-    const obtenerData = () => {
-      const Data = [{id: 0, title: 'Algo', bloque:1, asignado:true}, {id: 1, title: 'nada', bloque: 5, asignado:true}, {id: 2, title: 'Algo', bloque: 7, asignado:true}, {id:3, title: 'nada', bloque: 14, asignado:true},
-      {id:4, title: 'Algo', bloque: 22, asignado:true}, {id:5, title: 'nada', bloque: 24, asignado:true},
-      {id:6, title: 'Algo', bloque:30, asignado:true}, {id:7, title: 'nada', bloque:40, asignado:true}, {id:8, title: 'Algo', bloque: 50, asignado:true}, {id:9, title: 'Otro', bloque:-1, asignado:false}]
-      var asignados = []
-      var noAsignados = []
-      for (var i = 0; i < Data.length; i++) {
-        if(Data[i].asignado){
-          asignados.push(Data[i])
-        }
-        else {
-          noAsignados.push(Data[i])
-        }
-      }
-      setData(Data)
-    }
-    obtenerData()
-  }, []);*/
-
-  useEffect(()=>{
     var matrix = []
     for ( var y = 0; y < 9; y++ ) {
       matrix[ y ] = [];
       for ( var x = 0; x < 6; x++ ) {
-        matrix[ y ][ x ] = {};
+        matrix[ y ][ x ] = [];
       }
     }
     var ancho = matrix[0].length
     for (var i = 0; i < data.length; i++) {
-      let x = data[i].num_bloque % ancho
-      let y = parseInt(data[i].num_bloque /ancho)
-      matrix[y][x] = data[i]
+      if(data[i].asignado){
+        let x = data[i].num_bloque % ancho
+        let y = parseInt(data[i].num_bloque /ancho)
+        /*matrix[y][x] = data[i]
+        */
+        var pos = []
+        if(matrix[y][x].length>0){
+          matrix[y][x].map(dato=>{
+            pos.push(dato)
+          })
+        }
+        pos.push(data[i])
+        matrix[y][x] = pos
+      }
     }
     setBloques(matrix)
   },[data])
@@ -139,26 +129,49 @@ function Horario(props) {
       console.log(y);
       console.log(item);
       let nuevoBloque = x*6 + y;
-      const dato = data.find(dato=>dato.id==item.id)
+      const dato = data.find(dato=>dato.id===item.id)
       const index = data.indexOf(dato)
-      if(!data[index].asignado){
-        data[index].asignado = true
+      var prevPos = dato.num_bloque
+      if (nuevoBloque === prevPos) {
+        return
       }
-      setData(
-        update(data,{
-          [index]:{
-            num_bloque:{
-              $set: nuevoBloque
-            }
-          }
+      const repetidos = data.filter(dato=>dato.num_bloque===nuevoBloque)
+      repetidos.push(dato)
+      console.log(repetidos);
+      var matrixAux = data.slice()
+      if (repetidos.length==1) {
+        console.log(matrixAux);
+        if(!matrixAux[index].asignado){
+          matrixAux[index].asignado = true
+        }
+        matrixAux[index].num_bloque = nuevoBloque
+        matrixAux[index].size = 1
+      }
+      else {
+        if(!matrixAux[index].asignado){
+          matrixAux[index].asignado = true
+        }
+        matrixAux[index].num_bloque = nuevoBloque
+        repetidos.map((rep, i)=>{
+          var index2 = data.indexOf(rep)
+          matrixAux[index2].size = repetidos.length
+          matrixAux[index2].pos = i
         })
-      )
+      }
+      var posAnt = data.filter(dato=>dato.num_bloque===prevPos)
+      posAnt.map((rep, i)=>{
+        var index2 = data.indexOf(rep)
+        matrixAux[index2].size = repetidos.length-1
+        matrixAux[index2].pos = i
+        console.log(index2);
+      })
+      setData(matrixAux)
     }, [data]
   )
 
   const dropLista = useCallback((item) => {
     console.log("asdad");
-    const dato = data.find(dato=>dato.id==item.id)
+    const dato = data.find(dato=>dato.id===item.id)
     const index = data.indexOf(dato)
     setData(
       update(data,{
@@ -184,7 +197,7 @@ function Horario(props) {
             <TableHead>
               <TableRow>
                 {dias.map((dia)=>(
-                  <TableCell className={classes.encabezado}>{dia}</TableCell>
+                  <TableCell className={classes.encabezado} key={dia}>{dia}</TableCell>
                 ))}
               </TableRow>
             </TableHead>

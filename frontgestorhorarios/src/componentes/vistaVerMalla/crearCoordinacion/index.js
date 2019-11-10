@@ -3,8 +3,6 @@ import React, {useRef} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import IconButton from '@material-ui/core/IconButton';
-import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -53,10 +51,6 @@ function CrearCoordinacion({camposCord, onSubmitForm}){
   const handleChange = event => {
     setAge(event.target.value);
   };
-
-  const [stateC, setStateC] = React.useState({
-    checked: camposCord.lab_independiente,
-  });
 
   const stateSchema = {
     cod_coord: { value: camposCord.cod_coord, error: '' },

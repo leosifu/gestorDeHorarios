@@ -3,8 +3,6 @@ import React, { useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -33,7 +31,8 @@ const useStyles = makeStyles({
   }
 });
 
-export default function Bloque({nombre_coord, cod_coord, bloque, id, onDrop, color, tipo}) {
+export default function Bloque({coord, onDrop, tipo, num}) {
+  const {nombre_coord, cod_coord, bloque, id, color} = coord
   const ref = useRef(null)
   const classes = useStyles();
   const [ , drag] = useDrag({
@@ -48,30 +47,51 @@ export default function Bloque({nombre_coord, cod_coord, bloque, id, onDrop, col
     drop: onDrop,
     collect: monitor => ({
       isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
+      //canDrop: monitor.canDrop(),
     }),
   })
   const isActive = isOver && canDrop
   let backgroundColor = ''
   if (isActive) {
-    backgroundColor = 'darkgreen'
+    backgroundColor = '	#C0C0C0'
   } else if (canDrop) {
-    backgroundColor = 'darkkhaki'
+    backgroundColor = '#E8E8E8'
+  }
+  if (isOver) {
+    backgroundColor = '#E8E8E8'
   }
   drop(drag(ref))
 
-  return (
-    <Card ref={ref} className={classes.card} style={{ backgroundColor }} padding="none">
-      <CardContent className={classes.contenido}>
-        <Grid container>
-          <Grid item xs={11}>
-            <Typography >
-              {nombre_coord}
-              {cod_coord}
-            </Typography>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
-  );
+
+  switch (tipo) {
+    case "lista":
+      return(
+        <div ref={ref} className={classes.card}>
+          <BloqueListaAsign nombre_coord={nombre_coord} cod_coord={cod_coord} num={num} color={color}/>
+        </div>
+      )
+    case "tabla":
+      var width = 100
+      var left = 0
+      if (coord.size) {
+        console.log(coord.pos);
+        width = 100/coord.size
+        left = 0 + width*coord.pos
+        console.log(left);
+      }
+      width = width + '%'
+      left = 0 + '%'
+      return(
+        <Card ref={ref} style={{ backgroundColor, height: '100%', left, width }} padding="none">
+          <BloqueTablaHorario nombre_coord={nombre_coord} cod_coord={cod_coord} color={color}/>
+        </Card>
+      )
+    default:
+      return(
+        <Card ref={ref} className={classes.card} style={{ backgroundColor }} padding="none">
+          <CardContent className={classes.contenido}>
+          </CardContent>
+        </Card>
+      )
+  }
 }

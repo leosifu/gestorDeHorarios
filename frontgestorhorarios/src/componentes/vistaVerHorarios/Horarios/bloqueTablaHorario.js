@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
@@ -11,12 +11,12 @@ const useStyles = makeStyles({
   }
 });
 
-function BloqueTablaHorario({nombre_coord, cod_coord}){
+function BloqueTablaHorario({nombre_coord, cod_coord, color}){
 
   const classes = useStyles();
 
   return(
-    <CardContent className={classes.contenido}>
+    <CardContent className={classes.contenido} style={{background: color}}>
       <Grid container>
         <Grid item xs={11}>
           <Typography >

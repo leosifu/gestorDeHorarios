@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
 
 const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
 
-  const [stateC, setStateC] = React.useState({
+  const [stateC, ] = React.useState({
     checked: camposAsignatura.lab_independiente,
   });
 
@@ -124,10 +124,6 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
     },
     lab_independiente:{
     }
-  };
-
-  const handleChange = name => event => {
-    setStateC({ ...state, [name]: event.target.checked });
   };
 
   const { state, handleOnChange, handleOnSubmit, disable } = useForm(

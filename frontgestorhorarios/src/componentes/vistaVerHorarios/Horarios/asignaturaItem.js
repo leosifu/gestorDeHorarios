@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState} from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -8,8 +8,8 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-import ItemTypes from '../itemTypes/ItemTypes'
 import Bloque from './bloque'
+import BloqueListaAsign from './bloqueListaAsign'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -57,11 +57,7 @@ function AsignaturaItem({asignatura, data}){
 
   var codCoords = [...new Set(data.map(dato=>dato.cod_coord))]
 
-  console.log(codCoords);
-
-  var coords = codCoords.map(cod=>data.filter(dato=>(dato.cod_coord==cod&&!dato.asignado)))
-
-  console.log(coords);
+  var coords = codCoords.map(cod=>data.filter(dato=>(dato.cod_coord===cod)))
 
   //console.log(codCoords);
 
@@ -76,44 +72,27 @@ function AsignaturaItem({asignatura, data}){
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {/*data.map((coordinacion)=>{
-            if(!coordinacion.asignado){
-              return(
-                <ListItem button className={classes.nested}>
-                  <Bloque nombre_coord={coordinacion.nombre_coord} bloque={coordinacion.bloque}
-                    id={coordinacion.id}/>
-                </ListItem>
-              )
-            }
-            else {
-              return(<div/>)
-            }
-          })*/}
-          {/*groupByCoor.map(coord=>{
-            var bloquesNoAsign = coord.filter(bloque=>!bloque.asignado)
-            if(bloquesNoAsign==[]){
-              var bloque = bloquesNoAsign[0]
-              return(
-                <ListItem button className={classes.nested}>
-                  <Bloque nombre_coord={bloque.nombre_coord} bloque={bloque.bloque}
-                    id={bloque.id}/>
-                </ListItem>
-              )
-            }
-          })*/}
           {
-            coords.map(coord=>{
-              if(coord){
-                console.log(coord);
-                return(
-                  coord.length>0?<ListItem button className={classes.nested}>
-                    <Bloque nombre_coord={coord[0].nombre_coord} bloque={coord[0].bloque}
-                      id={coord[0].id}/>
-                  </ListItem>:<div/>
-                )
-              }
-            })
-          }
+              coords.map(coord=>{
+                var coordBloques = coord.filter(coord=>!coord.asignado)
+                if(coordBloques.length>0){
+                  return(
+                    <ListItem button className={classes.nested}>
+                      <Bloque coord={coordBloques[0]} tipo={"lista"} key={coord[0].id}
+                        num={coordBloques.length}/>
+                    </ListItem>
+                  )
+                }
+                else {
+                  return(
+                    <ListItem button className={classes.nested}>
+                      <BloqueListaAsign nombre_coord={coord[0].nombre_coord} cod_coord={coord[0].cod_coord}
+                      num={0} color={coord[0].color}/>
+                    </ListItem>
+                  )
+                }
+              })
+            }
         </List>
       </Collapse>
     </>

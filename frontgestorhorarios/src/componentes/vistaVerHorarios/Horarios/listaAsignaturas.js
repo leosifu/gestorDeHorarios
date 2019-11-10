@@ -1,18 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import { useDrop } from 'react-dnd'
 
 import ItemTypes from '../itemTypes/ItemTypes'
-import Bloque from './bloque'
 import AsignaturaItem from './asignaturaItem'
 
 const useStyles = makeStyles(theme => ({
@@ -60,12 +54,6 @@ function ListaAsignaturas({asignaturas, data, dropLista}) {
 
   const classes = useStyles();
 
-  const [open, setOpen] = useState(true);
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
   drop(ref)
 
   return (
@@ -82,8 +70,10 @@ function ListaAsignaturas({asignaturas, data, dropLista}) {
     >
       {
         asignaturas.map(asignatura=>{
-          var coordsAsignatura = data.filter(dato=>dato.cod_asignatura==asignatura.cod_asignatura)
-          return (<AsignaturaItem asignatura={asignatura.nombre_asignatura} data={coordsAsignatura}/>)
+          var coordsAsignatura = data.filter(dato=>dato.cod_asignatura===asignatura.cod_asignatura)
+          return (
+            <AsignaturaItem asignatura={asignatura.nombre_asignatura} data={coordsAsignatura}/>
+          )
         })
       }
     </List>

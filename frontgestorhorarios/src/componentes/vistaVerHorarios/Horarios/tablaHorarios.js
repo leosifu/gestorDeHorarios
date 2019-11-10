@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import Grid from '@material-ui/core/Grid';
 
 import Bloque from './bloque'
 
@@ -30,14 +31,60 @@ export default function TablaHorarios({bloques, handleDrop}){
 
   const classes = useStyles();
 
-  console.log(bloques);
   const Tabla = bloques.map((fila, i)=>{
     const Dia = fila.map((dia, j)=>{
-
+      if (dia.length>0) {
+        const Bloques = dia.map(bloque=>{
+          return(
+            <Bloque coord={bloque} onDrop={item => handleDrop(i, j, item)} tipo={"tabla"}
+              />
+          )
+        })
+        return(
+          <TableCell padding="none" className={classes.grilla} key={j}>
+            <div style={{width:'100%', display: 'flex'}}>
+              {Bloques}
+            </div>
+          </TableCell>
+        )
+      }
+      else {
+        var algo = {
+          nombre_coord: '',
+          cod_coord: '',
+          bloque: 0,
+          id:0,
+          color: 'white'
+        }
+        return(
+          <TableCell padding="none" className={classes.grilla} key={j}>
+            <Bloque coord={algo} onDrop={item => handleDrop(i, j, item)} style={{left: 50}}
+              />
+          </TableCell>
+        )
+      }
       return(
-        <TableCell padding="none" className={classes.grilla} >
-          <Bloque nombre_coord={dia.nombre_coord} cod_coord={dia.cod_coord}
-            bloque={dia.bloque} id={dia.id} onDrop={item => handleDrop(i, j, item)}/>
+        <TableCell padding="none" className={classes.grilla} key={j}>
+          <div style={{width:'100%', display: 'flex'}}>
+
+          {/*
+            dia.length>0?
+              dia.map(bloque=>{
+                console.log(bloque);
+                return(
+                  <>
+                  <Bloque coord={bloque} onDrop={item => handleDrop(i, j, item)} tipo={"tabla"}
+                    />
+                  <Bloque coord={bloque} onDrop={item => handleDrop(i, j, item)} tipo={"tabla"}
+                    />
+                  </>
+                )
+              })
+              :
+                <Bloque coord={dia} onDrop={item => handleDrop(i, j, item)} tipo={"tabla"} style={{left: 50}}
+                  />
+          */}
+          </div>
         </TableCell>
       )
     })
