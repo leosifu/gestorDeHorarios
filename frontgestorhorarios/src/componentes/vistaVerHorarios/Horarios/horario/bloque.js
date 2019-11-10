@@ -6,9 +6,9 @@ import CardContent from '@material-ui/core/CardContent';
 
 import { useDrag, useDrop } from 'react-dnd'
 
-import ItemTypes from '../itemTypes/ItemTypes'
-import BloqueListaAsign from './bloqueListaAsign'
-import BloqueTablaHorario from './bloqueTablaHorario'
+import ItemTypes from '../../itemTypes/ItemTypes'
+import BloqueListaAsign from '../listaAsignaturas/bloqueListaAsign'
+import BloqueTablaHorario from '../tablaHorarios/bloqueTablaHorario'
 
 const useStyles = makeStyles({
   card: {
@@ -67,7 +67,8 @@ export default function Bloque({coord, onDrop, tipo, num}) {
     case "lista":
       return(
         <div ref={ref} className={classes.card}>
-          <BloqueListaAsign nombre_coord={nombre_coord} cod_coord={cod_coord} num={num} color={color}/>
+          <BloqueListaAsign coord={coord} nombre_coord={nombre_coord} cod_coord={cod_coord} num={num}
+            color={color}/>
         </div>
       )
     case "tabla":
@@ -77,8 +78,8 @@ export default function Bloque({coord, onDrop, tipo, num}) {
       }
       width = width + '%'
       return(
-        <Card ref={ref} style={{ backgroundColor, height: '100%', width }} padding="none">
-          <BloqueTablaHorario nombre_coord={nombre_coord} cod_coord={cod_coord} color={color}/>
+        <Card ref={ref} style={{ backgroundColor, minHeight: 45, width }} padding="none">
+          <BloqueTablaHorario coord={coord} nombre_coord={nombre_coord} cod_coord={cod_coord} color={color}/>
         </Card>
       )
     default:

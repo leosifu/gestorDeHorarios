@@ -6,39 +6,15 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 
 import { useDrop } from 'react-dnd'
 
-import ItemTypes from '../itemTypes/ItemTypes'
+import ItemTypes from '../../itemTypes/ItemTypes'
 import AsignaturaItem from './asignaturaItem'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    width: 770,
-    marginTop: theme.spacing(3),
-    overflowX: 'auto',
-  },
-  table: {
-  },
-  grilla:{
-    width: 110,
-    height: 50,
-    padding: '0 0 0 0'
-  },
-  hora:{
-    width: 110,
-    height: 50,
-    padding: '0 0 0 10px',
-  },
-  encabezado:{
-    maxWidth:100,
-    minWidth: 100
-  },
   lista:{
     width: '90%',
     maxWidth: 330,
     backgroundColor: theme.palette.background.paper,
     minHeight: 500,
-  },
-  nested: {
-    paddingLeft: theme.spacing(4),
   },
 }));
 

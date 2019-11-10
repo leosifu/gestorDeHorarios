@@ -8,7 +8,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-import Bloque from './bloque'
+import Bloque from '../horario/bloque'
 import BloqueListaAsign from './bloqueListaAsign'
 
 const useStyles = makeStyles(theme => ({
@@ -40,10 +40,9 @@ const useStyles = makeStyles(theme => ({
     minHeight: 500,
   },
   nested: {
-    paddingLeft: theme.spacing(4),
+    paddingLeft: theme.spacing(3),
   },
 }));
-
 
 function AsignaturaItem({asignatura, data}){
 
@@ -59,11 +58,6 @@ function AsignaturaItem({asignatura, data}){
 
   var coords = codCoords.map(cod=>data.filter(dato=>(dato.cod_coord===cod)))
 
-  //console.log(codCoords);
-
-  //separar segun asignados, [asignados][noasig], num no asignados = length [noasign],
-  //[no asig [num no asign -1] en bloque]
-
   return(
     <>
       <ListItem button onClick={handleClick}>
@@ -73,26 +67,26 @@ function AsignaturaItem({asignatura, data}){
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {
-              coords.map(coord=>{
-                var coordBloques = coord.filter(coord=>!coord.asignado)
-                if(coordBloques.length>0){
-                  return(
-                    <ListItem button className={classes.nested} key={coord[0].id}>
-                      <Bloque coord={coordBloques[0]} tipo={"lista"}
-                        num={coordBloques.length}/>
-                    </ListItem>
-                  )
-                }
-                else {
-                  return(
-                    <ListItem button className={classes.nested} key={coord[0].id}>
-                      <BloqueListaAsign nombre_coord={coord[0].nombre_coord} cod_coord={coord[0].cod_coord}
-                      num={0} color={coord[0].color}/>
-                    </ListItem>
-                  )
-                }
-              })
-            }
+            coords.map(coord=>{
+              var coordBloques = coord.filter(coord=>!coord.asignado)
+              if(coordBloques.length>0){
+                return(
+                  <ListItem button className={classes.nested} key={coord[0].id}>
+                    <Bloque coord={coordBloques[0]} tipo={"lista"}
+                      num={coordBloques.length}/>
+                  </ListItem>
+                )
+              }
+              else {
+                return(
+                  <ListItem button className={classes.nested} key={coord[0].id}>
+                    <BloqueListaAsign nombre_coord={coord[0].nombre_coord} cod_coord={coord[0].cod_coord}
+                    num={0} color={coord[0].color}/>
+                  </ListItem>
+                )
+              }
+            })
+          }
         </List>
       </Collapse>
     </>

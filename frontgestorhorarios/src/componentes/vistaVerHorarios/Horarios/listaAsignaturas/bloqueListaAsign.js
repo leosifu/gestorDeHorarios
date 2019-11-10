@@ -13,6 +13,12 @@ const useStyles = makeStyles({
   },
   contenido:{
     padding: '3px 3px 3px 3px',
+    "&:last-child": {
+      paddingBottom: 3
+    }
+  },
+  nombreCoord:{
+    fontSize: 11.5,
   }
 });
 
@@ -22,15 +28,17 @@ function BloqueListaAsign({nombre_coord, cod_coord, num, color}){
 
   return(
     <Card className={classes.card} padding="none" style={{background: color}}>
-      <CardContent className={classes.contenido}>
+      <CardContent padding="none" className={classes.contenido}>
         <Grid container>
-          <Grid item xs={11}>
-            <Typography >
-              {nombre_coord}
-              {cod_coord}
+          <Grid item xs={10}>
+            <Typography className={classes.nombreCoord}>
+              {nombre_coord + ' - ' + cod_coord}
+            </Typography>
+            <Typography className={classes.nombreCoord}>
+
             </Typography>
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={2} className={classes.nombreCoord}>
             {num}
           </Grid>
         </Grid>

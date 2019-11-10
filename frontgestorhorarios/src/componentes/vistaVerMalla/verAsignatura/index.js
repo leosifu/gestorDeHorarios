@@ -17,7 +17,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
 const VerAsignatura = ({asignaturaId, edit, setEdit, activo, setActivo}) =>{
 
   const classes = useStyles();

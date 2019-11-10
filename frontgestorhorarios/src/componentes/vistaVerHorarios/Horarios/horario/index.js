@@ -13,8 +13,8 @@ import update from 'immutability-helper'
 
 import { connect } from 'react-redux';
 
-import ListaAsignaturas from './listaAsignaturas'
-import TablaHorarios from './tablaHorarios'
+import ListaAsignaturas from '../listaAsignaturas'
+import TablaHorarios from '../tablaHorarios'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -75,7 +75,7 @@ function Horario(props) {
       setAsignaturas(asignaturas)
       var bloquesMatrix = data.map((asignatura, i)=>asignatura.coordinaciones.map(coordinacion=>{
         coordinacion.bloques.map(bloque=>{
-          bloque.cod_asignatura= asignatura.cod_asignatura
+          bloque.cod_asignatura = asignatura.cod_asignatura
           bloque.nombre_coord = coordinacion.nombre_coord
           bloque.cod_coord = coordinacion.cod_coord
           bloque.mostrar = true

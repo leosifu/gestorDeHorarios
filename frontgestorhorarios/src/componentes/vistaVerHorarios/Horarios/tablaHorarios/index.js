@@ -5,7 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-import Bloque from './bloque'
+import Bloque from '../horario/bloque'
 
 const useStyles = makeStyles(theme => ({
   grilla:{
@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 const horarios = ['08:00 - 09:30', '09:40 - 11:10', '11:20 - 12:50', '13:50 - 15:20',
 '15:30 - 17:00', '17:10 - 18:40', '19:00 - 20:10', '20:20 - 22:00', '22:00 - 23:00']
 
-export default function TablaHorarios({bloques, handleDrop}){
+function TablaHorarios({bloques, handleDrop}){
 
   const classes = useStyles();
 
@@ -77,3 +77,4 @@ export default function TablaHorarios({bloques, handleDrop}){
     <TableBody>{Tabla}</TableBody>
   )
 }
+export default TablaHorarios
