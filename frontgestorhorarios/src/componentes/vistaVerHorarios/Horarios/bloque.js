@@ -72,17 +72,12 @@ export default function Bloque({coord, onDrop, tipo, num}) {
       )
     case "tabla":
       var width = 100
-      var left = 0
       if (coord.size) {
-        console.log(coord.pos);
         width = 100/coord.size
-        left = 0 + width*coord.pos
-        console.log(left);
       }
       width = width + '%'
-      left = 0 + '%'
       return(
-        <Card ref={ref} style={{ backgroundColor, height: '100%', left, width }} padding="none">
+        <Card ref={ref} style={{ backgroundColor, height: '100%', width }} padding="none">
           <BloqueTablaHorario nombre_coord={nombre_coord} cod_coord={cod_coord} color={color}/>
         </Card>
       )

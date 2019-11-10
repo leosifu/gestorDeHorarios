@@ -59,6 +59,7 @@ export default function SideBar(props) {
       console.log("asdasd");
       setNiveles(res.data[0].niveles)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (

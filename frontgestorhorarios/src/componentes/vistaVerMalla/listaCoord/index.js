@@ -63,17 +63,17 @@ function ListaCoord({coordinaciones, asignatura, lab_independiente, estado, setE
       if(lab_independiente){
         switch (state.tipo_coord.value) {
           case "Teoría":
-            return asignatura.tel_T
+            return asignatura.tel_T/2
           case "Ejercicios":
-            return asignatura.tel_E
+            return asignatura.tel_E/2
           case "Laboratorio":
-            return asignatura.tel_L
+            return asignatura.tel_L/2
           default:
             return 0
         }
       }
       else{
-        return asignatura.tel_T + asignatura.tel_E + asignatura.tel_L
+        return (asignatura.tel_T + asignatura.tel_E + asignatura.tel_L)/2
       }
     }
     const data = {

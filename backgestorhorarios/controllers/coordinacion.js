@@ -15,7 +15,7 @@ module.exports = {
       .then(coordinacion => {
         var bloques = []
         for (var i = 0; i < req.body.num_bloques; i++) {
-          bloques.push({coordinacionId: coordinacion.dataValues.id})
+          bloques.push({coordinacionId: coordinacion.dataValues.id, num_orden_bloque: i})
         }
         console.log(bloques);
         Bloque.create(bloques)

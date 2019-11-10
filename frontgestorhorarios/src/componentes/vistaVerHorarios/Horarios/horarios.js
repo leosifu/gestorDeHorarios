@@ -80,7 +80,6 @@ function Horario(props) {
           bloque.cod_coord = coordinacion.cod_coord
           bloque.mostrar = true
           bloque.size = 1
-          bloque.pos = 1
           bloque.color = colores[i]
           return bloque
         })
@@ -93,7 +92,7 @@ function Horario(props) {
     .catch((error)=>{
       console.log(error);
     })
-  },[nivel])
+  },[nivel, mallaId.mallaId])
 
   useEffect(()=>{
     var matrix = []
@@ -112,9 +111,7 @@ function Horario(props) {
         */
         var pos = []
         if(matrix[y][x].length>0){
-          matrix[y][x].map(dato=>{
-            pos.push(dato)
-          })
+          pos = matrix[y][x].map(dato=>dato)
         }
         pos.push(data[i])
         matrix[y][x] = pos
@@ -137,10 +134,8 @@ function Horario(props) {
       }
       const repetidos = data.filter(dato=>dato.num_bloque===nuevoBloque)
       repetidos.push(dato)
-      console.log(repetidos);
       var matrixAux = data.slice()
-      if (repetidos.length==1) {
-        console.log(matrixAux);
+      if (repetidos.length===1) {
         if(!matrixAux[index].asignado){
           matrixAux[index].asignado = true
         }
@@ -155,15 +150,14 @@ function Horario(props) {
         repetidos.map((rep, i)=>{
           var index2 = data.indexOf(rep)
           matrixAux[index2].size = repetidos.length
-          matrixAux[index2].pos = i
+          return true
         })
       }
       var posAnt = data.filter(dato=>dato.num_bloque===prevPos)
       posAnt.map((rep, i)=>{
         var index2 = data.indexOf(rep)
         matrixAux[index2].size = repetidos.length-1
-        matrixAux[index2].pos = i
-        console.log(index2);
+        return true
       })
       setData(matrixAux)
     }, [data]

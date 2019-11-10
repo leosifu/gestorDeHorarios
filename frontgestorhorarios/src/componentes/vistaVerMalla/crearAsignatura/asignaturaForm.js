@@ -73,7 +73,8 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
     tel_L: { value: camposAsignatura.tel_L, error: '' },
     cupos_pasados: { value: camposAsignatura.cupos_pasados, error: '' },
     tasa_reprobacion: { value: camposAsignatura.tasa_reprobacion, error: '' },
-    lab_independiente: { value: stateC.checked, checked:camposAsignatura.lab_independiente, error: '' },
+    lab_independiente: { value: stateC.checked, checked:camposAsignatura.lab_independiente,
+      error: '' },
   };
   const validationStateSchema = {
     cod_asignatura: {
@@ -92,19 +93,19 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
     },
     tel_T: {
       validator: {
-        regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
+        regEx: /^[0-9]*[02468]$/,
         error: 'Invalid last name format.',
       },
     },
     tel_E: {
       validator: {
-        regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
+        regEx: /^[0-9]*[02468]$/,
         error: 'Invalid last name format.',
       },
     },
     tel_L: {
       validator: {
-        regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
+        regEx: /^[0-9]*[02468]$/,
         error: 'Invalid last name format.',
       },
     },
@@ -132,6 +133,13 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
     onSubmitForm
   );
 
+  var sumaTel = true
+
+  if (state.tel_T.value + state.tel_E.value + state.tel_L.value>0) {
+    console.log("algo");
+    sumaTel = false
+  }
+
   const classes = useStyles();
   return (
     <>
@@ -148,6 +156,7 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
           className={classes.textField}
           value={state.cod_asignatura.value}
           onChange={handleOnChange}
+          type="number"
           margin="normal"
           variant="outlined"
         />
@@ -230,7 +239,7 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
           Historial
         </Typography>
         <TextField
-          error={state.tel_L.error ? true:false}
+          error={state.cupos_pasados.error ? true:false}
           id="standard-required"
           label="Cupos del semestre pasado"
           name="cupos_pasados"
@@ -242,7 +251,7 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
           variant="outlined"
         />
         <TextField
-          error={state.tel_L.error ? true:false}
+          error={state.tasa_reprobacion.error ? true:false}
           id="standard-required"
           label="Tasa de reprobación de la asignatura"
           name="tasa_reprobacion"
@@ -256,7 +265,8 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
         <br/>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleOnSubmit} disabled={disable} variant="contained" color="primary" className={classes.button}>
+        <Button onClick={handleOnSubmit} disabled={disable?true:(sumaTel?true:false)}
+          variant="contained" color="primary" className={classes.button}>
           Crear Asignatura
         </Button>
       </DialogActions>

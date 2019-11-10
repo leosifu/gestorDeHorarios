@@ -77,15 +77,15 @@ function AsignaturaItem({asignatura, data}){
                 var coordBloques = coord.filter(coord=>!coord.asignado)
                 if(coordBloques.length>0){
                   return(
-                    <ListItem button className={classes.nested}>
-                      <Bloque coord={coordBloques[0]} tipo={"lista"} key={coord[0].id}
+                    <ListItem button className={classes.nested} key={coord[0].id}>
+                      <Bloque coord={coordBloques[0]} tipo={"lista"}
                         num={coordBloques.length}/>
                     </ListItem>
                   )
                 }
                 else {
                   return(
-                    <ListItem button className={classes.nested}>
+                    <ListItem button className={classes.nested} key={coord[0].id}>
                       <BloqueListaAsign nombre_coord={coord[0].nombre_coord} cod_coord={coord[0].cod_coord}
                       num={0} color={coord[0].color}/>
                     </ListItem>
