@@ -49,7 +49,7 @@ function ListaCoord({coordinaciones, asignatura, lab_independiente, estado, setE
 
   const data = {
     cod_coord: '',
-    nombre_coord: '',
+    nombre_coord: asignatura.nombre_asignatura,
     tipo_coord: '',
   }
 

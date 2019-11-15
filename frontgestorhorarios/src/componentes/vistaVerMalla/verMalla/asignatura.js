@@ -10,7 +10,7 @@ import Box from '@material-ui/core/Box';
 import { connect } from 'react-redux';
 
 import VerAsignatura from '../verAsignatura'
-import CrearAsignatura from '../crearAsignatura'
+import CrearAsignatura from '../asignaturaForm/crearAsignatura'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -78,7 +78,7 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, mallaId,
               <Grid item xs={1}>
                 {edit===0?
                   <VerAsignatura asignaturaId={asignatura.id} edit={edit} setEdit={setEdit}
-                  activo={activo} setActivo={setActivo}/>:
+                    activo={activo} setActivo={setActivo}/>:
                   <div/>
                 }
               </Grid>

@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
+const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo}) => {
 
   const [stateC, ] = React.useState({
     checked: camposAsignatura.lab_independiente,
@@ -267,7 +267,12 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
       <DialogActions>
         <Button onClick={handleOnSubmit} disabled={disable?true:(sumaTel?true:false)}
           variant="contained" color="primary" className={classes.button}>
-          Crear Asignatura
+          {
+            tipo===0?
+            <>Crear Asignatura</>
+            :
+            <>Guardar Cambios</>
+          }
         </Button>
       </DialogActions>
     </>

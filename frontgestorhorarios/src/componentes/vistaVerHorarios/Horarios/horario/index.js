@@ -127,6 +127,17 @@ function Horario(props) {
       console.log(item);
       let nuevoBloque = x*6 + y;
       const dato = data.find(dato=>dato.id===item.id)
+      var link = 'http://localhost:8000/api/bloque/' + dato.num_asociacion +'/'+ dato.num_orden_bloque
+      console.log(link);
+      const datoBloque = {
+        num_bloque: nuevoBloque,
+        asignado: true
+      }
+      console.log(datoBloque);
+      axios.post(link, datoBloque)
+      .then(res => {
+        console.log(res.data);
+      })
       const index = data.indexOf(dato)
       var prevPos = dato.num_bloque
       if (nuevoBloque === prevPos) {
@@ -167,6 +178,17 @@ function Horario(props) {
     console.log("asdad");
     const dato = data.find(dato=>dato.id===item.id)
     const index = data.indexOf(dato)
+    var link = 'http://localhost:8000/api/bloque/' + dato.num_asociacion +'/'+ dato.num_orden_bloque
+    console.log(link);
+    const datoBloque = {
+      num_bloque: -1,
+      asignado: false
+    }
+    console.log(datoBloque);
+    axios.post(link, datoBloque)
+    .then(res => {
+      console.log(res.data);
+    })
     setData(
       update(data,{
         [index]:{

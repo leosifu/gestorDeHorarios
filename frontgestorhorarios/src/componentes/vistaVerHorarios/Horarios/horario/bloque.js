@@ -32,11 +32,11 @@ const useStyles = makeStyles({
 });
 
 export default function Bloque({coord, onDrop, tipo, num}) {
-  const {nombre_coord, cod_coord, bloque, id, color} = coord
+  const {nombre_coord, cod_coord, bloque, id, color, num_asociacion} = coord
   const ref = useRef(null)
   const classes = useStyles();
   const [ , drag] = useDrag({
-    item: { id, nombre_coord, bloque, type: ItemTypes.BOX },
+    item: { id, nombre_coord, bloque, num_asociacion, type: ItemTypes.BOX },
     canDrag: nombre_coord ? true : false,
     collect: monitor => ({
       isDragging: monitor.isDragging(),
@@ -61,7 +61,6 @@ export default function Bloque({coord, onDrop, tipo, num}) {
     backgroundColor = '#E8E8E8'
   }
   drop(drag(ref))
-
 
   switch (tipo) {
     case "lista":

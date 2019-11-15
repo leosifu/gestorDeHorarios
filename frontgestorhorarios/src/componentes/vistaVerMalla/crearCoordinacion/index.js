@@ -81,7 +81,6 @@ function CrearCoordinacion({camposCord, onSubmitForm}){
     },
   };
 
-
   const { state, handleOnChange, handleOnSubmit, disable } = useForm(
     stateSchema,
     validationStateSchema,

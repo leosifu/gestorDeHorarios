@@ -4,6 +4,7 @@ const asignaturaController = require('../controllers').asignatura
 const historialController = require('../controllers').historial
 const dependenciaController = require('../controllers').dependencia
 const coordinacionController = require('../controllers').coordinacion
+const bloqueController = require('../controllers').bloque
 
 module.exports = (app) => {
   app.get('/api', (req, res)=>res.status(200).send({
@@ -27,6 +28,7 @@ module.exports = (app) => {
   app.get('/api/asignaturaReq/:id', asignaturaController.getRequisitos)
   app.get('/api/asignatura/:id/:nivel', asignaturaController.findAsignaturasByNivel)
   app.post('/api/asignatura', asignaturaController.create)
+  app.put('/api/asignatura/:id', asignaturaController.update)
   //Api dependencia
   app.post('/api/dependencia', dependenciaController.crearDependencia)
   app.delete('/api/dependencia', dependenciaController.removeDependencia)
@@ -34,4 +36,8 @@ module.exports = (app) => {
   //Api coordinacion
   //app.get('/api/coordinacion', coordinacionController.findAll)
   app.post('/api/coordinacion', coordinacionController.create)
+
+  //Api bloque
+  app.post('/api/bloque/:numA/:numB', bloqueController.updateNumBloque)
+  app.post('/api/bloqueAsoc/:cId', bloqueController.setAsociacion)
 }

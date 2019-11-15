@@ -7,7 +7,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 
-import AsignaturaForm from './asignaturaForm'
+import AsignaturaForm from '../asignaturaForm'
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -29,8 +29,6 @@ const useStyles = makeStyles(theme => ({
     color:'blue'
   },
 }));
-
-
 
 function CrearAsignatura({open, setOpen, estado, setEstado, nivel, mallaId}){
   const classes = useStyles();
@@ -93,10 +91,7 @@ function CrearAsignatura({open, setOpen, estado, setEstado, nivel, mallaId}){
         <DialogTitle id="max-width-dialog-title">
           Crear Asignatura
         </DialogTitle>
-
-          {/*<CarreraForm cod_carrera={''} nombre_carrera={''} jornada={"Vespertino"} open={open} setOpen={setOpen} onSubmitForm={onSubmitForm}/>*/}
-          <AsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm}/>
-
+          <AsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} tipo={0}/>
       </Dialog>
     </React.Fragment>
   );
