@@ -1,10 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Asignatura = sequelize.define('Asignatura', {
-    cod_asignatura:{
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     nombre_asignatura:{
       type: DataTypes.STRING,
       allowNull: false,
@@ -12,10 +8,6 @@ module.exports = (sequelize, DataTypes) => {
     tel_T: DataTypes.INTEGER,
     tel_E: DataTypes.INTEGER,
     tel_L: DataTypes.INTEGER,
-    nivel: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     lab_independiente:{
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -24,13 +16,19 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Asignatura.associate = function(models) {
     // associations can be defined here
-    Asignatura.belongsTo(models.Malla,{
-      foreignKey: 'mallaId',
-      onDelete: 'CASCADE'
+    Asignatura.belongsToMany(models.Malla,{
+      through: models.MallaAsign,
+      foreignKey: 'asignaturaId',
+      as: 'mallas'
     })
-    Asignatura.hasMany(models.Coordinacion,{
+    /*Asignatura.hasMany(models.Coordinacion,{
       foreignKey: 'asignaturaId',
       as:'coordinaciones'
+    })*/
+    Asignatura.belongsToMany(models.Coordinacion,{
+      through: models.AsignCoord,
+      foreignKey: 'asignaturaId',
+      as: 'coordinaciones',
     })
     Asignatura.hasOne(models.Historial,{
       foreignKey:'asignaturaId',

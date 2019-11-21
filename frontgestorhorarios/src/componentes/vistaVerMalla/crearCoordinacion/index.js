@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, {useRef, useState} from 'react'
 
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 
 function CrearCoordinacion({camposCord, onSubmitForm}){
   const classes = useStyles();
-  const [age, setAge] = React.useState('');
+  const [age, setAge] = useState('');
 
   const inputLabel = useRef(null);
 

@@ -35,8 +35,8 @@ function TablaHorarios({bloques, handleDrop}){
       if (dia.length>0) {
         const Bloques = dia.map(bloque=>{
           return(
-            <Bloque coord={bloque} onDrop={item => handleDrop(i, j, item)} tipo={"tabla"} key={bloque.id}
-              />
+            <Bloque coord={bloque} onDrop={item => handleDrop(i, j, item)} tipo={"tabla"}
+              key={bloque.id}/>
           )
         })
         return(

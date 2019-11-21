@@ -8,26 +8,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cod_coord: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       tipo_coord: {
         type: Sequelize.STRING,
         allowNull: false,
-      },
-      nombre_coord:{
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      asignaturaId:{
-        type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
-        references:{
-          model: 'Asignaturas',
-          key: 'id',
-          as: 'asignaturaId'
-        }
       },
       createdAt: {
         allowNull: false,

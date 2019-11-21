@@ -14,14 +14,23 @@ module.exports = {
       .catch(error=> res.status(400).send(error))
   },
   setAsociacion(req, res){
-    return Bloque
-      .update({
-        num_asociacion: req.body.num_asociacion
-      },{
-        where:{coordinacionId:req.params.cId}
-      })
-      .then(bloque => res.status(201).send(bloque))
-      .catch(error=> res.status(400).send(error))
+    Bloque.findOne({
+      where:{coordinacionId: req.params.cId}
+    })
+    .then(bloque=>{
+      console.log(bloque);
+      var bloq = bloque.dataValues
+      console.log(bloq);
+      return Bloque
+        .update({
+          num_asociacion: bloque.num_asociacion
+        },{
+          where:{coordinacionId:req.params.cId}
+        })
+        .then(bloque => res.status(201).send(bloque))
+        .catch(error=> res.status(400).send(error))
+    })
+
   },
   updateNumBloque(req, res){
     return Bloque
@@ -29,7 +38,7 @@ module.exports = {
         num_bloque: req.body.num_bloque,
         asignado: req.body.asignado
       },{
-        where:{num_asociacion:req.params.numA, num_orden_bloque: req.params.numB}
+        where:{id:req.params.id}
       })
       .then(bloque => res.status(201).send(bloque))
   },

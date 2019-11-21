@@ -70,14 +70,16 @@ function Horario(props) {
     axios.get(link)
     .then(res => {
       const data = res.data
+      console.log(data);
       var asignaturas = data.map(asignatura=>({nombre_asignatura: asignatura.nombre_asignatura,cod_asignatura: asignatura.cod_asignatura}))
       console.log(res.data);
       setAsignaturas(asignaturas)
       var bloquesMatrix = data.map((asignatura, i)=>asignatura.coordinaciones.map(coordinacion=>{
+        console.log(coordinacion);
         coordinacion.bloques.map(bloque=>{
           bloque.cod_asignatura = asignatura.cod_asignatura
-          bloque.nombre_coord = coordinacion.nombre_coord
-          bloque.cod_coord = coordinacion.cod_coord
+          bloque.nombre_coord = coordinacion.AsignCoord.nombre_coord
+          bloque.cod_coord = coordinacion.AsignCoord.cod_coord
           bloque.mostrar = true
           bloque.size = 1
           bloque.color = colores[i]
@@ -87,6 +89,7 @@ function Horario(props) {
       }))
       var bloques = []
       bloquesMatrix.map(bloqueM=>bloques = bloques.concat(...bloqueM))
+      console.log(bloques);
       setData(bloques)
     })
     .catch((error)=>{
@@ -127,7 +130,7 @@ function Horario(props) {
       console.log(item);
       let nuevoBloque = x*6 + y;
       const dato = data.find(dato=>dato.id===item.id)
-      var link = 'http://localhost:8000/api/bloque/' + dato.num_asociacion +'/'+ dato.num_orden_bloque
+      var link = 'http://localhost:8000/api/bloque/' + item.id
       console.log(link);
       const datoBloque = {
         num_bloque: nuevoBloque,
@@ -177,8 +180,9 @@ function Horario(props) {
   const dropLista = useCallback((item) => {
     console.log("asdad");
     const dato = data.find(dato=>dato.id===item.id)
+    console.log(item);
     const index = data.indexOf(dato)
-    var link = 'http://localhost:8000/api/bloque/' + dato.num_asociacion +'/'+ dato.num_orden_bloque
+    var link = 'http://localhost:8000/api/bloque/' + item.id
     console.log(link);
     const datoBloque = {
       num_bloque: -1,

@@ -8,10 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cod_asignatura: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       nombre_asignatura: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -31,15 +27,6 @@ module.exports = {
       lab_independiente:{
         type: Sequelize.BOOLEAN,
         allowNull: false,
-      },
-      mallaId:{
-        type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
-        references:{
-          model: 'Mallas',
-          key: 'id',
-          as: 'mallaId'
-        }
       },
       createdAt: {
         allowNull: false,

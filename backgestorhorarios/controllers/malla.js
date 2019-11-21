@@ -23,6 +23,14 @@ module.exports = {
       .then(malla =>res.json(malla))
       .catch(error=> res.status(400).send(error))
   },
+  findMallas(req, res){
+    return Malla
+      .findAll({
+        where: {carreraId: req.params.id}
+      })
+      .then(malla =>res.json(malla))
+      .catch(error=> res.status(400).send(error))
+  },
   update(req, res){
     return Malla
       .update({
@@ -45,11 +53,10 @@ module.exports = {
           as:'asignaturas',
         }]
       }).then(malla =>{
-        console.log("asd");
         const asignaturas = malla[0].dataValues.asignaturas
         var niveles = []
         for (var i = 1; i <= malla[0].dataValues.n_niveles; i++) {
-          var algo1 = asignaturas.filter(asignatura=>asignatura.nivel == i)
+          var algo1 = asignaturas.filter(asignatura=>asignatura.MallaAsign.dataValues.nivel == i)
           var obj = {"nivel": i, asignaturas: algo1}
           niveles.push(obj)
         }

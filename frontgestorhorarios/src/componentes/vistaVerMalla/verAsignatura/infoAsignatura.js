@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InfoAsignatura({asignatura, estado, setEstado}){
+export default function InfoAsignatura({cod_asignatura, asignatura, estado, setEstado}){
 
   const classes = useStyles();
 
@@ -64,7 +64,7 @@ export default function InfoAsignatura({asignatura, estado, setEstado}){
               </Grid>
             </Grid>
             <Typography className={classes.campoDes}>
-              Código de la asignatura: {asignatura.cod_asignatura}
+              Código de la asignatura: {cod_asignatura}
             </Typography>
             <Typography className={classes.campoDes}>
               Descripción de la Asignatura:

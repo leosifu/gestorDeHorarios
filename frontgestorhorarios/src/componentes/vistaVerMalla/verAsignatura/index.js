@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const VerAsignatura = ({asignaturaId, edit, setEdit, activo, setActivo}) =>{
+const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, setActivo}) =>{
 
   const classes = useStyles();
 
@@ -26,6 +26,8 @@ const VerAsignatura = ({asignaturaId, edit, setEdit, activo, setActivo}) =>{
   const open2 = Boolean(anchorEl);
 
   const [estado, setEstado] = useState(false)
+
+  console.log(cod_asignatura);
 
   const [asignatura, setAsignatura] = useState([])
 
@@ -102,7 +104,7 @@ const VerAsignatura = ({asignaturaId, edit, setEdit, activo, setActivo}) =>{
         aria-labelledby="max-width-dialog-title"
         style={{height:630}}
       >
-       <TabsAsignatura asignatura={asignatura} estado={estado} setEstado={setEstado}/>
+       <TabsAsignatura cod_asignatura={cod_asignatura} asignatura={asignatura} estado={estado} setEstado={setEstado}/>
       </Dialog>
     </>
   )

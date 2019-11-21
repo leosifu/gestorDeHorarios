@@ -48,7 +48,8 @@ function ListaAsignaturas({asignaturas, data, dropLista}) {
         asignaturas.map(asignatura=>{
           var coordsAsignatura = data.filter(dato=>dato.cod_asignatura===asignatura.cod_asignatura)
           return (
-            <AsignaturaItem asignatura={asignatura.nombre_asignatura} data={coordsAsignatura} key={asignatura.cod_asignatura}/>
+            <AsignaturaItem asignatura={asignatura.nombre_asignatura} data={coordsAsignatura}
+              key={asignatura.cod_asignatura}/>
           )
         })
       }

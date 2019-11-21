@@ -24,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'carreraId',
       onDelete:'CASCADE',
     })
-    Malla.hasMany(models.Asignatura,{
+    Malla.belongsToMany(models.Asignatura,{
+      through: models.MallaAsign,
       foreignKey: 'mallaId',
       as: 'asignaturas'
     })

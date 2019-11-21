@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+
 import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,8 +7,11 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import Button from '@material-ui/core/Button';
 
 import CrearCoordinacion from '../crearCoordinacion'
+import AsociarCoord from './asociarCoord'
+import Coordinacion from './coordinacion'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,7 +49,9 @@ function ListaCoord({coordinaciones, asignatura, lab_independiente, estado, setE
 
   const [crear, setCrear] = useState(false)
 
-  console.log(lab_independiente);
+
+
+  console.log(coordinaciones);
 
   const data = {
     cod_coord: '',
@@ -86,6 +92,7 @@ function ListaCoord({coordinaciones, asignatura, lab_independiente, estado, setE
     console.log(data);
     axios.post('http://localhost:8000/api/coordinacion', data)
     .then(res => {
+      console.log('hola');
       console.log(res.data);
       setCrear(false)
       setEstado(!estado)
@@ -98,20 +105,7 @@ function ListaCoord({coordinaciones, asignatura, lab_independiente, estado, setE
         Coordinaciones
       </Typography>
       {coordinaciones.map(coordinacion=>
-        <Box className={classes.sector} borderRadius={1} boxShadow={2} key={coordinacion.id}>
-          <Typography className={classes.campoDes}>
-            Código de la coordinación: {coordinacion.cod_coord}
-          </Typography>
-          <Typography className={classes.campoDes}>
-            Nombre de la coordinación: {coordinacion.nombre_coord}
-          </Typography>
-          <Typography className={classes.campoDes}>
-            Tipo: {coordinacion.tipo_coord}
-          </Typography>
-          <Typography className={classes.campoDes}>
-            Profesor Asignado: Roberto Gonzalez
-          </Typography>
-        </Box>
+        <Coordinacion coordinacion={coordinacion} />
       )}
 
       {crear?

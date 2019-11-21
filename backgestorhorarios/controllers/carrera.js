@@ -13,6 +13,13 @@ module.exports = {
       .then(carrera => res.status(201).send(carrera))
       .catch(error=> res.status(400).send(error))
   },
+  findCarreras(req, res){
+    return Carrera
+      .findAll({
+      })
+      .then(carrera =>res.send(carrera))
+      .catch(error=> res.status(400).send(error))
+  },
   findAll(req,res){
     return Carrera
       .findAll({

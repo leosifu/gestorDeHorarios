@@ -7,11 +7,9 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Dependencia.belongsTo(models.Asignatura,{
       as: 'requisito',
-      onDelete: 'CASCADE'
     })
     Dependencia.belongsTo(models.Asignatura,{
       as: 'asignatura',
-      onDelete: 'CASCADE'
     })
   };
   return Dependencia;

@@ -1,29 +1,34 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Bloques', {
+    return queryInterface.createTable('MallaAsigns', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      num_bloque: {
-        type: Sequelize.INTEGER
-      },
-      sala: {
-        type: Sequelize.STRING
-      },
-      asignado: {
-        type: Sequelize.BOOLEAN
-      },
-      coordinacionId:{
+      cod_asignatura:{
         type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
+        allowNull: false,
+      },
+      nivel:{
+        type: Sequelize.INTEGER,
+      },
+      mallaId: {
+        type: Sequelize.INTEGER,
         references:{
-          model: 'Coordinacions',
+          model: 'Mallas',
           key: 'id',
-          as: 'coordinacionId'
+          as: 'mallaId'
+        }
+      },
+      asignaturaId: {
+        type: Sequelize.INTEGER,
+        references:{
+          model: 'Asignaturas',
+          key: 'id',
+          as: 'asignaturaId'
         }
       },
       createdAt: {
@@ -37,6 +42,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Bloques');
+    return queryInterface.dropTable('MallaAsigns');
   }
 };

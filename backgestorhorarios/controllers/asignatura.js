@@ -3,23 +3,33 @@ const Malla = require('../models').Malla
 const Coordinacion = require('../models').Coordinacion
 const HistorialM = require('../models').Historial
 const Bloque = require('../models').Bloque
+const MallaAsign = require('../models').MallaAsign
 const Historial = require('./historial')
 const CoordinacionF = require('./coordinacion')
+const AsignCoord = require('./asignCoord')
+const MallaAsignC = require('./mallaAsign')
 
 module.exports = {
   create(req,res){
+    console.log(req);
     return Asignatura
       .create({
-        cod_asignatura: req.body.cod_asignatura,
         nombre_asignatura: req.body.nombre_asignatura,
         tel_T: req.body.tel_T,
         tel_E: req.body.tel_E,
         tel_L: req.body.tel_L,
-        nivel: req.body.nivel,
-        mallaId: req.body.mallaId,
         lab_independiente: req.body.lab_independiente
       })
       .then(asignatura => {
+        console.log(asignatura);
+        var data = {
+          cod_asignatura: req.body.cod_asignatura,
+          mallaId: req.body.mallaId,
+          asignaturaId: asignatura.dataValues.id,
+          nivel: req.body.nivel,
+        }
+        console.log(data);
+        MallaAsignC.create(data)
         console.log("\nAsignatura: ");
         console.log(asignatura.dataValues);
         console.log("\n Fin asignatura");
@@ -32,13 +42,13 @@ module.exports = {
       })
       .catch(error=> res.status(400).send(error))
   },
-  findAll(req,res){
+  findAsignaturas(req,res){
     return Asignatura
       .findAll({
-        //include: [{model:Asignatura, as:'requisitos'}]
+        where:{mallaId: req.params.id},
+        include: [{model: 'MallaAsign'}]
       })
       .then(asignatura =>{
-        asignatura.getAsignaturas()
         return (res.json(asignatura))
       })
       .catch(error=> res.status(400).send(error))
@@ -53,6 +63,7 @@ module.exports = {
           {model:HistorialM, as:'historial'}]
       })
       .then(asignatura =>{
+        console.log(asignatura);
         return(res.json(asignatura))
       })
   },
@@ -76,10 +87,12 @@ module.exports = {
         include: [{model:Coordinacion, as:'coordinaciones', include:[{model: Bloque, as:'bloques'}]}]
       })
       .then(asignatura =>{
+        console.log(asignatura);
         return(res.json(asignatura))
       })
   },
   update(req, res){
+    console.log(req.body);
     var tel_T = parseInt(req.body.tel_T)
     var tel_E = parseInt(req.body.tel_E)
     var tel_L = parseInt(req.body.tel_L)
@@ -128,27 +141,27 @@ module.exports = {
               tel: 0,
               telAnt: 0,
             }
-            if(tel_T != asignaturaAct.tel_T || req.lab_independiente!=asignaturaAct.lab_independiente){
+            if(tel_T != asignaturaAct.tel_T || req.body.lab_independiente!=asignaturaAct.lab_independiente){
               reqT.tipo = 'Teoría'
               reqT.tel = tel_T
               reqT.telAnt = asignaturaAct.tel_T
               console.log(reqT);
-              CoordinacionF.actualizarTel(reqT)
+              AsignCoord.findCoords(reqT)
             }
-            if (tel_E != asignaturaAct.tel_E|| req.lab_independiente!=asignaturaAct.lab_independiente) {
+            if (tel_E != asignaturaAct.tel_E|| req.body.lab_independiente!=asignaturaAct.lab_independiente) {
               reqT.tipo = 'Ejercicios'
               reqT.tel = tel_E
               reqT.telAnt = asignaturaAct.tel_E
               console.log(reqT);
-              CoordinacionF.actualizarTel(reqT)
+              AsignCoord.findCoords(reqT)
             }
-            if (tel_L != asignaturaAct.tel_L || req.lab_independiente!=asignaturaAct.lab_independiente) {
+            if (tel_L != asignaturaAct.tel_L || req.body.lab_independiente!=asignaturaAct.lab_independiente) {
               reqT.tipo = 'Laboratorio'
               reqT.tel = tel_L
               reqT.telAnt = asignaturaAct.tel_L
               console.log('Laboratorio');
               console.log(reqT);
-              CoordinacionF.actualizarTel(reqT)
+              AsignCoord.findCoords(reqT)
             }
           }
           else {
@@ -161,7 +174,7 @@ module.exports = {
               telAnt: asignaturaAct.tel_L + asignaturaAct.tel_E + asignaturaAct.tel_L,
             }
             console.log(reqT);
-            CoordinacionF.actualizarTel(reqT)
+            AsignCoord.findCoords(reqT)
           }
         return res.status(201).send(asignatura)
       })

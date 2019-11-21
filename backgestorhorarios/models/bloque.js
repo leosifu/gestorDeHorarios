@@ -10,12 +10,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-    num_asociacion:{
-      type: DataTypes.INTEGER,
-    },
-    num_orden_bloque:{
-      type: DataTypes.INTEGER,
-    }
   }, {});
   Bloque.associate = function(models) {
     // associations can be defined here

@@ -72,12 +72,12 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, mallaId,
             <Grid container style={{paddingLeft:16, paddingRight: 16}}>
               <Grid item xs={11}>
                 <Typography className={classes.title} color="textSecondary" align="center" onClick={event => {return handleClick(event, asignatura.id)}}>
-                  Código: {asignatura.cod_asignatura}
+                  Código: {asignatura.MallaAsign.cod_asignatura}
                 </Typography>
               </Grid>
               <Grid item xs={1}>
                 {edit===0?
-                  <VerAsignatura asignaturaId={asignatura.id} edit={edit} setEdit={setEdit}
+                  <VerAsignatura cod_asignatura={asignatura.MallaAsign.cod_asignatura} asignaturaId={asignatura.id} edit={edit} setEdit={setEdit}
                     activo={activo} setActivo={setActivo}/>:
                   <div/>
                 }
