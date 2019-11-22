@@ -67,8 +67,7 @@ module.exports = {
             var i = numBloques
             var bloquesN = []
             while (i < tel/2){
-              console.log(i);
-              bloquesN.push({coordinacionId: coordsTipo.id})
+              bloquesN.push({coordinacionId: coord.id})
               i = i+1
             }
             Bloque.create(bloquesN)

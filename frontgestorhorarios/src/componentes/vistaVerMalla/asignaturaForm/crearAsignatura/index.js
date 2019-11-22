@@ -91,7 +91,7 @@ function CrearAsignatura({open, setOpen, estado, setEstado, nivel, mallaId}){
         <DialogTitle id="max-width-dialog-title">
           Crear Asignatura
         </DialogTitle>
-          <AsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} tipo={0}/>
+        <AsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} tipo={0}/>
       </Dialog>
     </React.Fragment>
   );

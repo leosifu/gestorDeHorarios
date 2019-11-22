@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function ListaCoord({coordinaciones, asignatura, lab_independiente, estado, setEstado}){
+function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independiente, estado, setEstado}){
   const classes = useStyles();
 
   const [crear, setCrear] = useState(false)
@@ -55,7 +55,7 @@ function ListaCoord({coordinaciones, asignatura, lab_independiente, estado, setE
 
   const data = {
     cod_coord: '',
-    nombre_coord: asignatura.nombre_asignatura,
+    nombre_coord: infoAsignatura.nombre_asignatura,
     tipo_coord: '',
   }
 

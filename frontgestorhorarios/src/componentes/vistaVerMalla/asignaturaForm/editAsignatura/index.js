@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import AsignaturaForm from '../asignaturaForm'
 
-function EditAsignatura({asignatura, mallaId, setEdit, estado, setEstado}){
+function EditAsignatura({infoAsignatura, asignatura, mallaId, setEdit, estado, setEstado}){
 
   console.log(asignatura);
 
@@ -35,8 +35,8 @@ function EditAsignatura({asignatura, mallaId, setEdit, estado, setEstado}){
   }
 
   var camposAsignatura = {
-    cod_asignatura: asignatura.cod_asignatura,
-    nombre_asignatura: asignatura.nombre_asignatura,
+    cod_asignatura: infoAsignatura.cod_asignatura,
+    nombre_asignatura: infoAsignatura.nombre_asignatura,
     descripcion: '',
     tel_T: asignatura.tel_T,
     tel_E: asignatura.tel_E,

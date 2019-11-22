@@ -6,7 +6,7 @@ const dependenciaController = require('../controllers').dependencia
 const coordinacionController = require('../controllers').coordinacion
 const bloqueController = require('../controllers').bloque
 const asingcoordController = require('../controllers').asingcoord
-const mallaasignController = require('../controllers').mallaasign
+const infoasignaturaController = require('../controllers').infoasignatura
 
 module.exports = (app) => {
   app.get('/api', (req, res)=>res.status(200).send({
@@ -26,11 +26,11 @@ module.exports = (app) => {
   app.post('/api/malla', mallaController.create)
   app.put('/api/malla/:id', mallaController.update)
 
-  //API mallaasign
-  app.get('/api/asignatura/:id/:nivel', mallaasignController.findAsignaturasByNivel)
+  //API infoAsignatura
+  app.get('/api/asignatura/:id/:nivel', infoasignaturaController.findAsignaturasByNivel)
+  app.get('/api/asignaturaInfo/:mId/:aId', infoasignaturaController.findAsignatura)
 
   //API asignatura
-  app.get('/api/asignatura/:id', asignaturaController.findAsignatura)
   app.get('/api/asignaturas/:id', asignaturaController.findAsignaturas)
   app.get('/api/asignaturaReq/:id', asignaturaController.getRequisitos)
   app.post('/api/asignatura', asignaturaController.create)

@@ -1,10 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Asignatura = sequelize.define('Asignatura', {
-    nombre_asignatura:{
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     tel_T: DataTypes.INTEGER,
     tel_E: DataTypes.INTEGER,
     tel_L: DataTypes.INTEGER,
@@ -17,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   Asignatura.associate = function(models) {
     // associations can be defined here
     Asignatura.belongsToMany(models.Malla,{
-      through: models.MallaAsign,
+      through: models.InfoAsignatura,
       foreignKey: 'asignaturaId',
       as: 'mallas'
     })

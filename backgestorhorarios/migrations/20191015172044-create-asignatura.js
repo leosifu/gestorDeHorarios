@@ -8,10 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      nombre_asignatura: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       tel_T: {
         type: Sequelize.INTEGER
       },
@@ -20,9 +16,6 @@ module.exports = {
       },
       tel_L: {
         type: Sequelize.INTEGER
-      },
-      nivel:{
-        type: Sequelize.INTEGER,
       },
       lab_independiente:{
         type: Sequelize.BOOLEAN,

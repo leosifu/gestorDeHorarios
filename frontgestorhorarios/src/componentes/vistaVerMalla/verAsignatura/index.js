@@ -9,6 +9,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 
+import { connect } from 'react-redux';
+
 import TabsAsignatura from './tabs'
 
 const useStyles = makeStyles(theme => ({
@@ -17,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, setActivo}) =>{
+const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, setActivo, mallaId}) =>{
 
   const classes = useStyles();
 
@@ -30,18 +32,20 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
   console.log(cod_asignatura);
 
   const [asignatura, setAsignatura] = useState([])
+  const [infoAsignatura, setInfoAsignatura] = useState({})
 
   useEffect(()=>{
-    var link = 'http://localhost:8000/api/asignatura/' + asignaturaId
+    var link = 'http://localhost:8000/api/asignaturaInfo/' + mallaId.mallaId + '/' + asignaturaId
     axios.get(link)
     .then(res => {
-      console.log(res.data[0]);
-      setAsignatura(res.data[0])
+      console.log(res.data);
+      setInfoAsignatura(res.data)
+      setAsignatura(res.data.Asignatura)
     })
     .catch((error)=>{
       console.log(error);
     })
-  },[asignaturaId, estado])
+  },[estado])
 
   const handleClickMenu = event => {
     setActivo(asignatura.id)
@@ -104,9 +108,14 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
         aria-labelledby="max-width-dialog-title"
         style={{height:630}}
       >
-       <TabsAsignatura cod_asignatura={cod_asignatura} asignatura={asignatura} estado={estado} setEstado={setEstado}/>
+       <TabsAsignatura infoAsignatura={infoAsignatura} asignatura={asignatura} estado={estado} setEstado={setEstado}/>
       </Dialog>
     </>
   )
 }
-export default VerAsignatura
+const mapStateToProps = state => {
+    return {
+        mallaId: state.mallaId
+    }
+}
+export default connect(mapStateToProps)(VerAsignatura)

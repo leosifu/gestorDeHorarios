@@ -31,13 +31,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InfoAsignatura({cod_asignatura, asignatura, estado, setEstado}){
+export default function InfoAsignatura({infoAsignatura, asignatura, estado, setEstado}){
 
   const classes = useStyles();
 
   const [edit, setEdit] = useState(false)
 
-  console.log(asignatura);
+  console.log(infoAsignatura);
 
   function clickEdit(){
     setEdit(true)
@@ -47,14 +47,15 @@ export default function InfoAsignatura({cod_asignatura, asignatura, estado, setE
     <>
       {
         edit?
-          <EditAsignatura asignatura={asignatura} setEdit={setEdit} estado={estado} setEstado={setEstado}/>
+          <EditAsignatura infoAsignatura={infoAsignatura}
+            asignatura={asignatura} setEdit={setEdit} estado={estado} setEstado={setEstado}/>
           :
           <>
           <Box className={classes.sector} borderRadius={1} boxShadow={2}>
             <Grid container>
               <Grid item xs={11}>
                 <Typography variant="h4" component="h3" className={classes.campoDes}>
-                  {asignatura.nombre_asignatura}
+                  {infoAsignatura.nombre_asignatura}
                 </Typography>
               </Grid>
               <Grid item xs={1}>
@@ -64,7 +65,7 @@ export default function InfoAsignatura({cod_asignatura, asignatura, estado, setE
               </Grid>
             </Grid>
             <Typography className={classes.campoDes}>
-              Código de la asignatura: {cod_asignatura}
+              Código de la asignatura: {infoAsignatura.cod_asignatura}
             </Typography>
             <Typography className={classes.campoDes}>
               Descripción de la Asignatura:

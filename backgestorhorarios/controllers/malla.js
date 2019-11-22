@@ -56,7 +56,7 @@ module.exports = {
         const asignaturas = malla[0].dataValues.asignaturas
         var niveles = []
         for (var i = 1; i <= malla[0].dataValues.n_niveles; i++) {
-          var algo1 = asignaturas.filter(asignatura=>asignatura.MallaAsign.dataValues.nivel == i)
+          var algo1 = asignaturas.filter(asignatura=>asignatura.InfoAsignatura.dataValues.nivel == i)
           var obj = {"nivel": i, asignaturas: algo1}
           niveles.push(obj)
         }

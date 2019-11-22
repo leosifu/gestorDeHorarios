@@ -5,7 +5,7 @@ const dependencia = require('./dependencia')
 const coordinacion = require('./coordinacion')
 const bloque = require('./bloque')
 const asingcoord = require('./asignCoord')
-const mallaasign = require('./mallaAsign')
+const infoasignatura = require('./infoAsignatura')
 
 module.exports = {
   carrera,
@@ -15,5 +15,5 @@ module.exports = {
   coordinacion,
   bloque,
   asingcoord,
-  mallaasign,
+  infoasignatura,
 }
