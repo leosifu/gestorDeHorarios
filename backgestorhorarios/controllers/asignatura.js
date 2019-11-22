@@ -22,11 +22,13 @@ module.exports = {
       .then(asignatura => {
         console.log(asignatura);
         var data = {
-          cod_asignatura: req.body.cod_asignatura,
-          nombre_asignatura: req.body.nombre_asignatura,
-          mallaId: req.body.mallaId,
-          asignaturaId: asignatura.dataValues.id,
-          nivel: req.body.nivel,
+          body:{
+            cod_asignatura: req.body.cod_asignatura,
+            nombre_asignatura: req.body.nombre_asignatura,
+            mallaId: req.body.mallaId,
+            asignaturaId: asignatura.dataValues.id,
+            nivel: req.body.nivel,
+          }
         }
         console.log(data);
         InfoAsignaturaC.create(data)
@@ -39,17 +41,6 @@ module.exports = {
         }
         Historial.create(dataHistorial)
         return(res.status(201).send(asignatura))
-      })
-      .catch(error=> res.status(400).send(error))
-  },
-  findAsignaturas(req,res){
-    return Asignatura
-      .findAll({
-        where:{mallaId: req.params.id},
-        include: [{model: 'InfoAsignatura'}]
-      })
-      .then(asignatura =>{
-        return (res.json(asignatura))
       })
       .catch(error=> res.status(400).send(error))
   },

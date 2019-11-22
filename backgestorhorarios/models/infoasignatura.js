@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
   const InfoAsignatura = sequelize.define('InfoAsignatura', {
     mallaId: {
       type: DataTypes.INTEGER,
-      unique: 'compositeIndex',
     },
     asignaturaId: {
       type: DataTypes.INTEGER,
@@ -11,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
     cod_asignatura:{
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: 'compositeIndex',
     },
     nivel: {
       type: DataTypes.INTEGER,

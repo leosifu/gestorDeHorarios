@@ -29,9 +29,10 @@ module.exports = (app) => {
   //API infoAsignatura
   app.get('/api/asignatura/:id/:nivel', infoasignaturaController.findAsignaturasByNivel)
   app.get('/api/asignaturaInfo/:mId/:aId', infoasignaturaController.findAsignatura)
+  app.post('/api/infoAsignatura', infoasignaturaController.create)
+  app.get('/api/asignaturas/:id', infoasignaturaController.findAsignaturas)
 
   //API asignatura
-  app.get('/api/asignaturas/:id', asignaturaController.findAsignaturas)
   app.get('/api/asignaturaReq/:id', asignaturaController.getRequisitos)
   app.post('/api/asignatura', asignaturaController.create)
   app.put('/api/asignatura/:id', asignaturaController.update)

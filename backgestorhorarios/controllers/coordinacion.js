@@ -25,7 +25,6 @@ module.exports = {
         for (var i = 0; i < req.body.num_bloques; i++) {
           bloques.push({coordinacionId: coordinacion.dataValues.id})
         }
-        console.log(bloques);
         Bloque.create(bloques)
         return(res.status(201).send(coordinacion))
       })

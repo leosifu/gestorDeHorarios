@@ -9,6 +9,8 @@ import Button from '@material-ui/core/Button';
 
 import axios from 'axios';
 
+import AsignarAsignaturaForm from './asignarAsignaturaForm'
+
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
@@ -19,13 +21,15 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsociarCoord({coordinacion}){
+function AsignarAsignatura({nivel, mallaId}){
 
   const classes = useStyles();
 
   const [carrera, setCarrera] = useState(0);
   const [malla, setMalla] = useState(0)
   const [asignatura, setAsignatura] = useState(0)
+  const [asignaturaCod, setAsignaturaCod] = useState(0)
+  const [asignaturaNombre, setAsignaturaNombre] = useState('')
 
   const [carreras, setCarreras] = useState([])
   const [mallas, setMallas] = useState([])
@@ -44,16 +48,22 @@ function AsociarCoord({coordinacion}){
 
   const handleChangeAsignatura = event => {
     setAsignatura(event.target.value);
+    var asignaturaSelec = asignaturas.find(asign=>asign.asignaturaId == event.target.value)
+    setAsignaturaCod(asignaturaSelec.cod_asignatura)
+    setAsignaturaNombre(asignaturaSelec.nombre_asignatura)
   };
 
-  const asignarAsociacion = event=>{
-    var data = {
+  const onSubmitForm = state=>{
+
+    const data = {
       asignaturaId: asignatura,
-      coordinacionId: coordinacion.AsignCoord.coordinacionId,
-      nombre_coord: coordinacion.AsignCoord.nombre_coord,
-      cod_coord: coordinacion.AsignCoord.cod_coord
+      mallaId: mallaId.mallaId,
+      nombre_asignatura: state.nombre_asignatura.value,
+      cod_asignatura: state.cod_asignatura.value,
+      nivel: nivel
     }
-    var link ='http://localhost:8000/api/asigncoord'
+
+    var link ='http://localhost:8000/api/infoasignatura'
     console.log(data);
     axios.post(link, data)
     .then(res=>{
@@ -64,6 +74,7 @@ function AsociarCoord({coordinacion}){
   useEffect(()=>{
     axios.get('http://localhost:8000/api/carreras')
     .then(res=>{
+      console.log(res.data);
       setCarreras(res.data)
     })
   }, [])
@@ -72,6 +83,7 @@ function AsociarCoord({coordinacion}){
     var link ='http://localhost:8000/api/mallas/' + carrera
     axios.get(link)
     .then(res=>{
+      console.log(res.data);
       setMallas(res.data)
     })
   }, [carrera])
@@ -84,6 +96,11 @@ function AsociarCoord({coordinacion}){
       setAsignaturas(res.data)
     })
   }, [malla])
+
+  var camposAsignatura = {
+    cod_asignatura: asignaturaCod,
+    nombre_asignatura: asignaturaNombre,
+  }
 
   return(
     <>
@@ -157,12 +174,10 @@ function AsociarCoord({coordinacion}){
       }
       {
         (asignatura!=0)?
-        <Button onClick={asignarAsociacion} variant="contained" color="primary">
-          Asociar Coordinacion
-        </Button>
+        <AsignarAsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} />
         :<div/>
       }
     </>
   )
 }
-export default AsociarCoord
+export default AsignarAsignatura

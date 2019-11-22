@@ -8,20 +8,17 @@ const HistorialM = require('../models').Historial
 
 module.exports = {
   create(req, res){
+    console.log(req.body);
     return InfoAsignatura
       .create({
-        cod_asignatura: req.cod_asignatura,
-        nombre_asignatura: req.nombre_asignatura,
-        mallaId: req.mallaId,
-        asignaturaId: req.asignaturaId,
-        nivel: req.nivel,
+        cod_asignatura: req.body.cod_asignatura,
+        nombre_asignatura: req.body.nombre_asignatura,
+        mallaId: req.body.mallaId,
+        asignaturaId: req.body.asignaturaId,
+        nivel: req.body.nivel,
       })
-      .then(mallaA=>{
+      .then(infoA=>res.json(infoA))
 
-      })
-      .catch(error=>{
-        console.log('ahhhhh');
-      })
   },
   findAsignaturasByNivel(req, res){
     var id = req.params.id
@@ -59,5 +56,15 @@ module.exports = {
         console.log(infoA);
         return (res.json(infoA))
       })
-  }
+  },
+  findAsignaturas(req,res){
+    return InfoAsignatura
+      .findAll({
+        where:{mallaId: req.params.id},
+      })
+      .then(infoA =>{
+        console.log(infoA);
+        return (res.json(infoA))
+      })
+  },
 }
