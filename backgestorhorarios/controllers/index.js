@@ -6,14 +6,16 @@ const coordinacion = require('./coordinacion')
 const bloque = require('./bloque')
 const asingcoord = require('./asignCoord')
 const infoasignatura = require('./infoAsignatura')
+const historial = require('./historial')
 
 module.exports = {
   carrera,
   malla,
+  infoasignatura,
   asignatura,
+  historial,
   dependencia,
+  asingcoord,
   coordinacion,
   bloque,
-  asingcoord,
-  infoasignatura,
 }

@@ -108,7 +108,7 @@ function AsociarCoord({coordinacion}){
         </Select>
       </FormControl>
       {
-        (carrera!=0)?
+        (carrera!==0)?
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Malla
@@ -132,7 +132,7 @@ function AsociarCoord({coordinacion}){
         :<div/>
       }
       {
-        (malla!=0)?
+        (malla!==0)?
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Asignatura
@@ -156,7 +156,7 @@ function AsociarCoord({coordinacion}){
         :<div/>
       }
       {
-        (asignatura!=0)?
+        (asignatura!==0)?
         <Button onClick={asignarAsociacion} variant="contained" color="primary">
           Asociar Coordinacion
         </Button>

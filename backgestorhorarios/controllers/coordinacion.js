@@ -25,8 +25,7 @@ module.exports = {
         for (var i = 0; i < req.body.num_bloques; i++) {
           bloques.push({coordinacionId: coordinacion.dataValues.id})
         }
-        Bloque.create(bloques)
-        return(res.status(201).send(coordinacion))
+        Bloque.create(bloques, res)
       })
   },
   findCoordinaciones(req, res){

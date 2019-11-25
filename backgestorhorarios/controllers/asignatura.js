@@ -54,7 +54,6 @@ module.exports = {
           {model:HistorialM, as:'historial'}]
       })
       .then(asignatura =>{
-        console.log(asignatura);
         return(res.json(asignatura))
       })
   },
@@ -78,12 +77,10 @@ module.exports = {
         include: [{model:Coordinacion, as:'coordinaciones', include:[{model: Bloque, as:'bloques'}]}]
       })
       .then(asignatura =>{
-        console.log(asignatura);
         return(res.json(asignatura))
       })
   },
   update(req, res){
-    console.log(req.body);
     var tel_T = parseInt(req.body.tel_T)
     var tel_E = parseInt(req.body.tel_E)
     var tel_L = parseInt(req.body.tel_L)
@@ -111,21 +108,15 @@ module.exports = {
             { return value === telAct[index]});
           var lab_independiente = (req.body.lab_independiente === 'true')
           var labIgual = asignaturaAct.lab_independiente===req.body.lab_independiente
-          console.log(labIgual);
-          console.log(iguales);
           if (iguales && labIgual) {
-            console.log('no hubo cambios en tel ni lab_independiente');
             return res.status(201).send(asignatura)
           }
           if (req.lab_independiente!==asignaturaAct.lab_independiente) {
-            console.log('asd');
           }
-          console.log('varia tel o lab_independiente');
           if (req.body.lab_independiente) {
             //Se separa el lab de la teoría
             //Se recorren todas las coordinaciones, y segun el tipo que sean, se le suman o restan
             //bloques, segun el tel que le corresponda
-            console.log('es lab_independiente');
             var reqT = {
               asignaturaId: asignaturaAct.id,
               tipo: '',
@@ -136,27 +127,22 @@ module.exports = {
               reqT.tipo = 'Teoría'
               reqT.tel = tel_T
               reqT.telAnt = asignaturaAct.tel_T
-              console.log(reqT);
               AsignCoord.actualizarTel(reqT)
             }
             if (tel_E != asignaturaAct.tel_E|| req.body.lab_independiente!=asignaturaAct.lab_independiente) {
               reqT.tipo = 'Ejercicios'
               reqT.tel = tel_E
               reqT.telAnt = asignaturaAct.tel_E
-              console.log(reqT);
               AsignCoord.actualizarTel(reqT)
             }
             if (tel_L != asignaturaAct.tel_L || req.body.lab_independiente!=asignaturaAct.lab_independiente) {
               reqT.tipo = 'Laboratorio'
               reqT.tel = tel_L
               reqT.telAnt = asignaturaAct.tel_L
-              console.log('Laboratorio');
-              console.log(reqT);
               AsignCoord.actualizarTel(reqT)
             }
           }
           else {
-            console.log('no es lab_independiente');
             //Se juntan el lab con la teoría
             var reqT = {
               asignaturaId: asignaturaAct.id,
@@ -164,7 +150,6 @@ module.exports = {
               tel: tel_L + tel_E + tel_T,
               telAnt: asignaturaAct.tel_L + asignaturaAct.tel_E + asignaturaAct.tel_L,
             }
-            console.log(reqT);
             AsignCoord.actualizarTel(reqT)
           }
         return res.status(201).send(asignatura)

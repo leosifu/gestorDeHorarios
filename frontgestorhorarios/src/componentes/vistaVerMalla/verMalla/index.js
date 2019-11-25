@@ -114,7 +114,8 @@ function VerMalla(props) {
         asignaturaId: activo,
         requisitoId: algo
       }
-      axios.delete('http://localhost:8000/api/dependencia', {params: data})
+      console.log(data);
+      axios.delete('http://localhost:8000/api/dependencia', {data: data})
       .then(res => {
         console.log(res.data);
       })

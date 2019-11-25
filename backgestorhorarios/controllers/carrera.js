@@ -3,7 +3,6 @@ const Malla = require('../models').Malla
 
 module.exports = {
   create(req,res){
-    console.log(req.body);
     return Carrera
       .create({
         cod_carrera: req.body.cod_carrera,

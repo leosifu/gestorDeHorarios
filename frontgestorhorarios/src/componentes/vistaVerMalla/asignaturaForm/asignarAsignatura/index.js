@@ -5,7 +5,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
 
 import axios from 'axios';
 
@@ -48,7 +47,7 @@ function AsignarAsignatura({nivel, mallaId}){
 
   const handleChangeAsignatura = event => {
     setAsignatura(event.target.value);
-    var asignaturaSelec = asignaturas.find(asign=>asign.asignaturaId == event.target.value)
+    var asignaturaSelec = asignaturas.find(asign=>asign.asignaturaId === event.target.value)
     setAsignaturaCod(asignaturaSelec.cod_asignatura)
     setAsignaturaNombre(asignaturaSelec.nombre_asignatura)
   };
@@ -125,7 +124,7 @@ function AsignarAsignatura({nivel, mallaId}){
         </Select>
       </FormControl>
       {
-        (carrera!=0)?
+        (carrera!==0)?
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Malla
@@ -149,7 +148,7 @@ function AsignarAsignatura({nivel, mallaId}){
         :<div/>
       }
       {
-        (malla!=0)?
+        (malla!==0)?
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Asignatura
@@ -173,7 +172,7 @@ function AsignarAsignatura({nivel, mallaId}){
         :<div/>
       }
       {
-        (asignatura!=0)?
+        (asignatura!==0)?
         <AsignarAsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} />
         :<div/>
       }

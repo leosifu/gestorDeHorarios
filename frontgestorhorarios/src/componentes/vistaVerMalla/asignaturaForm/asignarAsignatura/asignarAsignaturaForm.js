@@ -3,16 +3,12 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Divider from '@material-ui/core/Divider';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 
 import useForm from '../../../form/useForm'
-
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -61,10 +57,6 @@ const useStyles = makeStyles(theme => ({
 
 const AsignarAsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
 
-  const [stateC, ] = React.useState({
-    checked: camposAsignatura.lab_independiente,
-  });
-
   const stateSchema = {
     cod_asignatura: { value: camposAsignatura.cod_asignatura, error: '' },
     nombre_asignatura: { value: camposAsignatura.nombre_asignatura, error: '' },
@@ -86,7 +78,7 @@ const AsignarAsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
     },
   };
 
-  const { state, handleOnChange, handleOnSubmit, disable } = useForm(
+  const { state, handleOnChange, handleOnSubmit } = useForm(
     stateSchema,
     validationStateSchema,
     onSubmitForm

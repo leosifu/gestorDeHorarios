@@ -8,7 +8,6 @@ const HistorialM = require('../models').Historial
 
 module.exports = {
   create(req, res){
-    console.log(req.body);
     return InfoAsignatura
       .create({
         cod_asignatura: req.body.cod_asignatura,
@@ -32,13 +31,11 @@ module.exports = {
         }]
       })
       .then(mallaA=>{
-        console.log(mallaA);
         var asignaturas = mallaA.map(malA=>{
           malA.Asignatura.dataValues.cod_asignatura = malA.cod_asignatura
           malA.Asignatura.dataValues.nombre_asignatura = malA.nombre_asignatura
           return malA.Asignatura
         })
-        console.log(asignaturas);
         return(res.json(asignaturas))
       })
   },
@@ -53,7 +50,6 @@ module.exports = {
         }]
       })
       .then(infoA=>{
-        console.log(infoA);
         return (res.json(infoA))
       })
   },
@@ -63,7 +59,6 @@ module.exports = {
         where:{mallaId: req.params.id},
       })
       .then(infoA =>{
-        console.log(infoA);
         return (res.json(infoA))
       })
   },

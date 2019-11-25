@@ -7,10 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import Button from '@material-ui/core/Button';
 
 import CrearCoordinacion from '../crearCoordinacion'
-import AsociarCoord from './asociarCoord'
 import Coordinacion from './coordinacion'
 
 const useStyles = makeStyles(theme => ({

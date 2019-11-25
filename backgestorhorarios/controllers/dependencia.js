@@ -1,4 +1,5 @@
 const Dependencia = require('../models').Dependencia
+const HistorialC = require('./historial')
 
 module.exports = {
   crearDependencia(req, res){
@@ -9,6 +10,8 @@ module.exports = {
       })
       .then(dependencia => {
         console.log(dependencia)
+
+        HistorialC.findHistorial(req.body.asignaturaId)
         return res.json(dependencia)
       })
       .catch(error=> {
@@ -16,17 +19,17 @@ module.exports = {
       })
   },
   removeDependencia(req, res){
-    console.log(req.query);
+    console.log(req.body);
     Dependencia.findOne({
       where: {
-        requisitoId: req.query.requisitoId,
-        asignaturaId: req.query.asignaturaId
+        requisitoId: req.body.requisitoId,
+        asignaturaId: req.body.asignaturaId
       }
     })
     .then(dependencia=>{
+      HistorialC.findHistorial(req.body.asignaturaId)
       dependencia.destroy()
       res.json(dependencia)
     })
-    .catch(error=> res.status(400).send(error))
   }
 }

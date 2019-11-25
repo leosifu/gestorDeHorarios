@@ -33,6 +33,7 @@ module.exports = (app) => {
   app.get('/api/asignaturas/:id', infoasignaturaController.findAsignaturas)
 
   //API asignatura
+  //app.get('/api/asignH/:id', asignaturaController.actualizarHistorial)
   app.get('/api/asignaturaReq/:id', asignaturaController.getRequisitos)
   app.post('/api/asignatura', asignaturaController.create)
   app.put('/api/asignatura/:id', asignaturaController.update)
@@ -40,6 +41,9 @@ module.exports = (app) => {
   //Api dependencia
   app.post('/api/dependencia', dependenciaController.crearDependencia)
   app.delete('/api/dependencia', dependenciaController.removeDependencia)
+
+  //Api historial
+  app.put('/api/historial/:id', historialController.update)
 
   //Api AsignCoord
   //app.post('/api/coordinacion', coordinacionController.create)

@@ -9,18 +9,15 @@ module.exports = {
       )
       .then(bloques => {
         console.log(bloques);
-        return bloques
+        return(res.status(201).send(bloques))
       })
-      .catch(error=> res.status(400).send(error))
   },
   setAsociacion(req, res){
     Bloque.findOne({
       where:{coordinacionId: req.params.cId}
     })
     .then(bloque=>{
-      console.log(bloque);
       var bloq = bloque.dataValues
-      console.log(bloq);
       return Bloque
         .update({
           num_asociacion: bloque.num_asociacion
@@ -43,7 +40,6 @@ module.exports = {
       .then(bloque => res.status(201).send(bloque))
   },
   deleteBloque(req, res){
-    console.log(req);
     Bloque.findOne({
       where: {
         id: req,

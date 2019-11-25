@@ -5,7 +5,6 @@ const Coordinacion = require('../models').Coordinacion
 
 module.exports = {
   create(req,res){
-    console.log(req.body);
     return Malla
       .create({
         res_malla: req.body.res_malla,
@@ -60,7 +59,6 @@ module.exports = {
           var obj = {"nivel": i, asignaturas: algo1}
           niveles.push(obj)
         }
-        console.log(niveles);
         malla[0].dataValues["niveles"] = niveles
         delete malla[0].dataValues.asignaturas
         return (res.json(malla))
