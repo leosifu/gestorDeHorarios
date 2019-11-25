@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import axios from 'axios';
 
-import AsignarAsignaturaForm from './asignarAsignaturaForm'
+import AsignarAsignaturaCampos from './asignarAsignaturaCampos'
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -173,7 +173,7 @@ function AsignarAsignatura({nivel, mallaId}){
       }
       {
         (asignatura!==0)?
-        <AsignarAsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} />
+        <AsignarAsignaturaCampos camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} />
         :<div/>
       }
     </>

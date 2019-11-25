@@ -81,23 +81,29 @@ module.exports = {
       })
   },
   update(req, res){
-    var tel_T = parseInt(req.body.tel_T)
-    var tel_E = parseInt(req.body.tel_E)
-    var tel_L = parseInt(req.body.tel_L)
-    Asignatura.findAll({where: {id: req.params.id}})
+
+    Asignatura.findAll({where: {id: req.params.aId}})
     .then(asignaturaPrevia => {
+      var tel_T = parseInt(req.body.tel_T)
+      var tel_E = parseInt(req.body.tel_E)
+      var tel_L = parseInt(req.body.tel_L)
+      var infoA = {
+        asignaturaId: req.params.aId,
+        mallaId: req.params.mId,
+        cod_asignatura: req.body.cod_asignatura,
+        nombre_asignatura: req.body.nombre_asignatura,
+      }
       return Asignatura
         .update({
-          cod_asignatura: req.body.cod_asignatura,
-          nombre_asignatura: req.body.nombre_asignatura,
           tel_T: req.body.tel_T,
           tel_E: req.body.tel_E,
           tel_L: req.body.tel_L,
           lab_independiente: req.body.lab_independiente,
         },{
-          where:{id:req.params.id}
+          where:{id:req.params.aId}
         })
         .then(asignatura=>{
+          InfoAsignaturaC.update(infoA)
           var asignaturaAct = asignaturaPrevia[0].dataValues
           var telTotalAct = tel_T + tel_E + tel_L
           var telTotalPrev = asignaturaAct.tel_T + asignaturaAct.tel_E + asignaturaAct.tel_L

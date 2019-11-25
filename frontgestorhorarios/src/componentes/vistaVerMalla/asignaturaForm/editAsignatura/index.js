@@ -18,20 +18,21 @@ function EditAsignatura({infoAsignatura, asignatura, mallaId, setEdit, estado, s
       tel_L: parseInt(state.tel_L.value),
       lab_independiente: state.lab_independiente.checked,
       mallaId: mallaId.mallaId,
-      historial: {
-        cupos_pasados: state.cupos_pasados.value,
-        tasa_reprobacion: state.tasa_reprobacion.value,
-      }
     }
-    console.log(data);
-    var link = 'http://localhost:8000/api/asignatura/' + asignatura.id
-    console.log(link);
-    axios.put(link, data)
-    .then(res => {
-      console.log(res.data);
+    const historial = {
+      cupos_pasados: state.cupos_pasados.value,
+      tasa_reprobacion: state.tasa_reprobacion.value,
+    }
+    var linkA = 'http://localhost:8000/api/asignatura/' + asignatura.id + '/' + mallaId.mallaId
+    var linkH = 'http://localhost:8000/api/historial/' + asignatura.id
+    axios.all([
+      axios.put(linkA, data),
+      axios.put(linkH, historial)
+    ])
+    .then(axios.spread((data1, data2)=>{
       setEdit(false)
       setEstado(!estado)
-    })
+    }))
   }
 
   var camposAsignatura = {
@@ -47,9 +48,9 @@ function EditAsignatura({infoAsignatura, asignatura, mallaId, setEdit, estado, s
   }
 
   return (
-    <React.Fragment>
+    <>
       <AsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm}/>
-    </React.Fragment>
+    </>
   );
 }
 

@@ -36,7 +36,7 @@ module.exports = (app) => {
   //app.get('/api/asignH/:id', asignaturaController.actualizarHistorial)
   app.get('/api/asignaturaReq/:id', asignaturaController.getRequisitos)
   app.post('/api/asignatura', asignaturaController.create)
-  app.put('/api/asignatura/:id', asignaturaController.update)
+  app.put('/api/asignatura/:aId/:mId', asignaturaController.update)
 
   //Api dependencia
   app.post('/api/dependencia', dependenciaController.crearDependencia)

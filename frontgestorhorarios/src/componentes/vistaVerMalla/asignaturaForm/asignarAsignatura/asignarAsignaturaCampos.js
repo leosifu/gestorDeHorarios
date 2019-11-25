@@ -9,6 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Divider from '@material-ui/core/Divider';
 
 import useForm from '../../../form/useForm'
+import AsignarAsignaturaForm from '../formsAsignatura/asignarAsignaturaForm'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -55,7 +56,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const AsignarAsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
+const AsignarAsignaturaCampos = ({camposAsignatura, onSubmitForm}) => {
 
   const stateSchema = {
     cod_asignatura: { value: camposAsignatura.cod_asignatura, error: '' },
@@ -88,33 +89,8 @@ const AsignarAsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
   return (
     <>
       <DialogContent>
-        <Typography variant="h6" component="h3" className={classes.campoDes}>
-          Datos de la Asignatura
-        </Typography>
-        <Divider />
-        <TextField
-          error = {state.cod_asignatura.error ? true : false}
-          id="standard-name"
-          label="Código de la asignatura"
-          name="cod_asignatura"
-          className={classes.textField}
-          value={state.cod_asignatura.value}
-          onChange={handleOnChange}
-          type="number"
-          margin="normal"
-          variant="outlined"
-        />
-        <TextField
-          error = {state.cod_asignatura.error ? true : false}
-          id="standard-name"
-          label="Nombre de la asignatura"
-          name="nombre_asignatura"
-          className={classes.textField}
-          value={state.nombre_asignatura.value}
-          onChange={handleOnChange}
-          margin="normal"
-          variant="outlined"
-        />
+        <AsignarAsignaturaForm handleOnChange={handleOnChange} cod_asignatura={state.cod_asignatura}
+          nombre_asignatura={state.nombre_asignatura} />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleOnSubmit}
@@ -126,4 +102,4 @@ const AsignarAsignaturaForm = ({camposAsignatura, onSubmitForm}) => {
   );
 };
 
-export default AsignarAsignaturaForm
+export default AsignarAsignaturaCampos

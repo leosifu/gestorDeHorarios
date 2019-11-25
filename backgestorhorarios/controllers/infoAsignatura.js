@@ -62,4 +62,14 @@ module.exports = {
         return (res.json(infoA))
       })
   },
+  update(req){
+    console.log(req);
+    return InfoAsignatura
+      .update({
+        cod_asignatura: req.cod_asignatura,
+        nombre_asignatura: req.nombre_asignatura,
+      },{
+        where:{asignaturaId:req.asignaturaId, mallaId: req.mallaId}
+      })
+  }
 }

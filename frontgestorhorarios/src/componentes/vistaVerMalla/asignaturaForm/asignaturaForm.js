@@ -12,7 +12,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
 import useForm from '../../form/useForm'
-
+import AsignarAsignaturaForm from './formsAsignatura/asignarAsignaturaForm'
+import TelAsignaturaForm from './formsAsignatura/telAsignaturaForm'
+import HistorialForm from './formsAsignatura/historialForm'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -144,125 +146,16 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo}) => {
   return (
     <>
       <DialogContent>
-        <Typography variant="h6" component="h3" className={classes.campoDes}>
-          Datos de la Asignatura
-        </Typography>
-        <Divider />
-        <TextField
-          error = {state.cod_asignatura.error ? true : false}
-          id="standard-name"
-          label="Código de la asignatura"
-          name="cod_asignatura"
-          className={classes.textField}
-          value={state.cod_asignatura.value}
-          onChange={handleOnChange}
-          type="number"
-          margin="normal"
-          variant="outlined"
-        />
-        <TextField
-          error = {state.cod_asignatura.error ? true : false}
-          id="standard-name"
-          label="Nombre de la asignatura"
-          name="nombre_asignatura"
-          className={classes.textField}
-          value={state.nombre_asignatura.value}
-          onChange={handleOnChange}
-          margin="normal"
-          variant="outlined"
-        />
+      
+        <AsignarAsignaturaForm handleOnChange={handleOnChange} cod_asignatura={state.cod_asignatura}
+          nombre_asignatura={state.nombre_asignatura} />
 
+        <TelAsignaturaForm handleOnChange={handleOnChange} tel_T={state.tel_T} tel_E={state.tel_E}
+          tel_L={state.tel_L} lab_independiente={state.lab_independiente} />
 
-        <Grid container>
-          <Grid item xs={2}>
-            <Typography className={classes.campoDes}>
-              TEL:
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              error={state.tel_T.error ? true:false}
-              id="standard-required"
-              label="Teoría"
-              name="tel_T"
-              type="number"
-              className={classes.textFieldNumber}
-              value={state.tel_T.value}
-              onChange={handleOnChange}
-              margin="normal"
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              error={state.tel_E.error ? true:false}
-              id="standard-required"
-              label="Ejercicios"
-              name="tel_E"
-              type="number"
-              className={classes.textFieldNumber}
-              value={state.tel_E.value}
-              onChange={handleOnChange}
-              margin="normal"
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              error={state.tel_L.error ? true:false}
-              id="standard-required"
-              label="Laboratorio"
-              name="tel_L"
-              type="number"
-              className={classes.textFieldNumber}
-              value={state.tel_L.value}
-              onChange={handleOnChange}
-              margin="normal"
-              variant="outlined"
-            />
-          </Grid>
-        </Grid>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={state.lab_independiente.checked}
-              onChange={handleOnChange}
-              value={state.lab_independiente.checked}
-              color="primary"
-              name="lab_independiente"
-            />
-          }
-          label="Laboratorio independiente"
-        />
+        <HistorialForm handleOnChange={handleOnChange} cupos_pasados={state.cupos_pasados}
+          tasa_reprobacion={state.tasa_reprobacion} />
 
-        <Typography variant="h6" component="h3" className={classes.campoDes}>
-          Historial
-        </Typography>
-        <TextField
-          error={state.cupos_pasados.error ? true:false}
-          id="standard-required"
-          label="Cupos del semestre pasado"
-          name="cupos_pasados"
-          type="number"
-          className={classes.textField}
-          value={state.cupos_pasados.value}
-          onChange={handleOnChange}
-          margin="normal"
-          variant="outlined"
-        />
-        <TextField
-          error={state.tasa_reprobacion.error ? true:false}
-          id="standard-required"
-          label="Tasa de reprobación de la asignatura"
-          name="tasa_reprobacion"
-          type="number"
-          className={classes.textField}
-          value={state.tasa_reprobacion.value}
-          onChange={handleOnChange}
-          margin="normal"
-          variant="outlined"
-        />
-        <br/>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleOnSubmit} disabled={disable?true:(sumaTel?true:false)}
