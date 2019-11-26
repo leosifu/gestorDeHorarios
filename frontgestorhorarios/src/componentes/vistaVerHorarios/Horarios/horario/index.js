@@ -49,7 +49,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const colores = ['#F012BE', '	#0074D9', '#7FDBFF', '#39CCCC', '#3D9970', '#2ECC40', '#FFDC00', '#FF851B', '#FF4136']
+const colores = ['#F012BE', '	#0074D9', '#7FDBFF', '#39CCCC', '#3D9970', '#2ECC40', '#FFDC00',
+  '#FF851B', '#FF4136']
 
 function Horario(props) {
   const classes = useStyles();
@@ -71,7 +72,8 @@ function Horario(props) {
     .then(res => {
       const data = res.data
       console.log(data);
-      var asignaturas = data.map(asignatura=>({nombre_asignatura: asignatura.nombre_asignatura,cod_asignatura: asignatura.cod_asignatura}))
+      var asignaturas = data.map(asignatura=>({nombre_asignatura: asignatura.nombre_asignatura,
+        cod_asignatura: asignatura.cod_asignatura}))
       console.log(res.data);
       setAsignaturas(asignaturas)
       var bloquesMatrix = data.map((asignatura, i)=>asignatura.coordinaciones.map(coordinacion=>{

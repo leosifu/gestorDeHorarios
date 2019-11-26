@@ -14,7 +14,7 @@ import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
 import Horario from '../Horarios/horario'
-
+import Topes from '../topes'
 
 const drawerWidth = 100;
 
@@ -51,16 +51,35 @@ export default function SideBar(props) {
 
   const [nivel, setNivel] = useState(1)
 
+  const [state, setState] = useState([])
+
   useEffect(()=>{
     var link = 'http://localhost:8000/api/malla/' + props.match.params.id
     axios.get(link)
     .then(res => {
       console.log(res.data[0]);
       console.log("asdasd");
-      setNiveles(res.data[0].niveles)
+      var niveles = res.data[0].niveles
+      setNiveles(niveles)
+      var nivelC = []
+      niveles.map(niv=>{nivelC.push(false)})
+      console.log(nivelC);
+      setState(nivelC)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
+
+  function handleClick(){
+    console.log(state);
+  }
+
+  const handleChange = name => event => {
+    var stateAux = state.slice()
+    var isTrue = (event.target.value == 'false')
+    stateAux[name] = isTrue
+    console.log(stateAux);
+    setState(stateAux)
+  };
 
   return (
     <div className={classes.root}>
@@ -90,10 +109,21 @@ export default function SideBar(props) {
           <Grid container >
             <DndProvider backend={HTML5Backend}>
               <Grid item xs={11}>
-                <Horario nivel={nivel}/>
+                {
+                  state.map((niv, i)=>(
+                      niv && <div style={{position:'absolute', opacity: 0.3, width:'75%', zIndex: 1}}>
+                        <Horario nivel={i+1}/>
+                      </div>
+                  ))
+                }
+
+                <div style={{position:'absolute', opacity: 1, width:'75%', zIndex: 0}}>
+                  <Horario nivel={nivel}/>
+                </div>
               </Grid>
-              <Grid item xs={1}>
-                <button> Hola </button>
+              <Grid item xs={1} style={{zIndex: 100}}>
+                <button onClick={handleClick}> Hola </button>
+                <Topes niveles={state} handleChange={handleChange} />
               </Grid>
             </DndProvider>
           </Grid>

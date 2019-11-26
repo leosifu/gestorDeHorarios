@@ -22,11 +22,6 @@ const useStyles = makeStyles(theme => ({
     marginBottom: 10,
     padding: 10,
   },
-  textFieldNumber:{
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 100,
-  },
 }));
 
 function TelAsignaturaForm({handleOnChange, tel_T, tel_E, tel_L, lab_independiente}){
