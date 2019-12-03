@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('AsignCoords', {
+    return queryInterface.createTable('InfoCoordinacions', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -27,7 +27,7 @@ module.exports = {
         }
       },
       cod_coord: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       nombre_coord: {
         type: Sequelize.STRING
@@ -43,6 +43,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('AsignCoords');
+    return queryInterface.dropTable('InfoCoordinacions');
   }
 };

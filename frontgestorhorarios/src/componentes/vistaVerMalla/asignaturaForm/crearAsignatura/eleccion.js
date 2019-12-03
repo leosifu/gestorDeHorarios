@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import axios from 'axios';
 
 import Button from '@material-ui/core/Button';
+import DialogContent from '@material-ui/core/DialogContent';
 
 import AsignarAsignatura from '../asignarAsignatura'
 import AsignaturaForm from '../asignaturaForm'
@@ -57,24 +58,26 @@ const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel}) =>{
 
   if (eleccion === 1) {
     return(
-      <AsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} tipo={0}/>
+      <AsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} tipo={0}
+        estado={estado} setEstado={setEstado}/>
     )
   }
   else if (eleccion === 2) {
     return(
-      <AsignarAsignatura nivel={nivel} mallaId={mallaId} />
+      <AsignarAsignatura nivel={nivel} mallaId={mallaId} estado={estado} setEstado={setEstado}/>
     )
   }
   else {
     return(
-      <>
-      <Button onClick={eleccion1} variant="contained" color="primary">
-        Nueva Asignatura
-      </Button>
-      <Button onClick={eleccion2} variant="contained" color="primary">
-        Agregar Asignatura Existente
-      </Button>
-      </>
+      <DialogContent>
+        <Button onClick={eleccion1} variant="contained" color="primary">
+          Nueva Asignatura
+        </Button>
+        <br />
+        <Button onClick={eleccion2} variant="contained" color="primary">
+          Agregar Asignatura Existente
+        </Button>
+      </DialogContent>
     )
   }
 }

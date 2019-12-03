@@ -4,7 +4,7 @@ const asignatura = require('./asignatura')
 const dependencia = require('./dependencia')
 const coordinacion = require('./coordinacion')
 const bloque = require('./bloque')
-const asingcoord = require('./asignCoord')
+const infocoordinacion = require('./infoCoordinacion')
 const infoasignatura = require('./infoAsignatura')
 const historial = require('./historial')
 
@@ -15,7 +15,7 @@ module.exports = {
   asignatura,
   historial,
   dependencia,
-  asingcoord,
+  infocoordinacion,
   coordinacion,
   bloque,
 }

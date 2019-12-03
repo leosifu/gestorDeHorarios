@@ -9,7 +9,6 @@ module.exports = {
         asignaturaId: req.body.asignaturaId
       })
       .then(dependencia => {
-        console.log(dependencia)
 
         HistorialC.findHistorial(req.body.asignaturaId)
         return res.json(dependencia)
@@ -19,7 +18,6 @@ module.exports = {
       })
   },
   removeDependencia(req, res){
-    console.log(req.body);
     Dependencia.findOne({
       where: {
         requisitoId: req.body.requisitoId,

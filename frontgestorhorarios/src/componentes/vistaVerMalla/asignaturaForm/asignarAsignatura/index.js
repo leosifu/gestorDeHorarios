@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsignarAsignatura({nivel, mallaId}){
+function AsignarAsignatura({nivel, mallaId, estado, setEstado}){
 
   const classes = useStyles();
 
@@ -67,6 +67,7 @@ function AsignarAsignatura({nivel, mallaId}){
     axios.post(link, data)
     .then(res=>{
       console.log(res.data);
+      setEstado(!estado)
     })
   }
 

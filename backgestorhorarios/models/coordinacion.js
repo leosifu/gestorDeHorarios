@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   Coordinacion.associate = function(models) {
     // associations can be defined here
     Coordinacion.belongsToMany(models.Asignatura,{
-      through: models.AsignCoord,
+      through: models.InfoCoordinacion,
       foreignKey: 'coordinacionId',
       as: 'asignaturas'
     })

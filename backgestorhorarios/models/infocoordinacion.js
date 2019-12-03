@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const AsignCoord = sequelize.define('AsignCoord', {
+  const InfoCoordinacion = sequelize.define('InfoCoordinacion', {
     coordinacionId: {
       type: DataTypes.INTEGER,
       unique: 'compositeIndex',
@@ -9,17 +9,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       unique: 'compositeIndex',
     },
-    cod_coord: DataTypes.INTEGER,
+    cod_coord: DataTypes.STRING,
     nombre_coord: DataTypes.STRING
   }, {});
-  AsignCoord.associate = function(models) {
+  InfoCoordinacion.associate = function(models) {
     // associations can be defined here
-    AsignCoord.belongsTo(models.Asignatura,{
+    InfoCoordinacion.belongsTo(models.Asignatura,{
       foreignKey: 'asignaturaId'
     })
-    AsignCoord.belongsTo(models.Coordinacion,{
+    InfoCoordinacion.belongsTo(models.Coordinacion,{
       foreignKey: 'coordinacionId'
     })
   };
-  return AsignCoord;
+  return InfoCoordinacion;
 };

@@ -80,8 +80,8 @@ function Horario(props) {
         console.log(coordinacion);
         coordinacion.bloques.map(bloque=>{
           bloque.cod_asignatura = asignatura.cod_asignatura
-          bloque.nombre_coord = coordinacion.AsignCoord.nombre_coord
-          bloque.cod_coord = coordinacion.AsignCoord.cod_coord
+          bloque.nombre_coord = coordinacion.InfoCoordinacion.nombre_coord
+          bloque.cod_coord = coordinacion.InfoCoordinacion.cod_coord
           bloque.mostrar = true
           bloque.size = 1
           bloque.color = colores[i]

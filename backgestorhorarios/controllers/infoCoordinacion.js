@@ -1,4 +1,4 @@
-const AsignCoord = require('../models').AsignCoord
+const InfoCoordinacion = require('../models').InfoCoordinacion
 const Coordinacion = require('../models').Coordinacion
 const Bloques = require('../models').Bloque
 //const Coordinacion = require('./coordinacion')
@@ -6,15 +6,15 @@ const Bloque = require('./bloque')
 
 module.exports = {
   create(req, res){
-    return AsignCoord
+    return InfoCoordinacion
     .create({
       asignaturaId: req.body.asignaturaId,
       coordinacionId: req.body.coordinacionId,
       nombre_coord: req.body.nombre_coord,
       cod_coord: req.body.cod_coord
     })
-    .then(asignC=>{
-      console.log(asignC);
+    .then(infoC=>{
+      console.log(infoC);
     })
   },
   actualizarTel(req, res){
@@ -22,7 +22,7 @@ module.exports = {
     where.asignaturaId = req.asignaturaId
     var reqAlt = req
     var tel = req.tel
-    return AsignCoord
+    return InfoCoordinacion
       .findAll({
         where: where,
         include:[{model: Coordinacion, as:'Coordinacion', include:[{model: Bloques, as: 'bloques'}] }]
@@ -64,12 +64,12 @@ module.exports = {
       })
   },
   findCoords(req, res){
-    return AsignCoord
+    return InfoCoordinacion
       .findAll({
         where: {asignaturaId: req.params.id},
         include:[{model: Coordinacion, as:'Coordinacion'}]
       })
-      .then(asignC=>res.status(201).send(asignC)
+      .then(infoC=>res.status(201).send(infoC)
       )
   },
 }

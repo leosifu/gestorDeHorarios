@@ -2,7 +2,7 @@ const Coordinacion = require('../models').Coordinacion
 const Asignatura = require('../models').Asignatura
 const Bloques = require('../models').Bloque
 const Bloque = require('./bloque')
-const AsingCoord = require('./asignCoord')
+const AsingCoord = require('./infoCoordinacion')
 
 module.exports = {
   create(req, res){

@@ -9,6 +9,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
@@ -53,6 +54,8 @@ export default function SideBar(props) {
 
   const [state, setState] = useState([])
 
+  const [topes, setTopes] = useState(false)
+
   useEffect(()=>{
     var link = 'http://localhost:8000/api/malla/' + props.match.params.id
     axios.get(link)
@@ -69,8 +72,12 @@ export default function SideBar(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-  function handleClick(){
-    console.log(state);
+  function handleClick1(){
+    setTopes(true)
+  }
+
+  function handleClick2(){
+    setTopes(false)
   }
 
   const handleChange = name => event => {
@@ -108,22 +115,33 @@ export default function SideBar(props) {
         <div className={classes.toolbar} />
           <Grid container >
             <DndProvider backend={HTML5Backend}>
-              <Grid item xs={11}>
+              <Grid item xs={10}>
                 {
-                  state.map((niv, i)=>(
-                      niv && <div style={{position:'absolute', opacity: 0.3, width:'75%', zIndex: 1}}>
+                  topes && state.map((niv, i)=>(
+                      niv && <div style={{position:'absolute', opacity: 0.3, width:'70%', zIndex: 1}}>
                         <Horario nivel={i+1}/>
                       </div>
                   ))
                 }
 
-                <div style={{position:'absolute', opacity: 1, width:'75%', zIndex: 0}}>
+                <div style={{position:'absolute', opacity: 1, width:'70%', zIndex: 0}}>
                   <Horario nivel={nivel}/>
                 </div>
               </Grid>
-              <Grid item xs={1} style={{zIndex: 100}}>
-                <button onClick={handleClick}> Hola </button>
-                <Topes niveles={state} handleChange={handleChange} />
+              <Grid item xs={2} style={{zIndex: 100}}>
+                {
+                  topes ?
+                  <>
+                  <Button variant="contained" color="primary" className={classes.button} onClick={handleClick2}>
+                  Finalizar
+                  </Button>
+                  <Topes niveles={state} handleChange={handleChange} />
+                  </>
+                  :
+                  <Button variant="contained" color="primary" className={classes.button} onClick={handleClick1}>
+                      Ver Topes
+                  </Button>
+                }
               </Grid>
             </DndProvider>
           </Grid>

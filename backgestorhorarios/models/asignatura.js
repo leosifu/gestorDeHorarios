@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       as:'coordinaciones'
     })*/
     Asignatura.belongsToMany(models.Coordinacion,{
-      through: models.AsignCoord,
+      through: models.InfoCoordinacion,
       foreignKey: 'asignaturaId',
       as: 'coordinaciones',
     })

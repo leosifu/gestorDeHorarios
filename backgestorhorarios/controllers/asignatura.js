@@ -6,7 +6,7 @@ const Bloque = require('../models').Bloque
 const InfoAsignatura = require('../models').InfoAsignatura
 const Historial = require('./historial')
 const CoordinacionF = require('./coordinacion')
-const AsignCoord = require('./asignCoord')
+const InfoCoordinacion = require('./infoCoordinacion')
 const InfoAsignaturaC = require('./infoAsignatura')
 
 module.exports = {
@@ -133,19 +133,19 @@ module.exports = {
               reqT.tipo = 'Teoría'
               reqT.tel = tel_T
               reqT.telAnt = asignaturaAct.tel_T
-              AsignCoord.actualizarTel(reqT)
+              InfoCoordinacion.actualizarTel(reqT)
             }
             if (tel_E != asignaturaAct.tel_E|| req.body.lab_independiente!=asignaturaAct.lab_independiente) {
               reqT.tipo = 'Ejercicios'
               reqT.tel = tel_E
               reqT.telAnt = asignaturaAct.tel_E
-              AsignCoord.actualizarTel(reqT)
+              InfoCoordinacion.actualizarTel(reqT)
             }
             if (tel_L != asignaturaAct.tel_L || req.body.lab_independiente!=asignaturaAct.lab_independiente) {
               reqT.tipo = 'Laboratorio'
               reqT.tel = tel_L
               reqT.telAnt = asignaturaAct.tel_L
-              AsignCoord.actualizarTel(reqT)
+              InfoCoordinacion.actualizarTel(reqT)
             }
           }
           else {
@@ -156,7 +156,7 @@ module.exports = {
               tel: tel_L + tel_E + tel_T,
               telAnt: asignaturaAct.tel_L + asignaturaAct.tel_E + asignaturaAct.tel_L,
             }
-            AsignCoord.actualizarTel(reqT)
+            InfoCoordinacion.actualizarTel(reqT)
           }
         return res.status(201).send(asignatura)
       })

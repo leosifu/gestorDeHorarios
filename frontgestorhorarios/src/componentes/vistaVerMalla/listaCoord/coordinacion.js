@@ -51,10 +51,10 @@ function Coordinacion({coordinacion}){
     <>
       <Box className={classes.sector} borderRadius={1} boxShadow={2} key={coordinacion.id}>
         <Typography className={classes.campoDes}>
-          Código de la coordinación: {coordinacion.AsignCoord.cod_coord}
+          Código de la coordinación: {coordinacion.InfoCoordinacion.cod_coord}
         </Typography>
         <Typography className={classes.campoDes}>
-          Nombre de la coordinación: {coordinacion.AsignCoord.nombre_coord}
+          Nombre de la coordinación: {coordinacion.InfoCoordinacion.nombre_coord}
         </Typography>
         <Typography className={classes.campoDes}>
           Tipo: {coordinacion.tipo_coord}

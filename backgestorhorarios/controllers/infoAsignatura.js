@@ -44,12 +44,23 @@ module.exports = {
       .findOne({
         where:{mallaId: req.params.mId, asignaturaId: req.params.aId},
         include: [{model:Asignatura, as:'Asignatura',
-          include:[{model:HistorialM, as:'historial'},{model:Asignatura, as:'requisitos'},
+          include:[{model:HistorialM, as:'historial'},{model:Asignatura, as:'requisitos', include:[{model: Malla, as:'mallas', where:{id: req.params.mId}}]},
             {model:Coordinacion, as:'coordinaciones', include:[{model: Bloque, as:'bloques'}]
           }]
         }]
       })
       .then(infoA=>{
+        console.log(infoA.dataValues.asignaturaId);
+        for (var i = 0; i < infoA.dataValues.Asignatura.dataValues.requisitos.length; i++) {
+          var req = infoA.dataValues.Asignatura.dataValues.requisitos[i]
+          console.log(req);
+          var cod_asignatura = req.mallas[0].InfoAsignatura.dataValues.cod_asignatura
+          var nombre_asignatura = req.mallas[0].InfoAsignatura.dataValues.nombre_asignatura
+          infoA.dataValues.Asignatura.dataValues.requisitos[i].dataValues
+            .cod_asignatura = cod_asignatura
+          infoA.dataValues.Asignatura.dataValues.requisitos[i].dataValues
+            .nombre_asignatura = nombre_asignatura
+        }
         return (res.json(infoA))
       })
   },

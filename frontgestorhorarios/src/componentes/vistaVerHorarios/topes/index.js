@@ -1,5 +1,7 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
+
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -13,7 +15,22 @@ const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(3),
   },
+  check: {
+    width: 16,
+    height: 16,
+    margin: 10,
+  },
 }));
+
+const GreenCheckbox = withStyles({
+  root: {
+    color: 'orange',
+    '&$checked': {
+      color: 'orange'
+    },
+  },
+  checked: {},
+})(props => <Checkbox color="default" {...props} />);
 
 function Topes({niveles, handleChange}){
 
@@ -29,8 +46,9 @@ function Topes({niveles, handleChange}){
             //console.log(nivel);
             return(
               <FormControlLabel
-                control={<Checkbox checked={nivel} onChange={handleChange(i)} value={nivel} />}
-                label={'Nivel ' + (i+1)}
+                control={<GreenCheckbox checked={nivel} className={classes.check}
+                  onChange={handleChange(i)} value={nivel} />}
+                label={'Semestre ' + (i+1)}
               />
             )
           })

@@ -100,12 +100,14 @@ export default function InfoAsignatura({infoAsignatura, asignatura, estado, setE
             <Typography className={classes.campoDes}>
               Prerrequisitos:
             </Typography>
-            {asignatura.requisitos.length>0?
-              asignatura.requisitos.map(requisito=>(
-                <Typography className={classes.campoDes}>{requisito.nombre_asignatura}</Typography>
-              ))
-              :
-              <div/>
+            {asignatura.requisitos.length>0 &&
+              asignatura.requisitos.map(requisito=>{
+                console.log(requisito);
+                return(
+                  <Typography className={classes.campoDes}>{requisito.nombre_asignatura}</Typography>
+
+                )
+              })
             }
           </Box>
           <Box className={classes.sector} borderRadius={1} boxShadow={2}>

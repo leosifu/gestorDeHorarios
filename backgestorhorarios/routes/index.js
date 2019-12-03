@@ -5,7 +5,7 @@ const historialController = require('../controllers').historial
 const dependenciaController = require('../controllers').dependencia
 const coordinacionController = require('../controllers').coordinacion
 const bloqueController = require('../controllers').bloque
-const asingcoordController = require('../controllers').asingcoord
+const infocoordController = require('../controllers').infocoordinacion
 const infoasignaturaController = require('../controllers').infoasignatura
 
 module.exports = (app) => {
@@ -47,8 +47,8 @@ module.exports = (app) => {
 
   //Api AsignCoord
   //app.post('/api/coordinacion', coordinacionController.create)
-  app.get('/api/coordinacions/:id', asingcoordController.findCoords)
-  app.post('/api/asigncoord', asingcoordController.create)
+  app.get('/api/coordinacions/:id', infocoordController.findCoords)
+  app.post('/api/asigncoord', infocoordController.create)
 
   //Api coordinacion
   app.post('/api/coordinacion', coordinacionController.create)
