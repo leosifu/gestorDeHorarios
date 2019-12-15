@@ -7,6 +7,7 @@ const bloque = require('./bloque')
 const infocoordinacion = require('./infoCoordinacion')
 const infoasignatura = require('./infoAsignatura')
 const historial = require('./historial')
+const nuevoProceso = require('./nuevoProceso')
 
 module.exports = {
   carrera,
@@ -18,4 +19,5 @@ module.exports = {
   infocoordinacion,
   coordinacion,
   bloque,
+  nuevoProceso
 }

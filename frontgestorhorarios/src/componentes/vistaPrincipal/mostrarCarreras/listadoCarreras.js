@@ -1,7 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+
 import axios from 'axios';
+import CSVReader from 'react-csv-reader'
+import {useDropzone} from 'react-dropzone'
+import XLSX from 'xlsx';
 
 import Carrera from './carrera'
 import CrearCarrera from '../formularios/formCarrera/crearCarrera'
@@ -43,6 +47,47 @@ export default function ListadoCarreras(){
     })
   }, [openC, estado])
 
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+        console.log(file);
+        const reader = new FileReader()
+
+        reader.onabort = () => console.log('file reading was aborted')
+        reader.onerror = () => console.log('file reading has failed')
+        reader.onload = (e) => {
+          console.log(e);
+          const bstr = e.target.result;
+          const wb = XLSX.read(bstr, {type:'binary'});
+        // Do whatever you want with the file contents
+          const binaryStr = reader.result
+          console.log(binaryStr)
+        }
+        reader.readAsArrayBuffer(file)
+      })
+
+  }, [])
+  const {getRootProps, getInputProps} = useDropzone({onDrop})
+
+  const handleUpload = (e) => {
+    e.preventDefault();
+
+    var files = e.target.files, f = files[0];
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        var data = e.target.result;
+        let readedData = XLSX.read(data, {type: 'binary'});
+        const wsname = readedData.SheetNames[0];
+        const ws = readedData.Sheets[wsname];
+
+        /* Convert array to json*/
+        const dataParse = XLSX.utils.sheet_to_json(ws, {header:1});
+        //setFileUploaded(dataParse);
+        const profesores = dataParse.filter(row=>row.length>1)
+        console.log(profesores);
+    };
+    reader.readAsBinaryString(f)
+  }
+
   return (
     <div className={classes.root}>
       <Grid container>
@@ -73,6 +118,23 @@ export default function ListadoCarreras(){
           </Grid>
         ))}
       </Grid>
+      <CSVReader onFileLoaded={data => {
+        console.log(data);
+        axios.post('http://localhost:8000/api/csv-upload/profesores', data)
+        .then(res=>{
+          console.log(res);
+        })
+        .catch(error=>{
+          console.log(error);
+        })
+      }} />
+        <input type="file" onChange={e=>handleUpload(e)} />
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          {
+              <p>Drag 'n' drop some files here, or click to select files</p>
+          }
+        </div>
     </div>
   );
 }

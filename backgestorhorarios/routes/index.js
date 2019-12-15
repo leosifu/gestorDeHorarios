@@ -7,6 +7,8 @@ const coordinacionController = require('../controllers').coordinacion
 const bloqueController = require('../controllers').bloque
 const infocoordController = require('../controllers').infocoordinacion
 const infoasignaturaController = require('../controllers').infoasignatura
+const nuevoProcesoController = require('../controllers').nuevoProceso
+const routes = require('../controllers/uploadCsv')
 
 module.exports = (app) => {
   app.get('/api', (req, res)=>res.status(200).send({
@@ -56,4 +58,10 @@ module.exports = (app) => {
   //Api bloque
   app.post('/api/bloque/:id', bloqueController.updateNumBloque)
   app.post('/api/bloqueAsoc/:cId', bloqueController.setAsociacion)
+
+  //Api csvs
+  app.use('/api/csv-upload', routes)
+
+  //Api nuevoProceso
+  app.post('/api/nuevoProceso', nuevoProcesoController.createProceso)
 }

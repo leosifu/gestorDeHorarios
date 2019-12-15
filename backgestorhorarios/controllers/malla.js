@@ -10,6 +10,8 @@ module.exports = {
         res_malla: req.body.res_malla,
         nombre_malla: req.body.nombre_malla,
         n_niveles: req.body.n_niveles,
+        año: req.body.año,
+        semestre: req.body.semestre,
         carreraId: req.body.carreraId
       })
       .then(malla => res.status(201).send(malla))

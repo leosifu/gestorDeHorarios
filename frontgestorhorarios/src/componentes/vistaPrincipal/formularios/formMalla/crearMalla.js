@@ -45,7 +45,9 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
       carreraId,
       nombre_malla: state.nombre_malla.value,
       res_malla: state.res_malla.value,
-      n_niveles: state.n_niveles.value
+      n_niveles: state.n_niveles.value,
+      año: state.año.value,
+      semestre: state.semestre.value,
     }
     axios.post('http://localhost:8000/api/malla', data)
     .then(res => {
@@ -72,7 +74,8 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
       >
         <DialogTitle id="max-width-dialog-title">Crear Malla</DialogTitle>
         <DialogContent>
-          <MallaForm nombre_malla={''} res_malla={''} n_niveles={0} estado={estado} setEstado={setEstado} onSubmitForm={onSubmitForm}/>
+          <MallaForm nombre_malla={''} res_malla={''} n_niveles={0} estado={estado} año={0} semestre={0}
+            setEstado={setEstado} onSubmitForm={onSubmitForm}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

@@ -79,6 +79,7 @@ const CarreraForm = ({cod_carrera, nombre_carrera, jornada, onSubmitForm}) => {
           value={state.cod_carrera.value}
           onChange={handleOnChange}
           margin="normal"
+          variant="outlined"
         />
         <TextField
           error={state.nombre_carrera.error ? true:false}
@@ -89,6 +90,7 @@ const CarreraForm = ({cod_carrera, nombre_carrera, jornada, onSubmitForm}) => {
           value={state.nombre_carrera.value}
           onChange={handleOnChange}
           margin="normal"
+          variant="outlined"
         />
         <br/>
         <br/>

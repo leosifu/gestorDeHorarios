@@ -22,6 +22,19 @@ module.exports = {
       n_niveles: {
         type: Sequelize.INTEGER,
       },
+      semestre: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      año: {
+        type: Sequelize. INTEGER,
+        allowNull: false,
+      },
+      activa: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: true,
+      },
       carreraId:{
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
