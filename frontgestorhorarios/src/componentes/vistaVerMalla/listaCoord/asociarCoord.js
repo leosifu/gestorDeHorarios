@@ -31,6 +31,8 @@ function AsociarCoord({coordinacion}){
   const [mallas, setMallas] = useState([])
   const [asignaturas, setAsignaturas] = useState([])
 
+  console.log(coordinacion);
+
   const handleChangeCarrera = event => {
     setCarrera(event.target.value);
     setMalla(0)
@@ -49,9 +51,9 @@ function AsociarCoord({coordinacion}){
   const asignarAsociacion = event=>{
     var data = {
       asignaturaId: asignatura,
-      coordinacionId: coordinacion.AsignCoord.coordinacionId,
-      nombre_coord: coordinacion.AsignCoord.nombre_coord,
-      cod_coord: coordinacion.AsignCoord.cod_coord
+      coordinacionId: coordinacion.InfoCoordinacion.coordinacionId,
+      nombre_coord: coordinacion.InfoCoordinacion.nombre_coord,
+      cod_coord: coordinacion.InfoCoordinacion.cod_coord
     }
     var link ='http://localhost:8000/api/asigncoord'
     console.log(data);

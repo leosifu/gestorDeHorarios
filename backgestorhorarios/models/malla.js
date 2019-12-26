@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     activa: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: true,
+      defaultValue: false,
     }
   }, {});
   Malla.associate = function(models) {

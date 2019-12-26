@@ -22,7 +22,7 @@ module.exports = {
   findAll(req,res){
     return Carrera
       .findAll({
-        include: [{model:Malla, as:'mallas'}]
+        include: [{model:Malla, as:'mallas', where:{activa: true}}]
       })
       .then(carrera =>res.send(carrera))
       .catch(error=> res.status(400).send(error))

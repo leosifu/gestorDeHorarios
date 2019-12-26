@@ -40,6 +40,8 @@ module.exports = {
       })
   },
   findAsignatura(req, res){
+    console.log(req.params.mId);
+    console.log(req.params.aId);
     return InfoAsignatura
       .findOne({
         where:{mallaId: req.params.mId, asignaturaId: req.params.aId},
@@ -50,6 +52,7 @@ module.exports = {
         }]
       })
       .then(infoA=>{
+        console.log(infoA.dataValues);
         console.log(infoA.dataValues.asignaturaId);
         for (var i = 0; i < infoA.dataValues.Asignatura.dataValues.requisitos.length; i++) {
           var req = infoA.dataValues.Asignatura.dataValues.requisitos[i]
@@ -63,6 +66,7 @@ module.exports = {
         }
         return (res.json(infoA))
       })
+      .catch(error=> res.status(400).send(error))
   },
   findAsignaturas(req,res){
     return InfoAsignatura

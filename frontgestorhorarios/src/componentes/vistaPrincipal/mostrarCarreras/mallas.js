@@ -45,6 +45,7 @@ function Malla(props){
         >
           <Button component={Link1} to={"/malla/" + malla.id} onClick={event=>onClick(event,malla.id)}>Ver Malla</Button>
           <Button component={Link1} to={"/horario/" + malla.id} onClick={event=>onClick(event,malla.id)}>Horarios</Button>
+          <Button component={Link1} to={"/procesos/" + malla.id} onClick={event=>onClick(event,malla.id)}>Procesos</Button>
         </ButtonGroup>
       </CardActions>
     </Card>

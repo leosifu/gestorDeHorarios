@@ -6,6 +6,7 @@ import SideBar from './componentes/vistaVerHorarios/sideBar/sideBar'
 import App from './App'
 import ListadoCarreras from './componentes/vistaPrincipal/mostrarCarreras/listadoCarreras'
 import VerMalla from './componentes/vistaVerMalla/verMalla'
+import Procesos from './componentes/VistaVerProcesos/Procesos'
 
 const AppRoutes = ({store}) =>
   <Provider store = {store}>
@@ -14,6 +15,7 @@ const AppRoutes = ({store}) =>
         <Route exact path="/" component={ListadoCarreras}/>
         <Route exact path="/horario/:id" component={SideBar} />
         <Route exact path="/malla/:id" component={VerMalla} />
+        <Route exact path="/procesos/:id" component={Procesos} />
       </Switch>
     </App>
   </Provider>;
