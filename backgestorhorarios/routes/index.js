@@ -8,6 +8,7 @@ const bloqueController = require('../controllers').bloque
 const infocoordController = require('../controllers').infocoordinacion
 const infoasignaturaController = require('../controllers').infoasignatura
 const nuevoProcesoController = require('../controllers').nuevoProceso
+const profesorController = require('../controllers').profesor
 const routes = require('../controllers/uploadCsv')
 
 module.exports = (app) => {
@@ -27,6 +28,7 @@ module.exports = (app) => {
   app.get('/api/malla/:id', mallaController.findMallaById)
   app.post('/api/malla', mallaController.create)
   app.put('/api/malla/:id', mallaController.update)
+  app.put('/api/malla/estado/:id', mallaController.cambiarEstadoMalla)
 
   //API infoAsignatura
   app.get('/api/asignatura/:id/:nivel', infoasignaturaController.findAsignaturasByNivel)
@@ -60,7 +62,8 @@ module.exports = (app) => {
   app.post('/api/bloqueAsoc/:cId', bloqueController.setAsociacion)
 
   //Api csvs
-  app.use('/api/csv-upload', routes)
+  // app.use('/api/csv-upload', routes)
+  app.post('/api/profesores', profesorController.create)
 
   //Api nuevoProceso
   app.post('/api/nuevoProceso', nuevoProcesoController.createProceso)

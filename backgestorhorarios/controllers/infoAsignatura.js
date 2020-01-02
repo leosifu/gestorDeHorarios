@@ -76,6 +76,7 @@ module.exports = {
       .then(infoA =>{
         return (res.json(infoA))
       })
+      .catch(error=> res.status(400).send(error))
   },
   update(req){
     console.log(req);
@@ -86,5 +87,6 @@ module.exports = {
       },{
         where:{asignaturaId:req.asignaturaId, mallaId: req.mallaId}
       })
+      .catch(error=> res.status(400).send(error))
   }
 }

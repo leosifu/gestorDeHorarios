@@ -9,6 +9,8 @@ import { red } from '@material-ui/core/colors';
 import { connect } from 'react-redux';
 import * as actions from '../../../redux/actions'
 
+import EditarProceso from '../crearProceso/editarProceso'
+
 const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 500,
@@ -31,8 +33,7 @@ function Proceso(props){
   const classes = useStyles();
 
   const { proceso} = props
-
-  console.log(proceso.id);
+  const [open, setOpen] = useState(false)
 
   function onClick(){
     props.setMallaId(proceso.id)
@@ -48,11 +49,15 @@ function Proceso(props){
               <Grid item xs={9}>
                 {proceso.nombre_malla + ' ' + proceso.semestre + '/' + proceso.año}
               </Grid>
+              <Grid item xs={3}>
+                <EditarProceso proceso={proceso} open={open} setOpen={setOpen}/>
+              </Grid>
             </Grid>
           </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button component={Link1} to={"/malla/" + proceso.id} onClick={onClick}>Ver Malla</Button>
+        <Button variant="contained" color="primary" component={Link1} to={"/malla/" + proceso.id}
+          onClick={onClick}>Ver Malla</Button>
       </CardActions>
     </Card>
   )

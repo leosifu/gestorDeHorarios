@@ -64,7 +64,8 @@ const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel}) =>{
   }
   else if (eleccion === 2) {
     return(
-      <AsignarAsignatura nivel={nivel} mallaId={mallaId} estado={estado} setEstado={setEstado}/>
+      <AsignarAsignatura nivel={nivel} mallaId={mallaId} estado={estado} setEstado={setEstado}
+        open={open} setOpen={setOpen}/>
     )
   }
   else {

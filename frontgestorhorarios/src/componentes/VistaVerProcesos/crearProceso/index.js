@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function CrearProceso({open, setOpen}) {
+function CrearProceso({proceso, open, setOpen}) {
   const classes = useStyles();
 
   const handleClickOpen = () => {
@@ -40,6 +40,7 @@ function CrearProceso({open, setOpen}) {
       año: state.año.value,
       semestre: state.semestre.value,
     }
+    console.log(data);
     axios.post('http://localhost:8000/api/nuevoProceso', data)
     .then(res=>{
       console.log(res.data);
@@ -47,7 +48,6 @@ function CrearProceso({open, setOpen}) {
     .catch((error)=>{
       alert("error al crear la proceso")
     })
-    console.log(data);
   }
 
   return (

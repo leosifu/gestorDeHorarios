@@ -22,9 +22,12 @@ module.exports = {
   findAll(req,res){
     return Carrera
       .findAll({
-        include: [{model:Malla, as:'mallas', where:{activa: true}}]
+        include: [{model:Malla, as:'mallas', where:{activa: true}, required: false}]
       })
-      .then(carrera =>res.send(carrera))
+      .then(carrera =>{
+        console.log(carrera);
+        res.send(carrera)
+      })
       .catch(error=> res.status(400).send(error))
   },
   findByCarreraId(req, res){

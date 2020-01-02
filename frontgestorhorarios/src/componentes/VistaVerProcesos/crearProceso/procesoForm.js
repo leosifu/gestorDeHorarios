@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import {TextField, Button, } from '@material-ui/core';
 import useForm from '../../form/useForm'
 
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ProcesoForm = ({año, semestre, onSubmitForm}) => {
+const ProcesoForm = ({año, semestre, onSubmitForm, edit, activa}) => {
   const stateSchema = {
     año: {value: año, error: ''},
     semestre: {value: semestre, error: ''},
@@ -47,11 +47,13 @@ const ProcesoForm = ({año, semestre, onSubmitForm}) => {
     },
   };
 
-  const { state, handleOnChange, handleOnSubmit, disable } = useForm(
+  const { state, handleOnChange, handleOnSubmit } = useForm(
     stateSchema,
     validationStateSchema,
     onSubmitForm
   );
+
+  const disable = año > 0 && semestre > 0
 
   const classes = useStyles();
   return (
@@ -59,7 +61,6 @@ const ProcesoForm = ({año, semestre, onSubmitForm}) => {
       <form onSubmit={handleOnSubmit}>
           <TextField
             error={state.año.error ? true:false}
-            id="standard-required"
             label="Año del Proceso"
             name="año"
             type="number"
@@ -71,7 +72,6 @@ const ProcesoForm = ({año, semestre, onSubmitForm}) => {
           />
           <TextField
             error={state.semestre.error ? true:false}
-            id="standard-required"
             label="Semestre del Proceso"
             name="semestre"
             type="number"
@@ -82,7 +82,9 @@ const ProcesoForm = ({año, semestre, onSubmitForm}) => {
             variant="outlined"
           />
 
-        <input type="submit" name="submit" disabled={disable} />
+        <Button disabled={disable} onClick={ev=>onSubmitForm(state)}>
+          Crear Proceso
+        </Button>
       </form>
     </div>
   );

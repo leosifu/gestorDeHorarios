@@ -31,6 +31,7 @@ export default function ListadoCarreras(){
   useEffect(()=>{
     axios.get('http://localhost:8000/api/carrera')
     .then(res => {
+      console.log(res.data);
       var vesp = []
       var diur = []
       const data = res.data
@@ -49,21 +50,21 @@ export default function ListadoCarreras(){
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
-        console.log(file);
-        const reader = new FileReader()
+      console.log(file);
+      const reader = new FileReader()
 
-        reader.onabort = () => console.log('file reading was aborted')
-        reader.onerror = () => console.log('file reading has failed')
-        reader.onload = (e) => {
-          console.log(e);
-          const bstr = e.target.result;
-          const wb = XLSX.read(bstr, {type:'binary'});
-        // Do whatever you want with the file contents
-          const binaryStr = reader.result
-          console.log(binaryStr)
-        }
-        reader.readAsArrayBuffer(file)
-      })
+      reader.onabort = () => console.log('file reading was aborted')
+      reader.onerror = () => console.log('file reading has failed')
+      reader.onload = (e) => {
+        console.log(e);
+        const bstr = e.target.result;
+        const wb = XLSX.read(bstr, {type:'binary'});
+      // Do whatever you want with the file contents
+        const binaryStr = reader.result
+        console.log(binaryStr)
+      }
+      reader.readAsArrayBuffer(file)
+    })
 
   }, [])
   const {getRootProps, getInputProps} = useDropzone({onDrop})
@@ -84,6 +85,13 @@ export default function ListadoCarreras(){
         //setFileUploaded(dataParse);
         const profesores = dataParse.filter(row=>row.length>1)
         console.log(profesores);
+        axios.post('http://localhost:8000/api/profesores', profesores)
+        .then(res=>{
+          console.log(res);
+        })
+        .catch(error=>{
+          console.log(error);
+        })
     };
     reader.readAsBinaryString(f)
   }
@@ -118,23 +126,8 @@ export default function ListadoCarreras(){
           </Grid>
         ))}
       </Grid>
-      <CSVReader onFileLoaded={data => {
-        console.log(data);
-        axios.post('http://localhost:8000/api/csv-upload/profesores', data)
-        .then(res=>{
-          console.log(res);
-        })
-        .catch(error=>{
-          console.log(error);
-        })
-      }} />
         <input type="file" onChange={e=>handleUpload(e)} />
-        <div {...getRootProps()}>
-          <input {...getInputProps()} />
-          {
-              <p>Drag 'n' drop some files here, or click to select files</p>
-          }
-        </div>
+
     </div>
   );
 }

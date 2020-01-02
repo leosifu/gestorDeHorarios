@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsignarAsignatura({nivel, mallaId, estado, setEstado}){
+function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, }){
 
   const classes = useStyles();
 
@@ -68,6 +68,10 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado}){
     .then(res=>{
       console.log(res.data);
       setEstado(!estado)
+      setOpen(false)
+    })
+    .catch(error=>{
+      console.log(error);
     })
   }
 
@@ -76,6 +80,9 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado}){
     .then(res=>{
       console.log(res.data);
       setCarreras(res.data)
+    })
+    .catch(error=>{
+      console.log(error);
     })
   }, [])
 
@@ -86,6 +93,9 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado}){
       console.log(res.data);
       setMallas(res.data)
     })
+    .catch(error=>{
+      console.log(error);
+    })
   }, [carrera])
 
   useEffect(()=>{
@@ -94,6 +104,9 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado}){
     .then(res=>{
       console.log(res.data);
       setAsignaturas(res.data)
+    })
+    .catch(error=>{
+      console.log(error);
     })
   }, [malla])
 
@@ -114,7 +127,7 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado}){
           onChange={handleChangeCarrera}
           labelWidth={30}
         >
-          <MenuItem value="">
+          <MenuItem value={-1}>
             <em>Seleccione Carrera</em>
           </MenuItem>
           {
@@ -136,7 +149,7 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado}){
               onChange={handleChangeMalla}
               labelWidth={30}
             >
-              <MenuItem value="">
+              <MenuItem value={-1}>
                 <em>Seleccione Malla</em>
               </MenuItem>
               {
@@ -160,7 +173,7 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado}){
               onChange={handleChangeAsignatura}
               labelWidth={30}
             >
-              <MenuItem value="">
+              <MenuItem value={-1}>
                 <em>Seleccione Asignatura</em>
               </MenuItem>
               {
@@ -173,9 +186,8 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado}){
         :<div/>
       }
       {
-        (asignatura!==0)?
+        (asignatura!==0)&&
         <AsignarAsignaturaCampos camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} />
-        :<div/>
       }
     </>
   )

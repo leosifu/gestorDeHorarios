@@ -7,6 +7,8 @@ const InfoCoordinacion = require('../models').InfoCoordinacion
 const Coordinacion = require('../models').Coordinacion
 const Bloque = require('../models').Bloque
 
+const _ = require('lodash');
+
 module.exports = {
   async createProceso(req, res){
     const Mallas = await Malla.findAll({
@@ -90,7 +92,11 @@ module.exports = {
         requisitoId: newRequisitoId
       })
     })
-    const NuevosRequisitos = await Dependencia.bulkCreate(DependenciasData)
+    console.log(DependenciasData);
+    const DependenciasDataFiltered = _.uniqWith(DependenciasData, _.isEqual);
+    console.log('dependencia', DependenciasDataFiltered);
+    const NuevosRequisitos = await Dependencia.bulkCreate(DependenciasDataFiltered)
+    console.log(NuevosRequisitos);
     const NuevosRequisitosData = NuevosRequisitos.map(requisito=>requisito.dataValues)
 
     //Crear InfoAsignaturas
@@ -115,7 +121,10 @@ module.exports = {
         nombre_asignatura: infoA.nombre_asignatura
       })
     })
-    const NuevasInfoAsignaturas = await InfoAsignatura.bulkCreate(InfoAsignaturasData)
+    console.log('InfoA', InfoAsignaturasData);
+    const InfoAsignaturasDataFiltered = _.uniqWith(InfoAsignaturasData, _.isEqual);
+    console.log(InfoAsignaturasDataFiltered);
+    const NuevasInfoAsignaturas = await InfoAsignatura.bulkCreate(InfoAsignaturasDataFiltered)
     const NuevasInfoAsignaturasData = NuevasInfoAsignaturas.map(infoA=>infoA.dataValues)
 
     //Crear Coordinaciones

@@ -53,7 +53,8 @@ module.exports = {
           model:Asignatura,
           as:'asignaturas',
         }]
-      }).then(malla =>{
+      })
+      .then(malla =>{
         const asignaturas = malla[0].dataValues.asignaturas
         var niveles = []
         for (var i = 1; i <= malla[0].dataValues.n_niveles; i++) {
@@ -65,5 +66,22 @@ module.exports = {
         delete malla[0].dataValues.asignaturas
         return (res.json(malla))
       })
+      .catch(error=> res.status(400).send(error))
   },
+  cambiarEstadoMalla(req, res){
+    return Malla
+      .update({
+        activa: req.body.activa
+      },{
+        where: {id: req.params.id}
+      })
+      .then(malla=>{
+        console.log(malla);
+        res.status(201).send(malla)
+      })
+      .catch(error=>{
+        console.log(error);
+        res.status(400).send(error)
+      })
+  }
 }

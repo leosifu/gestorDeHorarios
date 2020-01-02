@@ -1,12 +1,8 @@
 import React, {useState} from 'react';
 import { Link } from "react-router-dom";
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import { Button } from '@material-ui/core';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Grid from '@material-ui/core/Grid';
+import {Card, CardContent, CardActions, Button, ButtonGroup, Grid} from '@material-ui/core';
+
 import ActualizarMalla from '../formularios/formMalla/actualizarMalla'
 
 import { connect } from 'react-redux';
@@ -45,7 +41,6 @@ function Malla(props){
         >
           <Button component={Link1} to={"/malla/" + malla.id} onClick={event=>onClick(event,malla.id)}>Ver Malla</Button>
           <Button component={Link1} to={"/horario/" + malla.id} onClick={event=>onClick(event,malla.id)}>Horarios</Button>
-          <Button component={Link1} to={"/procesos/" + malla.id} onClick={event=>onClick(event,malla.id)}>Procesos</Button>
         </ButtonGroup>
       </CardActions>
     </Card>

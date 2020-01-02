@@ -1,16 +1,14 @@
 import React, {useState} from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { Link } from "react-router-dom";
 import clsx from 'clsx';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+
+import { makeStyles } from '@material-ui/core/styles';
+import {Card, CardContent, CardActions, Collapse, IconButton, Typography, Grid, Button,
+  } from '@material-ui/core';
+
 import { red } from '@material-ui/core/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Grid from '@material-ui/core/Grid';
 
 import Malla from './mallas'
 import CrearMalla from '../formularios/formMalla/crearMalla'
@@ -55,6 +53,8 @@ export default function Carrera({carrera, estado, setEstado}) {
     setExpanded(!expanded);
   };
 
+  const Link1 = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />);
+
   return (
     <Card className={classes.card}>
       <CardContent>
@@ -71,6 +71,7 @@ export default function Carrera({carrera, estado, setEstado}) {
           </Typography>
       </CardContent>
       <CardActions disableSpacing>
+        <Button component={Link1} to={"/procesos/" + carrera.id}>Procesos</Button>
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -81,6 +82,7 @@ export default function Carrera({carrera, estado, setEstado}) {
         >
           <ExpandMoreIcon />
         </IconButton>
+
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         {carrera.mallas?
