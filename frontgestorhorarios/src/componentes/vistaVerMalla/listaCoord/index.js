@@ -47,54 +47,9 @@ function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independien
 
   const [crear, setCrear] = useState(false)
 
-
-
-  console.log(coordinaciones);
-
-  const data = {
-    cod_coord: '',
-    nombre_coord: infoAsignatura.nombre_asignatura,
-    tipo_coord: '',
-  }
-
   function handleClick(e){
     e.preventDefault()
     setCrear(true)
-  }
-
-  function onSubmitForm(state){
-    const num_bloques = function(){
-      if(lab_independiente){
-        switch (state.tipo_coord.value) {
-          case "Teoría":
-            return asignatura.tel_T/2
-          case "Ejercicios":
-            return asignatura.tel_E/2
-          case "Laboratorio":
-            return asignatura.tel_L/2
-          default:
-            return 0
-        }
-      }
-      else{
-        return (asignatura.tel_T + asignatura.tel_E + asignatura.tel_L)/2
-      }
-    }
-    const data = {
-      cod_coord: state.cod_coord.value,
-      nombre_coord: state.nombre_coord.value,
-      tipo_coord: state.tipo_coord.value,
-      asignaturaId: asignatura.id,
-      num_bloques: num_bloques()
-    }
-    console.log(data);
-    axios.post('http://localhost:8000/api/coordinacion', data)
-    .then(res => {
-      console.log('hola');
-      console.log(res.data);
-      setCrear(false)
-      setEstado(!estado)
-    })
   }
 
   return(
@@ -107,8 +62,9 @@ function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independien
       )}
 
       {crear?
-        <CrearCoordinacion camposCord={data} onSubmitForm={onSubmitForm}
-          lab_independiente={lab_independiente} estado={estado} setEstado={setEstado}/>
+        <CrearCoordinacion estado={estado} setEstado={setEstado} lab_independiente={lab_independiente}
+          nombre_asignatura={infoAsignatura.nombre_asignatura} asignatura={asignatura} crear={crear}
+          setCrear={setCrear}/>
         :
         <Box className={classes.crear} borderRadius={1} boxShadow={2}>
           <IconButton className={classes.centrarIcon} onClick={handleClick}>

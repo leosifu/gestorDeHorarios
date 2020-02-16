@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import AsociarCoord from './asociarCoord'
+// import AsociarCoord from './asociarCoord'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -62,13 +62,14 @@ function Coordinacion({coordinacion}){
         <Typography className={classes.campoDes}>
           Profesor Asignado: Roberto Gonzalez
         </Typography>
-        {
+        {/*
           asociar?
-          <AsociarCoord coordinacion={coordinacion}/>:
+          <AsociarCoord coordinacion={coordinacion}/>
+          :
           <Button onClick={handleAsociar} variant="contained" color="primary">
             Asociar Coordinacion
           </Button>
-        }
+        */}
       </Box>
     </>
   )

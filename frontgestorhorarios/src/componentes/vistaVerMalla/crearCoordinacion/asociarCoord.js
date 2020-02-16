@@ -9,6 +9,8 @@ import Button from '@material-ui/core/Button';
 
 import axios from 'axios';
 
+import SetCoordinacionForm from './setCoordinacionForm'
+
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
@@ -19,19 +21,22 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsociarCoord({coordinacion}){
+function AsociarCoord({asignaturaAct}){
 
   const classes = useStyles();
 
   const [carrera, setCarrera] = useState(0);
   const [malla, setMalla] = useState(0)
   const [asignatura, setAsignatura] = useState(0)
+  const [coordinacion, setCoordinacion] = useState(0)
+  const [coordinacionSelect, setCoordinacionSelect] = useState({})
 
   const [carreras, setCarreras] = useState([])
   const [mallas, setMallas] = useState([])
   const [asignaturas, setAsignaturas] = useState([])
+  const [coordinaciones, setCoordinaciones] = useState([])
 
-  console.log(coordinacion);
+  console.log(asignaturaAct);
 
   const handleChangeCarrera = event => {
     setCarrera(event.target.value);
@@ -48,19 +53,12 @@ function AsociarCoord({coordinacion}){
     setAsignatura(event.target.value);
   };
 
-  const asignarAsociacion = event=>{
-    var data = {
-      asignaturaId: asignatura,
-      coordinacionId: coordinacion.InfoCoordinacion.coordinacionId,
-      nombre_coord: coordinacion.InfoCoordinacion.nombre_coord,
-      cod_coord: coordinacion.InfoCoordinacion.cod_coord
-    }
-    var link ='http://localhost:8000/api/asigncoord'
-    console.log(data);
-    axios.post(link, data)
-    .then(res=>{
-      console.log(res.data);
-    })
+  const handleChangeCoordinacion = event => {
+    setCoordinacion(event.target.value)
+    console.log(event.target.value);
+    console.log(coordinaciones);
+    console.log(coordinaciones.find(coordinacion=>coordinacion.coordinacionId === event.target.value));
+    setCoordinacionSelect(coordinaciones.find(coordinacion=>coordinacion.coordinacionId === event.target.value))
   }
 
   useEffect(()=>{
@@ -87,6 +85,17 @@ function AsociarCoord({coordinacion}){
     })
   }, [malla])
 
+  useEffect(()=>{
+    var link ='http://localhost:8000/api/coordinacions/' + asignatura
+    axios.get(link)
+    .then(res=>{
+      console.log(res.data);
+      setCoordinaciones(res.data)
+    })
+  }, [asignatura])
+
+
+
   return(
     <>
       <FormControl variant="outlined" className={classes.formControl}>
@@ -110,7 +119,7 @@ function AsociarCoord({coordinacion}){
         </Select>
       </FormControl>
       {
-        (carrera!==0)?
+        (carrera!==0)&&
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Malla
@@ -131,10 +140,9 @@ function AsociarCoord({coordinacion}){
               }
             </Select>
           </FormControl>
-        :<div/>
       }
       {
-        (malla!==0)?
+        (malla!==0) &&
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Asignatura
@@ -155,15 +163,42 @@ function AsociarCoord({coordinacion}){
               }
             </Select>
           </FormControl>
-        :<div/>
       }
       {
-        (asignatura!==0)?
-        <Button onClick={asignarAsociacion} variant="contained" color="primary">
-          Asociar Coordinacion
-        </Button>
-        :<div/>
+        (asignatura !== 0) &&
+        <FormControl variant="outlined" className={classes.formControl}>
+          <InputLabel id="demo-simple-select-outlined-label">
+            Coordinación
+          </InputLabel>
+          <Select
+            id="demo-simple-select-outlined"
+            value={coordinacion}
+            onChange={handleChangeCoordinacion}
+            labelWidth={30}
+          >
+            <MenuItem value="">
+              <em>Seleccione Coordinación</em>
+            </MenuItem>
+            {
+              coordinaciones.map(coordinacion=>(
+                <MenuItem value={coordinacion.coordinacionId}>{coordinacion.nombre_coord}</MenuItem>
+              ))
+            }
+          </Select>
+        </FormControl>
       }
+      {
+        (coordinacion!==0) &&
+        <>
+          <SetCoordinacionForm coordinacion={coordinacionSelect} asignatura={asignatura} />
+          <Button
+            // onClick={asignarAsociacion}
+            variant="contained" color="primary">
+            Asociar Coordinacion
+          </Button>
+        </>
+      }
+
     </>
   )
 }
