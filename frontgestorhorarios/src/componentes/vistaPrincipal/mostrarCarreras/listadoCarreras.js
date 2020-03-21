@@ -2,10 +2,14 @@ import React, {useState, useEffect, useCallback} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-import axios from 'axios';
 import CSVReader from 'react-csv-reader'
 import {useDropzone} from 'react-dropzone'
 import XLSX from 'xlsx';
+
+import clientAxios from '../../../config/axios'
+
+import { useDispatch } from 'react-redux';
+import {setLoading} from '../../../redux/actions'
 
 import Carrera from './carrera'
 import CrearCarrera from '../formularios/formCarrera/crearCarrera'
@@ -18,7 +22,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ListadoCarreras(){
+
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [openC, setOpenC] = useState(false);
 
@@ -29,7 +35,7 @@ export default function ListadoCarreras(){
   const [carrerasV, setCarrerasV] = useState([])
 
   useEffect(()=>{
-    axios.get('http://localhost:8000/api/carrera')
+    clientAxios().get('/api/carrera')
     .then(res => {
       console.log(res.data);
       var vesp = []
@@ -45,6 +51,7 @@ export default function ListadoCarreras(){
       }
       setCarrerasV(vesp)
       setCarrerasD(diur)
+      dispatch(setLoading(false))
     })
   }, [openC, estado])
 
@@ -85,7 +92,7 @@ export default function ListadoCarreras(){
         //setFileUploaded(dataParse);
         const profesores = dataParse.filter(row=>row.length>1)
         console.log(profesores);
-        axios.post('http://localhost:8000/api/profesores', profesores)
+        clientAxios().post('/api/profesores', profesores)
         .then(res=>{
           console.log(res);
         })

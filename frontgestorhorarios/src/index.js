@@ -10,24 +10,12 @@ import withFirebaseAuth from 'react-with-firebase-auth'
 import firebase from 'firebase';
 import 'firebase/auth';
 import firebaseConfig from './firebaseConfig';
+import store from './redux/store'
 
 import {loadState, saveState} from './localStorage';
-
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-
 const estadoPer = loadState();
-let store = createStore(Reducers, estadoPer);
-
-
-store.subscribe( ()=>{
-    saveState(
-      {mallaId: store.getState().mallaId},
-
-    );
-  }
-);
-
 
 render(
     <Router>

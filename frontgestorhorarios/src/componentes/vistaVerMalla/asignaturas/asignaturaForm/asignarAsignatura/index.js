@@ -6,7 +6,7 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import axios from 'axios';
+import clientAxios from '../../../../../config/axios'
 
 import AsignarAsignaturaCampos from './asignarAsignaturaCampos'
 
@@ -56,15 +56,12 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, })
 
     const data = {
       asignaturaId: asignatura,
-      mallaId: mallaId.mallaId,
+      mallaId: mallaId,
       nombre_asignatura: state.nombre_asignatura.value,
       cod_asignatura: state.cod_asignatura.value,
       nivel: nivel
     }
-
-    var link ='http://localhost:8000/api/infoasignatura'
-    console.log(data);
-    axios.post(link, data)
+    clientAxios().post(`/api/infoAsignatura`, data)
     .then(res=>{
       console.log(res.data);
       setEstado(!estado)
@@ -76,7 +73,7 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, })
   }
 
   useEffect(()=>{
-    axios.get('http://localhost:8000/api/carreras')
+    clientAxios().get('/api/carreras')
     .then(res=>{
       console.log(res.data);
       setCarreras(res.data)
@@ -87,8 +84,7 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, })
   }, [])
 
   useEffect(()=>{
-    var link ='http://localhost:8000/api/mallas/' + carrera
-    axios.get(link)
+    clientAxios().get(`/api/mallas/${carrera}`)
     .then(res=>{
       console.log(res.data);
       setMallas(res.data)
@@ -99,8 +95,7 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, })
   }, [carrera])
 
   useEffect(()=>{
-    var link ='http://localhost:8000/api/asignaturas/' + malla
-    axios.get(link)
+    clientAxios().get(`/api/asignaturas/${malla}`)
     .then(res=>{
       console.log(res.data);
       setAsignaturas(res.data)

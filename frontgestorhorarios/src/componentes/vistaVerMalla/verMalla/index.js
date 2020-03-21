@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { Link } from "react-router-dom";
-import axios from 'axios';
+import { Link, useParams } from "react-router-dom";
+import clientAxios from '../../../config/axios'
 
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -8,7 +8,8 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Button from '@material-ui/core/Button';
 
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import {setMallaRedux} from '../../../redux/actions'
 
 import Asignatura from './asignatura'
 import NotificacionForm from '../notificacionForm'
@@ -34,12 +35,20 @@ const useStyles = makeStyles({
     top: '90%',
     left: '90%'
   },
+  button2: {
+    position: 'absolute',
+    top: '90%',
+    left: '75%'
+  },
 });
 
 
 function VerMalla(props) {
 
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const {mallaId} = useParams();
+  console.log(mallaId);
 
   const [estado, setEstado] = useState(false);
 
@@ -54,16 +63,16 @@ function VerMalla(props) {
   const firstUpdate = useRef(true);
 
   useEffect(()=>{
-    var link = 'http://localhost:8000/api/malla/' + props.match.params.id
-    axios.get(link)
+    clientAxios().get(`/api/malla/${mallaId}`)
     .then(res => {
       console.log(res.data[0]);
-      setNiveles(res.data[0].niveles)
+      dispatch(setMallaRedux(res.data[0]));
+      setNiveles(res.data[0].niveles);
     })
     .catch((error)=>{
       console.log(error);
     })
-  },[estado, props.match.params.id])
+  },[estado, mallaId])
 
   useEffect(()=>{
     if (firstUpdate.current) {
@@ -72,7 +81,7 @@ function VerMalla(props) {
     }
     var link = 'http://localhost:8000/api/asignaturaReq/' + activo
     console.log(link);
-    axios.get(link)
+    clientAxios().get(`/api/asignaturaReq/${activo}`)
     .then(res => {
       console.log(res);
       console.log(res.data[0]);
@@ -103,7 +112,7 @@ function VerMalla(props) {
         asignaturaId: activo,
         requisitoId: algo
       }
-      axios.post('http://localhost:8000/api/dependencia', data)
+      clientAxios().post('/api/dependencia', data)
       .then(res => {
         console.log(res.data);
       })
@@ -115,7 +124,7 @@ function VerMalla(props) {
         requisitoId: algo
       }
       console.log(data);
-      axios.delete('http://localhost:8000/api/dependencia', {data: data})
+      clientAxios().delete('/api/dependencia', {data: data})
       .then(res => {
         console.log(res.data);
       })
@@ -140,17 +149,26 @@ function VerMalla(props) {
                 <Asignatura activo={activo} setActivo={setActivo} requisitos={requisitos}
                   handleClick={edit===1?handleClick2:handleClick1} nivel={nivel.nivel}
                   asignaturas={nivel.asignaturas} edit={edit} setEdit={setEdit}
-                  estado={estado} setEstado={setEstado}/>
+                  estado={estado} setEstado={setEstado} mallaId={mallaId}/>
               </GridListTile>
             </div>
         )}) : < div/>}
       </GridList>
       {edit===0?
-        <Link style={{ textDecoration: 'none', color:'white' }} to={"/horario/" + props.match.params.id}>
-          <Button variant="contained" color="primary" className={classes.button}>
-              Horarios
-          </Button>
-        </Link>:
+        (
+          <>
+            <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${mallaId}`}>
+              <Button variant="contained" color="primary" className={classes.button}>
+                  Horarios
+              </Button>
+            </Link>
+            <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${mallaId}`}>
+              <Button variant="contained" color="primary" className={classes.button2}>
+                  Profesores
+              </Button>
+            </Link>
+          </>
+        ):
         <Button variant="contained" color="primary" className={classes.button} onClick={guardarRequisitos}>
           Guardar Requisitos
         </Button>
@@ -161,10 +179,4 @@ function VerMalla(props) {
   );
 }
 
-const mapStateToProps = state => {
-    return {
-        mallaId: state.mallaId
-    }
-}
-
-export default connect(mapStateToProps)(VerMalla)
+export default VerMalla

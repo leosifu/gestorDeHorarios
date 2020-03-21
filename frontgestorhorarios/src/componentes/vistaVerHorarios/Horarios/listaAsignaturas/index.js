@@ -28,6 +28,8 @@ function ListaAsignaturas({asignaturas, data, dropLista}) {
     drop: dropLista,
   })
 
+  console.log(asignaturas);
+
   const classes = useStyles();
 
   drop(ref)

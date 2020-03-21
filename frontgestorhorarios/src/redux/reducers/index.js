@@ -1,8 +1,12 @@
 import {combineReducers} from 'redux';
 import carreraReducer from './carreraReducer'
 import mallaReducer from './mallaReducer'
+import loaderReducer from './loaderReducer'
 
-export default combineReducers({
+const createRootReducer = () => combineReducers({
   carrera: carreraReducer,
-  mallaId: mallaReducer
+  malla: mallaReducer,
+  loading: loaderReducer
 })
+
+export default createRootReducer

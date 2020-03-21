@@ -14,7 +14,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 
-import useForm from '../../../form/useForm'
+import useForm from '../../../../form/useForm'
 import DatosCoordForm from './datosCoordForm'
 import EspecCoordForm from './especCoordForm'
 
@@ -100,7 +100,7 @@ function CoordinacionForm({camposCord, onSubmitForm}){
           nombre_coord={state.nombre_coord} />
 
         <EspecCoordForm handleOnChange={handleOnChange} tipo_coord={state.tipo_coord} />
-        
+
         <DialogActions>
           <Button onClick={handleOnSubmit} disabled={disable} variant="contained" color="primary" className={classes.button}>
             Crear Coordinación

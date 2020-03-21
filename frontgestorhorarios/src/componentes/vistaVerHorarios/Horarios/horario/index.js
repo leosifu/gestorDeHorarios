@@ -1,20 +1,20 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import axios from 'axios';
+
+import { useParams} from "react-router";
 
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import {Table, TableCell, TableHead, TableRow, Paper, Grid, } from '@material-ui/core';
 
 import update from 'immutability-helper'
 
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
+import {setMallaRedux} from '../../../../redux/actions';
 
-import ListaAsignaturas from '../listaAsignaturas'
-import TablaHorarios from '../tablaHorarios'
+import clientAxios from '../../../../config/axios';
+
+import ListaAsignaturas from '../listaAsignaturas';
+import TablaHorarios from '../tablaHorarios';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,35 +49,49 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const MallaSelector = createSelector(
+  state => state.malla,
+  malla => malla.malla
+)
+
 const colores = ['#F012BE', '	#0074D9', '#7FDBFF', '#39CCCC', '#3D9970', '#2ECC40', '#FFDC00',
   '#FF851B', '#FF4136']
 
-function Horario(props) {
+function Horario({nivel}) {
+
   const classes = useStyles();
+  const {id} = useParams();
+  const dispatch = useDispatch();
+  const malla = useSelector(MallaSelector);
 
-  const {mallaId, nivel} = props
+  const dias = ['Hora', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
 
-  const dias = ['Hora', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
+  const [data, setData] = useState([]);
 
-  const [data, setData] = useState([])
+  const [bloques, setBloques] = useState([]);
 
-  const [bloques, setBloques] = useState([])
+  const [asignaturas, setAsignaturas] = useState([]);
 
-  const [asignaturas, setAsignaturas] = useState([])
+  useEffect(() => {
+    clientAxios().get(`/api/malla/${id}`)
+    .then(res => {
+      console.log(res.data[0]);
+      dispatch(setMallaRedux(res.data[0]));
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  }, [])
 
   useEffect(()=>{
-    var link = 'http://localhost:8000/api/asignatura/' + mallaId.mallaId + '/' + nivel
-    console.log(link);
-    axios.get(link)
+    clientAxios().get(`/api/asignatura/${malla.id}/${nivel}`)
     .then(res => {
       const data = res.data
       console.log(data);
       var asignaturas = data.map(asignatura=>({nombre_asignatura: asignatura.nombre_asignatura,
         cod_asignatura: asignatura.cod_asignatura}))
-      console.log(res.data);
       setAsignaturas(asignaturas)
       var bloquesMatrix = data.map((asignatura, i)=>asignatura.coordinaciones.map(coordinacion=>{
-        console.log(coordinacion);
         coordinacion.bloques.map(bloque=>{
           bloque.cod_asignatura = asignatura.cod_asignatura
           bloque.nombre_coord = coordinacion.InfoCoordinacion.nombre_coord
@@ -97,7 +111,7 @@ function Horario(props) {
     .catch((error)=>{
       console.log(error);
     })
-  },[nivel, mallaId.mallaId])
+  },[nivel, malla.id])
 
   useEffect(()=>{
     var matrix = []
@@ -112,8 +126,6 @@ function Horario(props) {
       if(data[i].asignado){
         let x = data[i].num_bloque % ancho
         let y = parseInt(data[i].num_bloque /ancho)
-        /*matrix[y][x] = data[i]
-        */
         var pos = []
         if(matrix[y][x].length>0){
           pos = matrix[y][x].map(dato=>dato)
@@ -127,19 +139,13 @@ function Horario(props) {
 
   const handleDrop = useCallback(
     (x, y, item) => {
-      console.log(x);
-      console.log(y);
-      console.log(item);
       let nuevoBloque = x*6 + y;
       const dato = data.find(dato=>dato.id===item.id)
-      var link = 'http://localhost:8000/api/bloque/' + item.id
-      console.log(link);
       const datoBloque = {
         num_bloque: nuevoBloque,
         asignado: true
       }
-      console.log(datoBloque);
-      axios.post(link, datoBloque)
+      clientAxios().post(`/api/bloque/${item.id}`, datoBloque)
       .then(res => {
         console.log(res.data);
       })
@@ -180,18 +186,13 @@ function Horario(props) {
   )
 
   const dropLista = useCallback((item) => {
-    console.log("asdad");
     const dato = data.find(dato=>dato.id===item.id)
-    console.log(item);
     const index = data.indexOf(dato)
-    var link = 'http://localhost:8000/api/bloque/' + item.id
-    console.log(link);
     const datoBloque = {
       num_bloque: -1,
       asignado: false
     }
-    console.log(datoBloque);
-    axios.post(link, datoBloque)
+    clientAxios().post(`/api/bloque/${item.id}`, datoBloque)
     .then(res => {
       console.log(res.data);
     })
@@ -231,10 +232,4 @@ function Horario(props) {
   );
 }
 
-const mapStateToProps = state => {
-  return {
-    mallaId: state.mallaId
-  }
-}
-
-export default connect(mapStateToProps)(Horario)
+export default Horario

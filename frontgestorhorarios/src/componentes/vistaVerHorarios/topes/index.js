@@ -36,22 +36,17 @@ function Topes({niveles, handleChange}){
 
   const classes = useStyles();
 
-  console.log(niveles);
-
   return(
     <FormControl required component="fieldset" className={classes.formControl}>
       <FormGroup>
         {
-          niveles.map((nivel, i)=>{
-            //console.log(nivel);
-            return(
+          niveles.map((nivel, i)=>(
               <FormControlLabel
                 control={<GreenCheckbox checked={nivel} className={classes.check}
                   onChange={handleChange(i)} value={nivel} />}
                 label={'Semestre ' + (i+1)}
               />
-            )
-          })
+            ))
         }
       </FormGroup>
     </FormControl>

@@ -7,10 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 
-import { connect } from 'react-redux';
-
-import VerAsignatura from '../verAsignatura'
-import CrearAsignatura from '../asignaturaForm/crearAsignatura'
+import VerAsignatura from '../asignaturas/verAsignatura'
+import CrearAsignatura from '../asignaturas/asignaturaForm/crearAsignatura'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -42,8 +40,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, mallaId, handleClick,
-  edit, setEdit, activo, setActivo}) {
+function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleClick,
+  edit, setEdit, activo, setActivo, mallaId, }) {
 
   const classes = useStyles();
 
@@ -91,16 +89,12 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, mallaId,
       ))}
       <Card className={classes.card} style={{ display:'flex', justifyContent:'center' }}>
         <Box borderRadius="50%" border={1} className={classes.oval}>
-          <CrearAsignatura mallaId={mallaId} nivel={nivel} open={open} setOpen={setOpen} estado={estado} setEstado={setEstado}/>
+          <CrearAsignatura nivel={nivel} open={open} setOpen={setOpen} estado={estado} setEstado={setEstado}
+            mallaId={mallaId}/>
         </Box>
       </Card>
     </div>
   );
 }
-const mapStateToProps = state => {
-    return {
-        mallaId: state.mallaId
-    }
-}
 
-export default connect(mapStateToProps)(Asignatura)
+export default Asignatura

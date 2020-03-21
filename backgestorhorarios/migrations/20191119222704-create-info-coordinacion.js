@@ -2,11 +2,11 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('InfoCoordinacions', {
-      id: {
+      infoC_id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
+        unique: true
       },
       coordinacionId: {
         type: Sequelize.INTEGER,

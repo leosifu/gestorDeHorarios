@@ -11,10 +11,14 @@ module.exports = {
       asignaturaId: req.body.asignaturaId,
       coordinacionId: req.body.coordinacionId,
       nombre_coord: req.body.nombre_coord,
-      cod_coord: req.body.cod_coord
+      cod_coord: req.body.cod_coord,
+      infoC_id: req.body.infoC_id
     })
     .then(infoC=>{
-      console.log(infoC);
+      res.status(201).send(infoC)
+    })
+    .catch(error => {
+      console.log(error);
     })
   },
   actualizarTel(req, res){

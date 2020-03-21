@@ -100,7 +100,11 @@ module.exports = {
     const NuevosRequisitosData = NuevosRequisitos.map(requisito=>requisito.dataValues)
 
     //Crear InfoAsignaturas
+    console.log('------------------------Asignaturas--------------------------');
+    console.log(Asignaturas);
     const InfoAsignaturas = Asignaturas.map(asignatura=>asignatura.InfoAsignatura.dataValues)
+    console.log('------------------------InfoAsignaturas--------------------------');
+    console.log(InfoAsignaturas);
     const InfoAsignaturasData = InfoAsignaturas.map(infoA=>{
       let mallaId = infoA.mallaId
       let mallaFind = MallasDataValues.find(malla=>malla.id === mallaId)
@@ -118,14 +122,24 @@ module.exports = {
         asignaturaId: newAsignaturaId,
         cod_asignatura: infoA.cod_asignatura,
         nivel: infoA.nivel,
-        nombre_asignatura: infoA.nombre_asignatura
+        nombre_asignatura: infoA.nombre_asignatura,
+        infoA_id: nuevaMallaId + '~' + infoA.cod_asignatura + '~' + infoA.nombre_asignatura
       })
     })
-    console.log('InfoA', InfoAsignaturasData);
+    console.log('------------------------Asignaturas--------------------------');
+    console.log(Asignaturas);
+    console.log('------------------------InfoAsignaturasDataS--------------------------');
+    console.log(InfoAsignaturasData);
     const InfoAsignaturasDataFiltered = _.uniqWith(InfoAsignaturasData, _.isEqual);
+    console.log('------------------------InfoAsignaturasDataFiltered--------------------------');
     console.log(InfoAsignaturasDataFiltered);
-    const NuevasInfoAsignaturas = await InfoAsignatura.bulkCreate(InfoAsignaturasDataFiltered)
-    const NuevasInfoAsignaturasData = NuevasInfoAsignaturas.map(infoA=>infoA.dataValues)
+    for (var i = 0; i < InfoAsignaturasDataFiltered.length; i++) {
+      const newInfoAsignatura = await InfoAsignatura.create(InfoAsignaturasDataFiltered[i])
+      console.log(newInfoAsignatura);
+    }
+    // const NuevasInfoAsignaturas = await InfoAsignatura.bulkCreate(InfoAsignaturasDataFiltered)
+    // const NuevasInfoAsignaturasData = NuevasInfoAsignaturas.map(infoA=>infoA.dataValues)
+    console.log('------------------------NuevasInfoAsignaturasData--------------------------');
 
     //Crear Coordinaciones
     const CoordinacionesByAsignatura = Asignaturas.map(asignatura=>asignatura.coordinaciones.map(coordinacion=>
@@ -145,6 +159,7 @@ module.exports = {
     const CoordinacionData = Coords.map(coordinacion=>({
       tipo_coord: coordinacion.tipo_coord,
     }))
+    console.log('------------------------Coordinacion--------------------------');
     const NuevasCoordinaciones = await Coordinacion.bulkCreate(CoordinacionData)
     const NuevasCoordinacionesData = NuevasCoordinaciones.map(coordinacion=>coordinacion.dataValues)
 
@@ -169,6 +184,7 @@ module.exports = {
         nombre_coord: infoC.nombre_coord
       })
     })
+    console.log('------------------------NuevasInfoCoordinacionesData--------------------------');
     const NuevasInfoCoordinacion = await InfoCoordinacion.bulkCreate(InfoCoordinacionesData)
     const NuevasInfoCoordinacionesData = NuevasInfoCoordinacion.map(infoC=>infoC.dataValues)
     console.log(NuevasInfoCoordinacionesData);
@@ -191,6 +207,7 @@ module.exports = {
     })
     const NuevosBloques = await Bloque.bulkCreate(BloquesData)
     const nuevoBloqueData = NuevosBloques.map(bloque=>bloque.dataValues)
+    console.log('------------------------nuevoBloqueData--------------------------');
     console.log(nuevoBloqueData);
 
     res.send(NuevasMallas)

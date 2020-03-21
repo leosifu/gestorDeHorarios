@@ -1,6 +1,2 @@
-export const setMallaId = (mallaId) => {
-  return {
-    type: 'setMallaId',
-    payload: mallaId
-  }
-}
+export * from './mallaActions'
+export * from './loaderActions'

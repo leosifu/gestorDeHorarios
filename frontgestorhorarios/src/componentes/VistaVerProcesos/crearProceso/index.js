@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function CrearProceso({proceso, open, setOpen}) {
+function CrearProceso({proceso, open, setOpen, changed, setChanged, }) {
   const classes = useStyles();
 
   const handleClickOpen = () => {
@@ -44,6 +44,8 @@ function CrearProceso({proceso, open, setOpen}) {
     axios.post('http://localhost:8000/api/nuevoProceso', data)
     .then(res=>{
       console.log(res.data);
+      setChanged(!changed)
+      setOpen(false)
     })
     .catch((error)=>{
       alert("error al crear la proceso")

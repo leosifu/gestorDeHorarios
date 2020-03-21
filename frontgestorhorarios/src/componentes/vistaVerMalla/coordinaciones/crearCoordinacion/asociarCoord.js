@@ -21,9 +21,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsociarCoord({asignaturaAct}){
+function AsociarCoord({asignaturaAct, estado, setEstado, }){
 
   const classes = useStyles();
+  console.log(asignaturaAct);
 
   const [carrera, setCarrera] = useState(0);
   const [malla, setMalla] = useState(0)
@@ -35,8 +36,6 @@ function AsociarCoord({asignaturaAct}){
   const [mallas, setMallas] = useState([])
   const [asignaturas, setAsignaturas] = useState([])
   const [coordinaciones, setCoordinaciones] = useState([])
-
-  console.log(asignaturaAct);
 
   const handleChangeCarrera = event => {
     setCarrera(event.target.value);
@@ -55,10 +54,8 @@ function AsociarCoord({asignaturaAct}){
 
   const handleChangeCoordinacion = event => {
     setCoordinacion(event.target.value)
-    console.log(event.target.value);
-    console.log(coordinaciones);
-    console.log(coordinaciones.find(coordinacion=>coordinacion.coordinacionId === event.target.value));
-    setCoordinacionSelect(coordinaciones.find(coordinacion=>coordinacion.coordinacionId === event.target.value))
+    setCoordinacionSelect(coordinaciones.find(coordinacion=>
+      coordinacion.coordinacionId == event.target.value))
   }
 
   useEffect(()=>{
@@ -69,7 +66,7 @@ function AsociarCoord({asignaturaAct}){
   }, [])
 
   useEffect(()=>{
-    var link ='http://localhost:8000/api/mallas/' + carrera
+    var link ='http://localhost:8000/api/mallas/' + carrera +
     axios.get(link)
     .then(res=>{
       setMallas(res.data)
@@ -103,17 +100,19 @@ function AsociarCoord({asignaturaAct}){
           Carrera
         </InputLabel>
         <Select
+          multiple
+          native
+          inputProps={{
+            id: 'select-multiple-nativ',
+          }}
           id="demo-simple-select-outlined"
           value={carrera}
           onChange={handleChangeCarrera}
           labelWidth={30}
         >
-          <MenuItem value="">
-            <em>Seleccione Carrera</em>
-          </MenuItem>
           {
             carreras.map(carrera=>(
-              <MenuItem value={carrera.id}>{carrera.nombre_carrera}</MenuItem>
+              <option value={carrera.id}>{carrera.nombre_carrera}</option>
             ))
           }
         </Select>
@@ -126,16 +125,18 @@ function AsociarCoord({asignaturaAct}){
             </InputLabel>
             <Select
               id="demo-simple-select-outlined"
+              multiple
+              native
+              inputProps={{
+                id: 'select-multiple-nativ',
+              }}
               value={malla}
               onChange={handleChangeMalla}
               labelWidth={30}
             >
-              <MenuItem value="">
-                <em>Seleccione Malla</em>
-              </MenuItem>
               {
                 mallas.map(malla=>(
-                  <MenuItem value={malla.id}>{malla.nombre_malla}</MenuItem>
+                  <option value={malla.id}>{malla.nombre_malla}</option>
                 ))
               }
             </Select>
@@ -149,16 +150,18 @@ function AsociarCoord({asignaturaAct}){
             </InputLabel>
             <Select
               id="demo-simple-select-outlined"
+              multiple
+              native
+              inputProps={{
+                id: 'select-multiple-nativ',
+              }}
               value={asignatura}
               onChange={handleChangeAsignatura}
               labelWidth={30}
             >
-              <MenuItem value="">
-                <em>Seleccione Asignatura</em>
-              </MenuItem>
               {
                 asignaturas.map(asignatura=>(
-                  <MenuItem value={asignatura.asignaturaId}>{asignatura.nombre_asignatura}</MenuItem>
+                  <option value={asignatura.asignaturaId}>{asignatura.nombre_asignatura}</option>
                 ))
               }
             </Select>
@@ -172,16 +175,18 @@ function AsociarCoord({asignaturaAct}){
           </InputLabel>
           <Select
             id="demo-simple-select-outlined"
+            multiple
+            native
+            inputProps={{
+              id: 'select-multiple-nativ',
+            }}
             value={coordinacion}
             onChange={handleChangeCoordinacion}
             labelWidth={30}
           >
-            <MenuItem value="">
-              <em>Seleccione Coordinación</em>
-            </MenuItem>
             {
               coordinaciones.map(coordinacion=>(
-                <MenuItem value={coordinacion.coordinacionId}>{coordinacion.nombre_coord}</MenuItem>
+                <option value={coordinacion.coordinacionId}>{coordinacion.nombre_coord}</option>
               ))
             }
           </Select>
@@ -189,14 +194,9 @@ function AsociarCoord({asignaturaAct}){
       }
       {
         (coordinacion!==0) &&
-        <>
-          <SetCoordinacionForm coordinacion={coordinacionSelect} asignatura={asignatura} />
-          <Button
-            // onClick={asignarAsociacion}
-            variant="contained" color="primary">
-            Asociar Coordinacion
-          </Button>
-        </>
+          <SetCoordinacionForm coordinacion={coordinacionSelect} asignaturaAct={asignaturaAct}
+            estado={estado} setEstado={setEstado}/>
+
       }
 
     </>

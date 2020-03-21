@@ -11,7 +11,6 @@ const InfoAsignaturaC = require('./infoAsignatura')
 
 module.exports = {
   create(req,res){
-    console.log(req);
     return Asignatura
       .create({
         tel_T: req.body.tel_T,
@@ -19,7 +18,8 @@ module.exports = {
         tel_L: req.body.tel_L,
         lab_independiente: req.body.lab_independiente
       })
-      .then(asignatura => {
+      .then(async(asignatura) => {
+        console.log('------------------------Asignaturas--------------------------');
         console.log(asignatura);
         var data = {
           body:{
@@ -28,10 +28,19 @@ module.exports = {
             mallaId: req.body.mallaId,
             asignaturaId: asignatura.dataValues.id,
             nivel: req.body.nivel,
+            infoA_id: req.body.mallaId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
           }
         }
+        console.log('------------------------Data--------------------------');
         console.log(data);
-        InfoAsignaturaC.create(data)
+        const NewInfoAsignatura = await InfoAsignaturaC.create(data)
+        console.log('------------------------NewInfoAsignatura--------------------------');
+        console.log(NewInfoAsignatura);
+        if (!NewInfoAsignatura) {
+          asignatura.destroy()
+          return(res.status(400))
+        }
+        console.log(NewInfoAsignatura);
         console.log("\nAsignatura: ");
         console.log(asignatura.dataValues);
         console.log("\n Fin asignatura");
@@ -92,6 +101,7 @@ module.exports = {
         mallaId: req.params.mId,
         cod_asignatura: req.body.cod_asignatura,
         nombre_asignatura: req.body.nombre_asignatura,
+        infoA_id: req.params.mId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
       }
       return Asignatura
         .update({
@@ -102,8 +112,12 @@ module.exports = {
         },{
           where:{id:req.params.aId}
         })
-        .then(asignatura=>{
-          InfoAsignaturaC.update(infoA)
+        .then(async asignatura=>{
+          const UpdatedInfoAsignatura = await InfoAsignaturaC.update(infoA)
+          if (!UpdatedInfoAsignatura) {
+            asignatura.destroy();
+            return(res.status(400));
+          }
           var asignaturaAct = asignaturaPrevia[0].dataValues
           var telTotalAct = tel_T + tel_E + tel_L
           var telTotalPrev = asignaturaAct.tel_T + asignaturaAct.tel_E + asignaturaAct.tel_L

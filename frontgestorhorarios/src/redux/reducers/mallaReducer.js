@@ -1,13 +1,15 @@
 const initialState={
-  mallaId: 0,
+  malla: {
+    id: 0,
+  },
 }
 
 export default (state = initialState, action) => {
   switch(action.type){
-    case 'setMallaId':
+    case 'setMalla':
       return {
         ...state,
-        mallaId: action.payload,
+        malla: action.payload,
       }
     default:
       return state;

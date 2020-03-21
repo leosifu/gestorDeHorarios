@@ -1,5 +1,7 @@
 import React from 'react';
-import axios from 'axios';
+
+import axios from 'axios'
+import clientAxios from '../../../../../config/axios'
 
 import { connect } from 'react-redux';
 
@@ -23,11 +25,9 @@ function EditAsignatura({infoAsignatura, asignatura, mallaId, setEdit, estado, s
       cupos_pasados: state.cupos_pasados.value,
       tasa_reprobacion: state.tasa_reprobacion.value,
     }
-    var linkA = 'http://localhost:8000/api/asignatura/' + asignatura.id + '/' + mallaId.mallaId
-    var linkH = 'http://localhost:8000/api/historial/' + asignatura.id
     axios.all([
-      axios.put(linkA, data),
-      axios.put(linkH, historial)
+      clientAxios().put(`/api/asignatura/${asignatura.id}/${mallaId.mallaId}`, data),
+      clientAxios().put(`/api/historial/${asignatura.id}`, historial)
     ])
     .then(axios.spread((data1, data2)=>{
       setEdit(false)

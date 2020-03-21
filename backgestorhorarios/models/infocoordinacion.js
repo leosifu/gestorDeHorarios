@@ -1,16 +1,23 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const InfoCoordinacion = sequelize.define('InfoCoordinacion', {
+    infoA_id: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false
+    },
     coordinacionId: {
       type: DataTypes.INTEGER,
-      unique: 'compositeIndex',
     },
     asignaturaId: {
       type: DataTypes.INTEGER,
-      unique: 'compositeIndex',
     },
-    cod_coord: DataTypes.STRING,
-    nombre_coord: DataTypes.STRING
+    cod_coord: {
+      type: DataTypes.STRING,
+    },
+    nombre_coord: {
+      type: DataTypes.STRING,
+    },
   }, {});
   InfoCoordinacion.associate = function(models) {
     // associations can be defined here

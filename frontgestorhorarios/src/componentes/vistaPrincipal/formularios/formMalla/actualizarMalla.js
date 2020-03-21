@@ -9,7 +9,7 @@ import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import MallaForm from './mallaForm'
 
-import axios from 'axios';
+import clientAxios from '../../../../config/axios'
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -46,8 +46,7 @@ function ActualizarMalla({malla, open, setOpen, estado, setEstado}) {
       res_malla: state.res_malla.value,
       n_niveles: state.n_niveles.value
     }
-    let link = 'http://localhost:8000/api/malla/' + malla.id
-    axios.put(link, data)
+    clientAxios().put(`/api/malla/${malla.id}`, data)
     .then(res => {
       console.log(res.data);
       setOpen(false)

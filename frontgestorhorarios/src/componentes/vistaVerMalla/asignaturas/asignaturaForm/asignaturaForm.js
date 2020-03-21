@@ -11,7 +11,7 @@ import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-import useForm from '../../form/useForm'
+import useForm from '../../../form/useForm'
 import AsignarAsignaturaForm from './formsAsignatura/asignarAsignaturaForm'
 import TelAsignaturaForm from './formsAsignatura/telAsignaturaForm'
 import HistorialForm from './formsAsignatura/historialForm'
@@ -146,7 +146,7 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo}) => {
   return (
     <>
       <DialogContent>
-      
+
         <AsignarAsignaturaForm handleOnChange={handleOnChange} cod_asignatura={state.cod_asignatura}
           nombre_asignatura={state.nombre_asignatura} />
 

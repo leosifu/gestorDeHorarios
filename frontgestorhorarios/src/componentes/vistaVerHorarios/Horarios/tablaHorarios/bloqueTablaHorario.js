@@ -36,8 +36,7 @@ function BloqueTablaHorario({coord, nombre_coord, cod_coord, color}){
       <Grid container>
         <Grid item xs={10}>
           <Typography className={classes.nombreCoord}>
-            {nombre_coord}
-            {cod_coord}
+            {nombre_coord + '-' + cod_coord}
           </Typography>
         </Grid>
         <Grid item xs={2} className={classes.nombreCoord} >

@@ -35,10 +35,6 @@ function Proceso(props){
   const { proceso} = props
   const [open, setOpen] = useState(false)
 
-  function onClick(){
-    props.setMallaId(proceso.id)
-  }
-
   const Link1 = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />);
 
   return(
@@ -56,8 +52,9 @@ function Proceso(props){
           </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button variant="contained" color="primary" component={Link1} to={"/malla/" + proceso.id}
-          onClick={onClick}>Ver Malla</Button>
+        <Button variant="contained" color="primary" component={Link1} to={"/malla/" + proceso.id}>
+          Ver Malla
+        </Button>
       </CardActions>
     </Card>
   )

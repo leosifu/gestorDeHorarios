@@ -1,6 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const InfoAsignatura = sequelize.define('InfoAsignatura', {
+    infoA_id: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false
+    },
     mallaId: {
       type: DataTypes.INTEGER,
     },

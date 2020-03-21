@@ -68,6 +68,18 @@ module.exports = {
       })
       .catch(error=> res.status(400).send(error))
   },
+  findMallaByAño(req, res){
+    const {id, año, semestre} = req.params
+    return Malla
+    .findAll({
+      where: {carreraId: id, año: año, semestre: semestre}
+    })
+    .then(malla => res.status(201).send(malla))
+    .catch(error=>{
+      console.log(error);
+      res.status(400).send(error)
+    })
+  },
   cambiarEstadoMalla(req, res){
     return Malla
       .update({

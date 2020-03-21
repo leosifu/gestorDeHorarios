@@ -6,20 +6,12 @@ import {Card, CardContent, CardActions, Button, ButtonGroup, Grid} from '@materi
 import ActualizarMalla from '../formularios/formMalla/actualizarMalla'
 
 import { connect } from 'react-redux';
-import * as actions from '../../../redux/actions'
 
-function Malla(props){
+function Malla({ malla, estado, setEstado}){
 
-  console.log(props);
-
-  const { malla, estado, setEstado} = props
   const [open, setOpen] = useState(false);
 
   const Link1 = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />);
-
-  function onClick(event, mallaId){
-    props.setMallaId(mallaId)
-  }
 
   return(
     <Card>
@@ -39,18 +31,12 @@ function Malla(props){
           color="primary"
           aria-label="full-width contained primary button group"
         >
-          <Button component={Link1} to={"/malla/" + malla.id} onClick={event=>onClick(event,malla.id)}>Ver Malla</Button>
-          <Button component={Link1} to={"/horario/" + malla.id} onClick={event=>onClick(event,malla.id)}>Horarios</Button>
+          <Button component={Link1} to={"/malla/" + malla.id}>Ver Malla</Button>
+          <Button component={Link1} to={"/horario/" + malla.id}>Horarios</Button>
         </ButtonGroup>
       </CardActions>
     </Card>
   )
 }
 
-const mapStateToProps = state => {
-    return {
-        mallaId: state.mallaId
-    }
-}
-
-export default connect(mapStateToProps, actions)(Malla)
+export default Malla

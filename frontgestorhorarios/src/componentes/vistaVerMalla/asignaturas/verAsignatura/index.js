@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from 'react'
-import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import IconButton from '@material-ui/core/IconButton';
+import {Dialog, IconButton, Menu, MenuItem, Typography} from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
 
-import { connect } from 'react-redux';
+import clientAxios from '../../../../config/axios'
+
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect'
 
 import TabsAsignatura from './tabs'
 
@@ -19,24 +17,27 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const MallaSelector = createSelector(
+  state => state.malla,
+  malla => malla.malla
+)
+
 const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, setActivo, mallaId}) =>{
 
   const classes = useStyles();
+  const malla = useSelector(MallaSelector)
 
   const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open2 = Boolean(anchorEl);
 
   const [estado, setEstado] = useState(false)
-
-  console.log(cod_asignatura);
 
   const [asignatura, setAsignatura] = useState([])
   const [infoAsignatura, setInfoAsignatura] = useState({})
 
   useEffect(()=>{
-    var link = 'http://localhost:8000/api/asignaturaInfo/' + mallaId.mallaId + '/' + asignaturaId
-    axios.get(link)
+    clientAxios().get(`/api/asignaturaInfo/${malla.id}/${asignaturaId}`)
     .then(res => {
       console.log(res.data);
       setInfoAsignatura(res.data)
@@ -113,9 +114,5 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
     </>
   )
 }
-const mapStateToProps = state => {
-    return {
-        mallaId: state.mallaId
-    }
-}
-export default connect(mapStateToProps)(VerAsignatura)
+
+export default VerAsignatura

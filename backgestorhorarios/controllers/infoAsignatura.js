@@ -15,8 +15,12 @@ module.exports = {
         mallaId: req.body.mallaId,
         asignaturaId: req.body.asignaturaId,
         nivel: req.body.nivel,
+        infoA_id: req.body.infoA_id,
       })
-      .then(infoA=>res.json(infoA))
+      .then(infoA=>infoA)
+      .catch(error => {
+        console.log(error);
+      })
 
   },
   findAsignaturasByNivel(req, res){

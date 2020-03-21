@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+
+import { useParams, } from "react-router-dom";
+
 
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -10,6 +12,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+
+import clientAxios from '../../../config/axios'
 
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
@@ -45,8 +49,10 @@ const useStyles = makeStyles(theme => ({
   spacing:8,
 }));
 
-export default function SideBar(props) {
+export default function SideBar() {
+
   const classes = useStyles();
+  const {mallaId} = useParams();
 
   const [niveles, setNiveles] = useState([])
 
@@ -57,8 +63,7 @@ export default function SideBar(props) {
   const [topes, setTopes] = useState(false)
 
   useEffect(()=>{
-    var link = 'http://localhost:8000/api/malla/' + props.match.params.id
-    axios.get(link)
+    clientAxios().get(`/api/malla/${mallaId}`)
     .then(res => {
       console.log(res.data[0]);
       console.log("asdasd");

@@ -1,15 +1,15 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import MallaForm from './mallaForm'
 
-import axios from 'axios';
+import clientAxios from '../../../../config/axios'
+
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import { makeStyles } from '@material-ui/core/styles';
+
+import { useDispatch } from 'react-redux';
+import {setLoading} from '../../../../redux/actions'
+
+import MallaForm from './mallaForm'
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -31,6 +31,7 @@ const useStyles = makeStyles(theme => ({
 
 function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -41,6 +42,7 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
   };
 
   function onSubmitForm(state) {
+    dispatch(setLoading(true))
     const data = {
       carreraId,
       nombre_malla: state.nombre_malla.value,
@@ -49,7 +51,7 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
       año: state.año.value,
       semestre: state.semestre.value,
     }
-    axios.post('http://localhost:8000/api/malla', data)
+    clientAxios().post('/api/malla', data)
     .then(res => {
       console.log(res.data);
       setOpen(false)
@@ -62,8 +64,9 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
   }
 
   return (
-    <React.Fragment>
-      <Fab color="primary" size="small" aria-label="add" className={classes.margin} onClick={handleClickOpen}>
+    <>
+      <Fab color="primary" size="small" aria-label="add" className={classes.margin}
+        onClick={handleClickOpen}>
         <AddIcon />
       </Fab>
       <Dialog
@@ -83,7 +86,7 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
           </Button>
         </DialogActions>
       </Dialog>
-    </React.Fragment>
+    </>
   );
 }
 

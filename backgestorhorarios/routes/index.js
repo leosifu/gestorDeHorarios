@@ -25,6 +25,7 @@ module.exports = (app) => {
   //API malla
   app.get('/api/malla', mallaController.findAll)
   app.get('/api/mallas/:id', mallaController.findMallas)
+  app.get('/api/mallas/:año/:semestre', mallaController.findMallaByAño)
   app.get('/api/malla/:id', mallaController.findMallaById)
   app.post('/api/malla', mallaController.create)
   app.put('/api/malla/:id', mallaController.update)

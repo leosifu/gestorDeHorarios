@@ -28,6 +28,7 @@ module.exports = {
         .catch(error=> res.status(400).send(error))
     })
 
+
   },
   updateNumBloque(req, res){
     return Bloque

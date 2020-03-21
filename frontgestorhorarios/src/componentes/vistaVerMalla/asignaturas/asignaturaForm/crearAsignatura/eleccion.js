@@ -1,16 +1,26 @@
 import React, {useState} from 'react';
 
-import axios from 'axios';
+import clientAxios from '../../../../../config/axios'
 
 import Button from '@material-ui/core/Button';
 import DialogContent from '@material-ui/core/DialogContent';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect'
+
 import AsignarAsignatura from '../asignarAsignatura'
 import AsignaturaForm from '../asignaturaForm'
 
+const MallaSelector = createSelector(
+  state => state.malla,
+  malla => malla.malla
+)
+
 const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel}) =>{
 
-  const [eleccion, setEleccion] = useState(0)
+  const malla = useSelector(MallaSelector);
+
+  const [eleccion, setEleccion] = useState(0);
 
   const eleccion1 = () =>{
     setEleccion(1)
@@ -29,14 +39,14 @@ const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel}) =>{
       tel_L: parseInt(state.tel_L.value),
       nivel: nivel,
       lab_independiente: state.lab_independiente.checked,
-      mallaId: mallaId.mallaId,
+      mallaId: mallaId,
       historial: {
         cupos_pasados: state.cupos_pasados.value,
         tasa_reprobacion: state.tasa_reprobacion.value,
       }
     }
     console.log(data);
-    axios.post('http://localhost:8000/api/asignatura', data)
+    clientAxios().post(`/api/asignatura`, data)
     .then(res => {
       console.log(res.data);
       setOpen(false)

@@ -6,21 +6,25 @@ const AsingCoord = require('./infoCoordinacion')
 
 module.exports = {
   create(req, res){
-    console.log(req.body);
     return Coordinacion
       .create({
         tipo_coord: req.body.tipo_coord,
       })
-      .then(coordinacion => {
+      .then(async coordinacion => {
         var data = {
           body:{
             coordinacionId: coordinacion.dataValues.id,
             cod_coord: req.body.cod_coord,
             nombre_coord: req.body.nombre_coord,
-            asignaturaId: req.body.asignaturaId
+            asignaturaId: req.body.asignaturaId,
+            infoC_id: req.body.asignaturaId + '~' + req.body.cod_coord + '~' + req.body.nombre_coord
           }
         }
-        AsingCoord.create(data)
+        const NewInfoCoordinacion = await AsingCoord.create(data)
+        if (!NewInfoCoordinacion) {
+          coordinacion.destroy();
+          return(res.status(400));
+        }
         var bloques = []
         for (var i = 0; i < req.body.num_bloques; i++) {
           bloques.push({coordinacionId: coordinacion.dataValues.id})
@@ -32,16 +36,6 @@ module.exports = {
     return Coordinacion
       .findAll({
         where:{asignaturaId:req.params.id}
-      })
-      .then(coordinacion => res.status(201).send(coordinacion))
-      .catch(error=> res.status(400).send(error))
-  },
-  updateNum(req, res){
-    return Coordinacion
-      .update({
-        num_asociacion: req.body.num_asociacion
-      },{
-        where:{id:req.body.ids}
       })
       .then(coordinacion => res.status(201).send(coordinacion))
       .catch(error=> res.status(400).send(error))

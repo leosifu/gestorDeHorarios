@@ -1,15 +1,15 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import CarreraForm from './carreraForm'
 
-import axios from 'axios';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab} from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import { makeStyles } from '@material-ui/core/styles';
+
+import clientAxios from '../../../../config/axios'
+
+import { useDispatch } from 'react-redux';
+import {setLoading} from '../../../../redux/actions'
+
+import CarreraForm from './carreraForm'
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -30,7 +30,9 @@ const useStyles = makeStyles(theme => ({
 
 
 function CrearCarrera({open, setOpen}) {
+
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -41,15 +43,21 @@ function CrearCarrera({open, setOpen}) {
   };
 
   function onSubmitForm(state) {
+    dispatch(setLoading(true))
     const data = {
       nombre_carrera: state.nombre_carrera.value,
       cod_carrera: state.cod_carrera.value,
       jornada: state.jornada.value
     }
-    axios.post('http://localhost:8000/api/carrera', data)
+    clientAxios().post('/api/carrera', data)
     .then(res => {
       console.log(res.data);
       setOpen(false)
+      dispatch(setLoading(false))
+    })
+    .catch(error => {
+      console.log(error);
+      dispatch(setLoading(true))
     })
 
   }

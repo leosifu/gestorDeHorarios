@@ -48,30 +48,20 @@ function Coordinacion({coordinacion}){
   }
 
   return(
-    <>
-      <Box className={classes.sector} borderRadius={1} boxShadow={2} key={coordinacion.id}>
-        <Typography className={classes.campoDes}>
-          Código de la coordinación: {coordinacion.InfoCoordinacion.cod_coord}
-        </Typography>
-        <Typography className={classes.campoDes}>
-          Nombre de la coordinación: {coordinacion.InfoCoordinacion.nombre_coord}
-        </Typography>
-        <Typography className={classes.campoDes}>
-          Tipo: {coordinacion.tipo_coord}
-        </Typography>
-        <Typography className={classes.campoDes}>
-          Profesor Asignado: Roberto Gonzalez
-        </Typography>
-        {/*
-          asociar?
-          <AsociarCoord coordinacion={coordinacion}/>
-          :
-          <Button onClick={handleAsociar} variant="contained" color="primary">
-            Asociar Coordinacion
-          </Button>
-        */}
-      </Box>
-    </>
+    <Box className={classes.sector} borderRadius={1} boxShadow={2} key={coordinacion.id}>
+      <Typography className={classes.campoDes}>
+        Código de la coordinación: {coordinacion.InfoCoordinacion.cod_coord}
+      </Typography>
+      <Typography className={classes.campoDes}>
+        Nombre de la coordinación: {coordinacion.InfoCoordinacion.nombre_coord}
+      </Typography>
+      <Typography className={classes.campoDes}>
+        Tipo: {coordinacion.tipo_coord}
+      </Typography>
+      <Typography className={classes.campoDes}>
+        Profesor Asignado: Roberto Gonzalez
+      </Typography>
+    </Box>
   )
 }
 export default Coordinacion

@@ -13,9 +13,9 @@ const AppRoutes = ({store}) =>
     <App>
       <Switch>
         <Route exact path="/" component={ListadoCarreras}/>
-        <Route exact path="/horario/:id" component={SideBar} />
-        <Route exact path="/malla/:id" component={VerMalla} />
-        <Route exact path="/procesos/:id" component={Procesos} />
+        <Route exact path="/horario/:mallaId" component={SideBar} />
+        <Route exact path="/malla/:mallaId" component={VerMalla} />
+        <Route exact path="/procesos/:carreraId" component={Procesos} />
       </Switch>
     </App>
   </Provider>;

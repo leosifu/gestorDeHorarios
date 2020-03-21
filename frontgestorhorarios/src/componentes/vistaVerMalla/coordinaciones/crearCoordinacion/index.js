@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import axios from 'axios';
+import clientAxios from '../../../../config/axios'
 
 import Button from '@material-ui/core/Button';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -59,7 +59,7 @@ const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado
       num_bloques: num_bloques()
     }
     console.log(data);
-    axios.post('http://localhost:8000/api/coordinacion', data)
+    clientAxios().post('/api/coordinacion', data)
     .then(res => {
       console.log('hola');
       console.log(res.data);
@@ -77,7 +77,7 @@ const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado
   else if (eleccion === 2) {
     return(
       <>
-        <AsociarCoord asignaturaAct={asignatura}/>
+        <AsociarCoord asignaturaAct={asignatura} estado={estado} setEstado={setEstado}/>
       </>
     )
   }
