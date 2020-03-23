@@ -5,8 +5,6 @@ import {Card, CardContent, CardActions, Button, ButtonGroup, Grid} from '@materi
 
 import ActualizarMalla from '../formularios/formMalla/actualizarMalla'
 
-import { connect } from 'react-redux';
-
 function Malla({ malla, estado, setEstado}){
 
   const [open, setOpen] = useState(false);

@@ -1,10 +1,14 @@
 import React from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, } from '@material-ui/core';
 
-import ProcesoForm from './procesoForm'
+import clientAxios from '../../../config/axios'
 
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import {setLoading} from '../../../redux/actions'
+
+import ProcesoForm from './procesoForm'
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -22,10 +26,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
-
 function CrearProceso({proceso, open, setOpen, changed, setChanged, }) {
+
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -36,12 +40,13 @@ function CrearProceso({proceso, open, setOpen, changed, setChanged, }) {
   };
 
   function onSubmitForm(state) {
+    dispatch(setLoading(true))
     const data = {
       año: state.año.value,
       semestre: state.semestre.value,
     }
     console.log(data);
-    axios.post('http://localhost:8000/api/nuevoProceso', data)
+    clientAxios().post('/api/nuevoProceso', data)
     .then(res=>{
       console.log(res.data);
       setChanged(!changed)

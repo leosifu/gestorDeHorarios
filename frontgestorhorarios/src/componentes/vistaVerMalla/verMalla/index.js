@@ -9,7 +9,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import Button from '@material-ui/core/Button';
 
 import { useDispatch } from 'react-redux';
-import {setMallaRedux} from '../../../redux/actions'
+import {setMallaRedux, setLoading} from '../../../redux/actions'
 
 import Asignatura from './asignatura'
 import NotificacionForm from '../notificacionForm'
@@ -68,6 +68,7 @@ function VerMalla(props) {
       console.log(res.data[0]);
       dispatch(setMallaRedux(res.data[0]));
       setNiveles(res.data[0].niveles);
+      dispatch(setLoading(false))
     })
     .catch((error)=>{
       console.log(error);
@@ -79,8 +80,6 @@ function VerMalla(props) {
       firstUpdate.current = false;
       return;
     }
-    var link = 'http://localhost:8000/api/asignaturaReq/' + activo
-    console.log(link);
     clientAxios().get(`/api/asignaturaReq/${activo}`)
     .then(res => {
       console.log(res);

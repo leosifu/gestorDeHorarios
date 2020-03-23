@@ -18,6 +18,9 @@ import clientAxios from '../../../config/axios'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
+import { useDispatch } from 'react-redux';
+import {setLoading} from '../../../redux/actions'
+
 import Horario from '../Horarios/horario'
 import Topes from '../topes'
 
@@ -52,6 +55,7 @@ const useStyles = makeStyles(theme => ({
 export default function SideBar() {
 
   const classes = useStyles();
+  const dispatch = useDispatch();
   const {mallaId} = useParams();
 
   const [niveles, setNiveles] = useState([])
@@ -73,6 +77,7 @@ export default function SideBar() {
       niveles.map(niv=>{nivelC.push(false)})
       console.log(nivelC);
       setState(nivelC)
+      dispatch(setLoading(false))
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])

@@ -3,9 +3,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid,
   FormControlLabel, Switch} from '@material-ui/core';
 
-import ProcesoForm from './procesoForm'
+import clientAxios from '../../../config/axios';
 
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import {setLoading} from '../../../redux/actions';
+
+import ProcesoForm from './procesoForm';
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -23,11 +26,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
-
-function EditarProceso({open, setOpen, proceso}) {
+function EditarProceso({open, setOpen, proceso, changed, setChanged, }) {
 
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [activa, setActiva] = useState(proceso.activa?true:false)
 
@@ -44,11 +46,12 @@ function EditarProceso({open, setOpen, proceso}) {
   };
 
   const onSubmitForm = () => {
-    console.log(activa);
-    axios.put(`http://localhost:8000/api/malla/estado/${proceso.id}`, {activa: activa})
+    dispatch(setLoading(true))
+    clientAxios().put(`/api/malla/estado/${proceso.id}`, {activa: activa})
     .then(res=>{
       console.log(res);
       setOpen(false)
+      setChanged(!changed)
     })
     .catch(error=>{
       console.log(error);

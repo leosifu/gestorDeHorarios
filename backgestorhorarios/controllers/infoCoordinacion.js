@@ -6,18 +6,25 @@ const Bloque = require('./bloque')
 
 module.exports = {
   create(req, res){
+    const infoC_id = req.body.asignaturaId + '~' + req.body.cod_coord + '~' + req.body.nombre_coord
     return InfoCoordinacion
     .create({
       asignaturaId: req.body.asignaturaId,
       coordinacionId: req.body.coordinacionId,
       nombre_coord: req.body.nombre_coord,
       cod_coord: req.body.cod_coord,
-      infoC_id: req.body.infoC_id
+      infoC_id: infoC_id
     })
     .then(infoC=>{
-      res.status(201).send(infoC)
+      if (res) {
+        res.status(201).send(infoC)
+      }
+      else {
+        return infoC
+      }
     })
     .catch(error => {
+      console.log('------------FALLOOOOOOOOOOOOO------------');
       console.log(error);
     })
   },

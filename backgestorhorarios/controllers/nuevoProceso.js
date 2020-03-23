@@ -181,7 +181,8 @@ module.exports = {
         asignaturaId: newAsignaturaId,
         coordinacionId: nuevaCoordinacionId,
         cod_coord: infoC.cod_coord,
-        nombre_coord: infoC.nombre_coord
+        nombre_coord: infoC.nombre_coord,
+        infoC_id: newAsignaturaId + '~' + infoC.cod_coord + '~' + infoC.nombre_coord
       })
     })
     console.log('------------------------NuevasInfoCoordinacionesData--------------------------');

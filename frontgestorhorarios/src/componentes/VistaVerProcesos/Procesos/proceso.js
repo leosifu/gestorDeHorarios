@@ -3,11 +3,8 @@ import { Link } from "react-router-dom";
 
 import {Card, CardContent, CardActions, Collapse, IconButton, Typography, Grid,
   Button, } from '@material-ui/core';
-  import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
-
-import { connect } from 'react-redux';
-import * as actions from '../../../redux/actions'
 
 import EditarProceso from '../crearProceso/editarProceso'
 
@@ -28,11 +25,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Proceso(props){
+function Proceso({proceso, changed, setChanged, }){
 
   const classes = useStyles();
 
-  const { proceso} = props
   const [open, setOpen] = useState(false)
 
   const Link1 = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />);
@@ -46,7 +42,8 @@ function Proceso(props){
                 {proceso.nombre_malla + ' ' + proceso.semestre + '/' + proceso.año}
               </Grid>
               <Grid item xs={3}>
-                <EditarProceso proceso={proceso} open={open} setOpen={setOpen}/>
+                <EditarProceso proceso={proceso} open={open} setOpen={setOpen} changed={changed}
+                  setChanged={setChanged}/>
               </Grid>
             </Grid>
           </Typography>
@@ -60,10 +57,4 @@ function Proceso(props){
   )
 }
 
-const mapStateToProps = state => {
-    return {
-        mallaId: state.mallaId
-    }
-}
-
-export default connect(mapStateToProps, actions)(Proceso)
+export default Proceso;

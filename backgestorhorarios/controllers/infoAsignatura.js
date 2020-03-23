@@ -8,6 +8,7 @@ const HistorialM = require('../models').Historial
 
 module.exports = {
   create(req, res){
+    const infoA_id = req.body.mallaId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
     return InfoAsignatura
       .create({
         cod_asignatura: req.body.cod_asignatura,
@@ -15,9 +16,16 @@ module.exports = {
         mallaId: req.body.mallaId,
         asignaturaId: req.body.asignaturaId,
         nivel: req.body.nivel,
-        infoA_id: req.body.infoA_id,
+        infoA_id: infoA_id,
       })
-      .then(infoA=>infoA)
+      .then(infoA=>{
+        if (res) {
+          res.status(201).send(infoA)
+        }
+        else {
+          return infoA
+        }
+      })
       .catch(error => {
         console.log(error);
       })

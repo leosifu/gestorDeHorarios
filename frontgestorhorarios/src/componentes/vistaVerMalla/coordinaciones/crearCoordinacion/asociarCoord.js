@@ -7,7 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
-import axios from 'axios';
+import clientAxios from '../../../../config/axios'
 
 import SetCoordinacionForm from './setCoordinacionForm'
 
@@ -59,23 +59,21 @@ function AsociarCoord({asignaturaAct, estado, setEstado, }){
   }
 
   useEffect(()=>{
-    axios.get('http://localhost:8000/api/carreras')
+    clientAxios().get('/api/carreras')
     .then(res=>{
       setCarreras(res.data)
     })
   }, [])
 
   useEffect(()=>{
-    var link ='http://localhost:8000/api/mallas/' + carrera +
-    axios.get(link)
+    clientAxios().get(`/api/mallas/${carrera}`)
     .then(res=>{
       setMallas(res.data)
     })
   }, [carrera])
 
   useEffect(()=>{
-    var link ='http://localhost:8000/api/asignaturas/' + malla
-    axios.get(link)
+    clientAxios().get(`/api/asignaturas/${malla}`)
     .then(res=>{
       console.log(res.data);
       setAsignaturas(res.data)
@@ -83,8 +81,7 @@ function AsociarCoord({asignaturaAct, estado, setEstado, }){
   }, [malla])
 
   useEffect(()=>{
-    var link ='http://localhost:8000/api/coordinacions/' + asignatura
-    axios.get(link)
+    clientAxios().get(`/api/coordinacions/${asignatura}`)
     .then(res=>{
       console.log(res.data);
       setCoordinaciones(res.data)

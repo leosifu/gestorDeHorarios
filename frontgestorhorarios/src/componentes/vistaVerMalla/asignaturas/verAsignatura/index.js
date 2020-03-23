@@ -8,6 +8,7 @@ import clientAxios from '../../../../config/axios'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect'
+import {setLoading} from '../../../../redux/actions'
 
 import TabsAsignatura from './tabs'
 
@@ -25,7 +26,8 @@ const MallaSelector = createSelector(
 const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, setActivo, mallaId}) =>{
 
   const classes = useStyles();
-  const malla = useSelector(MallaSelector)
+  const dispatch = useDispatch();
+  const malla = useSelector(MallaSelector);
 
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -42,6 +44,7 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
       console.log(res.data);
       setInfoAsignatura(res.data)
       setAsignatura(res.data.Asignatura)
+      dispatch(setLoading(false))
     })
     .catch((error)=>{
       console.log(error);

@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect'
+import {setLoading} from '../../../../../redux/actions'
 
 import AsignarAsignatura from '../asignarAsignatura'
 import AsignaturaForm from '../asignaturaForm'
@@ -18,6 +19,7 @@ const MallaSelector = createSelector(
 
 const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel}) =>{
 
+  const dispatch = useDispatch();
   const malla = useSelector(MallaSelector);
 
   const [eleccion, setEleccion] = useState(0);
@@ -31,6 +33,7 @@ const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel}) =>{
   }
 
   function onSubmitForm(state) {
+    dispatch(setLoading(false))
     const data = {
       cod_asignatura: state.cod_asignatura.value,
       nombre_asignatura: state.nombre_asignatura.value,

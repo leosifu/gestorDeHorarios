@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const InfoCoordinacion = sequelize.define('InfoCoordinacion', {
-    infoA_id: {
+    infoC_id: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false
