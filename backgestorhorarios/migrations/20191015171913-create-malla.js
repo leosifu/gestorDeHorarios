@@ -22,14 +22,6 @@ module.exports = {
       n_niveles: {
         type: Sequelize.INTEGER,
       },
-      semestre: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      año: {
-        type: Sequelize. INTEGER,
-        allowNull: false,
-      },
       activa: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -44,6 +36,15 @@ module.exports = {
           as: 'carreraId'
         }
       },
+      procesoId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references:{
+          model: 'Procesos',
+          key: 'id',
+          as: 'procesoId'
+        }
+      }
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

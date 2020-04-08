@@ -91,7 +91,6 @@ module.exports = {
       .catch(error=> res.status(400).send(error))
   },
   update(req){
-    console.log(req);
     return InfoAsignatura
       .update({
         cod_asignatura: req.cod_asignatura,

@@ -9,7 +9,8 @@ const infocoordController = require('../controllers').infocoordinacion
 const infoasignaturaController = require('../controllers').infoasignatura
 const nuevoProcesoController = require('../controllers').nuevoProceso
 const profesorController = require('../controllers').profesor
-const routes = require('../controllers/uploadCsv')
+const procesoController = require('../controllers').proceso
+// const routes = require('../controllers/uploadCsv')
 
 module.exports = (app) => {
   app.get('/api', (req, res)=>res.status(200).send({
@@ -25,7 +26,7 @@ module.exports = (app) => {
   //API malla
   app.get('/api/malla', mallaController.findAll)
   app.get('/api/mallas/:id', mallaController.findMallas)
-  app.get('/api/mallas/:año/:semestre', mallaController.findMallaByAño)
+  app.get('/api/mallas/:id/:año/:semestre', mallaController.findMallaByAño)
   app.get('/api/malla/:id', mallaController.findMallaById)
   app.post('/api/malla', mallaController.create)
   app.put('/api/malla/:id', mallaController.update)
@@ -65,6 +66,9 @@ module.exports = (app) => {
   //Api csvs
   // app.use('/api/csv-upload', routes)
   app.post('/api/profesores', profesorController.create)
+
+  //Api proceso
+  app.get('/api/procesos', procesoController.findAll)
 
   //Api nuevoProceso
   app.post('/api/nuevoProceso', nuevoProcesoController.createProceso)

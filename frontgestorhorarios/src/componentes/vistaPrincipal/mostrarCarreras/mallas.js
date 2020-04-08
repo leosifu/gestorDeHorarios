@@ -1,15 +1,28 @@
 import React, {useState} from 'react';
 import { Link } from "react-router-dom";
 
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router'
+
 import {Card, CardContent, CardActions, Button, ButtonGroup, Grid} from '@material-ui/core';
 
 import ActualizarMalla from '../formularios/formMalla/actualizarMalla'
 
 function Malla({ malla, estado, setEstado}){
 
+  const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
 
   const Link1 = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />);
+
+  const redirectMalla = () => {
+    dispatch(push(`/malla/${malla.id}`))
+  }
+
+  const redirectHorario = () => {
+    dispatch(push(`/horario/${malla.id}`))
+  }
 
   return(
     <Card>
@@ -29,8 +42,8 @@ function Malla({ malla, estado, setEstado}){
           color="primary"
           aria-label="full-width contained primary button group"
         >
-          <Button component={Link1} to={"/malla/" + malla.id}>Ver Malla</Button>
-          <Button component={Link1} to={"/horario/" + malla.id}>Horarios</Button>
+          <Button onClick={redirectMalla}>Ver Malla</Button>
+          <Button onClick={redirectHorario}>Horarios</Button>
         </ButtonGroup>
       </CardActions>
     </Card>

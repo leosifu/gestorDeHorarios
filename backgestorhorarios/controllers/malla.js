@@ -2,6 +2,7 @@ const Malla = require('../models').Malla
 const Asignatura = require('../models').Asignatura
 const Historial = require('../models').Historial
 const Coordinacion = require('../models').Coordinacion
+const Proceso = require('../models').Proceso
 
 module.exports = {
   create(req,res){
@@ -10,12 +11,16 @@ module.exports = {
         res_malla: req.body.res_malla,
         nombre_malla: req.body.nombre_malla,
         n_niveles: req.body.n_niveles,
-        año: req.body.año,
-        semestre: req.body.semestre,
-        carreraId: req.body.carreraId
+        carreraId: req.body.carreraId,
+        procesoId: req.body.procesoId
       })
-      .then(malla => res.status(201).send(malla))
-      .catch(error=> res.status(400).send(error))
+      .then(malla => {
+        return(res.status(201).send(malla))
+      })
+      .catch(error=> {
+        console.log(error);
+        return(res.status(400).send(error))
+      })
   },
   findAll(req,res){
     return Malla

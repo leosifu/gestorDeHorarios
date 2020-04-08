@@ -1,13 +1,11 @@
 const Asignatura = require('../models').Asignatura
 const Malla = require('../models').Malla
 const Coordinacion = require('../models').Coordinacion
-const HistorialM = require('../models').Historial
+const Historial = require('../models').Historial
 const Bloque = require('../models').Bloque
 const InfoAsignatura = require('../models').InfoAsignatura
-const Historial = require('./historial')
-const CoordinacionF = require('./coordinacion')
-const InfoCoordinacion = require('./infoCoordinacion')
 const InfoAsignaturaC = require('./infoAsignatura')
+const InfoCoordinacion = require('./infoCoordinacion')
 
 module.exports = {
   create(req,res){
@@ -22,18 +20,16 @@ module.exports = {
         console.log('------------------------Asignaturas--------------------------');
         console.log(asignatura);
         var data = {
-          body:{
-            cod_asignatura: req.body.cod_asignatura,
-            nombre_asignatura: req.body.nombre_asignatura,
-            mallaId: req.body.mallaId,
-            asignaturaId: asignatura.dataValues.id,
-            nivel: req.body.nivel,
-            infoA_id: req.body.mallaId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
-          }
+          cod_asignatura: req.body.cod_asignatura,
+          nombre_asignatura: req.body.nombre_asignatura,
+          mallaId: req.body.mallaId,
+          asignaturaId: asignatura.dataValues.id,
+          nivel: req.body.nivel,
+          infoA_id: req.body.mallaId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
         }
         console.log('------------------------Data--------------------------');
         console.log(data);
-        const NewInfoAsignatura = await InfoAsignaturaC.create(data)
+        const NewInfoAsignatura = await InfoAsignatura.create(data)
         console.log('------------------------NewInfoAsignatura--------------------------');
         console.log(NewInfoAsignatura);
         if (!NewInfoAsignatura) {
@@ -48,8 +44,13 @@ module.exports = {
           historial: req.body.historial,
           asignaturaId: asignatura.dataValues.id
         }
-        Historial.create(dataHistorial)
-        return(res.status(201).send(asignatura))
+        const Historial = await Historial.create(dataHistorial)
+        if (Historial) {
+          return(res.status(201).send(asignatura))
+        }
+        else {
+          return(res.status(400).send(error))
+        }
       })
       .catch(error=> res.status(400).send(error))
   },
@@ -60,7 +61,7 @@ module.exports = {
         where: {id:id},
         include: [{model:Asignatura, as:'requisitos'},
           {model:Coordinacion, as:'coordinaciones', include:[{model: Bloque, as:'bloques'}]},
-          {model:HistorialM, as:'historial'}]
+          {model:Historial, as:'historial'}]
       })
       .then(asignatura =>{
         return(res.json(asignatura))
@@ -113,7 +114,9 @@ module.exports = {
           where:{id:req.params.aId}
         })
         .then(async asignatura=>{
-          const UpdatedInfoAsignatura = await InfoAsignaturaC.update(infoA)
+          const UpdatedInfoAsignatura = await InfoAsignatura.update(infoA, {
+            where:{asignaturaId:req.asignaturaId, mallaId: req.mallaId}
+          })
           if (!UpdatedInfoAsignatura) {
             asignatura.destroy();
             return(res.status(400));

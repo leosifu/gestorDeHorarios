@@ -17,14 +17,6 @@ module.exports = (sequelize, DataTypes) => {
     n_niveles: {
       type: DataTypes.INTEGER,
     },
-    semestre: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    año: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     activa: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -35,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Malla.belongsTo(models.Carrera,{
       foreignKey: 'carreraId',
+      onDelete:'CASCADE',
+    })
+    Malla.belongsTo(models.Proceso,{
+      foreignKey: 'procesoId',
       onDelete:'CASCADE',
     })
     Malla.belongsToMany(models.Asignatura,{

@@ -30,8 +30,6 @@ const MallaForm = ({nombre_malla, res_malla, n_niveles, año, semestre, estado, 
     res_malla: { value: res_malla, error: '' },
     nombre_malla: { value: nombre_malla, error: '' },
     n_niveles: { value: n_niveles, error: '' },
-    año: {value: año, error: ''},
-    semestre: {value: semestre, error: ''},
   };
   const validationStateSchema = {
     res_malla: {
@@ -49,20 +47,6 @@ const MallaForm = ({nombre_malla, res_malla, n_niveles, año, semestre, estado, 
       },
     },
     n_niveles: {
-      required: true,
-      validator: {
-        regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
-        error: 'Invalid last name format.',
-      },
-    },
-    año: {
-      required: true,
-      validator: {
-        regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
-        error: 'Invalid last name format.',
-      },
-    },
-    semestre: {
       required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
@@ -116,34 +100,7 @@ const MallaForm = ({nombre_malla, res_malla, n_niveles, año, semestre, estado, 
             margin="normal"
             variant="outlined"
           />
-          <TextField
-            error={state.n_niveles.error ? true:false}
-            id="standard-required"
-            label="Año del Proceso"
-            name="año"
-            type="number"
-            className={classes.textField}
-            value={state.año.value}
-            onChange={handleOnChange}
-            margin="normal"
-            variant="outlined"
-          />
-          <TextField
-            error={state.n_niveles.error ? true:false}
-            id="standard-required"
-            label="Semestre del Proceso"
-            name="semestre"
-            type="number"
-            className={classes.textField}
-            value={state.semestre.value}
-            onChange={handleOnChange}
-            margin="normal"
-            variant="outlined"
-          />
         </div>
-        <br/>
-        <br/>
-
         <input type="submit" name="submit" disabled={disable} />
       </form>
     </div>

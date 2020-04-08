@@ -10,24 +10,30 @@ module.exports = {
         jornada: req.body.jornada
       })
       .then(carrera => res.status(201).send(carrera))
-      .catch(error=> res.status(400).send(error))
+      .catch(error=> {
+        console.log(error);
+        return(res.status(400).send(error))
+      })
   },
   findCarreras(req, res){
     return Carrera
       .findAll({
       })
-      .then(carrera =>res.send(carrera))
+      .then(carrera =>res.status(201).send(carrera))
       .catch(error=> res.status(400).send(error))
   },
   findAll(req,res){
+    console.log(req.query);
+    const data = {}
+    if (req.query.procesoId) {
+      data.procesoId = req.query.procesoId
+    }
+    console.log(data);
     return Carrera
       .findAll({
-        include: [{model:Malla, as:'mallas', where:{activa: true}, required: false}]
+        include: [{model:Malla, as:'mallas', where: data, required: false}]
       })
-      .then(carrera =>{
-        console.log(carrera);
-        res.send(carrera)
-      })
+      .then(carrera => res.status(201).send(carrera))
       .catch(error=> res.status(400).send(error))
   },
   findByCarreraId(req, res){

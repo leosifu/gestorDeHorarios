@@ -6,7 +6,8 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, } from '
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect'
 import {setLoading} from '../../../../redux/actions'
 
 import MallaForm from './mallaForm'
@@ -27,11 +28,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
+const ProcesoSelector = createSelector(
+  state => state.proceso,
+  proceso => proceso.currentProceso
+)
 
 function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
+
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const currentProceso = useSelector(ProcesoSelector);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -43,13 +50,13 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
 
   function onSubmitForm(state) {
     dispatch(setLoading(true))
+    console.log(currentProceso);
     const data = {
       carreraId,
       nombre_malla: state.nombre_malla.value,
       res_malla: state.res_malla.value,
       n_niveles: state.n_niveles.value,
-      año: state.año.value,
-      semestre: state.semestre.value,
+      procesoId: currentProceso.id
     }
     clientAxios().post('/api/malla', data)
     .then(res => {

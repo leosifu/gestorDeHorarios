@@ -1,18 +1,23 @@
 import React, {useState, useEffect, useCallback} from 'react'
+
+import axios from 'axios'
+import clientAxios from '../../../config/axios'
+
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import {Grid, Button, Fab, } from '@material-ui/core';
 
 import CSVReader from 'react-csv-reader'
 import {useDropzone} from 'react-dropzone'
 import XLSX from 'xlsx';
 
-import clientAxios from '../../../config/axios'
-
-import { useDispatch } from 'react-redux';
-import {setLoading} from '../../../redux/actions'
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect'
+import {setLoading, setProcesoActivo, } from '../../../redux/actions'
 
 import Carrera from './carrera'
 import CrearCarrera from '../formularios/formCarrera/crearCarrera'
+import SelectProceso from '../../VistaNuevoProceso/selectProceso'
+import OptionsList from './optionsList'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,39 +26,60 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const ProcesoSelector = createSelector(
+  state => state.proceso,
+  proceso => proceso.currentProceso
+);
+
+const ProcesosSelector = createSelector(
+  state => state.proceso,
+  proceso => proceso.procesos
+);
+
 export default function ListadoCarreras(){
 
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const currentProceso = useSelector(ProcesoSelector);
+  const procesos = useSelector(ProcesosSelector);
+
   const [openC, setOpenC] = useState(false);
-
+  const [openList, setOpenList] = useState(false);
   const [estado, setEstado] = useState(false);
+  const [carrerasD, setCarrerasD] = useState([]);
+  const [carrerasV, setCarrerasV] = useState([]);
+  const [date, setDate] = useState({});
 
-  const [carrerasD, setCarrerasD] = useState([])
+  useEffect(() => {
+    const procesoFind = procesos.find(proceso => proceso.año === date.age &&
+      proceso.semestre === date.semester);
+    if (procesoFind) {
+      dispatch(setProcesoActivo(procesoFind));
+    }
+  }, [date])
 
-  const [carrerasV, setCarrerasV] = useState([])
-
-  useEffect(()=>{
-    clientAxios().get('/api/carrera')
-    .then(res => {
-      console.log(res.data);
-      var vesp = []
-      var diur = []
-      const data = res.data
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].jornada === "Vespertino") {
-          vesp.push(data[i])
+  useEffect(() => {
+    if (currentProceso.id !== -1) {
+      clientAxios().get(`/api/carrera?procesoId=${currentProceso.id}`)
+      .then(res1 => {
+        const carreras = res1.data
+        var vesp = []
+        var diur = []
+        for (var i = 0; i < carreras.length; i++) {
+          if (carreras[i].jornada === "Vespertino") {
+            vesp.push(carreras[i])
+          }
+          else{
+            diur.push(carreras[i])
+          }
         }
-        else{
-          diur.push(data[i])
-        }
-      }
-      setCarrerasV(vesp)
-      setCarrerasD(diur)
+        setCarrerasV(vesp)
+        setCarrerasD(diur)
+      })
       dispatch(setLoading(false))
-    })
-  }, [openC, estado])
+    }
+  }, [openC, estado, currentProceso])
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
@@ -74,6 +100,7 @@ export default function ListadoCarreras(){
     })
 
   }, [])
+
   const {getRootProps, getInputProps} = useDropzone({onDrop})
 
   const handleUpload = (e) => {
@@ -106,11 +133,21 @@ export default function ListadoCarreras(){
   return (
     <div className={classes.root}>
       <Grid container>
-        <Grid item xs={11}>
+        <Grid item xs={procesos.length > 0 ? 8 : 9}>
           <h2>Carreras Diurnas</h2>
         </Grid>
-        <Grid item xs={1}>
+        <Grid item xs={procesos.length > 0 ? 1 : 0}>
+          {
+            procesos.length > 0 && currentProceso.id !== -1 &&
+            <SelectProceso procesos={procesos} date={date} setDate={setDate}
+              currentProceso={currentProceso}/>
+          }
+        </Grid>
+        <Grid item xs={procesos.length > 0 ? 2 : 1}>
           <CrearCarrera open={openC} setOpen={setOpenC}/>
+        </Grid>
+        <Grid item xs={1}>
+          <OptionsList />
         </Grid>
       </Grid>
       <Grid container>
@@ -120,9 +157,8 @@ export default function ListadoCarreras(){
           </Grid>
         ))}
       </Grid>
-      <br/>
       <Grid container>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <h2>Carreras Vespertinas</h2>
         </Grid>
       </Grid>

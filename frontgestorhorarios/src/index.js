@@ -12,10 +12,7 @@ import 'firebase/auth';
 import firebaseConfig from './firebaseConfig';
 import store from './redux/store'
 
-import {loadState, saveState} from './localStorage';
 const firebaseApp = firebase.initializeApp(firebaseConfig);
-
-const estadoPer = loadState();
 
 render(
     <Router>

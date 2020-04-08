@@ -55,9 +55,6 @@ module.exports = {
           if (numBloques>tel/2) {
             var i = tel/2
             while (i<numBloques){
-              var req = {
-                bloqueId: bloques[i].dataValues.id
-              }
               Bloque.deleteBloque(bloques[i].dataValues.id)
               i = i+1
             }

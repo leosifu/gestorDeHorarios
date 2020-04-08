@@ -9,6 +9,7 @@ import {Card, CardContent, CardActions, Collapse, IconButton, Typography, Grid, 
 
 import { red } from '@material-ui/core/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
 
 import Malla from './mallas'
 import CrearMalla from '../formularios/formMalla/crearMalla'
@@ -71,7 +72,7 @@ export default function Carrera({carrera, estado, setEstado}) {
           </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button component={Link1} to={"/procesos/" + carrera.id}>Procesos</Button>
+        {/*<Button component={Link1} to={"/procesos/" + carrera.id}>Procesos</Button>*/}
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -87,13 +88,11 @@ export default function Carrera({carrera, estado, setEstado}) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         {carrera.mallas?
           <div>
-            {carrera.mallas.map((malla, i)=>{
-              return(
+            {carrera.mallas.map((malla, i) =>
                 <CardContent key={malla.id}>
                   <Malla malla={malla} estado={estado} setEstado={setEstado}/>
                 </CardContent>
-              )
-            })}
+            )}
            </div>:
           <div/>}
       </Collapse>
