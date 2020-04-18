@@ -6,7 +6,7 @@ import clientAxios from './config/axios'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect'
-import {getProcesos, } from './redux/actions'
+import {getProcesos, handleLoginUser, } from './redux/actions'
 
 import Content from './componentes/Children/Content'
 import NavBar from './componentes/navBar'
@@ -19,12 +19,6 @@ function App({children}) {
   useEffect(() => {
     dispatch(getProcesos())
   }, []);
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged(authUser => {
-      console.log(authUser);
-    });
-  }, [])
 
   return(
     <div>

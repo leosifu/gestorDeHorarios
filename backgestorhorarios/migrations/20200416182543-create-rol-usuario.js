@@ -1,12 +1,21 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Asignacions', {
+    return queryInterface.createTable('RolUsuarios', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
+      },
+      rolId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references:{
+          model: 'Rols',
+          key: 'id',
+          as: 'rolId'
+        }
       },
       usuarioId: {
         type: Sequelize.INTEGER,
@@ -15,15 +24,6 @@ module.exports = {
           model: 'Usuarios',
           key: 'id',
           as: 'usuarioId'
-        }
-      },
-      coordinacionId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references:{
-          model: 'Coordinacions',
-          key: 'id',
-          as: 'coordinacionId'
         }
       },
       createdAt: {
@@ -37,6 +37,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Asignacions');
+    return queryInterface.dropTable('RolUsuarios');
   }
 };

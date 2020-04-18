@@ -1,17 +1,17 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Asignacion = sequelize.define('Asignacion', {
-    profesorId: DataTypes.INTEGER,
+    usuarioId: DataTypes.INTEGER,
     coordinacionId: DataTypes.INTEGER
   }, {});
   Asignacion.associate = function(models) {
     // associations can be defined here
     Asignacion.belongsTo(models.Coordinacion,{
       foreignKey: 'coordinacionId',
-      as: 'profesores'
+      as: 'usuarios'
     })
-    Asignacion.belongsTo(models.Profesor,{
-      foreignKey: 'profesorId',
+    Asignacion.belongsTo(models.Usuario,{
+      foreignKey: 'usuarioId',
       as: 'coordinaciones'
     })
   };

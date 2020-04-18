@@ -8,7 +8,8 @@ import {Button, Typography, TextField, Grid, } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect'
+import { createSelector } from 'reselect';
+import { push } from 'connected-react-router';
 import {setLoading, setProcesoActivo, } from '../../redux/actions'
 
 import SelectProceso from './selectProceso';
@@ -79,8 +80,8 @@ export default function NuevoProceso() {
         setCarrerasV(vesp)
         setCarrerasD(diur)
       })
-      dispatch(setLoading(false))
     }
+    dispatch(setLoading(false))
   }, [currentProceso])
 
   const changeProcesoData = (event) => {
@@ -92,6 +93,7 @@ export default function NuevoProceso() {
     clientAxios().post('/api/nuevoProceso', data)
     .then(res=>{
       console.log(res.data);
+      dispatch(push('/'))
       // setChanged(!changed)
       // setOpen(false)
     })

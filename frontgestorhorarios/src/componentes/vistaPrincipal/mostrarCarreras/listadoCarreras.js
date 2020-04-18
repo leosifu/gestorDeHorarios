@@ -36,6 +36,11 @@ const ProcesosSelector = createSelector(
   proceso => proceso.procesos
 );
 
+const UserSelector = createSelector(
+  state => state.user,
+  user => user.user
+)
+
 export default function ListadoCarreras(){
 
   const classes = useStyles();
@@ -43,6 +48,7 @@ export default function ListadoCarreras(){
 
   const currentProceso = useSelector(ProcesoSelector);
   const procesos = useSelector(ProcesosSelector);
+  const user = useSelector(UserSelector);
 
   const [openC, setOpenC] = useState(false);
   const [openList, setOpenList] = useState(false);
@@ -61,7 +67,8 @@ export default function ListadoCarreras(){
 
   useEffect(() => {
     if (currentProceso.id !== -1) {
-      clientAxios().get(`/api/carrera?procesoId=${currentProceso.id}`)
+      console.log(user.idToken);
+      clientAxios(user.idToken).get(`/api/carrera?procesoId=${currentProceso.id}`)
       .then(res1 => {
         const carreras = res1.data
         var vesp = []
@@ -79,7 +86,7 @@ export default function ListadoCarreras(){
       })
       dispatch(setLoading(false))
     }
-  }, [openC, estado, currentProceso])
+  }, [openC, estado, currentProceso, user])
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {

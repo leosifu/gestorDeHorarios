@@ -1,15 +1,19 @@
+const dotenv = require('dotenv').config();
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 // This will be our application entry. We'll setup our server here.
 const http = require('http');
 // Set up the express app
 var cors = require('cors');
 
+const admin = require('./firebase-admin/admin');
 const app = express();
 // Log requests to the console.
 app.use(cors());
 app.use(logger('dev'));
+app.set('llave', process.env.KEY);
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -18,6 +22,7 @@ var models = require("./models")
 models.sequelize.sync().then(function(){
     console.log("Conecta2");
 }).catch(function(error){
+  console.log(error);
   console.log("Problemas al conectar con la DB");
 })
 require('./routes')(app)

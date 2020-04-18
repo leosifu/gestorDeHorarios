@@ -1,36 +1,43 @@
 import clientAxios from '../../config/axios'
 
+import { push } from 'connected-react-router';
+
 export const getProcesos = () => {
   return dispatch => {
     clientAxios().get(`/api/procesos`)
     .then(res => {
-      const reverseProcesos = res.data.reverse();
-      dispatch(setAllProcesos(reverseProcesos));
-      const currentProcesoLocalStorage = localStorage.getItem('currentProcess')
-      if (currentProcesoLocalStorage) {
-        const procesoActivo = res.data.find(proceso => proceso.id === currentProcesoLocalStorage);
-        if (procesoActivo) {
-          dispatch(setProcesoActivo(procesoActivo));
+      if (res.data.length > 0) {
+        const reverseProcesos = res.data.reverse();
+        dispatch(setAllProcesos(reverseProcesos));
+        const currentProcesoLocalStorage = localStorage.getItem('currentProcess')
+        if (currentProcesoLocalStorage) {
+          const procesoActivo = res.data.find(proceso => proceso.id === currentProcesoLocalStorage);
+          if (procesoActivo) {
+            dispatch(setProcesoActivo(procesoActivo));
+          }
+          else {
+            dispatch(setProcesoActivo(reverseProcesos[0]));
+          }
         }
         else {
-          dispatch(setProcesoActivo(reverseProcesos[0]));
+          const procesoActivo = res.data.find(proceso => proceso.activo);
+          if (procesoActivo) {
+            dispatch(setProcesoActivo(procesoActivo));
+          }
+          else {
+            dispatch(setProcesoActivo(reverseProcesos[0]));
+          }
         }
       }
       else {
-        const procesoActivo = res.data.find(proceso => proceso.activo);
-        if (procesoActivo) {
-          dispatch(setProcesoActivo(procesoActivo));
-        }
-        else {
-          dispatch(setProcesoActivo(reverseProcesos[0]));
-        }
+        dispatch(push(`/nuevoProceso`));
       }
     })
   }
 }
 
 export const setProcesoActivo = (proceso) => {
-  if (proceso.id) {
+  if (proceso && proceso.id) {
     localStorage.setItem('currentProcess', proceso.id)
     return dispatch => dispatch(setProceso(proceso));
   }

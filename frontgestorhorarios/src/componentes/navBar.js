@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -6,6 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+
+import clientAxios from '../config/axios'
+
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect'
+import {getProcesos, handleLoginUser, } from '../redux/actions'
 
 import firebase from 'firebase';
 
@@ -23,9 +29,45 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NavBar() {
-  const classes = useStyles();
 
-  const [log, setLog] = useState(false)
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [log, setLog] = useState(false);
+
+  useEffect(() => {
+    if (log) {
+      firebase.auth().onAuthStateChanged(authUser => {
+        if(authUser) {
+          console.log(authUser);
+          return firebase.auth().currentUser.getIdToken()
+            .then(idToken => {
+              console.log(idToken);
+              const userData = {
+                email: authUser.email,
+                name: authUser.displayName
+              }
+              clientAxios(idToken).post(`api/login`, userData)
+              .then(res => {
+                console.log(res);
+              })
+              .catch(error => {
+                console.log(error);
+              })
+              dispatch(handleLoginUser({
+                email: authUser.email,
+                photoURL: authUser.photoURL,
+                name: authUser.displayName,
+                idToken: idToken
+              }))
+              // axios.defaults.headers.common['Authorization'] = idToken;
+              // Any extra code
+            }).catch();
+        }
+        console.log(authUser);
+      });
+    }
+  }, [log])
 
   function handleAuth (event) {
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
@@ -38,8 +80,14 @@ export default function NavBar() {
       return (firebase.auth().signInWithPopup(provider)
         .then(
           result => {
+            var token = result.credential.idToken;
+            // console.log(token);
             console.log(result);
             console.log(`${result.user.email} ha iniciado sesión`);
+            console.table([{
+              user: result.user.email,
+              token: token
+            }])
             setLog(true)
           }
         )

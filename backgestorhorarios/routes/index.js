@@ -8,16 +8,17 @@ const bloqueController = require('../controllers').bloque
 const infocoordController = require('../controllers').infocoordinacion
 const infoasignaturaController = require('../controllers').infoasignatura
 const nuevoProcesoController = require('../controllers').nuevoProceso
-const profesorController = require('../controllers').profesor
+const usuarioController = require('../controllers').usuario
 const procesoController = require('../controllers').proceso
 // const routes = require('../controllers/uploadCsv')
+const verify = require('../firebase-admin/verify');
 
 module.exports = (app) => {
   app.get('/api', (req, res)=>res.status(200).send({
     message: 'Welcome toabsdkab'
   }))
   //API carrera
-  app.get('/api/carrera', carreraController.findAll)
+  app.get('/api/carrera', verify('admin', 'profesor'), carreraController.findAll)
   app.get('/api/carreras', carreraController.findCarreras)
   app.get('/api/carrera/:id', carreraController.findByCarreraId)
   app.post('/api/carrera', carreraController.create)
@@ -65,7 +66,8 @@ module.exports = (app) => {
 
   //Api csvs
   // app.use('/api/csv-upload', routes)
-  app.post('/api/profesores', profesorController.create)
+  app.post('/api/login', usuarioController.login)
+  app.post('/api/profesores', usuarioController.create)
 
   //Api proceso
   app.get('/api/procesos', procesoController.findAll)
