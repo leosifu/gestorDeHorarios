@@ -88,54 +88,66 @@ export default function ListadoCarreras(){
     }
   }, [openC, estado, currentProceso, user])
 
-  const onDrop = useCallback((acceptedFiles) => {
-    acceptedFiles.forEach((file) => {
-      console.log(file);
-      const reader = new FileReader()
+  // const onDrop = useCallback((acceptedFiles) => {
+  //   acceptedFiles.forEach((file) => {
+  //     console.log(file);
+  //     const reader = new FileReader()
+  //
+  //     reader.onabort = () => console.log('file reading was aborted')
+  //     reader.onerror = () => console.log('file reading has failed')
+  //     reader.onload = (e) => {
+  //       console.log(e);
+  //       const bstr = e.target.result;
+  //       const wb = XLSX.read(bstr, {type:'binary'});
+  //     // Do whatever you want with the file contents
+  //       const binaryStr = reader.result
+  //       console.log(binaryStr)
+  //     }
+  //     reader.readAsArrayBuffer(file)
+  //   })
+  //
+  // }, [])
+  //
+  // const {getRootProps, getInputProps} = useDropzone({onDrop})
+  //
+  // const handleUpload = (e) => {
+  //   e.preventDefault();
+  //
+  //   var files = e.target.files, f = files[0];
+  //   var reader = new FileReader();
+  //   reader.onload = function (e) {
+  //       var data = e.target.result;
+  //       let readedData = XLSX.read(data, {type: 'binary'});
+  //       const wsname = readedData.SheetNames[0];
+  //       const ws = readedData.Sheets[wsname];
+  //
+  //       /* Convert array to json*/
+  //       const dataParse = XLSX.utils.sheet_to_json(ws, {header:1});
+  //       //setFileUploaded(dataParse);
+  //       const profesores = dataParse.filter(row=>row.length>1)
+  //       console.log(profesores);
+  //       clientAxios().post('/api/profesores', profesores)
+  //       .then(res=>{
+  //         console.log(res);
+  //       })
+  //       .catch(error=>{
+  //         console.log(error);
+  //       })
+  //   };
+  //   reader.readAsBinaryString(f)
+  // }
 
-      reader.onabort = () => console.log('file reading was aborted')
-      reader.onerror = () => console.log('file reading has failed')
-      reader.onload = (e) => {
-        console.log(e);
-        const bstr = e.target.result;
-        const wb = XLSX.read(bstr, {type:'binary'});
-      // Do whatever you want with the file contents
-        const binaryStr = reader.result
-        console.log(binaryStr)
-      }
-      reader.readAsArrayBuffer(file)
+  const onDrop = useCallback(acceptedFiles => {
+    // Do something with the files
+    let formData = new FormData();
+    formData.append('file', acceptedFiles[0]);
+    console.log(acceptedFiles);
+    axios.post(`http://localhost:8000/api/profesores`, formData, {headers: {'Content-Type': 'multipart/form-data'}})
+    .then(res => {
+      console.log(res);
     })
-
   }, [])
-
-  const {getRootProps, getInputProps} = useDropzone({onDrop})
-
-  const handleUpload = (e) => {
-    e.preventDefault();
-
-    var files = e.target.files, f = files[0];
-    var reader = new FileReader();
-    reader.onload = function (e) {
-        var data = e.target.result;
-        let readedData = XLSX.read(data, {type: 'binary'});
-        const wsname = readedData.SheetNames[0];
-        const ws = readedData.Sheets[wsname];
-
-        /* Convert array to json*/
-        const dataParse = XLSX.utils.sheet_to_json(ws, {header:1});
-        //setFileUploaded(dataParse);
-        const profesores = dataParse.filter(row=>row.length>1)
-        console.log(profesores);
-        clientAxios().post('/api/profesores', profesores)
-        .then(res=>{
-          console.log(res);
-        })
-        .catch(error=>{
-          console.log(error);
-        })
-    };
-    reader.readAsBinaryString(f)
-  }
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   return (
     <div className={classes.root}>
@@ -176,7 +188,15 @@ export default function ListadoCarreras(){
           </Grid>
         ))}
       </Grid>
-        <input type="file" onChange={e=>handleUpload(e)} />
+      {/*<input type="file" onChange={e=>handleUpload(e)} />*/}
+      <div {...getRootProps()}>
+        <input {...getInputProps()} />
+        {
+          isDragActive ?
+            <p>Drop the files here ...</p> :
+            <p>Drag 'n' drop some files here, or click to select files</p>
+        }
+    </div>
 
     </div>
   );

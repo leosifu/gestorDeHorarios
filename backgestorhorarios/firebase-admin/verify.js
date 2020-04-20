@@ -24,11 +24,12 @@ const verify = (...roles) => async (req, res, next) => {
               model: Rol, as: 'roles'
             }]
           })
-          console.log(UsuarioFind);
           const UserRoles = UsuarioFind[0].dataValues.roles.map(rol => rol.dataValues);
-          console.log(UserRoles);
           const UserRolesNames = UserRoles.map(rol => rol.rol).sort();
+          console.log(roles);
+          console.log(UserRolesNames);
           if (roles.length === UserRolesNames.length && roles.sort().every((value, index) => value === UserRolesNames[index])){
+            console.log('wiii');
             return next();
           }
         }

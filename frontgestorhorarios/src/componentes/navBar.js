@@ -36,38 +36,58 @@ export default function NavBar() {
   const [log, setLog] = useState(false);
 
   useEffect(() => {
-    if (log) {
-      firebase.auth().onAuthStateChanged(authUser => {
-        if(authUser) {
-          console.log(authUser);
-          return firebase.auth().currentUser.getIdToken()
-            .then(idToken => {
-              console.log(idToken);
-              const userData = {
-                email: authUser.email,
-                name: authUser.displayName
-              }
-              clientAxios(idToken).post(`api/login`, userData)
-              .then(res => {
-                console.log(res);
-              })
-              .catch(error => {
-                console.log(error);
-              })
-              dispatch(handleLoginUser({
-                email: authUser.email,
-                photoURL: authUser.photoURL,
-                name: authUser.displayName,
-                idToken: idToken
-              }))
-              // axios.defaults.headers.common['Authorization'] = idToken;
-              // Any extra code
-            }).catch();
-        }
-        console.log(authUser);
-      });
+    if (localStorage.getItem('token')) {
+      login();
     }
-  }, [log])
+  }, []);
+
+  const loginRequest = (token, userData, authUser) => {
+    clientAxios(token).post(`api/login`, userData)
+    .then(res => {
+      const userData = res.data;
+      const roles = userData.roles.map(rol => rol.rol);
+      dispatch(handleLoginUser({
+        email: authUser.email,
+        photoURL: authUser.photoURL,
+        name: authUser.displayName,
+        idToken: token,
+        roles: roles
+      }))
+      localStorage.setItem('token', token);
+    })
+    .catch(error => {
+      dispatch(handleLoginUser({
+        email: authUser.email,
+        photoURL: authUser.photoURL,
+        name: authUser.displayName,
+        idToken: token,
+        roles: []
+      }))
+      localStorage.setItem('token', token);
+      console.log(error);
+    })
+    setLog(true);
+  }
+
+  const login = () => {
+    firebase.auth().onAuthStateChanged(authUser => {
+      if(authUser) {
+        console.log(authUser);
+        return firebase.auth().currentUser.getIdToken()
+          .then(idToken => {
+            console.log(idToken);
+            const userData = {
+              email: authUser.email,
+              name: authUser.displayName
+            }
+            loginRequest(idToken, userData, authUser)
+            // axios.defaults.headers.common['Authorization'] = idToken;
+            // Any extra code
+          }).catch();
+      }
+      console.log(authUser);
+    });
+  }
 
   function handleAuth (event) {
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
@@ -81,13 +101,6 @@ export default function NavBar() {
         .then(
           result => {
             var token = result.credential.idToken;
-            // console.log(token);
-            console.log(result);
-            console.log(`${result.user.email} ha iniciado sesión`);
-            console.table([{
-              user: result.user.email,
-              token: token
-            }])
             setLog(true)
           }
         )
@@ -105,7 +118,6 @@ export default function NavBar() {
       })
       .catch(error => console.log(`Error ${error.code}: ${error.message}`));
   }
-
 
   return (
     <div className={classes.root}>
