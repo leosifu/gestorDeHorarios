@@ -72,7 +72,7 @@ function EditarProceso({open, setOpen, proceso, changed, setChanged, }) {
         aria-labelledby="max-width-dialog-title"
       >
         <DialogTitle id="max-width-dialog-title">
-          {proceso.nombre_malla + ' ' + proceso.año + ' ' + proceso.semestre}
+          {proceso.cod_malla + ' ' + proceso.año + ' ' + proceso.semestre}
         </DialogTitle>
         <DialogContent>
           <FormControlLabel

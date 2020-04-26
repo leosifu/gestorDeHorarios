@@ -7,7 +7,7 @@ import {Button} from '@material-ui/core';
 import DatosCoordForm from './coordinacionForm/datosCoordForm'
 import useForm from '../../../form/useForm'
 
-const SetCoordinacionForm = ({coordinacion, asignaturaAct, estado, setEstado, }) => {
+const SetCoordinacionForm = ({coordinacion, asignaturaAct, estado, setEstado, user, }) => {
 
   const stateSchema = {
     cod_coord: { value: coordinacion.cod_coord, error: '' },
@@ -38,7 +38,7 @@ const SetCoordinacionForm = ({coordinacion, asignaturaAct, estado, setEstado, })
       nombre_coord: state.nombre_coord.value,
       cod_coord: state.cod_coord.value
     }
-    clientAxios().post(`/api/asigncoord`, data)
+    clientAxios(user.idToken).post(`/api/asigncoord`, data)
     .then(res=>{
       console.log(res.data);
       setEstado(!estado)

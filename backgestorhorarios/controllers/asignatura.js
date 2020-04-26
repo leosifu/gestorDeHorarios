@@ -17,8 +17,6 @@ module.exports = {
         lab_independiente: req.body.lab_independiente
       })
       .then(async(asignatura) => {
-        console.log('------------------------Asignaturas--------------------------');
-        console.log(asignatura);
         var data = {
           cod_asignatura: req.body.cod_asignatura,
           nombre_asignatura: req.body.nombre_asignatura,
@@ -27,32 +25,29 @@ module.exports = {
           nivel: req.body.nivel,
           infoA_id: req.body.mallaId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
         }
-        console.log('------------------------Data--------------------------');
-        console.log(data);
         const NewInfoAsignatura = await InfoAsignatura.create(data)
-        console.log('------------------------NewInfoAsignatura--------------------------');
-        console.log(NewInfoAsignatura);
         if (!NewInfoAsignatura) {
           asignatura.destroy()
           return(res.status(400))
         }
-        console.log(NewInfoAsignatura);
-        console.log("\nAsignatura: ");
-        console.log(asignatura.dataValues);
-        console.log("\n Fin asignatura");
         const dataHistorial = {
           historial: req.body.historial,
           asignaturaId: asignatura.dataValues.id
         }
-        const Historial = await Historial.create(dataHistorial)
-        if (Historial) {
-          return(res.status(201).send(asignatura))
+        const NewHistorial = await Historial.create(dataHistorial)
+        if (NewHistorial) {
+          return(res.status(201).send(asignatura));
         }
         else {
+          asignatura.destroy();
+          NewInfoAsignatura.destroy();
           return(res.status(400).send(error))
         }
       })
-      .catch(error=> res.status(400).send(error))
+      .catch(error=> {
+        console.log(error);
+        return res.status(400).send(error)
+      })
   },
   findAsignatura(req, res){
     var id = req.params.id

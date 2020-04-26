@@ -23,7 +23,8 @@ const MallaSelector = createSelector(
   malla => malla.malla
 )
 
-const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, setActivo, mallaId}) =>{
+const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, setActivo,
+  mallaId, user, }) =>{
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -112,7 +113,8 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
         aria-labelledby="max-width-dialog-title"
         style={{height:630}}
       >
-       <TabsAsignatura infoAsignatura={infoAsignatura} asignatura={asignatura} estado={estado} setEstado={setEstado}/>
+       <TabsAsignatura infoAsignatura={infoAsignatura} asignatura={asignatura} estado={estado}
+        setEstado={setEstado} user={user}/>
       </Dialog>
     </>
   )

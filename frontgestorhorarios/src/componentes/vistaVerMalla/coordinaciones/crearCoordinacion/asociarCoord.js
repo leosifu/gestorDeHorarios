@@ -21,10 +21,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsociarCoord({asignaturaAct, estado, setEstado, }){
+function AsociarCoord({asignaturaAct, estado, setEstado, user, }){
 
   const classes = useStyles();
-  console.log(asignaturaAct);
 
   const [carrera, setCarrera] = useState(0);
   const [malla, setMalla] = useState(0)
@@ -81,7 +80,7 @@ function AsociarCoord({asignaturaAct, estado, setEstado, }){
   }, [malla])
 
   useEffect(()=>{
-    clientAxios().get(`/api/coordinacions/${asignatura}`)
+    clientAxios(user.idToken).get(`/api/coordinacions/${asignatura}`)
     .then(res=>{
       console.log(res.data);
       setCoordinaciones(res.data)
@@ -133,7 +132,7 @@ function AsociarCoord({asignaturaAct, estado, setEstado, }){
             >
               {
                 mallas.map(malla=>(
-                  <option value={malla.id}>{malla.nombre_malla}</option>
+                  <option value={malla.id}>{malla.cod_malla}</option>
                 ))
               }
             </Select>
@@ -192,7 +191,7 @@ function AsociarCoord({asignaturaAct, estado, setEstado, }){
       {
         (coordinacion!==0) &&
           <SetCoordinacionForm coordinacion={coordinacionSelect} asignaturaAct={asignaturaAct}
-            estado={estado} setEstado={setEstado}/>
+            estado={estado} setEstado={setEstado} user={user}/>
 
       }
 

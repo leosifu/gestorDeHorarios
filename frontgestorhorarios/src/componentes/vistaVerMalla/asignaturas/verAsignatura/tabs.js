@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function TabsAsignatura({infoAsignatura, asignatura, estado, setEstado}) {
+export default function TabsAsignatura({infoAsignatura, asignatura, estado, setEstado, user, }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -65,11 +65,12 @@ export default function TabsAsignatura({infoAsignatura, asignatura, estado, setE
       </AppBar>
       <TabPanel value={value} index={0}>
         <InfoAsignatura infoAsignatura={infoAsignatura} asignatura={asignatura} estado={estado}
-          setEstado={setEstado}/>
+          setEstado={setEstado} user={user}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ListaCoord asignatura={asignatura} infoAsignatura={infoAsignatura} estado={estado} setEstado={setEstado}
-          lab_independiente={asignatura.lab_independiente} coordinaciones={asignatura.coordinaciones}/>
+          lab_independiente={asignatura.lab_independiente} coordinaciones={asignatura.coordinaciones}
+          user={user}/>
       </TabPanel>
     </div>
   );

@@ -39,7 +39,7 @@ function Proceso({proceso, changed, setChanged, }){
           <Typography gutterBottom variant="h6" component="h6">
             <Grid container>
               <Grid item xs={9}>
-                {proceso.nombre_malla + ' ' + proceso.semestre + '/' + proceso.año}
+                {proceso.cod_malla + ' ' + proceso.semestre + '/' + proceso.año}
               </Grid>
               <Grid item xs={3}>
                 <EditarProceso proceso={proceso} open={open} setOpen={setOpen} changed={changed}

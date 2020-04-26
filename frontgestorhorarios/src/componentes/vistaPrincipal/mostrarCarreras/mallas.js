@@ -29,7 +29,7 @@ function Malla({ malla, estado, setEstado}){
       <CardContent>
         <Grid container>
           <Grid item xs={10}>
-            {malla.nombre_malla}
+            {malla.cod_malla}
           </Grid>
           <Grid item xs={2}>
             <ActualizarMalla malla={malla} open={open} setOpen={setOpen} estado={estado} setEstado={setEstado}/>

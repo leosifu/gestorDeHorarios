@@ -40,7 +40,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independiente, estado, setEstado}){
+function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independiente, estado,
+  setEstado, user, }){
   const classes = useStyles();
 
   const [crear, setCrear] = useState(false)
@@ -62,7 +63,7 @@ function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independien
       {crear?
         <CrearCoordinacion estado={estado} setEstado={setEstado} lab_independiente={lab_independiente}
           nombre_asignatura={infoAsignatura.nombre_asignatura} asignatura={asignatura} crear={crear}
-          setCrear={setCrear}/>
+          setCrear={setCrear} user={user}/>
         :
         <Box className={classes.crear} borderRadius={1} boxShadow={2}>
           <IconButton className={classes.centrarIcon} onClick={handleClick}>

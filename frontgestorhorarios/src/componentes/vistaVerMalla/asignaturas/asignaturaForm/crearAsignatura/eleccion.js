@@ -15,9 +15,9 @@ import AsignaturaForm from '../asignaturaForm'
 const MallaSelector = createSelector(
   state => state.malla,
   malla => malla.malla
-)
+);
 
-const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel}) =>{
+const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel, user, }) =>{
 
   const dispatch = useDispatch();
   const malla = useSelector(MallaSelector);
@@ -49,7 +49,7 @@ const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel}) =>{
       }
     }
     console.log(data);
-    clientAxios().post(`/api/asignatura`, data)
+    clientAxios(user.idToken).post(`/api/asignatura`, data)
     .then(res => {
       console.log(res.data);
       setOpen(false)
@@ -78,7 +78,7 @@ const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel}) =>{
   else if (eleccion === 2) {
     return(
       <AsignarAsignatura nivel={nivel} mallaId={mallaId} estado={estado} setEstado={setEstado}
-        open={open} setOpen={setOpen}/>
+        open={open} setOpen={setOpen} user={user}/>
     )
   }
   else {

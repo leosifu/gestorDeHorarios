@@ -5,7 +5,6 @@ module.exports = {
   create(req,res){
     return Carrera
       .create({
-        cod_carrera: req.body.cod_carrera,
         nombre_carrera: req.body.nombre_carrera,
         jornada: req.body.jornada
       })
@@ -23,12 +22,10 @@ module.exports = {
       .catch(error=> res.status(400).send(error))
   },
   findAll(req,res){
-    console.log(req.query);
     const data = {}
     if (req.query.procesoId) {
       data.procesoId = req.query.procesoId
     }
-    console.log(data);
     return Carrera
       .findAll({
         include: [{model:Malla, as:'mallas', where: data, required: false}]
@@ -49,7 +46,6 @@ module.exports = {
   update(req,res){
     return Carrera
       .update({
-        cod_carrera: req.body.cod_carrera,
         nombre_carrera: req.body.nombre_carrera,
         jornada: req.body.jornada,
         carrera_activa: req.body.carrera_activa,

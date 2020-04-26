@@ -28,20 +28,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const CarreraForm = ({cod_carrera, nombre_carrera, jornada, onSubmitForm}) => {
+const CarreraForm = ({nombre_carrera, jornada, onSubmitForm}) => {
   const stateSchema = {
-    cod_carrera: { value: cod_carrera, error: '' },
     nombre_carrera: { value: nombre_carrera, error: '' },
     jornada: { value: jornada ? jornada:"Vespertino", error: '' },
   };
   const validationStateSchema = {
-    cod_carrera: {
-      required: true,
-      validator: {
-        regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
-        error: 'Invalid first name format.',
-      },
-    },
     nombre_carrera: {
       required: true,
       validator: {
@@ -70,17 +62,6 @@ const CarreraForm = ({cod_carrera, nombre_carrera, jornada, onSubmitForm}) => {
   return (
     <div>
       <form onSubmit={handleOnSubmit}>
-        <TextField
-          error = {state.cod_carrera.error ? true : false}
-          id="standard-name"
-          label="Código de la carrera"
-          name="cod_carrera"
-          className={classes.textField}
-          value={state.cod_carrera.value}
-          onChange={handleOnChange}
-          margin="normal"
-          variant="outlined"
-        />
         <TextField
           error={state.nombre_carrera.error ? true:false}
           id="standard-required"

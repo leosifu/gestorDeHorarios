@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleClick,
-  edit, setEdit, activo, setActivo, mallaId, }) {
+  edit, setEdit, activo, setActivo, mallaId, user, }) {
 
   const classes = useStyles();
 
@@ -74,10 +74,9 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleCl
                 </Typography>
               </Grid>
               <Grid item xs={1}>
-                {edit===0?
+                {edit === 0 &&
                   <VerAsignatura cod_asignatura={asignatura.InfoAsignatura.cod_asignatura} asignaturaId={asignatura.id} edit={edit} setEdit={setEdit}
-                    activo={activo} setActivo={setActivo}/>:
-                  <div/>
+                    activo={activo} setActivo={setActivo} user={user}/>
                 }
               </Grid>
             </Grid>
@@ -90,7 +89,7 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleCl
       <Card className={classes.card} style={{ display:'flex', justifyContent:'center' }}>
         <Box borderRadius="50%" border={1} className={classes.oval}>
           <CrearAsignatura nivel={nivel} open={open} setOpen={setOpen} estado={estado} setEstado={setEstado}
-            mallaId={mallaId}/>
+            mallaId={mallaId} user={user}/>
         </Box>
       </Card>
     </div>

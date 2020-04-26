@@ -9,6 +9,8 @@ import clientAxios from '../../../../config/axios'
 import { useDispatch } from 'react-redux';
 import {setLoading} from '../../../../redux/actions'
 
+import AlertUnauthorized from '../../../utils/alertUnauthorized'
+
 import CarreraForm from './carreraForm'
 
 const useStyles = makeStyles(theme => ({
@@ -46,7 +48,6 @@ function CrearCarrera({open, setOpen}) {
     dispatch(setLoading(true))
     const data = {
       nombre_carrera: state.nombre_carrera.value,
-      cod_carrera: state.cod_carrera.value,
       jornada: state.jornada.value
     }
     clientAxios().post('/api/carrera', data)
@@ -57,7 +58,16 @@ function CrearCarrera({open, setOpen}) {
     })
     .catch(error => {
       console.log(error);
-      dispatch(setLoading(true))
+      if (error.response) {
+        if (error.response.status === 401) {
+          console.log('wii');
+          AlertUnauthorized()
+        }
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      }
+      dispatch(setLoading(false))
     })
 
   }
@@ -77,7 +87,7 @@ function CrearCarrera({open, setOpen}) {
           Crear Carrera
         </DialogTitle>
         <DialogContent>
-          <CarreraForm cod_carrera={''} nombre_carrera={''} jornada={"Vespertino"} open={open} setOpen={setOpen} onSubmitForm={onSubmitForm}/>
+          <CarreraForm nombre_carrera={''} jornada={"Vespertino"} open={open} setOpen={setOpen} onSubmitForm={onSubmitForm}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

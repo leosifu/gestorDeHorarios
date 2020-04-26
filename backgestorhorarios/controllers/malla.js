@@ -9,7 +9,7 @@ module.exports = {
     return Malla
       .create({
         res_malla: req.body.res_malla,
-        nombre_malla: req.body.nombre_malla,
+        cod_malla: req.body.cod_malla,
         n_niveles: req.body.n_niveles,
         carreraId: req.body.carreraId,
         procesoId: req.body.procesoId
@@ -41,7 +41,7 @@ module.exports = {
     return Malla
       .update({
         res_malla: req.body.res_malla,
-        nombre_malla: req.body.nombre_malla,
+        cod_malla: req.body.cod_malla,
         n_niveles: req.body.n_niveles,
       },{
         where:{id:req.params.id}

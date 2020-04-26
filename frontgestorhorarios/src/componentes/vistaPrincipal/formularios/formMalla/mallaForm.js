@@ -25,10 +25,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const MallaForm = ({nombre_malla, res_malla, n_niveles, año, semestre, estado, setEstado, onSubmitForm}) => {
+const MallaForm = ({cod_malla, res_malla, n_niveles, año, semestre, estado, setEstado, onSubmitForm}) => {
   const stateSchema = {
     res_malla: { value: res_malla, error: '' },
-    nombre_malla: { value: nombre_malla, error: '' },
+    cod_malla: { value: cod_malla, error: '' },
     n_niveles: { value: n_niveles, error: '' },
   };
   const validationStateSchema = {
@@ -39,7 +39,7 @@ const MallaForm = ({nombre_malla, res_malla, n_niveles, año, semestre, estado, 
         error: 'Invalid first name format.',
       },
     },
-    nombre_malla: {
+    cod_malla: {
       required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
@@ -77,12 +77,12 @@ const MallaForm = ({nombre_malla, res_malla, n_niveles, año, semestre, estado, 
           variant="outlined"
         />
         <TextField
-          error={state.nombre_malla.error ? true:false}
+          error={state.cod_malla.error ? true:false}
           id="standard-required"
-          label="Nombre de la malla"
-          name="nombre_malla"
+          label="Código de la malla"
+          name="cod_malla"
           className={classes.textField}
-          value={state.nombre_malla.value}
+          value={state.cod_malla.value}
           onChange={handleOnChange}
           margin="normal"
           variant="outlined"

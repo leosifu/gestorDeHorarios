@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       // unique: true,
     },
-    nombre_malla: {
+    cod_malla: {
       type:DataTypes.STRING,
       allowNull: false,
       // unique: true,

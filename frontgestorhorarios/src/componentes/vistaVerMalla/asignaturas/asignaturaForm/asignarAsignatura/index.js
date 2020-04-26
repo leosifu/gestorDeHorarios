@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, }){
+function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, user, }){
 
   const classes = useStyles();
 
@@ -61,7 +61,7 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, })
       cod_asignatura: state.cod_asignatura.value,
       nivel: nivel
     }
-    clientAxios().post(`/api/infoAsignatura`, data)
+    clientAxios(user.idToken).post(`/api/infoAsignatura`, data)
     .then(res=>{
       console.log(res.data);
       setEstado(!estado)
@@ -149,7 +149,7 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, })
               </MenuItem>
               {
                 mallas.map(malla=>(
-                  <MenuItem value={malla.id}>{malla.nombre_malla}</MenuItem>
+                  <MenuItem value={malla.id}>{malla.cod_malla}</MenuItem>
                 ))
               }
             </Select>

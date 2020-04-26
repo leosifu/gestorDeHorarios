@@ -16,7 +16,7 @@ module.exports = {
     const NuevoProceso = await Proceso.create({
       año: req.body.año,
       semestre: req.body.semestre,
-      activo: false
+      estado: 'creating'
     })
     console.log(NuevoProceso);
     return;
@@ -34,7 +34,7 @@ module.exports = {
       año: req.body.año,
       semestre: req.body.semestre,
       res_malla: malla.res_malla,
-      nombre_malla: malla.nombre_malla,
+      cod_malla: malla.cod_malla,
       fecha_resolucion: malla.fecha_resolucion,
       n_niveles: malla.n_niveles,
       carreraId: malla.carreraId

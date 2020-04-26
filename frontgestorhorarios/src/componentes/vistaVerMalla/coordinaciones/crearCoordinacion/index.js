@@ -10,7 +10,7 @@ import CoordinacionForm from './coordinacionForm/coordinacionForm'
 import AsociarCoord from './asociarCoord'
 
 const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado, setEstado,
-  crear, setCrear, }) =>{
+  crear, setCrear, user, }) =>{
 
   const [eleccion, setEleccion] = useState(0)
 
@@ -59,10 +59,8 @@ const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado
       num_bloques: num_bloques()
     }
     console.log(data);
-    clientAxios().post('/api/coordinacion', data)
+    clientAxios(user.idToken).post('/api/coordinacion', data)
     .then(res => {
-      console.log('hola');
-      console.log(res.data);
       setCrear(false)
       setEstado(!estado)
     })
@@ -76,9 +74,7 @@ const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado
   }
   else if (eleccion === 2) {
     return(
-      <>
-        <AsociarCoord asignaturaAct={asignatura} estado={estado} setEstado={setEstado}/>
-      </>
+      <AsociarCoord asignaturaAct={asignatura} estado={estado} setEstado={setEstado} user={user}/>
     )
   }
   else {

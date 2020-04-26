@@ -12,8 +12,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      activo: {
-        type: Sequelize.INTEGER,
+      estado: {
+        type: Sequelize.ENUM,
+        values: ['active', 'creating', 'finished'],
         allowNull: false,
         default: false,
       }

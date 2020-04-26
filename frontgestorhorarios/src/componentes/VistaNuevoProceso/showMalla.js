@@ -21,7 +21,7 @@ const ShowMalla = ({malla}) => {
       <FormControlLabel
         value="end"
         control={<Checkbox color="primary" />}
-        label={malla.nombre_malla}
+        label={malla.cod_malla}
       />
     </FormControl>
   )

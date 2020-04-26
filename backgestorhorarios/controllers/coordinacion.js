@@ -26,7 +26,15 @@ module.exports = {
         for (var i = 0; i < req.body.num_bloques; i++) {
           bloques.push({coordinacionId: coordinacion.dataValues.id})
         }
-        Bloque.create(bloques)
+        const CoordinacionBloques = await Bloque.bulkCreate(bloques);
+        if (!CoordinacionBloques) {
+
+        }
+        return res.status(201).send(coordinacion)
+      })
+      .catch(error => {
+        console.log(error);
+        return res.status(400).send(error)
       })
   },
   findCoordinaciones(req, res){

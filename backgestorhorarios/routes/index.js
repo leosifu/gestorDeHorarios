@@ -25,7 +25,7 @@ module.exports = (app) => {
   app.get('/api/carrera', carreraController.findAll)
   app.get('/api/carreras', carreraController.findCarreras)
   app.get('/api/carrera/:id', carreraController.findByCarreraId)
-  app.post('/api/carrera', verify('admin'), carreraController.create)
+  app.post('/api/carrera', carreraController.create)
   app.put('/api/carrera/:id', verify('admin'), carreraController.update)
 
   //API malla
@@ -33,7 +33,7 @@ module.exports = (app) => {
   app.get('/api/mallas/:id', mallaController.findMallas)
   app.get('/api/mallas/:id/:año/:semestre', mallaController.findMallaByAño)
   app.get('/api/malla/:id', mallaController.findMallaById)
-  app.post('/api/malla', verify('admin'), mallaController.create)
+  app.post('/api/malla' , mallaController.create)
   app.put('/api/malla/:id', verify('admin'), mallaController.update)
   app.put('/api/malla/estado/:id', verify('admin'), mallaController.cambiarEstadoMalla)
 
@@ -58,7 +58,7 @@ module.exports = (app) => {
 
   //Api AsignCoord
   //app.post('/api/coordinacion', coordinacionController.create)
-  app.get('/api/coordinacions/:id', verify(), infocoordController.findCoords)
+  app.get('/api/coordinacions/:id', verify('admin'), infocoordController.findCoords)
   app.post('/api/asigncoord', verify('admin'), infocoordController.create)
 
   //Api coordinacion

@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      nombre_malla: {
+      cod_malla: {
         type: Sequelize.STRING,
         allowNull: false,
       },

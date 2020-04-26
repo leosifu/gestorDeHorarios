@@ -6,6 +6,9 @@ const Rol = require('../models').Rol;
 const verify = (...roles) => async (req, res, next) => {
   try {
     let idToken = req.get('Authorization');
+    if (!idToken) {
+      return res.status(401).json({ message: 'Usuario no Autorizado'})
+    }
     // console.log(idToken);
     const token = idToken.split(' ');
     // console.log('token', token[1]);

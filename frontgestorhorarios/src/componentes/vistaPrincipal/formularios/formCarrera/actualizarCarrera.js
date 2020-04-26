@@ -39,7 +39,6 @@ function ActualizarCarrera({carrera, open, setOpen, estado, setEstado}) {
   function onSubmitForm(state) {
     const data = {
       nombre_carrera: state.nombre_carrera.value,
-      cod_carrera: state.cod_carrera.value,
       jornada: state.jornada.value
     }
     clientAxios().put(`/api/carrera/${carrera.id}`, data)
@@ -63,7 +62,7 @@ function ActualizarCarrera({carrera, open, setOpen, estado, setEstado}) {
       >
         <DialogTitle id="max-width-dialog-title">Crear Carrera</DialogTitle>
         <DialogContent>
-          <CarreraForm cod_carrera={carrera.cod_carrera} nombre_carrera={carrera.nombre_carrera}
+          <CarreraForm nombre_carrera={carrera.nombre_carrera}
             jornada={carrera.jornada} open={open} setOpen={setOpen} onSubmitForm={onSubmitForm}/>
         </DialogContent>
         <DialogActions>

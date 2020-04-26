@@ -86,15 +86,15 @@ export default function Carrera({carrera, estado, setEstado}) {
 
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        {carrera.mallas?
+        {carrera.mallas &&
           <div>
             {carrera.mallas.map((malla, i) =>
                 <CardContent key={malla.id}>
                   <Malla malla={malla} estado={estado} setEstado={setEstado}/>
                 </CardContent>
             )}
-           </div>:
-          <div/>}
+          </div>
+        }
       </Collapse>
     </Card>
   );

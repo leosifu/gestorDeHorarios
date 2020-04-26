@@ -9,10 +9,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    activo: {
-      type: DataTypes.INTEGER,
+    estado: {
+      type: DataTypes.ENUM,
+      values: ['active', 'creating', 'finished'],
       allowNull: false,
-      default: false
+      default: 'creating'
     }
   }, {});
   Proceso.associate = function(models) {

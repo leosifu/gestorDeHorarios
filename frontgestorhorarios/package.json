@@ -28,6 +28,7 @@
     "redux-form": "^8.2.6",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
+    "sweetalert2": "^9.5.3",
     "xlsx": "^0.15.3"
   },
   "scripts": {

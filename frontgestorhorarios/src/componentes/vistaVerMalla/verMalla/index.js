@@ -8,11 +8,12 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Button from '@material-ui/core/Button';
 
-import { useDispatch } from 'react-redux';
-import {setMallaRedux, setLoading} from '../../../redux/actions'
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
+import {setMallaRedux, setLoading} from '../../../redux/actions';
 
-import Asignatura from './asignatura'
-import NotificacionForm from '../notificacionForm'
+import Asignatura from './asignatura';
+import NotificacionForm from '../notificacionForm';
 
 const useStyles = makeStyles({
   root: {
@@ -42,13 +43,17 @@ const useStyles = makeStyles({
   },
 });
 
+const UserSelector = createSelector(
+  state => state.user,
+  user => user.user
+);
 
 function VerMalla(props) {
 
   const classes = useStyles();
   const dispatch = useDispatch();
   const {mallaId} = useParams();
-  console.log(mallaId);
+  const user = useSelector(UserSelector);
 
   const [estado, setEstado] = useState(false);
 
@@ -111,19 +116,17 @@ function VerMalla(props) {
         asignaturaId: activo,
         requisitoId: algo
       }
-      clientAxios().post('/api/dependencia', data)
+      clientAxios(user.idToken).post('/api/dependencia', data)
       .then(res => {
         console.log(res.data);
       })
     }
     else {
-      console.log("asd");
       const data = {
         asignaturaId: activo,
         requisitoId: algo
       }
-      console.log(data);
-      clientAxios().delete('/api/dependencia', {data: data})
+      clientAxios(user.idToken).delete('/api/dependencia', {data: data})
       .then(res => {
         console.log(res.data);
       })
@@ -141,19 +144,19 @@ function VerMalla(props) {
   return (
     <Paper className={classes.root}>
       <GridList className={classes.gridList} cols={4}>
-        {niveles ? niveles.map(nivel => {
-          return(
+        {niveles && niveles.map(nivel => (
             <div style={{height:590}} key={nivel.nivel}>
               <GridListTile style={{ height: 'auto', overflow:'auto', padding:0 }}>
                 <Asignatura activo={activo} setActivo={setActivo} requisitos={requisitos}
                   handleClick={edit===1?handleClick2:handleClick1} nivel={nivel.nivel}
                   asignaturas={nivel.asignaturas} edit={edit} setEdit={setEdit}
-                  estado={estado} setEstado={setEstado} mallaId={mallaId}/>
+                  estado={estado} setEstado={setEstado} mallaId={mallaId} user={user}/>
               </GridListTile>
             </div>
-        )}) : < div/>}
+        ))
+      }
       </GridList>
-      {edit===0?
+      {edit === 0 ?
         (
           <>
             <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${mallaId}`}>
