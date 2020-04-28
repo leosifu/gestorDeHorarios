@@ -18,10 +18,10 @@ module.exports = {
       semestre: req.body.semestre,
       estado: 'creating'
     })
-    console.log(NuevoProceso);
-    return;
+    const NuevoProcesoValues = NuevoProceso.dataValues;
+    // console.log(NuevoProcesoValues);
     const Mallas = await Malla.findAll({
-      where: {activa: true},
+      where: {id: req.body.mallas},
       include: [{model: Asignatura, as: 'asignaturas',
         include: [{model:Asignatura, as:'requisitos'},
           {model:Coordinacion, as:'coordinaciones', include:[{model: Bloque, as:'bloques'}]},
@@ -31,13 +31,12 @@ module.exports = {
     const MallasDataValues = Mallas.map(malla=>malla.dataValues)
     // console.log(MallasDataValues);
     const MallasData = MallasDataValues.map(malla=>({
-      año: req.body.año,
-      semestre: req.body.semestre,
       res_malla: malla.res_malla,
       cod_malla: malla.cod_malla,
       fecha_resolucion: malla.fecha_resolucion,
       n_niveles: malla.n_niveles,
-      carreraId: malla.carreraId
+      carreraId: malla.carreraId,
+      procesoId: NuevoProcesoValues.id
     }))
     // console.log(MallasData);
     const NuevasMallas = await Malla.bulkCreate(MallasData)

@@ -13,14 +13,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ShowMalla = ({malla}) => {
+const ShowMalla = ({malla, isSelected, selectMalla, }) => {
+
   const classes = useStyles();
 
   return(
     <FormControl component="fieldset">
       <FormControlLabel
-        value="end"
-        control={<Checkbox color="primary" />}
+        control={<Checkbox
+          color="primary"
+          checked={isSelected}
+          onChange={() => selectMalla(malla.id)}
+        />}
         label={malla.cod_malla}
       />
     </FormControl>

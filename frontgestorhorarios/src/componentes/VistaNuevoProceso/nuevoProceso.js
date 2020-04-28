@@ -46,30 +46,33 @@ export default function NuevoProceso() {
     semestre: 0
   });
   const [date, setDate] = useState({});
-  const [procesoSelected, setProcesoSelected] = useState(currentProceso);
-  const [selects, setSelects] = useState([]);
-  const [mallasSelected, setMallasSelected] = useState([]);
+  const [procesoselects, setProcesoselects] = useState(currentProceso);
+  const [allSelects, setAllSelects] = useState([]);
 
   useEffect(() => {
     const procesoFind = procesos.find(proceso => proceso.año === date.age &&
       proceso.semestre === date.semester);
     if (procesoFind) {
-      setProcesoSelected(procesoFind);
+      setProcesoselects(procesoFind);
     }
     else {
-      setProcesoSelected(currentProceso);
+      setProcesoselects(currentProceso);
     }
   }, [date])
 
   useEffect(() => {
     if (currentProceso.id !== -1) {
-      clientAxios().get(`/api/carrera?procesoId=${currentProceso.id}`)
+      clientAxios().get(`/api/carrera?procesoId=${procesoselects.id}`)
       .then(res1 => {
         const carreras = res1.data
         let vesp = []
         let diur = []
-        let newSelect = []
+        let newSelect = [];
         for (var i = 0; i < carreras.length; i++) {
+          newSelect.push({
+            nombre_carrera: carreras[i].nombre_carrera,
+            selects: []
+          });
           if (carreras[i].jornada === "Vespertino") {
             vesp.push(carreras[i])
           }
@@ -77,19 +80,23 @@ export default function NuevoProceso() {
             diur.push(carreras[i])
           }
         }
-        setCarrerasV(vesp)
-        setCarrerasD(diur)
+        setAllSelects(newSelect);
+        setCarrerasV(vesp);
+        setCarrerasD(diur);
       })
     }
     dispatch(setLoading(false))
-  }, [currentProceso])
+  }, [procesoselects])
 
   const changeProcesoData = (event) => {
     setProcesoData({...procesoData, [event.target.id]: event.target.value})
   }
 
   const crearProceso = () => {
-    const data = {...procesoData}
+    const mallasSelected = [].concat(...allSelects.map(carrera => carrera.selects));
+    console.log(mallasSelected);
+    const data = {...procesoData};
+    data.mallas = mallasSelected
     clientAxios().post('/api/nuevoProceso', data)
     .then(res=>{
       console.log(res.data);
@@ -128,8 +135,9 @@ export default function NuevoProceso() {
         </Grid>
         <Grid item xs={procesos.length > 0 ? 4 : 0}>
         {
-          procesoSelected && procesos.length > 0 &&
-          <SelectProceso procesos={procesos} currentProceso={procesoSelected} date={date} setDate={setDate}/>
+          procesoselects && procesos.length > 0 &&
+          <SelectProceso procesos={procesos} currentProceso={procesoselects} date={date}
+            setDate={setDate}/>
         }
         </Grid>
       </Grid>
@@ -138,14 +146,14 @@ export default function NuevoProceso() {
         {
           carrerasD.map(carrera => (
             <Grid item xs={3}>
-              <ShowCarrera carrera={carrera} />
+              <ShowCarrera carrera={carrera} allSelects={allSelects} setAllSelects={setAllSelects} />
             </Grid>
           ))
         }
         {
           carrerasV.map(carrera =>
             <Grid item xs={3}>
-              <ShowCarrera carrera={carrera} />
+              <ShowCarrera carrera={carrera} allSelects={allSelects} setAllSelects={setAllSelects} />
             </Grid>
           )
         }

@@ -67,7 +67,6 @@ export default function ListadoCarreras(){
 
   useEffect(() => {
     if (currentProceso.id !== -1) {
-      console.log(user.idToken);
       clientAxios(user.idToken).get(`/api/carrera?procesoId=${currentProceso.id}`)
       .then(res1 => {
         const carreras = res1.data
