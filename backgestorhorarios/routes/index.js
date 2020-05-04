@@ -71,10 +71,12 @@ module.exports = (app) => {
   //Api csvs
   // app.use('/api/csv-upload', routes)
   app.post('/api/login', usuarioController.login)
+  app.get('/api/profesores', usuarioController.getProfesores)
   app.post('/api/profesores', upload.single('file'), usuarioController.createProfesores)
 
   //Api proceso
   app.get('/api/procesos', procesoController.findAll)
+  app.post('/api/procesos', procesoController.create)
 
   //Api nuevoProceso
   app.post('/api/nuevoProceso', nuevoProcesoController.createProceso)

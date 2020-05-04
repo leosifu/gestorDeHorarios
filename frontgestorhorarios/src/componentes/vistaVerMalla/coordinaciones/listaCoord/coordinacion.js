@@ -59,7 +59,14 @@ function Coordinacion({coordinacion}){
         Tipo: {coordinacion.tipo_coord}
       </Typography>
       <Typography className={classes.campoDes}>
-        Profesor Asignado: Roberto Gonzalez
+        Profesor Asignado:
+        {
+          coordinacion.profesores.map(profesor =>
+            <>
+              {` ${profesor.name} ${profesor.lastName}\n`}
+            </>
+          )
+        }
       </Typography>
     </Box>
   )

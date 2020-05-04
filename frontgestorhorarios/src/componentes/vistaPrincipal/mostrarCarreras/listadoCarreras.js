@@ -26,28 +26,25 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ProcesoSelector = createSelector(
-  state => state.proceso,
-  proceso => proceso.currentProceso
-);
-
 const ProcesosSelector = createSelector(
   state => state.proceso,
-  proceso => proceso.procesos
+  proceso => proceso
 );
 
 const UserSelector = createSelector(
   state => state.user,
   user => user.user
-)
+);
 
 export default function ListadoCarreras(){
 
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const currentProceso = useSelector(ProcesoSelector);
-  const procesos = useSelector(ProcesosSelector);
+  const procesosData = useSelector(ProcesosSelector);
+
+  const currentProceso = procesosData.currentProceso;
+  const procesos = procesosData.procesos;
   const user = useSelector(UserSelector);
 
   const [openC, setOpenC] = useState(false);
@@ -57,15 +54,24 @@ export default function ListadoCarreras(){
   const [carrerasV, setCarrerasV] = useState([]);
   const [date, setDate] = useState({});
 
-  useEffect(() => {
-    const procesoFind = procesos.find(proceso => proceso.año === date.age &&
-      proceso.semestre === date.semester);
-    if (procesoFind) {
-      dispatch(setProcesoActivo(procesoFind));
-    }
-  }, [date])
+  // useEffect(() => {
+  //   const procesoFind = procesos.find(proceso => proceso.año === date.age &&
+  //     proceso.semestre === date.semester);
+  //   if (procesoFind) {
+  //     dispatch(setProcesoActivo(procesoFind));
+  //   }
+  // }, [date])
 
   useEffect(() => {
+    console.log('asdawqeqe');
+  }, [procesosData])
+
+  useEffect(() => {
+    console.log('asdasdasd');
+  }, [currentProceso])
+
+  useEffect(() => {
+    console.log(procesosData);
     if (currentProceso.id !== -1) {
       clientAxios(user.idToken).get(`/api/carrera?procesoId=${currentProceso.id}`)
       .then(res1 => {
@@ -85,7 +91,15 @@ export default function ListadoCarreras(){
       })
       dispatch(setLoading(false))
     }
-  }, [openC, estado, currentProceso, user])
+    else {
+      if (procesosData.error) {
+        console.log('AHHHHHHH');
+        setCarrerasV([]);
+        setCarrerasD([]);
+        dispatch(setLoading(false));
+      }
+    }
+  }, [openC, estado, procesosData, user])
 
   // const onDrop = useCallback((acceptedFiles) => {
   //   acceptedFiles.forEach((file) => {
@@ -140,10 +154,14 @@ export default function ListadoCarreras(){
     // Do something with the files
     let formData = new FormData();
     formData.append('file', acceptedFiles[0]);
+    formData.append('procesoId', 1)
     console.log(acceptedFiles);
     axios.post(`http://localhost:8000/api/profesores`, formData, {headers: {'Content-Type': 'multipart/form-data'}})
     .then(res => {
       console.log(res);
+    })
+    .catch(error => {
+      console.log(error);
     })
   }, [])
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
@@ -188,14 +206,7 @@ export default function ListadoCarreras(){
         ))}
       </Grid>
       {/*<input type="file" onChange={e=>handleUpload(e)} />*/}
-      <div {...getRootProps()}>
-        <input {...getInputProps()} />
-        {
-          isDragActive ?
-            <p>Drop the files here ...</p> :
-            <p>Drag 'n' drop some files here, or click to select files</p>
-        }
-    </div>
+      
 
     </div>
   );

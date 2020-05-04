@@ -4,6 +4,7 @@ const Asignatura = require('../models').Asignatura
 const Coordinacion = require('../models').Coordinacion
 const Bloque = require('../models').Bloque
 const HistorialM = require('../models').Historial
+const Usuario = require('../models').Usuario
 //const AsignaturaC = require('./asignatura')
 
 module.exports = {
@@ -52,14 +53,14 @@ module.exports = {
       })
   },
   findAsignatura(req, res){
-    console.log(req.params.mId);
-    console.log(req.params.aId);
     return InfoAsignatura
       .findOne({
         where:{mallaId: req.params.mId, asignaturaId: req.params.aId},
         include: [{model:Asignatura, as:'Asignatura',
-          include:[{model:HistorialM, as:'historial'},{model:Asignatura, as:'requisitos', include:[{model: Malla, as:'mallas', where:{id: req.params.mId}}]},
-            {model:Coordinacion, as:'coordinaciones', include:[{model: Bloque, as:'bloques'}]
+          include:[{model:HistorialM, as:'historial'},{model:Asignatura, as:'requisitos',
+            include:[{model: Malla, as:'mallas', where:{id: req.params.mId}}]},
+            {model:Coordinacion, as:'coordinaciones',
+              include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores'}]
           }]
         }]
       })
@@ -78,7 +79,10 @@ module.exports = {
         }
         return (res.json(infoA))
       })
-      .catch(error=> res.status(400).send(error))
+      .catch(error=> {
+        console.log(error);
+        return res.status(400).send(error)
+      })
   },
   findAsignaturas(req,res){
     return InfoAsignatura

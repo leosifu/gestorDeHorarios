@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Asignacion.belongsTo(models.Coordinacion,{
       foreignKey: 'coordinacionId',
-      as: 'usuarios'
+      as: 'profesores'
     })
     Asignacion.belongsTo(models.Usuario,{
       foreignKey: 'usuarioId',

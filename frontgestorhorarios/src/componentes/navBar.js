@@ -11,7 +11,7 @@ import clientAxios from '../config/axios'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect'
-import {getProcesos, handleLoginUser, } from '../redux/actions'
+import {getProcesos, handleLoginUser, handleLogoutUser, } from '../redux/actions'
 
 import firebase from 'firebase';
 
@@ -36,9 +36,7 @@ export default function NavBar() {
   const [log, setLog] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
-      login();
-    }
+    login();
   }, []);
 
   const loginRequest = (token, userData, authUser) => {
@@ -53,7 +51,6 @@ export default function NavBar() {
         idToken: token,
         roles: roles
       }))
-      localStorage.setItem('token', token);
     })
     .catch(error => {
       dispatch(handleLoginUser({
@@ -63,8 +60,6 @@ export default function NavBar() {
         idToken: token,
         roles: []
       }))
-      localStorage.setItem('token', token);
-      console.log(error);
     })
     setLog(true);
   }
@@ -101,12 +96,12 @@ export default function NavBar() {
         .then(
           result => {
             var token = result.credential.idToken;
-            setLog(true)
+            setLog(true);
+            login();
           }
         )
         .catch(error => console.log(`Error ${error.code}: ${error.message}`))
       );
-
     })
   }
 
@@ -114,7 +109,8 @@ export default function NavBar() {
     firebase.auth().signOut()
       .then(result => {
         console.log('Te has desconectado correctamente');
-        setLog(false)
+        dispatch(handleLogoutUser());
+        setLog(false);
       })
       .catch(error => console.log(`Error ${error.code}: ${error.message}`));
   }

@@ -4,7 +4,8 @@ const initialState = {
     año: -1,
     semestre: -1
   },
-  procesos: []
+  procesos: [],
+  error: false
 }
 
 export default (state = initialState, action) => {
@@ -18,6 +19,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         procesos: action.payload
+      }
+      break;
+    case 'getProcesosFailed':
+      return {
+        ...state,
+        ...initialState,
+        error: true
       }
       break;
     default:

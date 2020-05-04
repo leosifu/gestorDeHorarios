@@ -7,24 +7,28 @@ const InfoCoordinacion = require('../models').InfoCoordinacion
 const Coordinacion = require('../models').Coordinacion
 const Bloque = require('../models').Bloque
 const Proceso = require('../models').Proceso
+const Usuario = require('../models').Usuario
+const UsuarioProceso = require('../models').UsuarioProceso
+const Asignacion = require('../models').Asignacion
 
 const _ = require('lodash');
 
 module.exports = {
   async createProceso(req, res){
     console.log(req.body);
-    const NuevoProceso = await Proceso.create({
-      año: req.body.año,
-      semestre: req.body.semestre,
-      estado: 'creating'
-    })
-    const NuevoProcesoValues = NuevoProceso.dataValues;
+    // const NuevoProceso = await Proceso.create({
+    //   año: req.body.año,
+    //   semestre: req.body.semestre,
+    //   estado: 'creating'
+    // })
+    // const NuevoProcesoValues = NuevoProceso.dataValues;
     // console.log(NuevoProcesoValues);
     const Mallas = await Malla.findAll({
       where: {id: req.body.mallas},
       include: [{model: Asignatura, as: 'asignaturas',
         include: [{model:Asignatura, as:'requisitos'},
-          {model:Coordinacion, as:'coordinaciones', include:[{model: Bloque, as:'bloques'}]},
+          {model:Coordinacion, as:'coordinaciones',
+            include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores'}]},
           {model:Historial, as:'historial'}]
       }]
     })
@@ -36,7 +40,8 @@ module.exports = {
       fecha_resolucion: malla.fecha_resolucion,
       n_niveles: malla.n_niveles,
       carreraId: malla.carreraId,
-      procesoId: NuevoProcesoValues.id
+      // procesoId: NuevoProcesoValues.id
+      procesoId: req.body.procesoId
     }))
     // console.log(MallasData);
     const NuevasMallas = await Malla.bulkCreate(MallasData)
@@ -82,7 +87,8 @@ module.exports = {
       requisito.dataValues))
     const Requisitos = [].concat(...RequisitosByMalla);
     const Dependencias = Requisitos.map(requisito=>requisito.Dependencia.dataValues)
-    const DependenciasData = Dependencias.map(dependencia=>{
+    const DependenciasData = Dependencias.reduce((result, dependencia)=>{
+      console.log(dependencia);
       let asignaturaId = dependencia.asignaturaId
       let asignaturaFind = Asignaturas.find(asignatura=>asignatura.id === asignaturaId)
       let asignaturaIndex = Asignaturas.indexOf(asignaturaFind)
@@ -91,15 +97,18 @@ module.exports = {
 
       let requisitoId = dependencia.requisitoId
       let requisitoFind = Asignaturas.find(asignatura=>asignatura.id === requisitoId)
-      let requisitoIndex = Asignaturas.indexOf(requisitoFind)
-      let newRequisito = NuevasAsignaturasData[requisitoIndex]
-      let newRequisitoId = newRequisito .id
+      if (requisitoFind) {
+        let requisitoIndex = Asignaturas.indexOf(requisitoFind)
+        let newRequisito = NuevasAsignaturasData[requisitoIndex]
+        let newRequisitoId = newRequisito.id
 
-      return({
-        asignaturaId: newAsignaturaId,
-        requisitoId: newRequisitoId
-      })
-    })
+        result.push({
+          asignaturaId: newAsignaturaId,
+          requisitoId: newRequisitoId
+        })
+      }
+      return result;
+    }, [])
     const DependenciasDataFiltered = _.uniqWith(DependenciasData, _.isEqual);
     const NuevosRequisitos = await Dependencia.bulkCreate(DependenciasDataFiltered)
     const NuevosRequisitosData = NuevosRequisitos.map(requisito=>requisito.dataValues)
@@ -138,12 +147,18 @@ module.exports = {
     const Coords = Array.from(new Set(Coordinaciones.map(coordinacion=>coordinacion.id)))
     .map(id=>{
       let coord = Coordinaciones.find(coordinacion=>coordinacion.id === id)
+      console.log('----AAHHHHHHHHHH-----');
+      console.log(coord);
       return{
         id: id,
         tipo_coord: coord.tipo_coord,
         infoCoordinacion: coord.InfoCoordinacion.dataValues,
         bloques: coord.bloques.map(bloque=>bloque.dataValues),
-        infoCoordinacion: coord.InfoCoordinacion.dataValues
+        infoCoordinacion: coord.InfoCoordinacion.dataValues,
+        asignaciones: coord.profesores.map(profesor => {
+          console.log(profesor);
+          return profesor.dataValues.Asignacion.dataValues
+        })
       }
     })
     const CoordinacionData = Coords.map(coordinacion=>({
@@ -196,6 +211,35 @@ module.exports = {
     const NuevosBloques = await Bloque.bulkCreate(BloquesData)
     const nuevoBloqueData = NuevosBloques.map(bloque=>bloque.dataValues)
 
-    res.send(NuevasMallas)
+    const Asignaciones = Coords.map(coordinacion => coordinacion.asignaciones);
+    const AllAsignaciones = [].concat(...Asignaciones);
+    const AsignacionesData = await AllAsignaciones.reduce(async(result, asignacion) =>{
+      const ProfesorActivo = await UsuarioProceso.findAll({
+        where: {
+          procesoId: req.body.procesoId,
+          usuarioId: asignacion.usuarioId
+        }
+      })
+      if (ProfesorActivo) {
+        let coordinacionId = asignacion.coordinacionId
+        let coordinacionFind = Coords.find(coordinacion=>coordinacion.id === coordinacionId)
+        let coordinacionIndex = Coords.indexOf(coordinacionFind)
+        let newCoordinacion = NuevasCoordinacionesData[coordinacionIndex]
+        let newCoordinacionId = newCoordinacion.id
+        console.log('asdasd');
+        result.push({
+          usuarioId: asignacion.usuarioId,
+          coordinacionId: newCoordinacionId
+        })
+      }
+      return result;
+    }, []);
+    console.log('----asdasdasdadsasd-----');
+    console.log(AsignacionesData);
+    const NuevasAsignaciones = await Asignacion.bulkCreate(AsignacionesData);
+    const NuevasAsignacionesData = NuevasAsignaciones.map(asignacion => asignacion => asignacion.dataValues)
+    console.log(NuevasAsignacionesData);
+
+    return res.status(201).send(NuevasMallas)
   }
 }

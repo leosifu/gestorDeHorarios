@@ -7,9 +7,9 @@ import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
-import clientAxios from '../../../../config/axios'
+import clientAxios from '../../../../config/axios';
 
-import SetCoordinacionForm from './setCoordinacionForm'
+import SetCoordinacionForm from './setCoordinacionForm';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -192,7 +192,6 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, }){
         (coordinacion!==0) &&
           <SetCoordinacionForm coordinacion={coordinacionSelect} asignaturaAct={asignaturaAct}
             estado={estado} setEstado={setEstado} user={user}/>
-
       }
 
     </>

@@ -14,6 +14,7 @@ import {setLoading, setProcesoActivo, } from '../../redux/actions'
 
 import SelectProceso from './selectProceso';
 import ShowCarrera from './showCarrera';
+import ProfesoresUploader from './profesoresUploader';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -48,6 +49,11 @@ export default function NuevoProceso() {
   const [date, setDate] = useState({});
   const [procesoselects, setProcesoselects] = useState(currentProceso);
   const [allSelects, setAllSelects] = useState([]);
+  const [uploadFile, setUploadFile] = useState(null);
+
+  useEffect(() => {
+    console.log(uploadFile);
+  }, [uploadFile])
 
   useEffect(() => {
     const procesoFind = procesos.find(proceso => proceso.año === date.age &&
@@ -92,21 +98,37 @@ export default function NuevoProceso() {
     setProcesoData({...procesoData, [event.target.id]: event.target.value})
   }
 
-  const crearProceso = () => {
+  const crearProceso = async () => {
     const mallasSelected = [].concat(...allSelects.map(carrera => carrera.selects));
-    console.log(mallasSelected);
-    const data = {...procesoData};
-    data.mallas = mallasSelected
-    clientAxios().post('/api/nuevoProceso', data)
-    .then(res=>{
-      console.log(res.data);
-      dispatch(push('/'))
-      // setChanged(!changed)
-      // setOpen(false)
-    })
-    .catch((error)=>{
-      alert("error al crear la proceso")
-    })
+    const NuevoProceso = await clientAxios().post('/api/procesos', procesoData);
+    let formData = new FormData();
+    formData.append('file', uploadFile);
+    formData.append('procesoId', NuevoProceso.data.id);
+    const SubirProfesores = await axios.post(`http://localhost:8000/api/profesores`,
+      formData,
+      {headers: {'Content-Type': 'multipart/form-data'}})
+    const data = {
+      procesoId: NuevoProceso.data.id,
+      mallas: mallasSelected
+    }
+    console.log(SubirProfesores);
+    const DuplicarDatos = await clientAxios().post('/api/nuevoProceso', data);
+    console.log(DuplicarDatos);
+    // .then(res => {
+    //   console.log(res.data);
+    //   const NuevoProceso = res.data;
+    //   clientAxios
+    // })
+    // clientAxios().post('/api/nuevoProceso', data)
+    // .then(res=>{
+    //   console.log(res.data);
+    //   dispatch(push('/'))
+    //   // setChanged(!changed)
+    //   // setOpen(false)
+    // })
+    // .catch((error)=>{
+    //   alert("error al crear la proceso")
+    // })
   }
 
   return (
@@ -143,24 +165,31 @@ export default function NuevoProceso() {
       </Grid>
       <br />
       <Grid container>
-        {
-          carrerasD.map(carrera => (
-            <Grid item xs={3}>
-              <ShowCarrera carrera={carrera} allSelects={allSelects} setAllSelects={setAllSelects} />
-            </Grid>
-          ))
-        }
-        {
-          carrerasV.map(carrera =>
-            <Grid item xs={3}>
-              <ShowCarrera carrera={carrera} allSelects={allSelects} setAllSelects={setAllSelects} />
-            </Grid>
-          )
-        }
+        <Grid item xs={8}>
+          <Grid container>
+            {
+              carrerasD.map(carrera => (
+                <Grid item xs={4}>
+                  <ShowCarrera carrera={carrera} allSelects={allSelects} setAllSelects={setAllSelects} />
+                </Grid>
+              ))
+            }
+            {
+              carrerasV.map(carrera =>
+                <Grid item xs={4}>
+                  <ShowCarrera carrera={carrera} allSelects={allSelects} setAllSelects={setAllSelects} />
+                </Grid>
+              )
+            }
+          </Grid>
+        </Grid>
+        <Grid item xs={4}>
+          <ProfesoresUploader uploadFile={uploadFile} setUploadFile={setUploadFile}/>
+          <Button onClick={crearProceso}>
+            Crear Proceso
+          </Button>
+        </Grid>
       </Grid>
-      <Button onClick={crearProceso}>
-        Crear Proceso
-      </Button>
 
     </div>
   );

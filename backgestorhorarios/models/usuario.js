@@ -12,12 +12,17 @@ module.exports = (sequelize, DataTypes) => {
     Usuario.belongsToMany(models.Coordinacion,{
       through: models.Asignacion,
       foreignKey: 'usuarioId',
-      as: 'usuarios'
+      as: 'coordinaciones'
     })
     Usuario.belongsToMany(models.Rol,{
       through: models.RolUsuario,
       foreignKey: 'usuarioId',
       as: 'roles'
+    })
+    Usuario.belongsToMany(models.Proceso,{
+      through: models.UsuarioProceso,
+      foreignKey: 'usuarioId',
+      as: 'profesores'
     })
   };
   return Usuario;

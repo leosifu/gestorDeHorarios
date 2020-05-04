@@ -3,7 +3,8 @@ const initialState = {
     email: '',
     photoURL: '',
     name: ''
-  }
+  },
+  status: 'notLogin'
 }
 
 export default (state = initialState, action) => {
@@ -11,12 +12,14 @@ export default (state = initialState, action) => {
     case 'loginUser':
       return {
         ...state,
-        user: action.payload
+        user: action.payload,
+        status: 'login'
       }
     case 'logoutUser':
       return {
         ...state,
-        user: initialState.user
+        user: initialState.user,
+        status: 'notLogin'
       }
       break;
     default:

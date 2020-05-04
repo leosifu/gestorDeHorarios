@@ -2,10 +2,12 @@ import clientAxios from '../../config/axios'
 
 import { push } from 'connected-react-router';
 
-export const getProcesos = () => {
+export const getProcesos = (idToken) => {
   return dispatch => {
-    clientAxios().get(`/api/procesos`)
+    console.log(idToken);
+    clientAxios(idToken).get(`/api/procesos`)
     .then(res => {
+      console.log(res.data);
       if (res.data.length > 0) {
         const reverseProcesos = res.data.reverse();
         dispatch(setAllProcesos(reverseProcesos));
@@ -30,7 +32,8 @@ export const getProcesos = () => {
         }
       }
       else {
-        dispatch(push(`/nuevoProceso`));
+        dispatch(getProcesosFailed());
+        // dispatch(push(`/nuevoProceso`));
       }
     })
   }
@@ -57,4 +60,9 @@ export const setAllProcesos = (procesos) => {
 const setProcesos = (procesos) => ({
   type: 'setProcesos',
   payload: procesos
+});
+
+const getProcesosFailed = () => ({
+  type: 'getProcesosFailed',
+  payload: {}
 });

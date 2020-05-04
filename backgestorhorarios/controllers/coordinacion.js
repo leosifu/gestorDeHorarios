@@ -2,6 +2,7 @@ const Coordinacion = require('../models').Coordinacion
 const Asignatura = require('../models').Asignatura
 const Bloque = require('../models').Bloque
 const InfoCoordinacion = require('../models').InfoCoordinacion
+const Asignacion = require('../models').Asignacion
 
 module.exports = {
   create(req, res){
@@ -27,9 +28,11 @@ module.exports = {
           bloques.push({coordinacionId: coordinacion.dataValues.id})
         }
         const CoordinacionBloques = await Bloque.bulkCreate(bloques);
-        if (!CoordinacionBloques) {
-
-        }
+        const AsignarProfesores = req.body.profesores.map(profesor => ({
+          usuarioId: profesor.id,
+          coordinacionId: coordinacion.dataValues.id
+        }));
+        const Asignaciones = await Asignacion.bulkCreate(AsignarProfesores);
         return res.status(201).send(coordinacion)
       })
       .catch(error => {

@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
 const SelectProceso = ({procesos, date, setDate, currentProceso, }) => {
 
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [años, setAños] = useState([]);
   const [semestres, setSemestres] = useState([]);
@@ -42,9 +43,19 @@ const SelectProceso = ({procesos, date, setDate, currentProceso, }) => {
         .map(proceso => proceso.semestre)
       setSemestres(semestresP);
       setDate({age: event.target.value, semester: semestresP[0]})
+      const procesoFind = procesos.find(proceso => proceso.año === event.target.value &&
+        proceso.semestre === semestresP[0]);
+      if (procesoFind) {
+        dispatch(setProcesoActivo(procesoFind));
+      }
     }
     else {
       setDate({...date, semester: event.target.value})
+      const procesoFind = procesos.find(proceso => proceso.año === date.age &&
+        proceso.semestre === event.target.value);
+      if (procesoFind) {
+        dispatch(setProcesoActivo(procesoFind));
+      }
     }
   };
 

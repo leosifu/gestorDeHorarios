@@ -12,13 +12,20 @@ import Content from './componentes/Children/Content'
 import NavBar from './componentes/navBar'
 import Loader from './componentes/utils/Loader'
 
+const UserSelector = createSelector(
+  state => state.user,
+  user => user.user
+);
+
 function App({children}) {
 
   const dispatch = useDispatch();
+  const user = useSelector(UserSelector);
 
   useEffect(() => {
-    dispatch(getProcesos())
-  }, []);
+    console.log('asdasd');
+    dispatch(getProcesos(user.idToken))
+  }, [user]);
 
   return(
     <div>

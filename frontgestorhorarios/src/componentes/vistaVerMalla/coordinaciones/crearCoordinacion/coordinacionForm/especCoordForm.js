@@ -45,24 +45,6 @@ const EspecCoordForm = ({handleOnChange, tipo_coord, }) => {
 
   return(
     <>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
-          Profesor
-        </InputLabel>
-        <Select
-          id="demo-simple-select-outlined"
-          value={age}
-          onChange={handleChange}
-          labelWidth={30}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
       <RadioGroup aria-label="Tipo de coordinación" name="tipo_coord"
         value={tipo_coord.value} onChange={handleOnChange} style={{marginLeft:10}}>
         <FormControlLabel value="Teoría" control={<Radio />} label="Teoría" />

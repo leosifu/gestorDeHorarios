@@ -1,22 +1,12 @@
 import React, {useRef, useState} from 'react'
 
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
+import {Typography, Box, Button, DialogActions, Grid, } from '@material-ui/core';
 
-import useForm from '../../../../form/useForm'
-import DatosCoordForm from './datosCoordForm'
-import EspecCoordForm from './especCoordForm'
+import useForm from '../../../../form/useForm';
+import DatosCoordForm from './datosCoordForm';
+import EspecCoordForm from './especCoordForm';
+import AsignarProfesor from './asignarProfesor';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function CoordinacionForm({camposCord, onSubmitForm}){
+function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfesoresSelect, }){
   const classes = useStyles();
   const [age, setAge] = useState('');
 
@@ -98,6 +88,8 @@ function CoordinacionForm({camposCord, onSubmitForm}){
 
         <DatosCoordForm handleOnChange={handleOnChange} cod_coord={state.cod_coord}
           nombre_coord={state.nombre_coord} />
+
+        <AsignarProfesor profesoresSelect={profesoresSelect} setProfesoresSelect={setProfesoresSelect}/>
 
         <EspecCoordForm handleOnChange={handleOnChange} tipo_coord={state.tipo_coord} />
 
