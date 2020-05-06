@@ -5,6 +5,7 @@ const initialState = {
     semestre: -1
   },
   procesos: [],
+  loading: true,
   error: false
 }
 

@@ -4,7 +4,8 @@ const initialState = {
     photoURL: '',
     name: ''
   },
-  status: 'notLogin'
+  status: null,
+  loading: true
 }
 
 export default (state = initialState, action) => {
@@ -20,6 +21,24 @@ export default (state = initialState, action) => {
         ...state,
         user: initialState.user,
         status: 'notLogin'
+      }
+      break;
+    case 'loginFailed':
+      return {
+        ...state,
+        status: 'loginFailed'
+      }
+      break;
+    case 'userLoading':
+      return {
+        ...state,
+        loading: true
+      }
+      break;
+    case 'userNotLoading':
+      return {
+        ...state,
+        loading: false
       }
       break;
     default:

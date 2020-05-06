@@ -11,7 +11,7 @@ import clientAxios from '../config/axios'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect'
-import {getProcesos, handleLoginUser, handleLogoutUser, } from '../redux/actions'
+import {getProcesos, handleLoginUser, handleLogoutUser, handleLoginFailed, } from '../redux/actions'
 
 import firebase from 'firebase';
 
@@ -67,10 +67,8 @@ export default function NavBar() {
   const login = () => {
     firebase.auth().onAuthStateChanged(authUser => {
       if(authUser) {
-        console.log(authUser);
         return firebase.auth().currentUser.getIdToken()
           .then(idToken => {
-            console.log(idToken);
             const userData = {
               email: authUser.email,
               name: authUser.displayName
@@ -80,7 +78,9 @@ export default function NavBar() {
             // Any extra code
           }).catch();
       }
-      console.log(authUser);
+      else {
+        dispatch(handleLoginFailed());
+      }
     });
   }
 

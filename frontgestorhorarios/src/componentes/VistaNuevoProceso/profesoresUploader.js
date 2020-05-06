@@ -11,19 +11,8 @@ const ProfesoresUploader = ({uploadFile, setUploadFile, }) => {
       setUploadFile(null);
     }
     else {
-      // console.log(status);
-      // let formData = new FormData();
-      // formData.append('file', file);
-      // formData.append('procesoId', 1)
       setUploadFile(file);
     }
-    // axios.post(`http://localhost:8000/api/profesores`, formData, {headers: {'Content-Type': 'multipart/form-data'}})
-    // .then(res => {
-    //   console.log(res);
-    // })
-    // .catch(error => {
-    //   console.log(error);
-    // })
   }
 
   return (

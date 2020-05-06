@@ -35,11 +35,12 @@ module.exports = {
               model: Rol, as: 'roles'
             }]
           })
-          const UserRoles = UsuarioFind[0].dataValues.roles.map(rol => rol.dataValues);
-          const UserRolesNames = UserRoles.map(rol => rol.rol).sort();
-          if (UserRolesNames.includes('admin')){
+          if (UsuarioFind.length === 0) {
+            console.log('-------NO HAY USUARIO EN DB--------');
             return Proceso
-              .findAll({})
+              .findAll({
+                where: {estado: 'active'}
+              })
               .then(proceso =>res.status(200).json(proceso))
               .catch(error=> {
                 console.log(error);
@@ -47,15 +48,32 @@ module.exports = {
               })
           }
           else {
-            return Proceso
-              .findAll({
-                where: {estado: 'creating'}
-              })
-              .then(proceso =>res.status(200).json(proceso))
-              .catch(error=> {
-                console.log(error);
-                return(res.status(400).send(error))
-              })
+            const UserRoles = UsuarioFind[0].dataValues.roles.map(rol => rol.dataValues);
+            const UserRolesNames = UserRoles.map(rol => rol.rol).sort();
+            if (UserRolesNames.includes('admin')){
+              console.log('-------USUARIO ADMINNNNN--------');
+              return Proceso
+                .findAll({})
+                .then(proceso =>{
+                  console.log(proceso);
+                  return res.status(200).json(proceso)})
+                .catch(error=> {
+                  console.log(error);
+                  return(res.status(400).send(error))
+                })
+            }
+            else {
+              console.log('-------USUARIO ES PROFEEEE--------');
+              return Proceso
+                .findAll({
+                  where: {estado: 'creating'}
+                })
+                .then(proceso =>res.status(200).json(proceso))
+                .catch(error=> {
+                  console.log(error);
+                  return(res.status(400).send(error))
+                })
+            }
           }
         }
       }).catch(error => {

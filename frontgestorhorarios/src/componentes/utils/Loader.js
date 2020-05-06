@@ -23,8 +23,6 @@ export default function Loader() {
   const classes = useStyles();
   const loading = useSelector(LoadingSelector);
 
-  console.log(loading);
-
   return (
     <Backdrop className={classes.backdrop} open={loading}>
       <CircularProgress color="inherit" />

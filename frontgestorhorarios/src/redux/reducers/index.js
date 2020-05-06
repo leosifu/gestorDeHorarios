@@ -5,6 +5,7 @@ import mallaReducer from './mallaReducer'
 import loaderReducer from './loaderReducer'
 import procesoReducer from './procesoReducer'
 import userReducer from './userReducer'
+import dialogUsuarioReducer from './dialogUsuarioReducer'
 
 const createRootReducer = (history) => combineReducers({
   carrera: carreraReducer,
@@ -12,6 +13,7 @@ const createRootReducer = (history) => combineReducers({
   loading: loaderReducer,
   proceso: procesoReducer,
   user: userReducer,
+  dialogUsuario: dialogUsuarioReducer,
   router: connectRouter(history)
 })
 

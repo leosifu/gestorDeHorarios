@@ -99,36 +99,28 @@ export default function NuevoProceso() {
   }
 
   const crearProceso = async () => {
-    const mallasSelected = [].concat(...allSelects.map(carrera => carrera.selects));
-    const NuevoProceso = await clientAxios().post('/api/procesos', procesoData);
-    let formData = new FormData();
-    formData.append('file', uploadFile);
-    formData.append('procesoId', NuevoProceso.data.id);
-    const SubirProfesores = await axios.post(`http://localhost:8000/api/profesores`,
-      formData,
-      {headers: {'Content-Type': 'multipart/form-data'}})
-    const data = {
-      procesoId: NuevoProceso.data.id,
-      mallas: mallasSelected
+    if (procesoData.año < 1 || procesoData < 1 || (!uploadFile)) {
+
     }
-    console.log(SubirProfesores);
-    const DuplicarDatos = await clientAxios().post('/api/nuevoProceso', data);
-    console.log(DuplicarDatos);
-    // .then(res => {
-    //   console.log(res.data);
-    //   const NuevoProceso = res.data;
-    //   clientAxios
-    // })
-    // clientAxios().post('/api/nuevoProceso', data)
-    // .then(res=>{
-    //   console.log(res.data);
-    //   dispatch(push('/'))
-    //   // setChanged(!changed)
-    //   // setOpen(false)
-    // })
-    // .catch((error)=>{
-    //   alert("error al crear la proceso")
-    // })
+    else {
+      dispatch(setLoading(true));
+      const mallasSelected = [].concat(...allSelects.map(carrera => carrera.selects));
+      const NuevoProceso = await clientAxios().post('/api/procesos', procesoData);
+      let formData = new FormData();
+      formData.append('file', uploadFile);
+      formData.append('procesoId', NuevoProceso.data.id);
+      const SubirProfesores = await axios.post(`http://localhost:8000/api/profesores`,
+        formData,
+        {headers: {'Content-Type': 'multipart/form-data'}})
+      const data = {
+        procesoId: NuevoProceso.data.id,
+        mallas: mallasSelected
+      }
+      console.log(SubirProfesores);
+      const DuplicarDatos = await clientAxios().post('/api/nuevoProceso', data);
+      console.log(DuplicarDatos);
+      dispatch(push('/'))
+    }
   }
 
   return (

@@ -158,5 +158,38 @@ module.exports = {
       console.log(error);
       return(res.status(400).send(error));
     }
+  },
+  async getUsuarios(req, res){
+    try {
+      const Usuarios = await Usuario.findAll({
+        include: [{
+          model: Rol, as: 'roles'
+        }]
+      })
+      const UsuariosData = Usuarios.map(usuario => usuario.dataValues);
+      let profesores = [];
+      let coordinadores = [];
+      // console.log(UsuariosData);
+      for (var i = 0; i < UsuariosData.length; i++) {
+        const UserRoles = UsuariosData[i].roles
+        if (UserRoles.length > 0) {
+          const UserRolesData = UserRoles.map(rol => rol.dataValues.rol);
+          if (UserRolesData.includes('coordinador')) {
+            coordinadores.push({...UsuariosData[i], roles: UserRolesData})
+          }
+          else {
+            profesores.push({...UsuariosData[i], roles: UserRolesData})
+          }
+        }
+      }
+      let usuariosSeparados = {
+        coordinadores: coordinadores,
+        profesores: profesores
+      }
+      return res.status(201).send(usuariosSeparados);
+    } catch (error) {
+      console.log(error);
+      return(res.status(400).send(error));
+    }
   }
 }

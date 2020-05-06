@@ -4,7 +4,6 @@ import { push } from 'connected-react-router';
 
 export const getProcesos = (idToken) => {
   return dispatch => {
-    console.log(idToken);
     clientAxios(idToken).get(`/api/procesos`)
     .then(res => {
       console.log(res.data);
