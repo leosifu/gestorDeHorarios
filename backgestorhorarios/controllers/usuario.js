@@ -169,24 +169,98 @@ module.exports = {
       const UsuariosData = Usuarios.map(usuario => usuario.dataValues);
       let profesores = [];
       let coordinadores = [];
+      let noRole = [];
       // console.log(UsuariosData);
       for (var i = 0; i < UsuariosData.length; i++) {
         const UserRoles = UsuariosData[i].roles
+        const UserRolesData = UserRoles.map(rol => rol.dataValues.rol);
         if (UserRoles.length > 0) {
-          const UserRolesData = UserRoles.map(rol => rol.dataValues.rol);
           if (UserRolesData.includes('coordinador')) {
             coordinadores.push({...UsuariosData[i], roles: UserRolesData})
           }
-          else {
+          else if (UserRolesData.includes('profe')) {
             profesores.push({...UsuariosData[i], roles: UserRolesData})
           }
+        }
+        else {
+          noRole.push({...UsuariosData[i], roles: UserRolesData})
         }
       }
       let usuariosSeparados = {
         coordinadores: coordinadores,
-        profesores: profesores
+        profesores: profesores,
+        noRole: noRole
       }
       return res.status(201).send(usuariosSeparados);
+    } catch (error) {
+      console.log(error);
+      return(res.status(400).send(error));
+    }
+  },
+  async addUsuario(req, res){
+    try {
+      const {usuarioData, rolesData} = req.body;
+      const [NuevoProfesor, created] = await Usuario.findOrCreate({
+        where: usuarioData
+      });
+      const NuevoProfesorData = NuevoProfesor.dataValues;
+      if (created) {
+        const UserRoles = rolesData.map(rol => {
+          if (rol === 'coordinador') {
+            return({
+              rolId: 3,
+              usuarioId: NuevoProfesorData.id
+            })
+          }
+          else {
+            return({
+              rolId: 2,
+              usuarioId: NuevoProfesorData.id
+            })
+          }
+        });
+        const NuevosRoles = await RolUsuario.bulkCreate(UserRoles);
+        return res.status(201).send(NuevoProfesor)
+      }
+      else {
+        return res.status(403);
+      }
+    } catch (error) {
+      console.log(error);
+      return(res.status(400).send(error));
+    }
+  },
+  async editUsuario(req, res){
+    try {
+      const {id} = req.params;
+      const {usuarioData, rolesData} = req.body;
+      const UserEdit = await Usuario.update(usuarioData, {
+        where: {id: req.params.id}
+      });
+      const EliminarRoles = await RolUsuario.findAll({
+        where: {
+          usuarioId: id
+        }
+      });
+      for (var i = 0; i < EliminarRoles.length; i++) {
+        EliminarRoles[i].destroy()
+      }
+      const UserRoles = rolesData.map(rol => {
+        if (rol === 'coordinador') {
+          return({
+            rolId: 3,
+            usuarioId: id
+          })
+        }
+        else {
+          return({
+            rolId: 2,
+            usuarioId: id
+          })
+        }
+      });
+      const NuevosRoles = await RolUsuario.bulkCreate(UserRoles);
+      return res.status(201).send(UserEdit);
     } catch (error) {
       console.log(error);
       return(res.status(400).send(error));

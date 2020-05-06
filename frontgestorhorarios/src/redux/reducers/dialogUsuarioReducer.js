@@ -1,10 +1,12 @@
 const initialState = {
   open: false,
   usuario: {
+    id: 0,
     nombre: '',
     email: '',
     lastName: '',
-    rut: ''
+    rut: '',
+    roles: []
   },
   type: ''
 }
@@ -20,8 +22,7 @@ export default (state = initialState, action) => {
     case 'closeDialogCreateUsuario':
       return {
         ...state,
-        open: false,
-        type: ''
+        ...initialState
       }
     case 'openDialogEditUsuario':
       return {
@@ -34,9 +35,7 @@ export default (state = initialState, action) => {
     case 'closeDialogEditUsuario':
       return {
         ...state,
-        open: false,
-        usuario: {},
-        type: ''
+        ...initialState
       }
       break;
     default:

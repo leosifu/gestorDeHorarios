@@ -3,11 +3,11 @@ import React, {useState, useEffect} from 'react';
 import clientAxios from '../../config/axios';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, Typography, TextField, Grid, Paper, List, ListItem,
+import {Typography, TextField, Grid, Paper, List, ListItem,
   ListItemText, } from '@material-ui/core';
 
 import { useDispatch, } from 'react-redux';
-import {handleDialogCreate, handleDialogEdit, } from '../../redux/actions'
+import {handleDialogEdit, } from '../../redux/actions'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,9 +29,10 @@ const VerUsuarios = ({title, usuarios, }) => {
   const dispatch = useDispatch();
 
   const [nuevoCoordinador, setNuevoCoordinador] = useState(false);
+  const [search, setSearch] = useState('');
 
-  const handleOpen = () => {
-    dispatch(handleDialogCreate(true))
+  const handleOnChange = (event) => {
+    setSearch(event.target.value);
   }
 
   return (
@@ -39,13 +40,21 @@ const VerUsuarios = ({title, usuarios, }) => {
       <h4>
         {title}
       </h4>
-      <Button onClick={handleOpen}>
-        Agregar {title === 'Coordinadores' ? 'Coordinador' : 'Profesor'}
-      </Button>
       <div>
+        <TextField
+          margin="dense"
+          variant="outlined"
+          id="search"
+          label="Buscar"
+          value={search}
+          onChange={handleOnChange}
+        />
         <Paper className={classes.paper}>
           <List dense component="div" role="list">
-            {usuarios.map((usuario) => (
+            {usuarios.filter(usuario =>
+              (search !== '' ? (`${usuario.name} ${usuario.lastName}`.toUpperCase().indexOf(search.toUpperCase()) > -1) : usuario)
+            )
+              .map((usuario) => (
                 <ListItem key={usuario.id} role="listitem" button
                   onClick={() => dispatch(handleDialogEdit(true, usuario))}>
                   <ListItemText primary={`${usuario.name} ${usuario.lastName}`} />

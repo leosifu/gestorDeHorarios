@@ -73,6 +73,8 @@ module.exports = (app) => {
   app.get('/api/profesores', usuarioController.getProfesores)
   app.get('/api/usuarios', usuarioController.getUsuarios)
   app.post('/api/profesores', upload.single('file'), usuarioController.createProfesores)
+  app.post('/api/createUsuario', usuarioController.addUsuario)
+  app.post('/api/editUsuario/:id', usuarioController.editUsuario)
 
   //Api proceso
   app.get('/api/procesos', procesoController.findAll)
