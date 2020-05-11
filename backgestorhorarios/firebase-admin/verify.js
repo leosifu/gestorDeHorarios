@@ -12,6 +12,7 @@ const verify = (...roles) => async (req, res, next) => {
     // console.log(idToken);
     const token = idToken.split(' ');
     // console.log('token', token[1]);
+    console.log(token);
     admin.auth().verifyIdToken(token[1]).then(async(claims) => {
       // console.log('claims', claims);
       if (claims.uid) {
@@ -29,7 +30,7 @@ const verify = (...roles) => async (req, res, next) => {
           })
           const UserRoles = UsuarioFind[0].dataValues.roles.map(rol => rol.dataValues);
           const UserRolesNames = UserRoles.map(rol => rol.rol).sort();
-          if (roles.length === UserRolesNames.length && roles.sort().every((value, index) => value === UserRolesNames[index])){
+          if (roles.sort().some(value => UserRolesNames.includes(value))){
             return next();
           }
         }

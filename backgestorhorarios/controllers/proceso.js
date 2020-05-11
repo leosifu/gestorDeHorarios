@@ -10,7 +10,8 @@ module.exports = {
       .create({
         año: req.body.año,
         semestre: req.body.semestre,
-        estado: 'creating'
+        estado: 'creating',
+        añoSemestre: req.body.año + '~' + req.body.semestre
       })
       .then(proceso => {
         return(res.status(201).send(proceso));
@@ -50,8 +51,7 @@ module.exports = {
           else {
             const UserRoles = UsuarioFind[0].dataValues.roles.map(rol => rol.dataValues);
             const UserRolesNames = UserRoles.map(rol => rol.rol).sort();
-            if (UserRolesNames.includes('admin')){
-              console.log('-------USUARIO ADMINNNNN--------');
+            if (UserRolesNames.includes('admin') || UserRolesNames.includes('coordinador')){
               return Proceso
                 .findAll({})
                 .then(proceso =>{
@@ -63,7 +63,6 @@ module.exports = {
                 })
             }
             else {
-              console.log('-------USUARIO ES PROFEEEE--------');
               return Proceso
                 .findAll({
                   where: {estado: 'creating'}

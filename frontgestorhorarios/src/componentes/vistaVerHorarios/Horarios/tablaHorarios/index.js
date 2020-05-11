@@ -9,8 +9,8 @@ import Bloque from '../horario/bloque'
 
 const useStyles = makeStyles(theme => ({
   grilla:{
-    width: 150,
-    height: 50,
+    width: 200,
+    height: 90,
     padding: '0 0 0 0'
   },
   hora:{
@@ -30,8 +30,8 @@ function TablaHorarios({bloques, handleDrop}){
 
   const classes = useStyles();
 
-  const Tabla = bloques.map((fila, i)=>{
-    const Dia = fila.map((dia, j)=>{
+  const Tabla = bloques.map((fila, i) => {
+    const Dia = fila.map((dia, j) => {
       if (dia.length>0) {
         const Bloques = dia.map(bloque=>{
           return(
@@ -48,16 +48,17 @@ function TablaHorarios({bloques, handleDrop}){
         )
       }
       else {
-        var algo = {
+        const NoCoord = {
           nombre_coord: '',
           cod_coord: '',
           bloque: 0,
           id:0,
-          color: 'white'
+          color: 'white',
+          profesores: []
         }
         return(
           <TableCell padding="none" className={classes.grilla} key={j}>
-            <Bloque coord={algo} onDrop={item => handleDrop(i, j, item)} style={{left: 50}}
+            <Bloque coord={NoCoord} onDrop={item => handleDrop(i, j, item)} style={{left: 50}}
               />
           </TableCell>
         )

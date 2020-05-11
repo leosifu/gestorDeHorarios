@@ -32,6 +32,11 @@ const ProcesosSelector = createSelector(
   proceso => proceso.procesos
 );
 
+const UserSelector = createSelector(
+  state => state.user,
+  user => user.user
+);
+
 export default function NuevoProceso() {
 
   const classes = useStyles();
@@ -39,6 +44,7 @@ export default function NuevoProceso() {
 
   const currentProceso = useSelector(ProcesoSelector);
   const procesos = useSelector(ProcesosSelector);
+  const user = useSelector(UserSelector);
 
   const [carrerasV, setCarrerasV] = useState([]);
   const [carrerasD, setCarrerasD] = useState([]);
@@ -105,19 +111,19 @@ export default function NuevoProceso() {
     else {
       dispatch(setLoading(true));
       const mallasSelected = [].concat(...allSelects.map(carrera => carrera.selects));
-      const NuevoProceso = await clientAxios().post('/api/procesos', procesoData);
+      const NuevoProceso = await clientAxios(user.idToken).post('/api/procesos', procesoData);
       let formData = new FormData();
       formData.append('file', uploadFile);
       formData.append('procesoId', NuevoProceso.data.id);
       const SubirProfesores = await axios.post(`http://localhost:8000/api/profesores`,
         formData,
-        {headers: {'Content-Type': 'multipart/form-data'}})
+        {headers: {'Authorization': `Bearer ${user.idToken}`, 'Content-Type': 'multipart/form-data'}})
       const data = {
         procesoId: NuevoProceso.data.id,
         mallas: mallasSelected
       }
       console.log(SubirProfesores);
-      const DuplicarDatos = await clientAxios().post('/api/nuevoProceso', data);
+      const DuplicarDatos = await clientAxios(user.idToken).post('/api/nuevoProceso', data);
       console.log(DuplicarDatos);
       dispatch(push('/'))
     }

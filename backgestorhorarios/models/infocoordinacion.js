@@ -14,9 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     cod_coord: {
       type: DataTypes.STRING,
+      allowNull: false
     },
     nombre_coord: {
       type: DataTypes.STRING,
+      allowNull: false
     },
   }, {});
   InfoCoordinacion.associate = function(models) {

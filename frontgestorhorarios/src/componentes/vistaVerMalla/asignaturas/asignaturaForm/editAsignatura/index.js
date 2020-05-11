@@ -3,13 +3,22 @@ import React from 'react';
 import axios from 'axios'
 import clientAxios from '../../../../../config/axios'
 
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect'
+import {setLoading, } from '../../../../../redux/actions'
 
 import AsignaturaForm from '../asignaturaForm'
 
-function EditAsignatura({infoAsignatura, asignatura, mallaId, setEdit, estado, setEstado}){
+const MallaSelector = createSelector(
+  state => state.malla,
+  malla => malla.malla
+);
+
+function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado, user, }){
 
   console.log(asignatura);
+  const malla = useSelector(MallaSelector);
+  console.log(malla);
 
   function onSubmitForm(state) {
     const data = {
@@ -19,20 +28,23 @@ function EditAsignatura({infoAsignatura, asignatura, mallaId, setEdit, estado, s
       tel_E: parseInt(state.tel_E.value),
       tel_L: parseInt(state.tel_L.value),
       lab_independiente: state.lab_independiente.checked,
-      mallaId: mallaId.mallaId,
+      mallaId: malla.id,
     }
     const historial = {
       cupos_pasados: state.cupos_pasados.value,
       tasa_reprobacion: state.tasa_reprobacion.value,
     }
     axios.all([
-      clientAxios().put(`/api/asignatura/${asignatura.id}/${mallaId.mallaId}`, data),
-      clientAxios().put(`/api/historial/${asignatura.id}`, historial)
+      clientAxios(user.idToken).put(`/api/asignatura/${asignatura.id}/${malla.id}`, data),
+      clientAxios(user.idToken).put(`/api/historial/${asignatura.id}`, historial)
     ])
     .then(axios.spread((data1, data2)=>{
       setEdit(false)
       setEstado(!estado)
     }))
+    .catch(error => {
+      console.log(error);
+    })
   }
 
   var camposAsignatura = {
@@ -54,10 +66,4 @@ function EditAsignatura({infoAsignatura, asignatura, mallaId, setEdit, estado, s
   );
 }
 
-const mapStateToProps = state => {
-    return {
-        mallaId: state.mallaId
-    }
-}
-
-export default connect(mapStateToProps)(EditAsignatura)
+export default EditAsignatura

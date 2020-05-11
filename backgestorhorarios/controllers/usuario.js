@@ -6,9 +6,14 @@ var XLSX = require('xlsx');
 const _ = require('lodash');
 
 const Rol = require('../models').Rol;
+const Proceso = require('../models').Proceso;
 const Usuario = require('../models').Usuario;
 const RolUsuario = require('../models').RolUsuario;
 const UsuarioProceso = require('../models').UsuarioProceso;
+const Coordinacion = require('../models').Coordinacion;
+const Asignatura = require('../models').Asignatura;
+const Bloque = require('../models').Bloque;
+const InfoAsignatura = require('../models').InfoAsignatura;
 
 function toTitleCase(str) {
     return str.replace(/\w\S*/g, function(txt){
@@ -58,9 +63,6 @@ module.exports = {
   },
   async createProfesores(req, res){
     try {
-      console.log('----------AHHHHHHHHHH----------');
-      console.log(req.body);
-      console.log('----------AHHHHHHHHHH----------');
       var workbook = XLSX.read(req.file.buffer);
       const sheetNames = workbook.SheetNames;
       const profesoresData = sheetNames.map(sheetName => {
@@ -261,6 +263,46 @@ module.exports = {
       });
       const NuevosRoles = await RolUsuario.bulkCreate(UserRoles);
       return res.status(201).send(UserEdit);
+    } catch (error) {
+      console.log(error);
+      return(res.status(400).send(error));
+    }
+  },
+  async getHorario(req, res){
+    try {
+      console.log('asdasd');
+      const {usuarioId, procesoId} = req.params;
+      console.log(usuarioId);
+      console.log(procesoId);
+      const GetHorario = await InfoAsignatura.findAll({
+        include:[{model:Asignatura, as:'Asignatura',
+          include: [{model:Coordinacion, as:'coordinaciones',
+            include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores',
+              where: {id: usuarioId},
+              include: [{model: Proceso, as: 'profesores', where: {id: procesoId}}]
+            }]}]
+        }]
+      })
+      console.log(GetHorario);
+      const asignaturas = GetHorario.map(malA=>{
+        malA.Asignatura.dataValues.cod_asignatura = malA.cod_asignatura
+        malA.Asignatura.dataValues.nombre_asignatura = malA.nombre_asignatura
+        return malA.Asignatura
+      })
+      // const GetHorario = await UsuarioProceso.findAll({
+      //   where: {
+      //     usuarioId: usuarioId,
+      //     procesoId: procesoId
+      //   },
+      //   include: [{model: Usuario,
+      //     include: [{model: Coordinacion, as: 'coordinaciones',
+      //       include: [{model: Bloque, as: 'bloques'}, {model: Asignatura, as: 'asignaturas'}]
+      //     }]
+      //   }]
+      // });
+
+      console.log(GetHorario);
+      return res.status(201).send(GetHorario);
     } catch (error) {
       console.log(error);
       return(res.status(400).send(error));

@@ -53,6 +53,7 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
   },[estado])
 
   const handleClickMenu = event => {
+    console.log(asignatura);
     setActivo(asignatura.id)
     setAnchorEl(event.currentTarget);
   };

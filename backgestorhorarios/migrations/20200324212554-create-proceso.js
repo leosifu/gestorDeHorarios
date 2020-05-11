@@ -17,10 +17,15 @@ module.exports = {
         values: ['active', 'creating', 'finished'],
         allowNull: false,
         default: false,
-      }
+      },
       semestre: {
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      añoSemestre: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
       },
       createdAt: {
         allowNull: false,

@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 
 import { useParams, } from "react-router-dom";
 
-
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,8 +17,10 @@ import clientAxios from '../../../config/axios'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
 import {setLoading} from '../../../redux/actions'
+import {setMallaRedux} from '../../../redux/actions';
 
 import Horario from '../Horarios/horario'
 import Topes from '../topes'
@@ -52,11 +53,18 @@ const useStyles = makeStyles(theme => ({
   spacing:8,
 }));
 
+const UserSelector = createSelector(
+  state => state.user,
+  user => user.user
+);
+
 export default function SideBar() {
 
   const classes = useStyles();
   const dispatch = useDispatch();
   const {mallaId} = useParams();
+  const user = useSelector(UserSelector);
+  console.log(mallaId);
 
   const [niveles, setNiveles] = useState([])
 
@@ -67,9 +75,11 @@ export default function SideBar() {
   const [topes, setTopes] = useState(false)
 
   useEffect(()=>{
-    clientAxios().get(`/api/malla/${mallaId}`)
+    console.log(mallaId);
+    clientAxios(user.idToken).get(`/api/malla/${mallaId}`)
     .then(res => {
       console.log(res.data[0]);
+      dispatch(setMallaRedux(res.data[0]));
       console.log("asdasd");
       var niveles = res.data[0].niveles
       setNiveles(niveles)
@@ -129,23 +139,22 @@ export default function SideBar() {
                 {
                   topes && state.map((niv, i)=>(
                       niv && <div style={{position:'absolute', opacity: 0.3, width:'70%', zIndex: 1}}>
-                        <Horario nivel={i+1}/>
+                        <Horario nivel={i+1} user={user}/>
                       </div>
                   ))
                 }
-
                 <div style={{position:'absolute', opacity: 1, width:'70%', zIndex: 0}}>
-                  <Horario nivel={nivel}/>
+                  <Horario nivel={nivel} user={user}/>
                 </div>
               </Grid>
               <Grid item xs={2} style={{zIndex: 100}}>
                 {
                   topes ?
                   <>
-                  <Button variant="contained" color="primary" className={classes.button} onClick={handleClick2}>
-                  Finalizar
-                  </Button>
-                  <Topes niveles={state} handleChange={handleChange} />
+                    <Button variant="contained" color="primary" className={classes.button} onClick={handleClick2}>
+                      Finalizar
+                    </Button>
+                    <Topes niveles={state} handleChange={handleChange} />
                   </>
                   :
                   <Button variant="contained" color="primary" className={classes.button} onClick={handleClick1}>

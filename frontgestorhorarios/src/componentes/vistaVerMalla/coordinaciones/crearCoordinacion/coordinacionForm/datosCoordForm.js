@@ -20,7 +20,7 @@ const DatosCoordForm = ({handleOnChange, cod_coord, nombre_coord, }) => {
     <>
       <TextField
         error = {cod_coord.error ? true : false}
-        id="standard-name"
+        id="cod_coord"
         label="Código de la coordinación"
         name="cod_coord"
         className={classes.textField}
@@ -31,7 +31,7 @@ const DatosCoordForm = ({handleOnChange, cod_coord, nombre_coord, }) => {
       />
       <TextField
         error = {nombre_coord.error ? true : false}
-        id="standard-name"
+        id="nombre_coord"
         label="Nombre de la coordinación"
         name="nombre_coord"
         className={classes.textField}

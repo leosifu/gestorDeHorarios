@@ -1,8 +1,14 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const UsuarioProceso = sequelize.define('UsuarioProceso', {
-    procesoId: DataTypes.INTEGER,
-    usuarioId: DataTypes.INTEGER
+    procesoId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    usuarioId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {});
   UsuarioProceso.associate = function(models) {
     // associations can be defined here

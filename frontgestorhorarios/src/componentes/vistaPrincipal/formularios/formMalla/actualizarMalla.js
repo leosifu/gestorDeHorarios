@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function ActualizarMalla({malla, open, setOpen, estado, setEstado}) {
+function ActualizarMalla({malla, open, setOpen, estado, setEstado, user, }) {
   const classes = useStyles();
 
   const handleClickOpen = () => {
@@ -46,7 +46,7 @@ function ActualizarMalla({malla, open, setOpen, estado, setEstado}) {
       res_malla: state.res_malla.value,
       n_niveles: state.n_niveles.value
     }
-    clientAxios().put(`/api/malla/${malla.id}`, data)
+    clientAxios(user.idToken).put(`/api/malla/${malla.id}`, data)
     .then(res => {
       console.log(res.data);
       setOpen(false)

@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    añoSemestre: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: false
+    },
     estado: {
       type: DataTypes.ENUM,
       values: ['active', 'creating', 'finished'],

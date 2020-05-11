@@ -34,7 +34,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfesoresSelect, }){
+function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfesoresSelect, user,
+  profesores, edit, }){
   const classes = useStyles();
   const [age, setAge] = useState('');
 
@@ -48,6 +49,7 @@ function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfes
     cod_coord: { value: camposCord.cod_coord, error: '' },
     nombre_coord: { value: camposCord.nombre_coord, error: '' },
     tipo_coord: { value: camposCord.tipo_coord, error: '' },
+    num_bloques: { value: camposCord.num_bloques, error: '' },
   };
 
   const validationStateSchema = {
@@ -71,6 +73,13 @@ function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfes
         error: 'Invalid last name format.',
       },
     },
+    num_bloques: {
+      required: true,
+      validator: {
+        regEx: /^[0-9]$/,
+        error: 'Invalid last name format.',
+      },
+    }
   };
 
   const { state, handleOnChange, handleOnSubmit, disable } = useForm(
@@ -78,6 +87,8 @@ function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfes
     validationStateSchema,
     onSubmitForm
   );
+
+  let isDisabled = (!camposCord.cod_coord && !camposCord.nombreCoord && !camposCord.tipo_coord)
 
   return(
     <>
@@ -89,15 +100,28 @@ function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfes
         <DatosCoordForm handleOnChange={handleOnChange} cod_coord={state.cod_coord}
           nombre_coord={state.nombre_coord} />
 
-        <AsignarProfesor profesoresSelect={profesoresSelect} setProfesoresSelect={setProfesoresSelect}/>
+        <AsignarProfesor profesoresSelect={profesoresSelect} user={user}
+          setProfesoresSelect={setProfesoresSelect} showProfesores={profesores} />
 
-        <EspecCoordForm handleOnChange={handleOnChange} tipo_coord={state.tipo_coord} />
+        <EspecCoordForm handleOnChange={handleOnChange} tipo_coord={state.tipo_coord}
+          num_bloques={state.num_bloques}/>
 
-        <DialogActions>
-          <Button onClick={handleOnSubmit} disabled={disable} variant="contained" color="primary" className={classes.button}>
-            Crear Coordinación
-          </Button>
-        </DialogActions>
+        {
+          edit ?
+          <DialogActions>
+            <Button onClick={handleOnSubmit} disabled={isDisabled} variant="contained"
+              color="primary" className={classes.button}>
+              Editar Coordinación
+            </Button>
+          </DialogActions>
+          :
+          <DialogActions>
+            <Button onClick={handleOnSubmit} disabled={disable} variant="contained"
+              color="primary" className={classes.button}>
+              Crear Coordinación
+            </Button>
+          </DialogActions>
+        }
       </Box>
     </>
   )

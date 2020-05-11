@@ -27,6 +27,7 @@ const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado
     cod_coord: '',
     nombre_coord: nombre_asignatura,
     tipo_coord: '',
+    num_bloques: 0
   }
 
   function handleClick(e){
@@ -35,29 +36,12 @@ const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado
   }
 
   function onSubmitForm(state){
-    const num_bloques = function(){
-      if(lab_independiente){
-        switch (state.tipo_coord.value) {
-          case "Teoría":
-            return asignatura.tel_T/2
-          case "Ejercicios":
-            return asignatura.tel_E/2
-          case "Laboratorio":
-            return asignatura.tel_L/2
-          default:
-            return 0
-        }
-      }
-      else{
-        return (asignatura.tel_T + asignatura.tel_E + asignatura.tel_L)/2
-      }
-    }
     const data = {
       cod_coord: state.cod_coord.value,
       nombre_coord: state.nombre_coord.value,
       tipo_coord: state.tipo_coord.value,
       asignaturaId: asignatura.id,
-      num_bloques: num_bloques(),
+      num_bloques: state.num_bloques.value,
       profesores: profesoresSelect
     }
     console.log(data);
@@ -66,12 +50,16 @@ const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado
       setCrear(false)
       setEstado(!estado)
     })
+    .catch(error => {
+      console.log(error);
+    })
   }
 
   if (eleccion === 1) {
     return(
       <CoordinacionForm camposCord={data} onSubmitForm={onSubmitForm} setEstado={setEstado}
-        estado={estado} profesoresSelect={profesoresSelect} setProfesoresSelect={setProfesoresSelect}/>
+        estado={estado} profesoresSelect={profesoresSelect} user={user}
+        setProfesoresSelect={setProfesoresSelect}/>
     )
   }
   else if (eleccion === 2) {

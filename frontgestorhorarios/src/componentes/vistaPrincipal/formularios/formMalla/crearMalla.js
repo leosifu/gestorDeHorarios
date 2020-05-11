@@ -33,7 +33,7 @@ const ProcesoSelector = createSelector(
   proceso => proceso.currentProceso
 )
 
-function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
+function CrearMalla({carreraId, open, setOpen, estado, setEstado, user, }) {
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -58,7 +58,7 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado}) {
       n_niveles: state.n_niveles.value,
       procesoId: currentProceso.id
     }
-    clientAxios().post('/api/malla', data)
+    clientAxios(user.idToken).post('/api/malla', data)
     .then(res => {
       console.log(res.data);
       setOpen(false)

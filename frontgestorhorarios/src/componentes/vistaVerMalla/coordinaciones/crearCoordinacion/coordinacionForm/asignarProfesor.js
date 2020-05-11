@@ -16,14 +16,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AsignarProfesor = ({profesoresSelect, setProfesoresSelect, }) => {
+const AsignarProfesor = ({profesoresSelect, setProfesoresSelect, user, showProfesores, }) => {
 
   const classes = useStyles();
 
   const [profesores, setProfesores] = useState([])
 
   useEffect(() => {
-    clientAxios().get(`/api/profesores`)
+    clientAxios(user.idToken).get(`/api/profesores`)
     .then(res => {
       console.log(res.data);
       setProfesores(res.data);
@@ -42,9 +42,15 @@ const AsignarProfesor = ({profesoresSelect, setProfesoresSelect, }) => {
       <Autocomplete
         multiple
         id="tags-standard"
+        // getOptionSelected={(option, value) => {
+        //   console.log(option);
+        //   console.log(value);
+        //   return showProfesores.some(profesor => profesor.id === option.id)}
+        // }
+        value={profesoresSelect}
         options={profesores}
         getOptionLabel={(option) => (`${option.name} ${option.lastName}`)}
-        // defaultValue={[top100Films[13]]}
+        // defaultValue={showProfesores ? showProfesores: []}
         onChange={(event, profesoresS) => handleChips(profesoresS)}
         renderInput={(params) => (
           <TextField

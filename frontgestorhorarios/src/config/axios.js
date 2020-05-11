@@ -1,6 +1,5 @@
 import axios from 'axios';
 import baseUrl from './urls';
-const token = localStorage.getItem('token') || "";
 
 const clientAxios = (token="") => axios.create({
     baseURL: `${baseUrl}`,

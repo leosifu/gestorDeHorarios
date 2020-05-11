@@ -4,8 +4,13 @@ const Coordinacion = require('../models').Coordinacion
 const Historial = require('../models').Historial
 const Bloque = require('../models').Bloque
 const InfoAsignatura = require('../models').InfoAsignatura
-const InfoAsignaturaC = require('./infoAsignatura')
 const InfoCoordinacion = require('./infoCoordinacion')
+
+// const CheckCoordinaciones = async (asignaturaId) => {
+//   const FindAsignaturas = await InfoCoordinacion.findAll({
+//
+//   })
+// }
 
 module.exports = {
   create(req,res){
@@ -31,7 +36,8 @@ module.exports = {
           return(res.status(400))
         }
         const dataHistorial = {
-          historial: req.body.historial,
+          ...req.body.historial,
+          cupos_estimados: req.body.historial.cupos_pasados * req.body.historial.tasa_reprobacion/100,
           asignaturaId: asignatura.dataValues.id
         }
         const NewHistorial = await Historial.create(dataHistorial)
@@ -39,8 +45,8 @@ module.exports = {
           return(res.status(201).send(asignatura));
         }
         else {
-          asignatura.destroy();
-          NewInfoAsignatura.destroy();
+          await asignatura.destroy();
+          await NewInfoAsignatura.destroy();
           return(res.status(400).send(error))
         }
       })
@@ -61,6 +67,10 @@ module.exports = {
       .then(asignatura =>{
         return(res.json(asignatura))
       })
+      .catch(error=> {
+        console.log(error);
+        return(res.status(400).send(error))
+      })
   },
   getRequisitos(req, res){
     var id = req.params.id
@@ -71,6 +81,10 @@ module.exports = {
       })
       .then(asignatura =>{
         return(res.json(asignatura))
+      })
+      .catch(error=> {
+        console.log(error);
+        return(res.status(400).send(error))
       })
   },
   findAsignaturasByNivel(req, res){
@@ -86,7 +100,6 @@ module.exports = {
       })
   },
   update(req, res){
-
     Asignatura.findAll({where: {id: req.params.aId}})
     .then(asignaturaPrevia => {
       var tel_T = parseInt(req.body.tel_T)
@@ -109,70 +122,79 @@ module.exports = {
           where:{id:req.params.aId}
         })
         .then(async asignatura=>{
+          var asignaturaAct = asignaturaPrevia[0].dataValues
           const UpdatedInfoAsignatura = await InfoAsignatura.update(infoA, {
-            where:{asignaturaId:req.asignaturaId, mallaId: req.mallaId}
+            where:{asignaturaId:req.params.aId, mallaId: req.params.mId}
           })
           if (!UpdatedInfoAsignatura) {
-            asignatura.destroy();
+            asignatura.update({
+              tel_T: asignaturaAct.tel_T,
+              tel_E: asignaturaAct.tel_E,
+              tel_L: asignaturaAct.tel_L,
+              lab_independiente: asignaturaAct.lab_independiente,
+            })
             return(res.status(400));
           }
-          var asignaturaAct = asignaturaPrevia[0].dataValues
-          var telTotalAct = tel_T + tel_E + tel_L
-          var telTotalPrev = asignaturaAct.tel_T + asignaturaAct.tel_E + asignaturaAct.tel_L
-          var telAct = [tel_T, tel_E, tel_L]
-          var telAnt = [asignaturaAct.tel_T, asignaturaAct.tel_E, asignaturaAct.tel_L]
-          //Copia3 papu
-          var iguales = telAnt.length === telAct.length && telAnt.every(function(value, index)
-            { return value === telAct[index]});
-          var lab_independiente = (req.body.lab_independiente === 'true')
-          var labIgual = asignaturaAct.lab_independiente===req.body.lab_independiente
-          if (iguales && labIgual) {
-            return res.status(201).send(asignatura)
-          }
-          if (req.lab_independiente!==asignaturaAct.lab_independiente) {
-          }
-          if (req.body.lab_independiente) {
-            //Se separa el lab de la teoría
-            //Se recorren todas las coordinaciones, y segun el tipo que sean, se le suman o restan
-            //bloques, segun el tel que le corresponda
-            var reqT = {
-              asignaturaId: asignaturaAct.id,
-              tipo: '',
-              tel: 0,
-              telAnt: 0,
-            }
-            if(tel_T != asignaturaAct.tel_T || req.body.lab_independiente!=asignaturaAct.lab_independiente){
-              reqT.tipo = 'Teoría'
-              reqT.tel = tel_T
-              reqT.telAnt = asignaturaAct.tel_T
-              InfoCoordinacion.actualizarTel(reqT)
-            }
-            if (tel_E != asignaturaAct.tel_E|| req.body.lab_independiente!=asignaturaAct.lab_independiente) {
-              reqT.tipo = 'Ejercicios'
-              reqT.tel = tel_E
-              reqT.telAnt = asignaturaAct.tel_E
-              InfoCoordinacion.actualizarTel(reqT)
-            }
-            if (tel_L != asignaturaAct.tel_L || req.body.lab_independiente!=asignaturaAct.lab_independiente) {
-              reqT.tipo = 'Laboratorio'
-              reqT.tel = tel_L
-              reqT.telAnt = asignaturaAct.tel_L
-              InfoCoordinacion.actualizarTel(reqT)
-            }
-          }
-          else {
-            //Se juntan el lab con la teoría
-            var reqT = {
-              asignaturaId: asignaturaAct.id,
-              tipo: '',
-              tel: tel_L + tel_E + tel_T,
-              telAnt: asignaturaAct.tel_L + asignaturaAct.tel_E + asignaturaAct.tel_L,
-            }
-            InfoCoordinacion.actualizarTel(reqT)
-          }
+          // var telTotalAct = tel_T + tel_E + tel_L
+          // var telTotalPrev = asignaturaAct.tel_T + asignaturaAct.tel_E + asignaturaAct.tel_L
+          // var telAct = [tel_T, tel_E, tel_L]
+          // var telAnt = [asignaturaAct.tel_T, asignaturaAct.tel_E, asignaturaAct.tel_L]
+          // //Copia3 papu
+          // var iguales = telAnt.length === telAct.length && telAnt.every(function(value, index)
+          //   { return value === telAct[index]});
+          // var lab_independiente = (req.body.lab_independiente === 'true')
+          // var labIgual = asignaturaAct.lab_independiente===req.body.lab_independiente
+          // if (iguales && labIgual) {
+          //   return res.status(201).send(asignatura)
+          // }
+          // if (req.lab_independiente!==asignaturaAct.lab_independiente) {
+          // }
+          // if (req.body.lab_independiente) {
+          //   //Se separa el lab de la teoría
+          //   //Se recorren todas las coordinaciones, y segun el tipo que sean, se le suman o restan
+          //   //bloques, segun el tel que le corresponda
+          //   var reqT = {
+          //     asignaturaId: asignaturaAct.id,
+          //     tipo: '',
+          //     tel: 0,
+          //     telAnt: 0,
+          //   }
+          //   if(tel_T != asignaturaAct.tel_T || req.body.lab_independiente!=asignaturaAct.lab_independiente){
+          //     reqT.tipo = 'Teoría'
+          //     reqT.tel = tel_T
+          //     reqT.telAnt = asignaturaAct.tel_T
+          //     InfoCoordinacion.actualizarTel(reqT)
+          //   }
+          //   if (tel_E != asignaturaAct.tel_E|| req.body.lab_independiente!=asignaturaAct.lab_independiente) {
+          //     reqT.tipo = 'Ejercicios'
+          //     reqT.tel = tel_E
+          //     reqT.telAnt = asignaturaAct.tel_E
+          //     InfoCoordinacion.actualizarTel(reqT)
+          //   }
+          //   if (tel_L != asignaturaAct.tel_L || req.body.lab_independiente!=asignaturaAct.lab_independiente) {
+          //     reqT.tipo = 'Laboratorio'
+          //     reqT.tel = tel_L
+          //     reqT.telAnt = asignaturaAct.tel_L
+          //     InfoCoordinacion.actualizarTel(reqT)
+          //   }
+          // }
+          // else {
+          //   //Se juntan el lab con la teoría
+          //   var reqT = {
+          //     asignaturaId: asignaturaAct.id,
+          //     tipo: '',
+          //     tel: tel_L + tel_E + tel_T,
+          //     telAnt: asignaturaAct.tel_L + asignaturaAct.tel_E + asignaturaAct.tel_L,
+          //   }
+          //   InfoCoordinacion.actualizarTel(reqT)
+          // }
         return res.status(201).send(asignatura)
       })
 
+    })
+    .catch(error=> {
+      console.log(error);
+      return(res.status(400).send(error))
     })
   }
 }

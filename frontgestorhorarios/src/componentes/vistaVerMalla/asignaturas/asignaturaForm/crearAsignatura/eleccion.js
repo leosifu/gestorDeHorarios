@@ -48,7 +48,6 @@ const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel, user, }) =>
         tasa_reprobacion: state.tasa_reprobacion.value,
       }
     }
-    console.log(data);
     clientAxios(user.idToken).post(`/api/asignatura`, data)
     .then(res => {
       console.log(res.data);

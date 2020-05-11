@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Carrera({carrera, estado, setEstado}) {
+export default function Carrera({carrera, estado, setEstado, user, }) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
 
@@ -65,8 +65,10 @@ export default function Carrera({carrera, estado, setEstado}) {
                 {carrera.nombre_carrera}
               </Grid>
               <Grid item xs={3}>
-                <CrearMalla carreraId={carrera.id} open={openM} setOpen={setOpenM} estado={estado} setEstado={setEstado}/>
-                <ActualizarCarrera carrera={carrera} open={openC} setOpen={setOpenC} estado={estado} setEstado={setEstado}/>
+                <CrearMalla carreraId={carrera.id} open={openM} setOpen={setOpenM} estado={estado}
+                  setEstado={setEstado} user={user}/>
+                <ActualizarCarrera carrera={carrera} open={openC} setOpen={setOpenC} estado={estado}
+                  setEstado={setEstado} user={user}/>
               </Grid>
             </Grid>
           </Typography>

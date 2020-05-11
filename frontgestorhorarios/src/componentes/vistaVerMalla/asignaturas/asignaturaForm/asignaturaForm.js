@@ -95,19 +95,19 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo}) => {
     },
     tel_T: {
       validator: {
-        regEx: /^[0-9]*[02468]$/,
+        regEx: /^[0-9]$/,
         error: 'Invalid last name format.',
       },
     },
     tel_E: {
       validator: {
-        regEx: /^[0-9]*[02468]$/,
+        regEx: /^[0-9]$/,
         error: 'Invalid last name format.',
       },
     },
     tel_L: {
       validator: {
-        regEx: /^[0-9]*[02468]$/,
+        regEx: /^[0-9]$/,
         error: 'Invalid last name format.',
       },
     },
@@ -138,7 +138,6 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo}) => {
   var sumaTel = true
 
   if (state.tel_T.value + state.tel_E.value + state.tel_L.value>0) {
-    console.log("algo");
     sumaTel = false
   }
 

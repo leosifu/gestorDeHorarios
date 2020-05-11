@@ -1,14 +1,18 @@
+const { Op } = require("sequelize");
+
 const Coordinacion = require('../models').Coordinacion
 const Asignatura = require('../models').Asignatura
 const Bloque = require('../models').Bloque
 const InfoCoordinacion = require('../models').InfoCoordinacion
 const Asignacion = require('../models').Asignacion
+const bloqueController = require('./bloque')
 
 module.exports = {
   create(req, res){
     return Coordinacion
       .create({
         tipo_coord: req.body.tipo_coord,
+        num_bloques: req.body.num_bloques
       })
       .then(async coordinacion => {
         var data = {
@@ -48,4 +52,67 @@ module.exports = {
       .then(coordinacion => res.status(201).send(coordinacion))
       .catch(error=> res.status(400).send(error))
   },
+  async updateCoordinacion(req, res){
+    try {
+      const coordinacionId = req.params.id;
+      const {num_bloques, tipo_coord} = req.body;
+      const profesores = req.body.profesores.map(profesor => profesor.id)
+      const FindCoordinacion = await Coordinacion.findOne({
+        where: {id: coordinacionId},
+        include: [{model: Bloque, as: 'bloques'}]
+      });
+      let PrevBloques = FindCoordinacion.dataValues.num_bloques;
+      const Bloques = FindCoordinacion.dataValues.bloques.map(bloque => bloque.dataValues);
+      const UpdatedCoordinacion = await FindCoordinacion.update({
+        tipo_coord: tipo_coord,
+        num_bloques: num_bloques
+      });
+      if (!UpdatedCoordinacion) {
+        return res.status(400)
+      }
+      if (num_bloques > PrevBloques) {
+        //crear bloques
+        let i = PrevBloques;
+        let bloquesNuevos = []
+        while (i < num_bloques) {
+          bloquesNuevos.push({coordinacionId: coordinacionId})
+          i = i + 1
+        }
+        const NuevosBloques = await Bloque.bulkCreate(bloquesNuevos)
+      }
+      else if (num_bloques < PrevBloques) {
+        //borrarBloques
+        let i = num_bloques;
+        while (i < PrevBloques) {
+          await bloqueController.deleteBloque(Bloques[i].id)
+          i = i + 1
+        }
+      }
+      const ProfesoresCoordinacion = await Asignacion.findAll({
+        where: {
+          coordinacionId: coordinacionId,
+          [Op.not]: [{
+            usuarioId: profesores
+          }]
+        }
+      });
+      for (var i = 0; i < ProfesoresCoordinacion.length; i++) {
+        const DeleteAsignacion = ProfesoresCoordinacion[i]
+        await DeleteAsignacion.destroy();
+      }
+      const AsignarProfesores = profesores.map(profesor => ({
+        usuarioId: profesor,
+        coordinacionId: coordinacionId
+      }));
+      for (var i = 0; i < AsignarProfesores.length; i++) {
+        const [NuevoProfesor, created] = await Asignacion.findOrCreate({
+          where: AsignarProfesores[i]
+        });
+      }
+      return res.status(201).send(FindCoordinacion)
+    } catch (e) {
+      console.log(e);
+      return res.status(400).send(e);
+    }
+  }
 }

@@ -20,17 +20,12 @@ module.exports = {
         infoA_id: infoA_id,
       })
       .then(infoA=>{
-        if (res) {
-          res.status(201).send(infoA)
-        }
-        else {
-          return infoA
-        }
+          return res.status(201).send(infoA)
       })
-      .catch(error => {
+      .catch(error=> {
         console.log(error);
+        return res.status(400).send(error)
       })
-
   },
   findAsignaturasByNivel(req, res){
     var id = req.params.id
@@ -40,7 +35,7 @@ module.exports = {
         where: {mallaId:id, nivel: nivel},
         include:[{model:Asignatura, as:'Asignatura',
           include: [{model:Coordinacion, as:'coordinaciones',
-            include:[{model: Bloque, as:'bloques'}]}]
+            include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores'}]}]
         }]
       })
       .then(mallaA=>{
@@ -50,6 +45,10 @@ module.exports = {
           return malA.Asignatura
         })
         return(res.json(asignaturas))
+      })
+      .catch(error=> {
+        console.log(error);
+        return res.status(400).send(error)
       })
   },
   findAsignatura(req, res){

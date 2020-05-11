@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function ActualizarCarrera({carrera, open, setOpen, estado, setEstado}) {
+function ActualizarCarrera({carrera, open, setOpen, estado, setEstado, user, }) {
   const classes = useStyles();
 
   const handleClickOpen = () => {
@@ -41,7 +41,7 @@ function ActualizarCarrera({carrera, open, setOpen, estado, setEstado}) {
       nombre_carrera: state.nombre_carrera.value,
       jornada: state.jornada.value
     }
-    clientAxios().put(`/api/carrera/${carrera.id}`, data)
+    clientAxios(user.idToken).put(`/api/carrera/${carrera.id}`, data)
     .then(res => {
       setOpen(false)
       setEstado(!estado)

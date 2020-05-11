@@ -98,7 +98,7 @@ export default function ListadoCarreras(){
           }
         </Grid>
         <Grid item xs={procesos.length > 0 ? 2 : 1}>
-          <CrearCarrera open={openC} setOpen={setOpenC}/>
+          <CrearCarrera open={openC} setOpen={setOpenC} user={user}/>
         </Grid>
         <Grid item xs={1}>
           <OptionsList />
@@ -107,7 +107,7 @@ export default function ListadoCarreras(){
       <Grid container>
         {carrerasD.map((carrera)=>(
           <Grid item xs={6}  key={carrera.id}>
-            <Carrera carrera={carrera} estado={estado} setEstado={setEstado}/>
+            <Carrera carrera={carrera} estado={estado} setEstado={setEstado} user={user}/>
           </Grid>
         ))}
       </Grid>
@@ -119,7 +119,7 @@ export default function ListadoCarreras(){
       <Grid container>
         {carrerasV.map((carrera)=>(
           <Grid item xs={6}  key={carrera.id}>
-            <Carrera carrera={carrera} estado={estado} setEstado={setEstado}/>
+            <Carrera carrera={carrera} estado={estado} setEstado={setEstado} user={user}/>
           </Grid>
         ))}
       </Grid>

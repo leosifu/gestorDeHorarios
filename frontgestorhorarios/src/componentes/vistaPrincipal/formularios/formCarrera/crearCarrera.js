@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function CrearCarrera({open, setOpen}) {
+function CrearCarrera({open, setOpen, user, }) {
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -50,7 +50,7 @@ function CrearCarrera({open, setOpen}) {
       nombre_carrera: state.nombre_carrera.value,
       jornada: state.jornada.value
     }
-    clientAxios().post('/api/carrera', data)
+    clientAxios(user.idToken).post('/api/carrera', data)
     .then(res => {
       console.log(res.data);
       setOpen(false)

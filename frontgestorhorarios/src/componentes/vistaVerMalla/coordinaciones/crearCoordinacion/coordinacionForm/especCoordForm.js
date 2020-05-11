@@ -3,7 +3,7 @@ import React, {useState, useRef} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 
 import {Select, InputLabel, MenuItem, FormControl, FormControlLabel, Radio,
-  RadioGroup, } from '@material-ui/core';
+  RadioGroup, TextField, } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const EspecCoordForm = ({handleOnChange, tipo_coord, }) => {
+const EspecCoordForm = ({handleOnChange, tipo_coord, num_bloques, }) => {
 
   const classes = useStyles();
 
@@ -51,6 +51,17 @@ const EspecCoordForm = ({handleOnChange, tipo_coord, }) => {
         <FormControlLabel value="Ejercicios" control={<Radio />} label="Ejercicios" />
         <FormControlLabel value="Laboratorio" control={<Radio />} label="Laboratorio" />
       </RadioGroup>
+      <TextField
+        error = {num_bloques.error ? true : false}
+        id="num_bloques"
+        label="Bloques asignados a la coordinación"
+        name="num_bloques"
+        className={classes.textField}
+        value={num_bloques.value}
+        onChange={handleOnChange}
+        margin="normal"
+        variant="outlined"
+      />
     </>
   )
 }

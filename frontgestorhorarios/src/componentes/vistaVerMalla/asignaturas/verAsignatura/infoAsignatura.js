@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InfoAsignatura({infoAsignatura, asignatura, estado, setEstado}){
+export default function InfoAsignatura({infoAsignatura, asignatura, estado, setEstado, user, }){
 
   const classes = useStyles();
 
@@ -47,7 +47,7 @@ export default function InfoAsignatura({infoAsignatura, asignatura, estado, setE
     <>
       {
         edit?
-          <EditAsignatura infoAsignatura={infoAsignatura}
+          <EditAsignatura infoAsignatura={infoAsignatura} user={user}
             asignatura={asignatura} setEdit={setEdit} estado={estado} setEstado={setEstado}/>
           :
           <>

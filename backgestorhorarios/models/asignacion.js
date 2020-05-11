@@ -1,8 +1,14 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Asignacion = sequelize.define('Asignacion', {
-    usuarioId: DataTypes.INTEGER,
-    coordinacionId: DataTypes.INTEGER
+    usuarioId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    coordinacionId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
   }, {});
   Asignacion.associate = function(models) {
     // associations can be defined here

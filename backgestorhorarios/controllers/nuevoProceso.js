@@ -213,32 +213,51 @@ module.exports = {
 
     const Asignaciones = Coords.map(coordinacion => coordinacion.asignaciones);
     const AllAsignaciones = [].concat(...Asignaciones);
-    const AsignacionesData = await AllAsignaciones.reduce(async(result, asignacion) =>{
+    let AsignacionesData = []
+    for (var i = 0; i < AllAsignaciones.length; i++) {
+      const ProfeAsignacion = AllAsignaciones[i];
       const ProfesorActivo = await UsuarioProceso.findAll({
         where: {
           procesoId: req.body.procesoId,
-          usuarioId: asignacion.usuarioId
+          usuarioId: ProfeAsignacion.usuarioId
         }
-      })
+      });
       if (ProfesorActivo) {
-        let coordinacionId = asignacion.coordinacionId
+        let coordinacionId = ProfeAsignacion.coordinacionId
         let coordinacionFind = Coords.find(coordinacion=>coordinacion.id === coordinacionId)
         let coordinacionIndex = Coords.indexOf(coordinacionFind)
         let newCoordinacion = NuevasCoordinacionesData[coordinacionIndex]
         let newCoordinacionId = newCoordinacion.id
-        console.log('asdasd');
-        result.push({
-          usuarioId: asignacion.usuarioId,
+        AsignacionesData.push({
+          usuarioId: ProfeAsignacion.usuarioId,
           coordinacionId: newCoordinacionId
         })
       }
-      return result;
-    }, []);
-    console.log('----asdasdasdadsasd-----');
-    console.log(AsignacionesData);
+    }
+    // const AsignacionesData = await AllAsignaciones.reduce(async(result, asignacion) =>{
+    //   const ProfesorActivo = await UsuarioProceso.findAll({
+    //     where: {
+    //       procesoId: req.body.procesoId,
+    //       usuarioId: asignacion.usuarioId
+    //     }
+    //   })
+    //   console.log(result);
+    //   if (ProfesorActivo) {
+    //     let coordinacionId = asignacion.coordinacionId
+    //     let coordinacionFind = Coords.find(coordinacion=>coordinacion.id === coordinacionId)
+    //     let coordinacionIndex = Coords.indexOf(coordinacionFind)
+    //     let newCoordinacion = NuevasCoordinacionesData[coordinacionIndex]
+    //     let newCoordinacionId = newCoordinacion.id
+    //     console.log(result);
+    //     await result.push({
+    //       usuarioId: asignacion.usuarioId,
+    //       coordinacionId: newCoordinacionId
+    //     })
+    //   }
+    //   return result;
+    // }, []);
     const NuevasAsignaciones = await Asignacion.bulkCreate(AsignacionesData);
     const NuevasAsignacionesData = NuevasAsignaciones.map(asignacion => asignacion => asignacion.dataValues)
-    console.log(NuevasAsignacionesData);
 
     return res.status(201).send(NuevasMallas)
   }

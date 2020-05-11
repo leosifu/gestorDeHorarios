@@ -1,14 +1,18 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Asignatura = sequelize.define('Asignatura', {
-    tel_T: DataTypes.INTEGER,
-    tel_E: DataTypes.INTEGER,
-    tel_L: DataTypes.INTEGER,
-    lab_independiente:{
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: false,
+    tel_T: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
+    tel_E: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    tel_L: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    }
   }, {});
   Asignatura.associate = function(models) {
     // associations can be defined here

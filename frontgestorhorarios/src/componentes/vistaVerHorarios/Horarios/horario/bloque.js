@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 });
 
 export default function Bloque({coord, onDrop, tipo, num}) {
-  const {nombre_coord, cod_coord, id, color, num_asociacion} = coord
+  const {nombre_coord, cod_coord, id, color, num_asociacion, profesores} = coord
   const ref = useRef(null)
   const classes = useStyles();
   const [ , drag] = useDrag({
@@ -78,7 +78,8 @@ export default function Bloque({coord, onDrop, tipo, num}) {
       width = width + '%'
       return(
         <Card ref={ref} style={{ backgroundColor, minHeight: 45, width }} padding="none">
-          <BloqueTablaHorario coord={coord} nombre_coord={nombre_coord} cod_coord={cod_coord} color={color}/>
+          <BloqueTablaHorario coord={coord} nombre_coord={nombre_coord} cod_coord={cod_coord}
+            profesores={profesores} color={color}/>
         </Card>
       )
     default:

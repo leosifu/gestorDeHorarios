@@ -49,7 +49,8 @@ export default function NavBar() {
         photoURL: authUser.photoURL,
         name: authUser.displayName,
         idToken: token,
-        roles: roles
+        roles: roles,
+        id: userData.id
       }))
     })
     .catch(error => {

@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    num_bloques: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {});
   Coordinacion.associate = function(models) {
     // associations can be defined here

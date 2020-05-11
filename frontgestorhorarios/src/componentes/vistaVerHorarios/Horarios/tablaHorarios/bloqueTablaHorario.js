@@ -7,16 +7,19 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import InfoTwoToneIcon from '@material-ui/icons/InfoTwoTone';
 
+import './bloqueTablaHorario.css'
+
 const useStyles = makeStyles({
   contenido:{
-    height: '100%',
+    height: 90,
     padding: '3px 3px 3px 3px',
     "&:last-child": {
       paddingBottom: 3
-    }
+    },
+    fontSize: 11
   },
   nombreCoord:{
-    fontSize: 11.5,
+    fontSize: 11,
   },
   icono:{
     fontSize: 12,
@@ -25,19 +28,31 @@ const useStyles = makeStyles({
   }
 });
 
-function BloqueTablaHorario({coord, nombre_coord, cod_coord, color}){
+function BloqueTablaHorario({coord, nombre_coord, cod_coord, color, profesores, }){
 
   const classes = useStyles();
-
   console.log(coord);
 
   return(
     <CardContent className={classes.contenido} style={{background: color}}>
       <Grid container>
         <Grid item xs={10}>
-          <Typography className={classes.nombreCoord}>
-            {nombre_coord + '-' + cod_coord}
+          <Typography className={'textoBloque'} style={{fontSize: 11}}>
+            {nombre_coord}
           </Typography>
+          <Typography className={'textoBloque'} style={{fontSize: 11}}>
+            {cod_coord}
+          </Typography>
+          <Typography className={classes.nombreCoord}>
+            Profesores:
+          </Typography>
+          {
+            profesores && profesores.length > 0 && profesores.map(profesor => (
+              <Typography className={'textoProfesor'} style={{fontSize: 11}}>
+                {`${profesor.name} ${profesor.lastName}`}
+              </Typography>
+            ))
+          }
         </Grid>
         <Grid item xs={2} className={classes.nombreCoord} >
           <IconButton >

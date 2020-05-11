@@ -38,6 +38,10 @@ function actualizarCupos(id, cupos_pasados, tasa_reprobacion){
     //console.log('\n');
     //console.log(asignatura.dataValues.asignaturas);
   })
+  .catch(error=> {
+    console.log(error);
+    return(res.status(400).send(error))
+  })
 }
 
 function update(req, res){
@@ -52,6 +56,10 @@ function update(req, res){
     actualizarCupos(req.params.id, req.body.cupos_pasados, req.body.tasa_reprobacion)
     return (res.json(historial))
   })
+  .catch(error=> {
+    console.log(error);
+    return(res.status(400).send(error))
+  })
 }
 
 module.exports = {
@@ -62,7 +70,7 @@ module.exports = {
         cupos_pasados: req.historial.cupos_pasados,
         tasa_reprobacion: req.historial.tasa_reprobacion,
         cupos_estimados: cupos_estimados,
-        tasa_reprobacion_pre: req.historial.tasa_reprobacion_pre,
+        desinscripciones: req.historial.desinscripciones,
         asignaturaId: req.asignaturaId
       })
       .then(historial => {

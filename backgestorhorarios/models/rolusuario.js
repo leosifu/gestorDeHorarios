@@ -1,8 +1,14 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const RolUsuario = sequelize.define('RolUsuario', {
-    rolId: DataTypes.INTEGER,
-    usuarioId: DataTypes.INTEGER
+    rolId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    usuarioId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {});
   RolUsuario.associate = function(models) {
     // associations can be defined here

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     asignaturaId: {
       type: DataTypes.INTEGER,
     },
-    cod_asignatura:{
+    cod_asignatura: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
