@@ -5,6 +5,8 @@ var fs = require('fs');
 var XLSX = require('xlsx');
 const _ = require('lodash');
 
+const { Op } = require("sequelize");
+
 const Rol = require('../models').Rol;
 const Proceso = require('../models').Proceso;
 const Usuario = require('../models').Usuario;
@@ -13,12 +15,56 @@ const UsuarioProceso = require('../models').UsuarioProceso;
 const Coordinacion = require('../models').Coordinacion;
 const Asignatura = require('../models').Asignatura;
 const Bloque = require('../models').Bloque;
+const Malla = require('../models').Malla;
 const InfoAsignatura = require('../models').InfoAsignatura;
 
 function toTitleCase(str) {
     return str.replace(/\w\S*/g, function(txt){
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
+}
+
+const EditRoles = async(rolesData, id) => {
+  const UserRoles = await RolUsuario.findAll({
+    where: {
+      usuarioId: id,
+      rolId: {[Op.not]: 1}
+    }
+  });
+  const PrevRoles = UserRoles.map(rol => rol.dataValues.rol);
+  const RolesFaltantes = rolesData.filter(rol => PrevRoles.indexOf(rol) === -1);
+  const EliminarRoles = PrevRoles.filter(rol => rolesData.indexOf(rol) === -1);
+  for (var i = 0; i < EliminarRoles.length; i++) {
+    if (EliminarRoles[i] === 'profe') {
+      const ProcesoUsuario = await UsuarioProceso.findOne({
+        where: {
+          usuarioId: id,
+          procesoId: procesoId
+        }
+      });
+      if (ProcesoUsuario) {
+        ProcesoUsuario.destroy();
+      }
+    }
+    else {
+      EliminarRoles[i].destroy();
+    }
+  }
+  const AsignarRoles = RolesFaltantes.map(rol => {
+    if (rol === 'coordinador') {
+      return({
+        rolId: 3,
+        usuarioId: id
+      })
+    }
+    else {
+      return({
+        rolId: 2,
+        usuarioId: id
+      })
+    }
+  });
+  const NuevosRoles = await RolUsuario.bulkCreate(AsignarRoles);
 }
 
 module.exports = {
@@ -148,14 +194,28 @@ module.exports = {
   },
   async getProfesores(req, res){
     try {
-      const RolProfesor = await RolUsuario.findAll({
-        where: {rolId: 2},
-        include: [{model: Usuario}]
+      const {procesoId} = req.params;
+      console.log(procesoId);
+      const ProfesoresByProceso = await Usuario.findAll({
+        include: [{
+          model: Proceso, as: 'profesores', where: {id: procesoId}
+        }, {
+          model: Rol, as: 'roles'
+        }]
       });
-      const RolProfesorData = RolProfesor.map(rolProfesor => rolProfesor.dataValues);
-      const Profesores = RolProfesorData.map(rolProfesor => rolProfesor.Usuario);
-      const ProfesoresData = Profesores.map(profesor => profesor.dataValues);
-      return res.status(201).send(ProfesoresData);
+      console.log('-----PROFESORES-----');
+      console.log(ProfesoresByProceso);
+      console.log('-----FIN PROFESORES-----');
+      const ProfesoresWithRol = ProfesoresByProceso.map(profesor => {
+        const UserRoles = profesor.roles
+        const UserRolesData = UserRoles.map(rol => rol.dataValues.rol);
+        return({...profesor.dataValues, roles: UserRolesData})
+      })
+      // const RolProfesorData = RolProfesor.map(rolProfesor => rolProfesor.dataValues);
+      // const Profesores = RolProfesorData.map(rolProfesor => rolProfesor.Usuario);
+      // const ProfesoresData = Profesores.filter(profesor => profesor);
+
+      return res.status(201).send(ProfesoresWithRol);
     } catch (error) {
       console.log(error);
       return(res.status(400).send(error));
@@ -180,9 +240,6 @@ module.exports = {
           if (UserRolesData.includes('coordinador')) {
             coordinadores.push({...UsuariosData[i], roles: UserRolesData})
           }
-          else if (UserRolesData.includes('profe')) {
-            profesores.push({...UsuariosData[i], roles: UserRolesData})
-          }
         }
         else {
           noRole.push({...UsuariosData[i], roles: UserRolesData})
@@ -190,7 +247,6 @@ module.exports = {
       }
       let usuariosSeparados = {
         coordinadores: coordinadores,
-        profesores: profesores,
         noRole: noRole
       }
       return res.status(201).send(usuariosSeparados);
@@ -201,67 +257,178 @@ module.exports = {
   },
   async addUsuario(req, res){
     try {
-      const {usuarioData, rolesData} = req.body;
-      const [NuevoProfesor, created] = await Usuario.findOrCreate({
-        where: usuarioData
-      });
-      const NuevoProfesorData = NuevoProfesor.dataValues;
-      if (created) {
+      const {usuarioData, rolesData, procesoId} = req.body;
+      const FindProfesor = await Usuario.findOne({
+        where: {
+          email: usuarioData.email
+        }
+      })
+      if (!FindProfesor) {
+        const NuevoProfesor = await Usuario.create(usuarioData);
+        const NuevoProfesorData = NuevoProfesor.dataValues;
+        const id = NuevoProfesorData.id;
         const UserRoles = rolesData.map(rol => {
           if (rol === 'coordinador') {
             return({
               rolId: 3,
-              usuarioId: NuevoProfesorData.id
+              usuarioId: id
             })
           }
           else {
             return({
               rolId: 2,
-              usuarioId: NuevoProfesorData.id
+              usuarioId: id
             })
           }
         });
         const NuevosRoles = await RolUsuario.bulkCreate(UserRoles);
+        if (rolesData.includes('profe')) {
+          const AsignarProceso = await UsuarioProceso.create({
+            usuarioId: NuevoProfesorData.id,
+            procesoId: procesoId
+          });
+        }
         return res.status(201).send(NuevoProfesor)
       }
       else {
-        return res.status(403);
+        console.log('Encontro usuario');
+        const id = FindProfesor.dataValues.id;
+        const UserRoles = await RolUsuario.findAll({
+          where: {
+            usuarioId: id,
+            rolId: {[Op.not]: 1}
+          },
+          include: [{model: Rol}]
+        });
+        console.log(UserRoles);
+        const PrevRoles = UserRoles.map(rol => rol.dataValues.Rol.rol);
+        console.log(PrevRoles);
+        const RolesFaltantes = rolesData.filter(rol => PrevRoles.indexOf(rol) === -1);
+        console.log(RolesFaltantes);
+        console.log('Asignando roles');
+        const AsignarRoles = RolesFaltantes.map(rol => {
+          if (rol === 'coordinador') {
+            return({
+              rolId: 3,
+              usuarioId: id
+            })
+          }
+          else if (rol === 'profe') {
+            return({
+              rolId: 2,
+              usuarioId: id
+            })
+          }
+        });
+        const NuevosRoles = await RolUsuario.bulkCreate(AsignarRoles);
+        if (AsignarRoles.includes('profe')) {
+          console.log('Asignando proceso...');
+          const AsignarProceso = await UsuarioProceso.create({
+            usuarioId: id,
+            procesoId: procesoId
+          });
+        }
+        return res.status(201).send(FindProfesor)
       }
     } catch (error) {
       console.log(error);
       return(res.status(400).send(error));
     }
   },
+  // async addProfesor(req, res){
+  //   try {
+  //     const {usuarioData, rolesData, procesoId} = req.body;
+  //     const [NuevoProfesor, created] = await Usuario.findOrCreate({
+  //       where: usuarioData,
+  //       include: [{model: Proceso, where: {id: procesoId}}]
+  //     });
+  //     const NuevoProfesorData = NuevoProfesor.dataValues;
+  //     if (created) {
+  //       const NuevosRoles = await RolUsuario.create({
+  //         rolId: 2,
+  //         usuarioId: NuevoProfesorData.id
+  //       });
+  //     }
+  //     const AsignarProceso = await UsuarioProceso.create({
+  //       usuarioId: NuevoProfesorData.id,
+  //       procesoId: procesoId
+  //     });
+  //     return res.status(201).send(NuevoProfesor)
+  //   } catch (error) {
+  //     console.log(error);
+  //     return(res.status(400).send(error));
+  //   }
+  // },
   async editUsuario(req, res){
     try {
       const {id} = req.params;
-      const {usuarioData, rolesData} = req.body;
+      const {usuarioData, rolesData, procesoId} = req.body;
       const UserEdit = await Usuario.update(usuarioData, {
         where: {id: req.params.id}
       });
-      const EliminarRoles = await RolUsuario.findAll({
+      // const CheckRoles = await EditRoles(rolesData, id);
+      const UserRoles = await RolUsuario.findAll({
         where: {
-          usuarioId: id
-        }
+          usuarioId: id,
+          rolId: {[Op.not]: 1}
+        },
+        include: [{model: Rol}]
       });
+      console.log(UserRoles);
+      const PrevRoles = UserRoles.map(rol => rol.dataValues.Rol.rol);
+      console.log(PrevRoles);
+      console.log(rolesData);
+      const RolesFaltantes = rolesData.filter(rol => PrevRoles.indexOf(rol) === -1);
+      const EliminarRoles = PrevRoles.filter(rol => rolesData.indexOf(rol) === -1);
+      console.log(EliminarRoles);
       for (var i = 0; i < EliminarRoles.length; i++) {
-        EliminarRoles[i].destroy()
+        if (EliminarRoles[i] === 'profe') {
+          const ProcesoUsuario = await UsuarioProceso.findOne({
+            where: {
+              usuarioId: id,
+              procesoId: procesoId
+            }
+          });
+          if (ProcesoUsuario) {
+            ProcesoUsuario.destroy();
+          }
+        }
+        else {
+          const EliminarRol = UserRoles.find(rol => rol.dataValues.Rol.rol === EliminarRoles[i]);
+          console.log(EliminarRol.dataValues);
+          EliminarRol.destroy();
+        }
       }
-      const UserRoles = rolesData.map(rol => {
+      console.log(RolesFaltantes);
+      const AsignarRoles = RolesFaltantes.map(rol => {
         if (rol === 'coordinador') {
           return({
             rolId: 3,
             usuarioId: id
           })
         }
-        else {
+        else if (rol === 'profe') {
           return({
             rolId: 2,
             usuarioId: id
           })
         }
       });
-      const NuevosRoles = await RolUsuario.bulkCreate(UserRoles);
+      const NuevosRoles = await RolUsuario.bulkCreate(AsignarRoles);
+      if (rolesData.includes('profe') ) {
+        const CheckAsignacion = await UsuarioProceso.findOne({
+          where: {
+            usuarioId: id,
+            procesoId: procesoId
+          }
+        })
+        if (!CheckAsignacion) {
+          const AsignarProceso = await UsuarioProceso.create({
+            usuarioId: id,
+            procesoId: procesoId
+          });
+        }
+      }
       return res.status(201).send(UserEdit);
     } catch (error) {
       console.log(error);
@@ -283,12 +450,40 @@ module.exports = {
             }]}]
         }]
       })
-      console.log(GetHorario);
-      const asignaturas = GetHorario.map(malA=>{
-        malA.Asignatura.dataValues.cod_asignatura = malA.cod_asignatura
-        malA.Asignatura.dataValues.nombre_asignatura = malA.nombre_asignatura
-        return malA.Asignatura
+      const HorarioProfesor = await Malla.findAll({
+        where: {procesoId: procesoId},
+        include:[{model:Asignatura, as:'asignaturas',
+          include: [{model:Coordinacion, as:'coordinaciones',
+            include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores',
+              where: {id: usuarioId},
+              include: [{model: Proceso, as: 'profesores'}]
+            }]}]
+        }]
       })
+      const GetMallas = [].concat(...HorarioProfesor)
+      const GetAsignaturasHorario = [].concat(...GetMallas.map(malla => malla.dataValues.asignaturas))
+      console.log(GetAsignaturasHorario);
+      const AsignarValores = GetAsignaturasHorario.map(asignatura => {
+        console.log(asignatura);
+        return({
+          ...asignatura.InfoAsignatura.dataValues,
+          Asignatura: asignatura.dataValues
+        })
+      })
+      // console.log(GetHorario);
+
+      // console.log();
+      // GetHorario.map(horario => {
+      //   console.log(horario.dataValues.Asignatura.dataValues.coordinaciones)
+      // })
+      // console.log(GetHorario[3].dataValues.Asignatura.dataValues.coordinaciones[0].dataValues.profesores[0].dataValues.profesores);
+      // console.log(GetHorario.map(horario => horario.dataValues));
+      // const asignaturas = GetHorario.map(infoA=>{
+      //   // console.log(infoA.Asignatura.dataValues);
+      //   infoA.Asignatura.dataValues.cod_asignatura = infoA.cod_asignatura
+      //   infoA.Asignatura.dataValues.nombre_asignatura = infoA.nombre_asignatura
+      //   return infoA.Asignatura
+      // })
       // const GetHorario = await UsuarioProceso.findAll({
       //   where: {
       //     usuarioId: usuarioId,
@@ -301,8 +496,8 @@ module.exports = {
       //   }]
       // });
 
-      console.log(GetHorario);
-      return res.status(201).send(GetHorario);
+      // console.log(GetHorario);
+      return res.status(201).send(AsignarValores);
     } catch (error) {
       console.log(error);
       return(res.status(400).send(error));

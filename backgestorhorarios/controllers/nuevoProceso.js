@@ -15,7 +15,6 @@ const _ = require('lodash');
 
 module.exports = {
   async createProceso(req, res){
-    console.log(req.body);
     // const NuevoProceso = await Proceso.create({
     //   año: req.body.año,
     //   semestre: req.body.semestre,
@@ -73,6 +72,7 @@ module.exports = {
       let newAsignatura = NuevasAsignaturasData[asignaturaIndex]
       let newAsignaturaId = newAsignatura.id
       return({
+        cupos_estimados: historial.cupos_estimados,
         cupos_pasados: historial.cupos_pasados,
         tasa_reprobacion: historial.tasa_reprobacion,
         tasa_reprobacion_pre: historial.tasa_reprobacion_pre,
@@ -88,7 +88,6 @@ module.exports = {
     const Requisitos = [].concat(...RequisitosByMalla);
     const Dependencias = Requisitos.map(requisito=>requisito.Dependencia.dataValues)
     const DependenciasData = Dependencias.reduce((result, dependencia)=>{
-      console.log(dependencia);
       let asignaturaId = dependencia.asignaturaId
       let asignaturaFind = Asignaturas.find(asignatura=>asignatura.id === asignaturaId)
       let asignaturaIndex = Asignaturas.indexOf(asignaturaFind)
@@ -147,11 +146,10 @@ module.exports = {
     const Coords = Array.from(new Set(Coordinaciones.map(coordinacion=>coordinacion.id)))
     .map(id=>{
       let coord = Coordinaciones.find(coordinacion=>coordinacion.id === id)
-      console.log('----AAHHHHHHHHHH-----');
-      console.log(coord);
       return{
         id: id,
         tipo_coord: coord.tipo_coord,
+        num_bloques: coord.num_bloques,
         infoCoordinacion: coord.InfoCoordinacion.dataValues,
         bloques: coord.bloques.map(bloque=>bloque.dataValues),
         infoCoordinacion: coord.InfoCoordinacion.dataValues,
@@ -163,6 +161,7 @@ module.exports = {
     })
     const CoordinacionData = Coords.map(coordinacion=>({
       tipo_coord: coordinacion.tipo_coord,
+      num_bloques: coordinacion.num_bloques
     }))
     const NuevasCoordinaciones = await Coordinacion.bulkCreate(CoordinacionData)
     const NuevasCoordinacionesData = NuevasCoordinaciones.map(coordinacion=>coordinacion.dataValues)

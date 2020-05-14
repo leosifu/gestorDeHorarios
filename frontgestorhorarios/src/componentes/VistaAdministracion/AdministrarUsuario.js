@@ -7,14 +7,14 @@ import {Button, TextField, Dialog, DialogActions, DialogContent,
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import {handleDialogCreate, } from '../../redux/actions'
+import {handleDialogCreate, handleDialogHorarioProfesor, } from '../../redux/actions'
 
 const DialosUsuarioSelector = createSelector(
   state => state.dialogUsuario,
   dialogUsuario => dialogUsuario
 );
 
-const AdministrarUsuario = ({changed, setChanged, }) => {
+const AdministrarUsuario = ({changed, setChanged, currentProceso, }) => {
 
   const dispatch = useDispatch();
   const dialogUsuario = useSelector(DialosUsuarioSelector);
@@ -56,10 +56,11 @@ const AdministrarUsuario = ({changed, setChanged, }) => {
   const handleCLick = () => {
     const data = {
       usuarioData: userState,
-      rolesData: Object.keys(userRoles).filter(rol => userRoles[rol])
+      rolesData: Object.keys(userRoles).filter(rol => userRoles[rol]),
+      procesoId: currentProceso.id
     }
     if (dialogUsuario.type === 'edit') {
-      clientAxios().post(`/api/editUsuario/${userState.id}`, data)
+      clientAxios().put(`/api/editUsuario/${userState.id}`, data)
       .then(res => {
         console.log(res.data);
         dispatch(handleDialogCreate(false));
@@ -157,6 +158,10 @@ const AdministrarUsuario = ({changed, setChanged, }) => {
         <DialogActions>
           <Button onClick={() => dispatch(handleDialogCreate(false))} color="primary">
             Cerrar
+          </Button>
+          <Button onClick={() => dispatch(handleDialogHorarioProfesor(true, userState.id))}
+            color="primary">
+            Ver Horario
           </Button>
           <Button onClick={() => handleCLick()} color="primary">
             {dialogUsuario.type === 'edit' ? 'Actualizar Usuario' : 'Crear Usuario'}

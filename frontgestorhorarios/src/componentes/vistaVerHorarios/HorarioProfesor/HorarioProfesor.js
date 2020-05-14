@@ -38,7 +38,7 @@ const HorarioProfesor = ({selectedUser, }) => {
   const [asignaturas, setAsignaturas] = useState([]);
 
   useEffect(()=>{
-    clientAxios(user.idToken).get(`/api/getHorario/${selectedUser ? 'selectedUser' : user.id}/${proceso.id}`)
+    clientAxios(user.idToken).get(`/api/getHorario/${selectedUser ? selectedUser : user.id}/${proceso.id}`)
     .then(res => {
       const data = res.data
       console.log(data);

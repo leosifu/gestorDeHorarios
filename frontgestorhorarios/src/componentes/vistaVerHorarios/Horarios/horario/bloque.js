@@ -85,8 +85,7 @@ export default function Bloque({coord, onDrop, tipo, num}) {
     default:
       return(
         <Card ref={ref} className={classes.card} style={{ backgroundColor }} padding="none">
-          <CardContent className={classes.contenido}>
-          </CardContent>
+          <CardContent className={classes.contenido} />
         </Card>
       )
   }

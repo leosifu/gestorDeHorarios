@@ -6,6 +6,7 @@ import loaderReducer from './loaderReducer'
 import procesoReducer from './procesoReducer'
 import userReducer from './userReducer'
 import dialogUsuarioReducer from './dialogUsuarioReducer'
+import dialogHorarioProfesorReducer from './dialogHorarioProfesorReducer'
 
 const createRootReducer = (history) => combineReducers({
   carrera: carreraReducer,
@@ -14,6 +15,7 @@ const createRootReducer = (history) => combineReducers({
   proceso: procesoReducer,
   user: userReducer,
   dialogUsuario: dialogUsuarioReducer,
+  dialogHorarioProfesor: dialogHorarioProfesorReducer,
   router: connectRouter(history)
 })
 
