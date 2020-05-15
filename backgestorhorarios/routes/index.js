@@ -51,7 +51,8 @@ module.exports = (app) => {
 
   //Api dependencia
   app.post('/api/dependencia', verify('admin', 'coordinador'), dependenciaController.crearDependencia)
-  app.delete('/api/dependencia', verify('admin', 'coordinador'), dependenciaController.removeDependencia)
+  app.delete('/api/dependencia', verify('admin', 'coordinador'),
+    dependenciaController.removeDependencia)
 
   //Api historial
   app.put('/api/historial/:id', verify('admin', 'coordinador'), historialController.update)
@@ -71,9 +72,11 @@ module.exports = (app) => {
   //Api usuarios
   app.post('/api/login', usuarioController.login)
   app.get('/api/profesores', verify('admin', 'coordinador'), usuarioController.getProfesores)
-  app.get('/api/usuarios', usuarioController.getUsuarios)
-  app.get('/api/profesores/:procesoId', usuarioController.getProfesores)
-  app.post('/api/profesores', verify('admin', 'coordinador'), upload.single('file'), usuarioController.createProfesores)
+  app.get('/api/usuarios', verify('admin'), usuarioController.getUsuarios)
+  app.get('/api/profesores/:procesoId', verify('admin', 'coordinador'),
+    usuarioController.getProfesores)
+  app.post('/api/profesores', verify('admin', 'coordinador'), upload.single('file'),
+    usuarioController.createProfesores)
   app.post('/api/createUsuario', usuarioController.addUsuario)
   app.put('/api/editUsuario/:id', usuarioController.editUsuario)
   app.get('/api/getHorario/:usuarioId/:procesoId', usuarioController.getHorario)
@@ -81,6 +84,8 @@ module.exports = (app) => {
   //Api proceso
   app.get('/api/procesos', procesoController.findAll)
   app.post('/api/procesos', verify('admin', 'coordinador'), procesoController.create)
+  app.put('/api/procesos/:procesoId', verify('admin'), procesoController.changeProcesoStatus)
+  app.delete('/api/procesos/:procesoId', verify('admin'), procesoController.EliminarProceso)
 
   //Api nuevoProceso
   app.post('/api/nuevoProceso', verify('admin', 'coordinador'), nuevoProcesoController.createProceso)

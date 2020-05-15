@@ -40,6 +40,7 @@ export default function NavBar() {
   }, []);
 
   const loginRequest = (token, userData, authUser) => {
+    console.log(token);
     clientAxios(token).post(`api/login`, userData)
     .then(res => {
       const userData = res.data;
@@ -48,7 +49,7 @@ export default function NavBar() {
         email: authUser.email,
         photoURL: authUser.photoURL,
         name: authUser.displayName,
-        idToken: token,
+        idToken: userData.token,
         roles: roles,
         id: userData.id
       }))

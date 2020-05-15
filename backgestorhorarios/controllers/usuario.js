@@ -73,7 +73,7 @@ module.exports = {
     let idToken = req.get('Authorization');
     const token = idToken.split(' ');
     // const {token, user} = req.body;
-    console.log('TOKEEEEEEN', token[0]);
+    console.log('TOKEEEEEEN', token[1]);
     // if (token[1]) {
     //   console.log('------------------WIIIIIIIIIII-------------------');
     //   jwt.verify(token[1], process.env.FIREBASE_CLIENT_X509_CERT_URL, (err, decoded) => {
@@ -92,7 +92,7 @@ module.exports = {
     admin.auth().verifyIdToken(token[1]).then(async(claims) => {
       // console.log('claims', claims);
       if (claims.uid) {
-        const UsuarioFind = await Usuario.findAll({
+        const UsuarioFind = await Usuario.findOne({
           where: {
             email: claims.email
           },
@@ -100,7 +100,33 @@ module.exports = {
             model: Rol, as: 'roles'
           }]
         })
-        return(res.status(201).send(UsuarioFind[0]))
+        if (!UsuarioFind) {
+          const UsuarioData = {
+            email: claims.email,
+            name: claims.name,
+            roles: []
+          }
+          const payload = {
+            ...UsuarioData,
+            check: true
+          }
+          const token = jwt.sign(payload, process.env.KEY, {
+            expiresIn: 1440
+          });
+          const NotFindUsuario = {...UsuarioData, token: token}
+          return(res.status(201).send(NotFindUsuario))
+        }
+        else {
+          const payload = {
+            ...UsuarioFind.dataValues,
+            check:  true
+          };
+          const token = jwt.sign(payload, process.env.KEY, {
+            expiresIn: 1440
+          });
+          const UsuarioData = {...UsuarioFind.dataValues, token: token}
+          return(res.status(201).send(UsuarioData))
+        }
       }
     }).catch(error => {
       console.log(error);
@@ -195,7 +221,6 @@ module.exports = {
   async getProfesores(req, res){
     try {
       const {procesoId} = req.params;
-      console.log(procesoId);
       const ProfesoresByProceso = await Usuario.findAll({
         include: [{
           model: Proceso, as: 'profesores', where: {id: procesoId}
@@ -203,9 +228,6 @@ module.exports = {
           model: Rol, as: 'roles'
         }]
       });
-      console.log('-----PROFESORES-----');
-      console.log(ProfesoresByProceso);
-      console.log('-----FIN PROFESORES-----');
       const ProfesoresWithRol = ProfesoresByProceso.map(profesor => {
         const UserRoles = profesor.roles
         const UserRolesData = UserRoles.map(rol => rol.dataValues.rol);

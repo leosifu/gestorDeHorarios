@@ -17,7 +17,8 @@ import {setLoading, setProcesoActivo, } from '../../../redux/actions'
 import Carrera from './carrera'
 import CrearCarrera from '../formularios/formCarrera/crearCarrera'
 import SelectProceso from '../../VistaNuevoProceso/selectProceso'
-import OptionsList from './optionsList'
+import OptionsList from '../manageProceso/optionsList';
+import UpdateProceso from '../manageProceso/UpdateProceso';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,6 +32,11 @@ const ProcesosSelector = createSelector(
   proceso => proceso
 );
 
+const DialogProcesoSelector = createSelector(
+  state => state.dialogUpdateProceso,
+  dialogUpdateProceso => dialogUpdateProceso
+);
+
 const UserSelector = createSelector(
   state => state.user,
   user => user.user
@@ -42,10 +48,11 @@ export default function ListadoCarreras(){
   const dispatch = useDispatch();
 
   const procesosData = useSelector(ProcesosSelector);
+  const user = useSelector(UserSelector);
+  const dialogUpdateProceso = useSelector(DialogProcesoSelector);
 
   const currentProceso = procesosData.currentProceso;
   const procesos = procesosData.procesos;
-  const user = useSelector(UserSelector);
 
   const [openC, setOpenC] = useState(false);
   const [openList, setOpenList] = useState(false);
@@ -76,7 +83,6 @@ export default function ListadoCarreras(){
     }
     else {
       if (procesosData.error) {
-        console.log('AHHHHHHH');
         setCarrerasV([]);
         setCarrerasD([]);
         dispatch(setLoading(false));
@@ -86,6 +92,8 @@ export default function ListadoCarreras(){
 
   return (
     <div className={classes.root}>
+      <UpdateProceso proceso={currentProceso} dialogUpdateProceso={dialogUpdateProceso}
+        estado={estado} setEstado={setEstado} user={user}/>
       <Grid container>
         <Grid item xs={procesos.length > 0 ? 8 : 9}>
           <h2>Carreras Diurnas</h2>
@@ -101,7 +109,7 @@ export default function ListadoCarreras(){
           <CrearCarrera open={openC} setOpen={setOpenC} user={user}/>
         </Grid>
         <Grid item xs={1}>
-          <OptionsList />
+          <OptionsList currentProceso={currentProceso} user={user}/>
         </Grid>
       </Grid>
       <Grid container>

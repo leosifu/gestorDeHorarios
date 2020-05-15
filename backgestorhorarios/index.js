@@ -15,8 +15,8 @@ app.use(cors());
 app.use(logger('dev'));
 app.set('llave', process.env.KEY);
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 var models = require("./models")
 models.sequelize.sync().then(function(){

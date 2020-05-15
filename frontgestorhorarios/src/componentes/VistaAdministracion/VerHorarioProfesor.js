@@ -47,7 +47,6 @@ const VerHorarioProfesor = () => {
 
   const dialogHorarioProfesor = useSelector(DialogHorarioProfesorSelector);
   const {open, selectedUser} = dialogHorarioProfesor;
-  console.log(selectedUser);
 
   return (
     <div>
