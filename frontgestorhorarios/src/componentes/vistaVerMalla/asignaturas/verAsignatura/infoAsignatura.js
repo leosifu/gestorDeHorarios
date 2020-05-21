@@ -31,13 +31,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InfoAsignatura({infoAsignatura, asignatura, estado, setEstado, user, }){
+export default function InfoAsignatura({infoAsignatura, asignatura, estado, setEstado, user,
+  userRedux, }){
 
   const classes = useStyles();
 
   const [edit, setEdit] = useState(false)
-
-  console.log(infoAsignatura);
 
   function clickEdit(){
     setEdit(true)
@@ -47,8 +46,14 @@ export default function InfoAsignatura({infoAsignatura, asignatura, estado, setE
     <>
       {
         edit?
-          <EditAsignatura infoAsignatura={infoAsignatura} user={user}
-            asignatura={asignatura} setEdit={setEdit} estado={estado} setEstado={setEstado}/>
+          <>
+            {
+              userRedux.status === 'login' &&
+              (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+              <EditAsignatura infoAsignatura={infoAsignatura} user={user}
+                asignatura={asignatura} setEdit={setEdit} estado={estado} setEstado={setEstado}/>
+            }
+          </>
           :
           <>
           <Box className={classes.sector} borderRadius={1} boxShadow={2}>
@@ -58,11 +63,15 @@ export default function InfoAsignatura({infoAsignatura, asignatura, estado, setE
                   {infoAsignatura.nombre_asignatura}
                 </Typography>
               </Grid>
-              <Grid item xs={1}>
-                <IconButton className={classes.centrarIcon} onClick={clickEdit}>
-                  <EditIcon style={{color:"blue"}}/>
-                </IconButton>
-              </Grid>
+              {
+                userRedux.status === 'login' &&
+                (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+                <Grid item xs={1}>
+                  <IconButton className={classes.centrarIcon} onClick={clickEdit}>
+                    <EditIcon style={{color:"blue"}}/>
+                  </IconButton>
+                </Grid>
+              }
             </Grid>
             <Typography className={classes.campoDes}>
               Código de la asignatura: {infoAsignatura.cod_asignatura}
@@ -100,33 +109,33 @@ export default function InfoAsignatura({infoAsignatura, asignatura, estado, setE
             <Typography className={classes.campoDes}>
               Prerrequisitos:
             </Typography>
-            {asignatura.requisitos.length>0 &&
-              asignatura.requisitos.map(requisito=>{
-                console.log(requisito);
-                return(
+            {
+              asignatura.requisitos.map(requisito=>
                   <Typography className={classes.campoDes}>{requisito.nombre_asignatura}</Typography>
-
-                )
-              })
+              )
             }
           </Box>
-          <Box className={classes.sector} borderRadius={1} boxShadow={2}>
-            <Typography variant="h4" component="h3" className={classes.campoDes}>
-              Historial
-            </Typography>
-            <Typography className={classes.campoDes}>
-              Cupos cupos estimados: {asignatura.historial.cupos_estimados}
-            </Typography>
-            <Typography className={classes.campoDes}>
-              Cupos del semestre pasado: {asignatura.historial.cupos_pasados}
-            </Typography>
-            <Typography className={classes.campoDes}>
-              Tasa de reprobación:{asignatura.historial.tasa_reprobacion + '%'}
-            </Typography>
-            <Typography className={classes.campoDes}>
-              Desinscripciones actuales: 10
-            </Typography>
-          </Box>
+          {
+            userRedux.status === 'login' &&
+            (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+            <Box className={classes.sector} borderRadius={1} boxShadow={2}>
+              <Typography variant="h4" component="h3" className={classes.campoDes}>
+                Historial
+              </Typography>
+              <Typography className={classes.campoDes}>
+                Cupos cupos estimados: {asignatura.historial.cupos_estimados}
+              </Typography>
+              <Typography className={classes.campoDes}>
+                Cupos del semestre pasado: {asignatura.historial.cupos_pasados}
+              </Typography>
+              <Typography className={classes.campoDes}>
+                Tasa de reprobación:{asignatura.historial.tasa_reprobacion + '%'}
+              </Typography>
+              <Typography className={classes.campoDes}>
+                Desinscripciones actuales: 10
+              </Typography>
+            </Box>
+          }
           </>
       }
     </>

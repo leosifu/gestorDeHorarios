@@ -10,7 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { push } from 'connected-react-router';
-import {setLoading, setProcesoActivo, } from '../../redux/actions'
+import {setLoading, setProcesoActivo, getProcesos, } from '../../redux/actions'
 
 import SelectProceso from './selectProceso';
 import ShowCarrera from './showCarrera';
@@ -74,7 +74,7 @@ export default function NuevoProceso() {
 
   useEffect(() => {
     if (currentProceso.id !== -1) {
-      clientAxios().get(`/api/carrera?procesoId=${procesoselects.id}`)
+      clientAxios(user.idToken).get(`/api/carrera/${procesoselects.id}`)
       .then(res1 => {
         const carreras = res1.data
         let vesp = []
@@ -117,14 +117,14 @@ export default function NuevoProceso() {
       formData.append('procesoId', NuevoProceso.data.id);
       const SubirProfesores = await axios.post(`http://localhost:8000/api/profesores`,
         formData,
-        {headers: {'Authorization': `Bearer ${user.idToken}`, 'Content-Type': 'multipart/form-data'}})
+        {headers: {'Authorization': `Bearer ${user.idToken}`,
+          'Content-Type': 'multipart/form-data'}})
       const data = {
         procesoId: NuevoProceso.data.id,
         mallas: mallasSelected
       }
-      console.log(SubirProfesores);
       const DuplicarDatos = await clientAxios(user.idToken).post('/api/nuevoProceso', data);
-      console.log(DuplicarDatos);
+      dispatch(getProcesos(user.idToken))
       dispatch(push('/'))
     }
   }
@@ -168,14 +168,16 @@ export default function NuevoProceso() {
             {
               carrerasD.map(carrera => (
                 <Grid item xs={4}>
-                  <ShowCarrera carrera={carrera} allSelects={allSelects} setAllSelects={setAllSelects} />
+                  <ShowCarrera carrera={carrera} allSelects={allSelects}
+                    setAllSelects={setAllSelects} />
                 </Grid>
               ))
             }
             {
               carrerasV.map(carrera =>
                 <Grid item xs={4}>
-                  <ShowCarrera carrera={carrera} allSelects={allSelects} setAllSelects={setAllSelects} />
+                  <ShowCarrera carrera={carrera} allSelects={allSelects}
+                    setAllSelects={setAllSelects} />
                 </Grid>
               )
             }

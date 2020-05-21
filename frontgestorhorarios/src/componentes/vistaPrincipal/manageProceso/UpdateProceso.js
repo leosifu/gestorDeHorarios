@@ -7,7 +7,7 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid,
 import clientAxios from '../../../config/axios';
 
 import { useDispatch } from 'react-redux';
-import {setLoading, handleDialogUpdateProceso, } from '../../../redux/actions';
+import {setLoading, handleDialogUpdateProceso, getProcesos, } from '../../../redux/actions';
 
 import ProcesoForm from './ProcesoForm';
 
@@ -43,8 +43,9 @@ function EditarProceso({proceso, estado, setEstado, dialogUpdateProceso, user, }
     clientAxios(user.idToken).put(`/api/procesos/${proceso.id}`, data)
     .then(res=>{
       console.log(res);
+      dispatch(getProcesos(user.idToken));
       dispatch(handleDialogUpdateProceso(false));
-      setEstado(!estado)
+      setEstado(!estado);
     })
     .catch(error=>{
       console.log(error);

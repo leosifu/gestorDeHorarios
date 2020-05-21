@@ -24,7 +24,7 @@ const MallaSelector = createSelector(
 )
 
 const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, setActivo,
-  mallaId, user, }) =>{
+  mallaId, user, currentProceso, userRedux, }) =>{
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -40,7 +40,8 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
   const [infoAsignatura, setInfoAsignatura] = useState({})
 
   useEffect(()=>{
-    clientAxios().get(`/api/asignaturaInfo/${malla.id}/${asignaturaId}`)
+    clientAxios(user.idToken)
+    .get(`/api/asignaturaInfo/${malla.id}/${asignaturaId}/${currentProceso.id}`)
     .then(res => {
       console.log(res.data);
       setInfoAsignatura(res.data)
@@ -79,7 +80,8 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
 
   return(
     <>
-      <IconButton aria-label="settings" size='small' style={{padding:0}} onClick={handleClickMenu}>
+      <IconButton aria-label="settings" size='small' style={{padding:0}}
+        onClick={handleClickMenu}>
         <MoreVertIcon />
       </IconButton>
       <Menu
@@ -100,11 +102,15 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
             Información de la Asignatura
           </Typography>
         </MenuItem>
-        <MenuItem onClick={handleClickEdit}>
-          <Typography className={classes.title} align="center">
-            Definir Prerrequisitos
-          </Typography>
-        </MenuItem>
+        {
+          userRedux.status === 'login' &&
+          (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+          <MenuItem onClick={handleClickEdit}>
+            <Typography className={classes.title} align="center">
+              Definir Prerrequisitos
+            </Typography>
+          </MenuItem>
+        }
       </Menu>
       <Dialog
         fullWidth={true}
@@ -115,7 +121,7 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
         style={{height:630}}
       >
        <TabsAsignatura infoAsignatura={infoAsignatura} asignatura={asignatura} estado={estado}
-        setEstado={setEstado} user={user}/>
+        setEstado={setEstado} user={user} userRedux={userRedux} currentProceso={currentProceso}/>
       </Dialog>
     </>
   )

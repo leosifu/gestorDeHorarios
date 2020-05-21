@@ -7,6 +7,9 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import InfoTwoToneIcon from '@material-ui/icons/InfoTwoTone';
 
+import { useDispatch } from 'react-redux';
+import {handleDialogInfoCoordinacion, } from '../../../../redux/actions';
+
 import './bloqueTablaHorario.css'
 
 const useStyles = makeStyles({
@@ -22,16 +25,29 @@ const useStyles = makeStyles({
     fontSize: 11,
   },
   icono:{
-    fontSize: 12,
+    margin: 0,
+    padding: 0,
+    spacing: 0,
     margin: 'auto',
     textAlign: 'center'
+  },
+  button: {
+    width: 20,
+    height: 20,
+    top: 0,
+    left: 0,
+    padding: 0
   }
 });
 
 function BloqueTablaHorario({coord, nombre_coord, cod_coord, color, profesores, }){
 
   const classes = useStyles();
-  console.log(coord);
+  const dispatch = useDispatch();
+
+  const openInfoCoordinacion = () => {
+    dispatch(handleDialogInfoCoordinacion(true, coord))
+  }
 
   return(
     <CardContent className={classes.contenido} style={{background: color}}>
@@ -55,8 +71,8 @@ function BloqueTablaHorario({coord, nombre_coord, cod_coord, color, profesores, 
           }
         </Grid>
         <Grid item xs={2} className={classes.nombreCoord} >
-          <IconButton >
-            <InfoTwoToneIcon fontSize="small" className={classes.icono}/>
+          <IconButton className={classes.button} onClick={openInfoCoordinacion}>
+            <InfoTwoToneIcon fontSize="small" className={classes.icono} />
           </IconButton>
         </Grid>
       </Grid>

@@ -169,11 +169,12 @@ module.exports = {
         return res.status(200).json(UpdateProceso);
       }
       else {
+        const añoSemestre = año + '~' + semestre
         const UpdateProceso = await Proceso.update({
           estado: estado,
           año: año,
           semestre: semestre,
-          añoSemestre: req.body.año + '~' + req.body.semestre
+          añoSemestre: añoSemestre
         }, {
           where: {id: procesoId}
         });

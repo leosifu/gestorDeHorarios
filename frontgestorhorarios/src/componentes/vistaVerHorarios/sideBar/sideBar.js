@@ -55,16 +55,23 @@ const useStyles = makeStyles(theme => ({
 
 const UserSelector = createSelector(
   state => state.user,
-  user => user.user
+  user => user
+);
+
+const ProcesoSelector = createSelector(
+  state => state.proceso,
+  proceso => proceso.currentProceso
 );
 
 export default function SideBar() {
 
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const {mallaId} = useParams();
-  const user = useSelector(UserSelector);
-  console.log(mallaId);
+  const userRedux = useSelector(UserSelector);
+  const currentProceso = useSelector(ProcesoSelector);
+  const user = userRedux.user;
 
   const [niveles, setNiveles] = useState([])
 
@@ -76,21 +83,24 @@ export default function SideBar() {
 
   useEffect(()=>{
     console.log(mallaId);
-    clientAxios(user.idToken).get(`/api/malla/${mallaId}`)
-    .then(res => {
-      console.log(res.data[0]);
-      dispatch(setMallaRedux(res.data[0]));
-      console.log("asdasd");
-      var niveles = res.data[0].niveles
-      setNiveles(niveles)
-      var nivelC = []
-      niveles.map(niv=>{nivelC.push(false)})
-      console.log(nivelC);
-      setState(nivelC)
-      dispatch(setLoading(false))
-    })
+    if (currentProceso.id !== -1) {
+      clientAxios(user.idToken).get(`/api/malla/${mallaId}/${currentProceso.id}`)
+      .then(res => {
+        console.log(res.data[0]);  // app.put('/api/malla/estado/:id', verify('admin', 'coordinador'), mallaController.cambiarEstadoMalla)
+
+        dispatch(setMallaRedux(res.data[0]));
+        console.log("asdasd");
+        var niveles = res.data[0].niveles
+        setNiveles(niveles)
+        var nivelC = []
+        niveles.map(niv=>{nivelC.push(false)})
+        console.log(nivelC);
+        setState(nivelC)
+        dispatch(setLoading(false))
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  }, [currentProceso])
 
   function handleClick1(){
     setTopes(true)
@@ -139,27 +149,37 @@ export default function SideBar() {
                 {
                   topes && state.map((niv, i)=>(
                       niv && <div style={{position:'absolute', opacity: 0.3, width:'70%', zIndex: 1}}>
-                        <Horario nivel={i+1} user={user}/>
+                        <Horario nivel={i+1} user={user} currentProceso={currentProceso}
+                          userRedux={userRedux} dontDrag={true}/>
                       </div>
                   ))
                 }
                 <div style={{position:'absolute', opacity: 1, width:'70%', zIndex: 0}}>
-                  <Horario nivel={nivel} user={user}/>
+                  <Horario nivel={nivel} user={user} currentProceso={currentProceso}
+                    userRedux={userRedux}/>
                 </div>
               </Grid>
               <Grid item xs={2} style={{zIndex: 100}}>
                 {
                   topes ?
                   <>
-                    <Button variant="contained" color="primary" className={classes.button} onClick={handleClick2}>
+                    <Button variant="contained" color="primary" className={classes.button}
+                      onClick={handleClick2}>
                       Finalizar
                     </Button>
                     <Topes niveles={state} handleChange={handleChange} />
                   </>
                   :
-                  <Button variant="contained" color="primary" className={classes.button} onClick={handleClick1}>
-                      Ver Topes
-                  </Button>
+                  <>
+                    {
+                      userRedux.status === 'login' &&
+                      (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+                      <Button variant="contained" color="primary" className={classes.button}
+                        onClick={handleClick1}>
+                        Ver Topes
+                      </Button>
+                    }
+                  </>
                 }
               </Grid>
             </DndProvider>

@@ -2,7 +2,8 @@ const initialState = {
   user: {
     email: '',
     photoURL: '',
-    name: ''
+    name: '',
+    roles: []
   },
   status: null,
   loading: true

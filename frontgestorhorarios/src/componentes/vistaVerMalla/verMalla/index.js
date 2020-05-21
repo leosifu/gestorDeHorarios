@@ -39,21 +39,29 @@ const useStyles = makeStyles({
   button2: {
     position: 'absolute',
     top: '90%',
-    left: '75%'
+    left: '80%'
   },
 });
 
 const UserSelector = createSelector(
   state => state.user,
-  user => user.user
+  user => user
+);
+
+const ProcesoSelector = createSelector(
+  state => state.proceso,
+  proceso => proceso.currentProceso
 );
 
 function VerMalla(props) {
 
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const {mallaId} = useParams();
-  const user = useSelector(UserSelector);
+  const userRedux = useSelector(UserSelector);
+  const currentProceso = useSelector(ProcesoSelector);
+  const user = userRedux.user;
 
   const [estado, setEstado] = useState(false);
 
@@ -68,26 +76,27 @@ function VerMalla(props) {
   const firstUpdate = useRef(true);
 
   useEffect(()=>{
-    clientAxios().get(`/api/malla/${mallaId}`)
-    .then(res => {
-      console.log(res.data[0]);
-      dispatch(setMallaRedux(res.data[0]));
-      setNiveles(res.data[0].niveles);
-      dispatch(setLoading(false))
-    })
-    .catch((error)=>{
-      console.log(error);
-    })
-  },[estado, mallaId])
+    if (currentProceso.id !== -1) {
+      clientAxios(user.idToken).get(`/api/malla/${mallaId}/${currentProceso.id}`)
+      .then(res => {
+        console.log(res.data[0]);
+        dispatch(setMallaRedux(res.data[0]));
+        setNiveles(res.data[0].niveles);
+        dispatch(setLoading(false))
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
+    }
+  },[estado, mallaId, currentProceso])
 
   useEffect(()=>{
     if (firstUpdate.current) {
       firstUpdate.current = false;
       return;
     }
-    clientAxios().get(`/api/asignaturaReq/${activo}`)
+    clientAxios(user.idToken).get(`/api/asignaturaReq/${activo}/${mallaId}/${currentProceso.id}`)
     .then(res => {
-      console.log(res);
       console.log(res.data[0]);
       setActivo(res.data[0].id)
       var req = res.data[0].requisitos.map(requisito => requisito.id)
@@ -137,7 +146,6 @@ function VerMalla(props) {
   }
 
   function guardarRequisitos(event){
-    console.log(requisitos);
     setEdit(0)
   }
 
@@ -150,32 +158,50 @@ function VerMalla(props) {
                 <Asignatura activo={activo} setActivo={setActivo} requisitos={requisitos}
                   handleClick={edit===1?handleClick2:handleClick1} nivel={nivel.nivel}
                   asignaturas={nivel.asignaturas} edit={edit} setEdit={setEdit}
-                  estado={estado} setEstado={setEstado} mallaId={mallaId} user={user}/>
+                  currentProceso={currentProceso} mallaId={mallaId} user={user}
+                  estado={estado} setEstado={setEstado} userRedux={userRedux}/>
               </GridListTile>
             </div>
         ))
       }
       </GridList>
-      {edit === 0 ?
-        (
-          <>
-            <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${mallaId}`}>
-              <Button variant="contained" color="primary" className={classes.button}>
-                  Horarios
-              </Button>
-            </Link>
-            <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${mallaId}`}>
-              <Button variant="contained" color="primary" className={classes.button2}>
-                  Profesores
-              </Button>
-            </Link>
-          </>
-        ):
-        <Button variant="contained" color="primary" className={classes.button} onClick={guardarRequisitos}>
-          Guardar Requisitos
-        </Button>
+      {
+        userRedux.status === 'login' &&
+        <>
+          {edit === 0 ?
+            <>
+              {
+                user.roles.includes('profe') &&
+                <Link style={{ textDecoration: 'none', color:'white' }} to={`/horarioProfesor`}>
+                  <Button variant="contained" color="primary" className={classes.button2}>
+                      Mi Horario
+                  </Button>
+                </Link>
+              }
+              {
+                currentProceso.status === 'creating' ?
+                (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+                <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${mallaId}`}>
+                  <Button variant="contained" color="primary" className={classes.button}>
+                      Horarios
+                  </Button>
+                </Link>
+                :
+                <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${mallaId}`}>
+                  <Button variant="contained" color="primary" className={classes.button}>
+                      Horarios
+                  </Button>
+                </Link>
+              }
+            </>
+            :
+            <Button variant="contained" color="primary" className={classes.button}
+              onClick={guardarRequisitos}>
+              Guardar Requisitos
+            </Button>
+          }
+        </>
       }
-
       <NotificacionForm />
     </Paper>
   );

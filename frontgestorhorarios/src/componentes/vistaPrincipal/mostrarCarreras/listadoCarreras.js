@@ -4,7 +4,7 @@ import axios from 'axios'
 import clientAxios from '../../../config/axios'
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Grid, Button, Fab, } from '@material-ui/core';
+import {Grid, Button, Fab, Typography, } from '@material-ui/core';
 
 import CSVReader from 'react-csv-reader'
 import {useDropzone} from 'react-dropzone'
@@ -39,7 +39,7 @@ const DialogProcesoSelector = createSelector(
 
 const UserSelector = createSelector(
   state => state.user,
-  user => user.user
+  user => user
 );
 
 export default function ListadoCarreras(){
@@ -47,9 +47,12 @@ export default function ListadoCarreras(){
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const userRedux = useSelector(UserSelector);
   const procesosData = useSelector(ProcesosSelector);
-  const user = useSelector(UserSelector);
   const dialogUpdateProceso = useSelector(DialogProcesoSelector);
+
+  const user = userRedux.user;
+  console.log(user);
 
   const currentProceso = procesosData.currentProceso;
   const procesos = procesosData.procesos;
@@ -63,7 +66,7 @@ export default function ListadoCarreras(){
 
   useEffect(() => {
     if (currentProceso.id !== -1) {
-      clientAxios(user.idToken).get(`/api/carrera?procesoId=${currentProceso.id}`)
+      clientAxios(user.idToken).get(`/api/carrera/${currentProceso.id}`)
       .then(res1 => {
         const carreras = res1.data
         var vesp = []
@@ -92,30 +95,48 @@ export default function ListadoCarreras(){
 
   return (
     <div className={classes.root}>
-      <UpdateProceso proceso={currentProceso} dialogUpdateProceso={dialogUpdateProceso}
-        estado={estado} setEstado={setEstado} user={user}/>
+      {
+        userRedux.status === 'login' &&
+        (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+        <UpdateProceso proceso={currentProceso} dialogUpdateProceso={dialogUpdateProceso}
+          estado={estado} setEstado={setEstado} user={user}/>
+      }
       <Grid container>
-        <Grid item xs={procesos.length > 0 ? 8 : 9}>
+        <Grid item xs={7}>
           <h2>Carreras Diurnas</h2>
         </Grid>
-        <Grid item xs={procesos.length > 0 ? 1 : 0}>
-          {
-            procesos.length > 0 && currentProceso.id !== -1 &&
+        {
+          userRedux.status === 'login' &&
+          (user.roles.includes('admin') || user.roles.includes('coordinador')) ?
+          <Grid item xs={procesos.length > 0 ? 3 : 0}>
             <SelectProceso procesos={procesos} date={date} setDate={setDate}
               currentProceso={currentProceso}/>
-          }
-        </Grid>
-        <Grid item xs={procesos.length > 0 ? 2 : 1}>
-          <CrearCarrera open={openC} setOpen={setOpenC} user={user}/>
-        </Grid>
-        <Grid item xs={1}>
-          <OptionsList currentProceso={currentProceso} user={user}/>
-        </Grid>
+          </Grid>
+          :
+          <Grid item xs={3} style={{textAlign: 'right'}}>
+            <Typography>
+              {`${currentProceso.semestre}/${currentProceso.año}`}
+            </Typography>
+          </Grid>
+        }
+        {
+          userRedux.status === 'login' &&
+          (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+          <>
+            <Grid item xs={1}>
+              <CrearCarrera open={openC} setOpen={setOpenC} user={user}/>
+            </Grid>
+            <Grid item xs={1}>
+              <OptionsList currentProceso={currentProceso} user={user}/>
+            </Grid>
+          </>
+        }
       </Grid>
       <Grid container>
         {carrerasD.map((carrera)=>(
           <Grid item xs={6}  key={carrera.id}>
-            <Carrera carrera={carrera} estado={estado} setEstado={setEstado} user={user}/>
+            <Carrera carrera={carrera} estado={estado} setEstado={setEstado} user={user}
+              userRedux={userRedux}/>
           </Grid>
         ))}
       </Grid>
@@ -127,7 +148,8 @@ export default function ListadoCarreras(){
       <Grid container>
         {carrerasV.map((carrera)=>(
           <Grid item xs={6}  key={carrera.id}>
-            <Carrera carrera={carrera} estado={estado} setEstado={setEstado} user={user}/>
+            <Carrera carrera={carrera} estado={estado} setEstado={setEstado} user={user}
+              userRedux={userRedux}/>
           </Grid>
         ))}
       </Grid>

@@ -16,14 +16,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AsignarProfesor = ({profesoresSelect, setProfesoresSelect, user, showProfesores, }) => {
+const AsignarProfesor = ({profesoresSelect, setProfesoresSelect, user, showProfesores,
+  currentProceso, }) => {
 
   const classes = useStyles();
 
   const [profesores, setProfesores] = useState([])
 
   useEffect(() => {
-    clientAxios(user.idToken).get(`/api/profesores`)
+    clientAxios(user.idToken).get(`/api/profesores/${currentProceso.id}`)
     .then(res => {
       console.log(res.data);
       setProfesores(res.data);

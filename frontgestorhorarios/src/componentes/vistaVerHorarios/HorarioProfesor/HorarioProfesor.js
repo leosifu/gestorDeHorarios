@@ -21,7 +21,7 @@ const ProcesoSelector = createSelector(
 
 const UserSelector = createSelector(
   state => state.user,
-  user => user.user
+  user => user
 );
 
 const getRandomColor = () => "hsl(" + Math.random() * 360 + ", 100%, 75%)";
@@ -30,8 +30,9 @@ const HorarioProfesor = ({selectedUser, }) => {
 
   const dispatch = useDispatch();
 
-  const user = useSelector(UserSelector);
+  const userRedux = useSelector(UserSelector);
   const proceso = useSelector(ProcesoSelector);
+  const user = userRedux.user;
 
   const [data, setData] = useState([]);
 
@@ -89,7 +90,7 @@ const HorarioProfesor = ({selectedUser, }) => {
   return (
     <DndProvider backend={HTML5Backend}>
       <Horario data={data} setData={setData} asignaturas={asignaturas} setAsignaturas={setAsignaturas}
-        user={user}/>
+        user={user} userRedux={userRedux} dontDrag={true}/>
     </DndProvider>
   )
 }

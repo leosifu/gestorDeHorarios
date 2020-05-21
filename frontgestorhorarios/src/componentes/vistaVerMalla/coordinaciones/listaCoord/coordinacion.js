@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Coordinacion({coordinacion, estado, setEstado, user, }){
+function Coordinacion({coordinacion, estado, setEstado, user, userRedux, }){
   const classes = useStyles();
 
   const [asociar, setAsociar] = useState(false);
@@ -59,17 +59,23 @@ function Coordinacion({coordinacion, estado, setEstado, user, }){
     <>
       {
         edit ?
-        <EditCoordinacion estado={estado} setEstado={setEstado} coordinacion={coordinacion}
-          edit={edit} setEdit={setEdit} user={user} profesores={coordinacion.profesores.map(profesor => ({
-            createdAt: profesor.createdAt,
-            email: profesor.email,
-            id: profesor.id,
-            lastName: profesor.lastName,
-            name: profesor.name,
-            phone: profesor.phone,
-            rut: profesor.rut,
-            updatedAt: profesor.updatedAt
-          }))}/>
+        <>
+          {
+            userRedux.status === 'login' &&
+            (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+            <EditCoordinacion estado={estado} setEstado={setEstado} coordinacion={coordinacion}
+              edit={edit} setEdit={setEdit} user={user} profesores={coordinacion.profesores.map(profesor => ({
+                createdAt: profesor.createdAt,
+                email: profesor.email,
+                id: profesor.id,
+                lastName: profesor.lastName,
+                name: profesor.name,
+                phone: profesor.phone,
+                rut: profesor.rut,
+                updatedAt: profesor.updatedAt
+              }))}/>
+          }
+        </>
         :
         <Box className={classes.sector} borderRadius={1} boxShadow={2} key={coordinacion.id}>
           <Grid container>
@@ -78,11 +84,15 @@ function Coordinacion({coordinacion, estado, setEstado, user, }){
                 Código de la coordinación: {coordinacion.InfoCoordinacion.cod_coord}
               </Typography>
             </Grid>
-            <Grid item xs={2}>
-              <IconButton className={classes.centrarIcon} onClick={clickEdit}>
-                <EditIcon style={{color:"blue"}}/>
-              </IconButton>
-            </Grid>
+            {
+              userRedux.status === 'login' &&
+              (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+              <Grid item xs={2}>
+                <IconButton className={classes.centrarIcon} onClick={clickEdit}>
+                  <EditIcon style={{color:"blue"}}/>
+                </IconButton>
+              </Grid>
+            }
           </Grid>
           <Typography className={classes.campoDes}>
             Nombre de la coordinación: {coordinacion.InfoCoordinacion.nombre_coord}

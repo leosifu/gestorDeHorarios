@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 
-import {FormControl, InputLabel, Select, } from '@material-ui/core';
+import {FormControl, InputLabel, Select, Typography, } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -59,8 +59,17 @@ const SelectProceso = ({procesos, date, setDate, currentProceso, }) => {
     }
   };
 
+  const estados = {
+    finished: 'Proceso Terminado',
+    creating: 'Nuevo Proceso',
+    active: 'Proceso Activo'
+  }
+
   return(
     <>
+      <Typography>
+        {estados[currentProceso.estado]}
+      </Typography>
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor="age-native-simple">Año</InputLabel>
         {

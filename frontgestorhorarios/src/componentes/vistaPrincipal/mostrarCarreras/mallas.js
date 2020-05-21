@@ -8,7 +8,7 @@ import {Card, CardContent, CardActions, Button, ButtonGroup, Grid} from '@materi
 
 import ActualizarMalla from '../formularios/formMalla/actualizarMalla'
 
-function Malla({ malla, estado, setEstado}){
+function Malla({ malla, estado, setEstado, user, userRedux, }){
 
   const dispatch = useDispatch();
 
@@ -31,9 +31,13 @@ function Malla({ malla, estado, setEstado}){
           <Grid item xs={10}>
             {malla.cod_malla}
           </Grid>
-          <Grid item xs={2}>
-            <ActualizarMalla malla={malla} open={open} setOpen={setOpen} estado={estado} setEstado={setEstado}/>
-          </Grid>
+          {
+            userRedux.status === 'login' &&
+            (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+            <Grid item xs={2}>
+              <ActualizarMalla malla={malla} open={open} setOpen={setOpen} estado={estado} setEstado={setEstado}/>
+            </Grid>
+          }
         </Grid>
       </CardContent>
       <CardActions>
@@ -43,7 +47,10 @@ function Malla({ malla, estado, setEstado}){
           aria-label="full-width contained primary button group"
         >
           <Button onClick={redirectMalla}>Ver Malla</Button>
-          <Button onClick={redirectHorario}>Horarios</Button>
+          {
+            userRedux.status === 'login' &&
+            <Button onClick={redirectHorario}>Horarios</Button>
+          }
         </ButtonGroup>
       </CardActions>
     </Card>

@@ -1,10 +1,13 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {Button, Dialog, DialogTitle, DialogActions, DialogContent, Fab, } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
-import CarreraForm from './carreraForm'
 
 import clientAxios from '../../../../config/axios'
+
+import { makeStyles } from '@material-ui/core/styles';
+import {Button, Dialog, DialogTitle, DialogActions, DialogContent, Fab,
+  Tooltip, } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+
+import CarreraForm from './carreraForm'
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -50,10 +53,12 @@ function ActualizarCarrera({carrera, open, setOpen, estado, setEstado, user, }) 
 
   return (
     <React.Fragment>
-      <Fab color="secondary" size="small" aria-label="add" className={classes.margin}
-        onClick={handleClickOpen}>
-        <EditIcon />
-      </Fab>
+      <Tooltip title="Editar Carrera">
+        <Fab color="secondary" size="small" aria-label="add" className={classes.margin}
+          onClick={handleClickOpen}>
+          <EditIcon />
+        </Fab>
+      </Tooltip>
       <Dialog
         fullWidth={true}
         open={open}

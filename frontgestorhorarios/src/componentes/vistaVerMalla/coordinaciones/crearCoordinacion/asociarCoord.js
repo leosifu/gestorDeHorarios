@@ -58,21 +58,21 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, }){
   }
 
   useEffect(()=>{
-    clientAxios().get('/api/carreras')
+    clientAxios(user.idToken).get('/api/carreras')
     .then(res=>{
       setCarreras(res.data)
     })
   }, [])
 
   useEffect(()=>{
-    clientAxios().get(`/api/mallas/${carrera}`)
+    clientAxios(user.idToken).get(`/api/mallas/${carrera}`)
     .then(res=>{
       setMallas(res.data)
     })
   }, [carrera])
 
   useEffect(()=>{
-    clientAxios().get(`/api/asignaturas/${malla}`)
+    clientAxios(user.idToken).get(`/api/asignaturas/${malla}`)
     .then(res=>{
       console.log(res.data);
       setAsignaturas(res.data)

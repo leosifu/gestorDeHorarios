@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     añoSemestre: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: false
+      unique: true
     },
     estado: {
       type: DataTypes.ENUM,

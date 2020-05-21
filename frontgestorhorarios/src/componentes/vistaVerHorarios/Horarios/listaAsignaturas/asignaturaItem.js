@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsignaturaItem({asignatura, data}){
+function AsignaturaItem({asignatura, data, userRedux, }){
 
   const classes = useStyles();
 
@@ -73,7 +73,7 @@ function AsignaturaItem({asignatura, data}){
                 return(
                   <ListItem button className={classes.nested} key={coord[0].id}>
                     <Bloque coord={coordBloques[0]} tipo={"lista"}
-                      num={coordBloques.length}/>
+                      num={coordBloques.length} userRedux={userRedux}/>
                   </ListItem>
                 )
               }
@@ -81,7 +81,7 @@ function AsignaturaItem({asignatura, data}){
                 return(
                   <ListItem button className={classes.nested} key={coord[0].id}>
                     <BloqueListaAsign nombre_coord={coord[0].nombre_coord} cod_coord={coord[0].cod_coord}
-                    num={0} color={coord[0].color}/>
+                      num={0} color={coord[0].color}/>
                   </ListItem>
                 )
               }

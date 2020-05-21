@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleClick,
-  edit, setEdit, activo, setActivo, mallaId, user, }) {
+  edit, setEdit, activo, setActivo, mallaId, user, currentProceso, userRedux, }) {
 
   const classes = useStyles();
 
@@ -69,29 +69,46 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleCl
           <CardContent style={{paddingLeft:0, paddingRight: 0}}>
             <Grid container style={{paddingLeft:16, paddingRight: 16}}>
               <Grid item xs={11}>
-                <Typography className={classes.title} color="textSecondary" align="center" onClick={event => {return handleClick(event, asignatura.id)}}>
+                <Typography className={classes.title} color="textSecondary" align="center"
+                  onClick={event => {return handleClick(event, asignatura.id)}}>
                   Código: {asignatura.InfoAsignatura.cod_asignatura}
                 </Typography>
               </Grid>
               <Grid item xs={1}>
-                {edit === 0 &&
-                  <VerAsignatura cod_asignatura={asignatura.InfoAsignatura.cod_asignatura} asignaturaId={asignatura.id} edit={edit} setEdit={setEdit}
-                    activo={activo} setActivo={setActivo} user={user}/>
+                {userRedux.status === 'login' && edit === 0 &&
+                  <VerAsignatura cod_asignatura={asignatura.InfoAsignatura.cod_asignatura}
+                    asignaturaId={asignatura.id} edit={edit} setEdit={setEdit}
+                    activo={activo} setActivo={setActivo} user={user} userRedux={userRedux}
+                    currentProceso={currentProceso}/>
                 }
               </Grid>
             </Grid>
-            <Typography align="center" style={{fontSize:14, color: 'orange', height: 110}} onClick={event => {return handleClick(event, asignatura.id)}}>
+            <Typography align="center" style={{fontSize:14, color: 'orange', height: 110}}
+              onClick={event => {return handleClick(event, asignatura.id)}}>
               {asignatura.InfoAsignatura.nombre_asignatura}
             </Typography>
           </CardContent>
         </Card>
       ))}
-      <Card className={classes.card} style={{ display:'flex', justifyContent:'center' }}>
-        <Box borderRadius="50%" border={1} className={classes.oval}>
-          <CrearAsignatura nivel={nivel} open={open} setOpen={setOpen} estado={estado} setEstado={setEstado}
-            mallaId={mallaId} user={user}/>
-        </Box>
-      </Card>
+      {
+        (userRedux.status === 'login' &&
+        (user.roles.includes('admin') || user.roles.includes('coordinador'))) ?
+        <Card className={classes.card} style={{ display:'flex', justifyContent:'center' }}>
+          <Box borderRadius="50%" border={1} className={classes.oval}>
+            <CrearAsignatura nivel={nivel} open={open} setOpen={setOpen} estado={estado}
+              setEstado={setEstado}
+              mallaId={mallaId} user={user}/>
+          </Box>
+        </Card>
+        :
+        <>
+          {
+            asignaturas.length === 0 &&
+            <Card className={classes.card} style={{ display:'flex', justifyContent:'center' }}>
+            </Card>
+          }
+        </>
+      }
     </div>
   );
 }

@@ -50,16 +50,21 @@ module.exports = {
       .catch(error=> res.status(400).send(error))
   },
   findMallaById(req,res){
-    var id = req.params.id
+    const {mallaId, procesoId} = req.params;
+    console.log(mallaId);
+    console.log(procesoId);
     return Malla
       .findAll({
-        where: {id:id},
+        where: {id:mallaId},
         include: [{
           model:Asignatura,
           as:'asignaturas',
         }]
       })
       .then(malla =>{
+        if (!malla) {
+          return res.status(404).send({message: 'Malla no encontrada'})
+        }
         const asignaturas = malla[0].dataValues.asignaturas
         var niveles = []
         for (var i = 1; i <= malla[0].dataValues.n_niveles; i++) {
@@ -71,7 +76,10 @@ module.exports = {
         delete malla[0].dataValues.asignaturas
         return (res.json(malla))
       })
-      .catch(error=> res.status(400).send(error))
+      .catch(error=> {
+        console.log(error);
+        return res.status(400).send(error)
+      })
   },
   findMallaByAño(req, res){
     const {id, año, semestre} = req.params

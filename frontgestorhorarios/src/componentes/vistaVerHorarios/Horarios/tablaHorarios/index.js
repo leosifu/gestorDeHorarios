@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 const horarios = ['08:00 - 09:30', '09:40 - 11:10', '11:20 - 12:50', '13:50 - 15:20',
 '15:30 - 17:00', '17:10 - 18:40', '19:00 - 20:10', '20:20 - 22:00', '22:00 - 23:00']
 
-function TablaHorarios({bloques, handleDrop}){
+function TablaHorarios({bloques, handleDrop, userRedux, dontDrag, }){
 
   const classes = useStyles();
 
@@ -36,7 +36,7 @@ function TablaHorarios({bloques, handleDrop}){
         const Bloques = dia.map(bloque=>{
           return(
             <Bloque coord={bloque} onDrop={item => handleDrop(i, j, item)} tipo={"tabla"}
-              key={bloque.id}/>
+              key={bloque.id} userRedux={userRedux} dontDrag={dontDrag}/>
           )
         })
         return(
@@ -58,8 +58,8 @@ function TablaHorarios({bloques, handleDrop}){
         }
         return(
           <TableCell padding="none" className={classes.grilla} key={j}>
-            <Bloque coord={NoCoord} onDrop={item => handleDrop(i, j, item)} style={{left: 50}}
-              />
+            <Bloque onDrop={item => handleDrop(i, j, item)} style={{left: 50}} coord={NoCoord}
+              userRedux={userRedux}/>
           </TableCell>
         )
       }

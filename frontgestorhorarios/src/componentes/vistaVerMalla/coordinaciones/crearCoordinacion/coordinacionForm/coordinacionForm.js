@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfesoresSelect, user,
-  profesores, edit, }){
+  profesores, edit, currentProceso, }){
   const classes = useStyles();
   const [age, setAge] = useState('');
 
@@ -100,7 +100,7 @@ function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfes
         <DatosCoordForm handleOnChange={handleOnChange} cod_coord={state.cod_coord}
           nombre_coord={state.nombre_coord} />
 
-        <AsignarProfesor profesoresSelect={profesoresSelect} user={user}
+        <AsignarProfesor profesoresSelect={profesoresSelect} user={user} currentProceso={currentProceso}
           setProfesoresSelect={setProfesoresSelect} showProfesores={profesores} />
 
         <EspecCoordForm handleOnChange={handleOnChange} tipo_coord={state.tipo_coord}

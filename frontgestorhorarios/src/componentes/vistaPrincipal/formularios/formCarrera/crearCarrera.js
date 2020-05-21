@@ -1,6 +1,7 @@
 import React from 'react';
 
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab} from '@material-ui/core';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab,
+  Tooltip, } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -74,9 +75,11 @@ function CrearCarrera({open, setOpen, user, }) {
 
   return (
     <React.Fragment>
-      <Fab color="primary" size="small" aria-label="add" className={classes.margin} onClick={handleClickOpen}>
-        <AddIcon />
-      </Fab>
+      <Tooltip title="Crear Carrera">
+        <Fab color="primary" size="small" aria-label="add" className={classes.margin} onClick={handleClickOpen}>
+          <AddIcon />
+        </Fab>
+      </Tooltip>
       <Dialog
         fullWidth={true}
         open={open}

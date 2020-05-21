@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import {Card, CardContent, Typography, Grid, FormControlLabel, Checkbox,
+  Tooltip, } from '@material-ui/core';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
 const useStyles = makeStyles({
   card: {
@@ -32,14 +32,26 @@ function BloqueListaAsign({nombre_coord, cod_coord, num, color}){
         <Grid container>
           <Grid item xs={10}>
             <Typography className={classes.nombreCoord}>
-              {nombre_coord + ' - ' + cod_coord}
+              {nombre_coord}
             </Typography>
             <Typography className={classes.nombreCoord}>
-
+              {cod_coord}
             </Typography>
           </Grid>
           <Grid item xs={2} className={classes.nombreCoord}>
             {num}
+            <Tooltip title="Mostrar">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    style={{ width: 36, height: 36 }}
+                    icon={<CheckBoxOutlineBlankIcon fontSize="small" style={{ fontSize: 20 }}/>}
+                    checkedIcon={<CheckBoxIcon fontSize="small" style={{ fontSize: 20 }}/>}
+                    name="checkedI"
+                  />
+                }
+              />
+            </Tooltip>
           </Grid>
         </Grid>
       </CardContent>

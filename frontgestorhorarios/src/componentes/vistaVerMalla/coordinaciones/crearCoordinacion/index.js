@@ -10,7 +10,7 @@ import CoordinacionForm from './coordinacionForm/coordinacionForm'
 import AsociarCoord from './asociarCoord'
 
 const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado, setEstado,
-  crear, setCrear, user, }) =>{
+  crear, setCrear, user, currentProceso, }) =>{
 
   const [eleccion, setEleccion] = useState(0);
   const [profesoresSelect, setProfesoresSelect] = useState([]);
@@ -59,12 +59,13 @@ const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado
     return(
       <CoordinacionForm camposCord={data} onSubmitForm={onSubmitForm} setEstado={setEstado}
         estado={estado} profesoresSelect={profesoresSelect} user={user}
-        setProfesoresSelect={setProfesoresSelect}/>
+        setProfesoresSelect={setProfesoresSelect} currentProceso={currentProceso}/>
     )
   }
   else if (eleccion === 2) {
     return(
-      <AsociarCoord asignaturaAct={asignatura} estado={estado} setEstado={setEstado} user={user}/>
+      <AsociarCoord asignaturaAct={asignatura} estado={estado} setEstado={setEstado} user={user}
+        currentProceso={currentProceso}/>
     )
   }
   else {

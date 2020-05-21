@@ -102,7 +102,6 @@ const ProcesoForm = ({año, semestre, estado, onSubmitForm, edit, activa}) => {
             <FormControlLabel value="finished" control={<Radio />} label="Proceso Terminado" />
           </RadioGroup>
         </FormControl>
-
         <DialogActions>
           <Button onClick={handleOnSubmit} color="primary">
             Actualizar Malla

@@ -4,14 +4,17 @@ module.exports = (sequelize, DataTypes) => {
     cupos_pasados: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 0
     },
     tasa_reprobacion: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 0
     },
     cupos_estimados: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 0
     },
     desinscripciones: {
       type: DataTypes.INTEGER,

@@ -2,7 +2,8 @@ import React from 'react';
 
 import clientAxios from '../../../../config/axios'
 
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, } from '@material-ui/core';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab,
+  Tooltip, } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -72,10 +73,12 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado, user, }) {
 
   return (
     <>
-      <Fab color="primary" size="small" aria-label="add" className={classes.margin}
-        onClick={handleClickOpen}>
-        <AddIcon />
-      </Fab>
+      <Tooltip title="Agregar Malla">
+        <Fab color="primary" size="small" aria-label="add" className={classes.margin}
+          onClick={handleClickOpen}>
+          <AddIcon />
+        </Fab>
+      </Tooltip>
       <Dialog
         fullWidth={true}
         open={open}

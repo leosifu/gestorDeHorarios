@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Carrera({carrera, estado, setEstado, user, }) {
+export default function Carrera({carrera, estado, setEstado, user, userRedux, }) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
 
@@ -64,12 +64,16 @@ export default function Carrera({carrera, estado, setEstado, user, }) {
               <Grid item xs={9}>
                 {carrera.nombre_carrera}
               </Grid>
-              <Grid item xs={3}>
-                <CrearMalla carreraId={carrera.id} open={openM} setOpen={setOpenM} estado={estado}
-                  setEstado={setEstado} user={user}/>
-                <ActualizarCarrera carrera={carrera} open={openC} setOpen={setOpenC} estado={estado}
-                  setEstado={setEstado} user={user}/>
-              </Grid>
+              {
+                userRedux.status === 'login' &&
+                (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+                <Grid item xs={3}>
+                  <CrearMalla carreraId={carrera.id} open={openM} setOpen={setOpenM} estado={estado}
+                    setEstado={setEstado} user={user}/>
+                  <ActualizarCarrera carrera={carrera} open={openC} setOpen={setOpenC} estado={estado}
+                    setEstado={setEstado} user={user}/>
+                </Grid>
+              }
             </Grid>
           </Typography>
       </CardContent>
@@ -92,7 +96,8 @@ export default function Carrera({carrera, estado, setEstado, user, }) {
           <div>
             {carrera.mallas.map((malla, i) =>
                 <CardContent key={malla.id}>
-                  <Malla malla={malla} estado={estado} setEstado={setEstado}/>
+                  <Malla malla={malla} estado={estado} setEstado={setEstado} user={user}
+                    userRedux={userRedux}/>
                 </CardContent>
             )}
           </div>

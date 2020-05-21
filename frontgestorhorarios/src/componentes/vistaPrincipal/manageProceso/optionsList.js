@@ -2,13 +2,13 @@ import React, {useState, } from 'react'
 
 import clientAxios from '../../../config/axios';
 
+import { makeStyles } from '@material-ui/core/styles';
+import {MenuItem, Menu, Fab, Tooltip, } from '@material-ui/core';
+import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
+
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import {handleDialogUpdateProceso, } from '../../../redux/actions';
-
-import { makeStyles } from '@material-ui/core/styles';
-import {MenuItem, Menu, Fab, } from '@material-ui/core';
-import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
 
 import Swal from 'sweetalert2';
 
@@ -82,10 +82,12 @@ export default function OptionsList({currentProceso, user, }) {
 
   return (
     <div className={classes.root}>
-      <Fab color="primary" size="small" aria-label="add" className={classes.margin}
-        onClick={handleClick}>
-        <BrightnessHighIcon />
-      </Fab>
+      <Tooltip title="Opciones del Proceso">
+        <Fab color="primary" size="small" aria-label="add" className={classes.margin}
+          onClick={handleClick}>
+          <BrightnessHighIcon />
+        </Fab>
+      </Tooltip>
       <Menu
         id="simple-menu"
         elevation={0}

@@ -27,48 +27,42 @@ module.exports = {
         return res.status(400).send(error)
       })
   },
-  findAsignaturasByNivel(req, res){
-    var id = req.params.id
-    var nivel = req.params.nivel
-    return InfoAsignatura
-      .findAll({
-        where: {mallaId:id, nivel: nivel},
+  async findAsignaturasByNivel(req, res){
+    try {
+      const {mallaId, nivel, procesoId} = req.params;
+      const mallaA = await InfoAsignatura.findAll({
+        where: {mallaId:mallaId, nivel: nivel},
         include:[{model:Asignatura, as:'Asignatura',
           include: [{model:Coordinacion, as:'coordinaciones',
             include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores'}]}]
         }]
       })
-      .then(mallaA=>{
-        var asignaturas = mallaA.map(malA=>{
-          malA.Asignatura.dataValues.cod_asignatura = malA.cod_asignatura
-          malA.Asignatura.dataValues.nombre_asignatura = malA.nombre_asignatura
-          return malA.Asignatura
-        })
-        return(res.json(asignaturas))
+      var asignaturas = mallaA.map(malA=>{
+        malA.Asignatura.dataValues.cod_asignatura = malA.cod_asignatura
+        malA.Asignatura.dataValues.nombre_asignatura = malA.nombre_asignatura
+        return malA.Asignatura
       })
-      .catch(error=> {
-        console.log(error);
-        return res.status(400).send(error)
-      })
+      return(res.json(asignaturas))
+    } catch (error) {
+      console.log(error);
+      return res.status(400).send(error)
+    }
   },
   findAsignatura(req, res){
     return InfoAsignatura
       .findOne({
-        where:{mallaId: req.params.mId, asignaturaId: req.params.aId},
+        where:{mallaId: req.params.mallaId, asignaturaId: req.params.aId},
         include: [{model:Asignatura, as:'Asignatura',
           include:[{model:HistorialM, as:'historial'},{model:Asignatura, as:'requisitos',
-            include:[{model: Malla, as:'mallas', where:{id: req.params.mId}}]},
+            include:[{model: Malla, as:'mallas', where:{id: req.params.mallaId}}]},
             {model:Coordinacion, as:'coordinaciones',
               include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores'}]
           }]
         }]
       })
       .then(infoA=>{
-        console.log(infoA.dataValues);
-        console.log(infoA.dataValues.asignaturaId);
         for (var i = 0; i < infoA.dataValues.Asignatura.dataValues.requisitos.length; i++) {
           var req = infoA.dataValues.Asignatura.dataValues.requisitos[i]
-          console.log(req);
           var cod_asignatura = req.mallas[0].InfoAsignatura.dataValues.cod_asignatura
           var nombre_asignatura = req.mallas[0].InfoAsignatura.dataValues.nombre_asignatura
           infoA.dataValues.Asignatura.dataValues.requisitos[i].dataValues

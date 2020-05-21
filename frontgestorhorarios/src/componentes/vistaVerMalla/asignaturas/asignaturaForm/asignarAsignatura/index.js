@@ -73,7 +73,7 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, us
   }
 
   useEffect(()=>{
-    clientAxios().get('/api/carreras')
+    clientAxios(user.idToken).get('/api/carreras')
     .then(res=>{
       console.log(res.data);
       setCarreras(res.data)
@@ -84,7 +84,7 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, us
   }, [])
 
   useEffect(()=>{
-    clientAxios().get(`/api/mallas/${carrera}`)
+    clientAxios(user.idToken).get(`/api/mallas/${carrera}`)
     .then(res=>{
       console.log(res.data);
       setMallas(res.data)
@@ -95,7 +95,7 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, us
   }, [carrera])
 
   useEffect(()=>{
-    clientAxios().get(`/api/asignaturas/${malla}`)
+    clientAxios(user.idToken).get(`/api/asignaturas/${malla}`)
     .then(res=>{
       console.log(res.data);
       setAsignaturas(res.data)

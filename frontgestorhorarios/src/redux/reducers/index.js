@@ -8,6 +8,7 @@ import userReducer from './userReducer'
 import dialogUsuarioReducer from './dialogUsuarioReducer'
 import dialogHorarioProfesorReducer from './dialogHorarioProfesorReducer'
 import dialogUpdateProcesoReducer from './dialogUpdateProcesoReducer'
+import dialogInfoCoordinacionReducer from './dialogInfoCoordinacionReducer'
 
 const createRootReducer = (history) => combineReducers({
   carrera: carreraReducer,
@@ -18,6 +19,7 @@ const createRootReducer = (history) => combineReducers({
   dialogUsuario: dialogUsuarioReducer,
   dialogHorarioProfesor: dialogHorarioProfesorReducer,
   dialogUpdateProceso: dialogUpdateProcesoReducer,
+  dialogInfoCoordinacion: dialogInfoCoordinacionReducer,
   router: connectRouter(history)
 })
 

@@ -22,13 +22,10 @@ module.exports = {
       .catch(error=> res.status(400).send(error))
   },
   findAll(req,res){
-    const data = {}
-    if (req.query.procesoId) {
-      data.procesoId = req.query.procesoId
-    }
+    const {procesoId} = req.params;
     return Carrera
       .findAll({
-        include: [{model:Malla, as:'mallas', where: data, required: false}]
+        include: [{model:Malla, as:'mallas', where: {procesoId: procesoId}, required: false}]
       })
       .then(carrera => res.status(201).send(carrera))
       .catch(error=> res.status(400).send(error))

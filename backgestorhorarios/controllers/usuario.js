@@ -163,6 +163,7 @@ module.exports = {
       const {procesoId} = req.body;
       const AllProfesoresDuplicated = [].concat(...profesoresData);
       const AllProfesores = AllProfesoresDuplicated.map(profesor => {
+        console.log(profesor);
         const ProfesorNombreCompleto = profesor.NOMBREPROFESOR.replace(',', '');
         const ProfesorAllNombre = ProfesorNombreCompleto.split(' ');
         const ProfesorNombreFormat = ProfesorAllNombre.map(nombre => toTitleCase(nombre));
@@ -343,12 +344,19 @@ module.exports = {
           }
         });
         const NuevosRoles = await RolUsuario.bulkCreate(AsignarRoles);
-        if (AsignarRoles.includes('profe')) {
-          console.log('Asignando proceso...');
-          const AsignarProceso = await UsuarioProceso.create({
-            usuarioId: id,
-            procesoId: procesoId
-          });
+        if (rolesData.includes('profe')) {
+          const CheckAsignacion = await UsuarioProceso.findOne({
+            where: {
+              usuarioId: id,
+              procesoId: procesoId
+            }
+          })
+          if (!CheckAsignacion) {
+            const AsignarProceso = await UsuarioProceso.create({
+              usuarioId: id,
+              procesoId: procesoId
+            });
+          }
         }
         return res.status(201).send(FindProfesor)
       }

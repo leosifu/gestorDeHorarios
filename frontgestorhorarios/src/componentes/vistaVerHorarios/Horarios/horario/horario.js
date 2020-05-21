@@ -9,6 +9,7 @@ import clientAxios from '../../../../config/axios';
 
 import ListaAsignaturas from '../listaAsignaturas';
 import TablaHorarios from '../tablaHorarios';
+import InfoCoordinacion from './InfoCoordinacion';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 const getRandomColor = () => "hsl(" + Math.random() * 360 + ", 100%, 75%)";
 
-function Horario({data, setData, asignaturas, setAsignaturas, user}) {
+function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, dontDrag, }) {
 
   const classes = useStyles();
 
@@ -132,25 +133,30 @@ function Horario({data, setData, asignaturas, setAsignaturas, user}) {
     )}, [data])
 
   return (
-    <Grid container>
-      <Grid item xs={2}>
-        <ListaAsignaturas asignaturas={asignaturas} data={data} dropLista={dropLista}/>
+    <>
+      <InfoCoordinacion />
+      <Grid container>
+        <Grid item xs={2}>
+          <ListaAsignaturas asignaturas={asignaturas} data={data} dropLista={dropLista}
+            userRedux={userRedux}/>
+        </Grid>
+        <Grid item xs={10}>
+          <Paper className={classes.root}>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  {dias.map((dia)=>(
+                    <TableCell className={classes.encabezado} key={dia}>{dia}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TablaHorarios bloques={bloques} handleDrop={handleDrop} userRedux={userRedux}
+                dontDrag={dontDrag}/>
+            </Table>
+          </Paper>
+        </Grid>
       </Grid>
-      <Grid item xs={10}>
-        <Paper className={classes.root}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                {dias.map((dia)=>(
-                  <TableCell className={classes.encabezado} key={dia}>{dia}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TablaHorarios bloques={bloques} handleDrop={handleDrop} />
-          </Table>
-        </Paper>
-      </Grid>
-    </Grid>
+    </>
   );
 }
 

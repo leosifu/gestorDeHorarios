@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independiente, estado,
-  setEstado, user, }){
+  setEstado, user, userRedux, currentProceso, }){
   const classes = useStyles();
 
   const [crear, setCrear] = useState(false)
@@ -58,19 +58,39 @@ function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independien
       </Typography>
       {coordinaciones.map(coordinacion=>
         <Coordinacion coordinacion={coordinacion} key={coordinacion.id} estado={estado}
-          setEstado={setEstado} user={user}/>
+          setEstado={setEstado} user={user} userRedux={userRedux}/>
       )}
 
-      {crear?
-        <CrearCoordinacion estado={estado} setEstado={setEstado} lab_independiente={lab_independiente}
-          nombre_asignatura={infoAsignatura.nombre_asignatura} asignatura={asignatura} crear={crear}
-          setCrear={setCrear} user={user}/>
+      {crear ?
+        <>
+          {
+            userRedux.status === 'login' &&
+            (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+            <CrearCoordinacion estado={estado} setEstado={setEstado} lab_independiente={lab_independiente}
+              nombre_asignatura={infoAsignatura.nombre_asignatura} asignatura={asignatura} crear={crear}
+              setCrear={setCrear} user={user} currentProceso={currentProceso}/>
+          }
+        </>
         :
-        <Box className={classes.crear} borderRadius={1} boxShadow={2}>
-          <IconButton className={classes.centrarIcon} onClick={handleClick}>
-            <AddCircleOutlineOutlinedIcon fontSize='large'/>
-          </IconButton>
-        </Box>
+        <>
+          {
+            (userRedux.status === 'login' &&
+            (user.roles.includes('admin') || user.roles.includes('coordinador'))) ?
+            <Box className={classes.crear} borderRadius={1} boxShadow={2}>
+              <IconButton className={classes.centrarIcon} onClick={handleClick}>
+                <AddCircleOutlineOutlinedIcon fontSize='large'/>
+              </IconButton>
+            </Box>
+            :
+            <>
+              {
+                coordinaciones.length === 0 &&
+                <Box className={classes.crear} borderRadius={1} boxShadow={2}>
+                </Box>
+              }
+            </>
+          }
+        </>
       }
     </>
   )

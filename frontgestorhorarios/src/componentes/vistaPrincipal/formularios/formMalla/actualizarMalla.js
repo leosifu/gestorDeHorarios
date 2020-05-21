@@ -1,12 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Fab from '@material-ui/core/Fab';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab,
+  Tooltip, } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
+
+
 import MallaForm from './mallaForm'
 
 import clientAxios from '../../../../config/axios'
@@ -60,9 +58,11 @@ function ActualizarMalla({malla, open, setOpen, estado, setEstado, user, }) {
 
   return (
     <React.Fragment>
-      <Fab color="secondary" size="small" aria-label="add" className={classes.margin} onClick={handleClickOpen}>
-        <EditIcon />
-      </Fab>
+      <Tooltip title="Editar Malla">
+        <Fab color="secondary" size="small" aria-label="add" className={classes.margin} onClick={handleClickOpen}>
+          <EditIcon />
+        </Fab>
+      </Tooltip>
       <Dialog
         fullWidth={true}
         open={open}
