@@ -1,6 +1,9 @@
 const admin = require('firebase-admin');
 const jwt = require('jsonwebtoken');
 
+const { Op } = require("sequelize");
+
+const UsuarioProceso = require('../models').UsuarioProceso;
 const Proceso = require('../models').Proceso;
 const Usuario = require('../models').Usuario;
 const Rol = require('../models').Rol;
@@ -60,22 +63,18 @@ module.exports = {
                 })
             }
             else {
-              return Proceso
-                .findAll({
-                  where: {estado: 'creating'}
-                })
-                .then(proceso =>res.status(200).json(proceso))
-                .catch(error=> {
-                  console.log(error);
-                  return(res.status(400).send(error))
-                })
+              const ProfeProcesos = await UsuarioProceso.findAll({
+                where: {usuarioId: usuarioData.id},
+                include: [{model: Proceso}]
+              });
+              const Procesos = ProfeProcesos.map(usuarioProceso => usuarioProceso.Proceso)
+              return res.status(200).json(Procesos)
             }
           }
           res.json({
               message: 'Successful log in',
               authorizedData
           });
-          console.log('SUCCESS: Connected to protected route');
         }
       })
       // admin.auth().verifyIdToken(token[1]).then(async(claims) => {

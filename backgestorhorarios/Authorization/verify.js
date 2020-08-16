@@ -19,6 +19,8 @@ const verify = (...roles) => async (req, res, next) => {
       jwt.verify(token[1], process.env.KEY, async(err, usuarioData) => {
         if(err){
           //If error send Forbidden (403)
+          console.log('ahhhhhh');
+          console.log(err);
           console.log('ERROR: Could not connect to the protected route');
           return res.sendStatus(403);
         } else {

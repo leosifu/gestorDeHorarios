@@ -111,7 +111,7 @@ module.exports = {
             check: true
           }
           const token = jwt.sign(payload, process.env.KEY, {
-            expiresIn: 1440
+            expiresIn: '12h'
           });
           const NotFindUsuario = {...UsuarioData, token: token}
           return(res.status(201).send(NotFindUsuario))
@@ -467,6 +467,109 @@ module.exports = {
   },
   async getHorario(req, res){
     try {
+      let idToken = req.get('Authorization');
+      if (idToken) {
+        const token = idToken.split(' ');
+        jwt.verify(token[1], process.env.KEY, async(err, usuarioData) => {
+          if(err){
+            //If error send Forbidden (403)
+            console.log('ERROR: Could not connect to the protected route');
+            res.sendStatus(403);
+          } else {
+            //If token is successfully verified, we can send the autorized data
+            console.log(usuarioData);
+            const UserRoles = usuarioData.roles;
+            if (userRoles.length > 1) {
+              return res.status(401).json({ message: 'Usuario no Autorizado'})
+            }
+            else {
+              const UserRolesNames = UserRoles.map(rol => rol.rol).sort();
+              const {usuarioId, procesoId} = req.params;
+              if (UserRolesNames.includes('admin') || UserRolesNames.includes('coordinador')){
+                // const GetHorario = await InfoAsignatura.findAll({
+                //   include:[{model:Asignatura, as:'Asignatura',
+                //     include: [{model:Coordinacion, as:'coordinaciones',
+                //       include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores',
+                //         where: {id: usuarioId},
+                //         include: [{model: Proceso, as: 'profesores', where: {id: procesoId}}]
+                //       }]}]
+                //   }]
+                // })
+                const HorarioProfesor = await Malla.findAll({
+                  where: {procesoId: procesoId},
+                  include:[{model:Asignatura, as:'asignaturas',
+                    include: [{model:Coordinacion, as:'coordinaciones',
+                      include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores',
+                        where: {id: usuarioId},
+                        include: [{model: Proceso, as: 'profesores'}]
+                      }]}]
+                  }]
+                })
+                const GetMallas = [].concat(...HorarioProfesor)
+                const GetAsignaturasHorario = [].concat(...GetMallas.map(malla => malla.dataValues.asignaturas))
+                console.log(GetAsignaturasHorario);
+                const AsignarValores = GetAsignaturasHorario.map(asignatura => {
+                  console.log(asignatura);
+                  return({
+                    ...asignatura.InfoAsignatura.dataValues,
+                    Asignatura: asignatura.dataValues
+                  })
+                })
+                return res.status(201).send(AsignarValores);
+              }
+              else {
+                if (usuarioData.id === usuarioId) {
+                  const HorarioProfesor = await Malla.findAll({
+                    where: {procesoId: procesoId},
+                    include:[{model:Asignatura, as:'asignaturas',
+                      include: [{model:Coordinacion, as:'coordinaciones',
+                        include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores',
+                          where: {id: usuarioId},
+                          include: [{model: Proceso, as: 'profesores'}]
+                        }]}]
+                    }]
+                  })
+                  const GetMallas = [].concat(...HorarioProfesor)
+                  const GetAsignaturasHorario = [].concat(...GetMallas.map(malla => malla.dataValues.asignaturas))
+                  console.log(GetAsignaturasHorario);
+                  const AsignarValores = GetAsignaturasHorario.map(asignatura => {
+                    console.log(asignatura);
+                    return({
+                      ...asignatura.InfoAsignatura.dataValues,
+                      Asignatura: asignatura.dataValues
+                    })
+                  })
+                  return res.status(201).send(AsignarValores);
+                }
+                else {
+                  return res.status(401).json({ message: 'Usuario no Autorizado'})
+                }
+                // const GetHorario = await InfoAsignatura.findAll({
+                //   include:[{model:Asignatura, as:'Asignatura',
+                //     include: [{model:Coordinacion, as:'coordinaciones',
+                //       include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores',
+                //         where: {id: usuarioId},
+                //         include: [{model: Proceso, as: 'profesores', where: {id: procesoId}}]
+                //       }]}]
+                //   }]
+                // })
+
+              }
+            }
+          }
+        })
+      }
+      else {
+        return Proceso
+          .findAll({
+            where: {estado: 'active'}
+          })
+          .then(proceso =>res.status(200).json(proceso))
+          .catch(error=> {
+            console.log(error);
+            return(res.status(400).send(error))
+          })
+      }
       console.log('asdasd');
       const {usuarioId, procesoId} = req.params;
       console.log(usuarioId);
@@ -500,33 +603,6 @@ module.exports = {
           Asignatura: asignatura.dataValues
         })
       })
-      // console.log(GetHorario);
-
-      // console.log();
-      // GetHorario.map(horario => {
-      //   console.log(horario.dataValues.Asignatura.dataValues.coordinaciones)
-      // })
-      // console.log(GetHorario[3].dataValues.Asignatura.dataValues.coordinaciones[0].dataValues.profesores[0].dataValues.profesores);
-      // console.log(GetHorario.map(horario => horario.dataValues));
-      // const asignaturas = GetHorario.map(infoA=>{
-      //   // console.log(infoA.Asignatura.dataValues);
-      //   infoA.Asignatura.dataValues.cod_asignatura = infoA.cod_asignatura
-      //   infoA.Asignatura.dataValues.nombre_asignatura = infoA.nombre_asignatura
-      //   return infoA.Asignatura
-      // })
-      // const GetHorario = await UsuarioProceso.findAll({
-      //   where: {
-      //     usuarioId: usuarioId,
-      //     procesoId: procesoId
-      //   },
-      //   include: [{model: Usuario,
-      //     include: [{model: Coordinacion, as: 'coordinaciones',
-      //       include: [{model: Bloque, as: 'bloques'}, {model: Asignatura, as: 'asignaturas'}]
-      //     }]
-      //   }]
-      // });
-
-      // console.log(GetHorario);
       return res.status(201).send(AsignarValores);
     } catch (error) {
       console.log(error);

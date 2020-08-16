@@ -57,6 +57,7 @@ const checkProceso = () => async (req, res, next) => {
       jwt.verify(token[1], process.env.KEY, async(err, usuarioData) => {
         if(err){
           //If error send Forbidden (403)
+          console.log(err);
           console.log('ERROR: Could not connect to the protected route');
           return res.sendStatus(403);
         } else {
@@ -91,13 +92,35 @@ const checkProceso = () => async (req, res, next) => {
             const AvailableProcesos = await UsuarioProceso.findAll({
               where: {usuarioId: usuarioData.id}
             });
+            console.log(AvailableProcesos);
             const AvailableProcesosIDs = AvailableProcesos.map(proceso =>
               parseInt(proceso.dataValues.procesoId));
             if (AvailableProcesosIDs.includes(procesoIdNumber)) {
               return next();
             }
             else {
-              return res.status(401).json({ message: 'Usuario no Autorizado'})
+              const AvailableProcesosP = await Proceso.findAll({
+                where: {estado: 'active'}
+              });
+              const AvailableProcesosPIDs = AvailableProcesosP.map(proceso =>
+                parseInt(proceso.dataValues.id));
+              console.log(AvailableProcesosPIDs);
+              if (AvailableProcesosPIDs.includes(procesoIdNumber)) {
+                if (mallaId) {
+                  const LastCheck = await checkMallaWithProceso(mallaId, procesoId);
+                  if (mallaId) {
+                    return next();
+                  }
+                  else {
+                    return res.status(401).json({ message: 'Usuario no Autorizado'})
+                  }
+                }
+              }
+              else {
+                console.log('FFFFF');
+                return res.status(401).json({ message: 'Usuario no Autorizado'})
+              }
+              // return res.status(401).json({ message: 'Usuario no Autorizado'})
             }
           }
         }

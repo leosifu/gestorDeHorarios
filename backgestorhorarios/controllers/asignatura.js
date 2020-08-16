@@ -110,6 +110,7 @@ module.exports = {
         mallaId: req.params.mId,
         cod_asignatura: req.body.cod_asignatura,
         nombre_asignatura: req.body.nombre_asignatura,
+        nivel: req.body.nivel,
         infoA_id: req.params.mId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
       }
       return Asignatura
