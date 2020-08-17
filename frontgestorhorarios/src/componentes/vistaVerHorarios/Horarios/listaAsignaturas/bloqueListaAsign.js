@@ -22,7 +22,8 @@ const useStyles = makeStyles({
   }
 });
 
-function BloqueListaAsign({nombre_coord, cod_coord, num, color}){
+function BloqueListaAsign({nombre_coord, cod_coord, num, color, handleMostrarCoordinacion,
+  coordinacionId, mostrar, }){
 
   const classes = useStyles();
 
@@ -47,7 +48,8 @@ function BloqueListaAsign({nombre_coord, cod_coord, num, color}){
                     style={{ width: 36, height: 36 }}
                     icon={<CheckBoxOutlineBlankIcon fontSize="small" style={{ fontSize: 20 }}/>}
                     checkedIcon={<CheckBoxIcon fontSize="small" style={{ fontSize: 20 }}/>}
-                    name="checkedI"
+                    onChange={() => handleMostrarCoordinacion(coordinacionId)}
+                    checked={mostrar}
                   />
                 }
               />

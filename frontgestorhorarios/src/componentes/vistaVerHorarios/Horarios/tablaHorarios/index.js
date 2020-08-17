@@ -33,16 +33,16 @@ function TablaHorarios({bloques, handleDrop, userRedux, dontDrag, }){
   const Tabla = bloques.map((fila, i) => {
     const Dia = fila.map((dia, j) => {
       if (dia.length>0) {
-        const Bloques = dia.map(bloque=>{
-          return(
-            <Bloque coord={bloque} onDrop={item => handleDrop(i, j, item)} tipo={"tabla"}
-              key={bloque.id} userRedux={userRedux} dontDrag={dontDrag}/>
-          )
-        })
         return(
           <TableCell padding="none" className={classes.grilla} key={j}>
             <div style={{width:'100%', display: 'flex'}}>
-              {Bloques}
+              {
+                dia.filter(bloque => bloque.mostrar).map(bloque => (
+                  <Bloque coord={bloque} onDrop={item => handleDrop(i, j, item)} tipo={"tabla"}
+                    key={bloque.id} userRedux={userRedux} dontDrag={dontDrag}/>
+                  )
+                )
+              }
             </div>
           </TableCell>
         )
@@ -58,7 +58,7 @@ function TablaHorarios({bloques, handleDrop, userRedux, dontDrag, }){
         }
         return(
           <TableCell padding="none" className={classes.grilla} key={j}>
-            <Bloque onDrop={item => handleDrop(i, j, item)} style={{left: 50}} coord={NoCoord}
+            <Bloque onDrop={item => handleDrop(i, j, item)} coord={NoCoord}
               userRedux={userRedux}/>
           </TableCell>
         )
@@ -75,7 +75,9 @@ function TablaHorarios({bloques, handleDrop, userRedux, dontDrag, }){
   })
 
   return(
-    <TableBody>{Tabla}</TableBody>
+    <TableBody>
+      {Tabla}
+    </TableBody>
   )
 }
 export default TablaHorarios

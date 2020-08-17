@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo}) => {
+const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, }) => {
 
   const [stateC, ] = React.useState({
     checked: camposAsignatura.lab_independiente,
@@ -77,6 +77,7 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo}) => {
     tasa_reprobacion: { value: camposAsignatura.tasa_reprobacion, error: '' },
     lab_independiente: { value: stateC.checked, checked:camposAsignatura.lab_independiente,
       error: '' },
+    nivel: { value: camposAsignatura.nivel, error: '' },
   };
   const validationStateSchema = {
     cod_asignatura: {
@@ -126,6 +127,9 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo}) => {
       },
     },
     lab_independiente:{
+    },
+    nivel: {
+
     }
   };
 
@@ -154,6 +158,22 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo}) => {
 
         <HistorialForm handleOnChange={handleOnChange} cupos_pasados={state.cupos_pasados}
           tasa_reprobacion={state.tasa_reprobacion} />
+
+        {
+          edit &&
+          <TextField
+            error={state.nivel.error ? true:false}
+            id="standard-required"
+            label="Nivel"
+            name="nivel"
+            type="number"
+            className={classes.textFieldNumber}
+            value={state.nivel.value}
+            onChange={handleOnChange}
+            margin="normal"
+            variant="outlined"
+          />
+        }
 
       </DialogContent>
       <DialogActions>

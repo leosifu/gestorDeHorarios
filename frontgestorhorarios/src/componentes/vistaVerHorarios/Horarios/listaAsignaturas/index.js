@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-function ListaAsignaturas({asignaturas, data, dropLista, userRedux, }) {
+function ListaAsignaturas({asignaturas, data, dropLista, userRedux, handleMostrarCoordinacion, }) {
 
   const ref = useRef(null)
 
@@ -51,7 +51,8 @@ function ListaAsignaturas({asignaturas, data, dropLista, userRedux, }) {
           var coordsAsignatura = data.filter(dato=>dato.asignaturaId===asignatura.asignaturaId)
           return (
             <AsignaturaItem asignatura={asignatura.nombre_asignatura} data={coordsAsignatura}
-              key={asignatura.cod_asignatura} userRedux={userRedux}/>
+              key={asignatura.cod_asignatura} userRedux={userRedux}
+              handleMostrarCoordinacion={handleMostrarCoordinacion}/>
           )
         })
       }

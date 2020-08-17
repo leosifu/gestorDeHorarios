@@ -7,6 +7,7 @@ import update from 'immutability-helper'
 
 import clientAxios from '../../../../config/axios';
 
+import HeaderCell from './headerCell'
 import ListaAsignaturas from '../listaAsignaturas';
 import TablaHorarios from '../tablaHorarios';
 import InfoCoordinacion from './InfoCoordinacion';
@@ -28,13 +29,19 @@ const useStyles = makeStyles(theme => ({
 
 const getRandomColor = () => "hsl(" + Math.random() * 360 + ", 100%, 75%)";
 
-function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, dontDrag, }) {
+const dias = ['Hora', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+
+function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, dontDrag, verTope,
+  selected, tope, }) {
 
   const classes = useStyles();
 
-  const dias = ['Hora', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
-
   const [bloques, setBloques] = useState([]);
+  const [widths, setWidths] = useState([68, 68, 68, 68, 68, 68, 68]);
+
+  useEffect(() => {
+    console.log(widths);
+  }, [widths])
 
   useEffect(()=>{
     var matrix = []
@@ -130,30 +137,62 @@ function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, d
           }
         }
       })
-    )}, [data])
+    )
+  }, [data])
+
+  const handleMostrarCoordinacion = (coordinacionId) => {
+    const copyData = data.slice();
+    console.log(coordinacionId);
+    const changeMostrar = copyData.map(bloque => {
+      console.log(bloque);
+      if (bloque.coordinacionId === coordinacionId) {
+        return ({
+          ...bloque,
+          mostrar: !bloque.mostrar
+        })
+      }
+      else {
+        return bloque;
+      }
+    });
+    console.log(changeMostrar);
+    setData(changeMostrar);
+  }
 
   return (
     <>
       <InfoCoordinacion />
       <Grid container>
-        <Grid item xs={2}>
-          <ListaAsignaturas asignaturas={asignaturas} data={data} dropLista={dropLista}
-            userRedux={userRedux}/>
-        </Grid>
-        <Grid item xs={10}>
+        {
+          !tope &&
+          <Grid item xs={2} style={{zIndex: 30}}>
+            <ListaAsignaturas asignaturas={asignaturas} data={data} dropLista={dropLista}
+              userRedux={userRedux} handleMostrarCoordinacion={handleMostrarCoordinacion}/>
+          </Grid>
+        }
+        <Grid item xs={verTope ? 8:10} style={{zIndex: 1}}>
           <Paper className={classes.root}>
             <Table className={classes.table}>
               <TableHead>
                 <TableRow>
-                  {dias.map((dia)=>(
-                    <TableCell className={classes.encabezado} key={dia}>{dia}</TableCell>
-                  ))}
+                  {
+                    dias.map((dia, i) =>
+                      <HeaderCell dia={dia} i={i}/>
+                    )
+                  }
                 </TableRow>
               </TableHead>
               <TablaHorarios bloques={bloques} handleDrop={handleDrop} userRedux={userRedux}
-                dontDrag={dontDrag}/>
+                dontDrag={dontDrag} widths={widths}/>
             </Table>
           </Paper>
+        </Grid>
+        <Grid item xs={verTope && 2}>
+          {
+            selected &&
+            <ListaAsignaturas asignaturas={asignaturas} data={data} dropLista={dropLista}
+            userRedux={userRedux} handleMostrarCoordinacion={handleMostrarCoordinacion}/>
+          }
         </Grid>
       </Grid>
     </>

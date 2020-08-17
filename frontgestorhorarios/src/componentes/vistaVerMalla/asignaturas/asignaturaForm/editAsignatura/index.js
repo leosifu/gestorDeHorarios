@@ -14,9 +14,11 @@ const MallaSelector = createSelector(
   malla => malla.malla
 );
 
-function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado, user, }){
+function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado, user,
+  estadoM, setEstadoM, }){
 
   console.log(asignatura);
+  console.log(infoAsignatura);
   const malla = useSelector(MallaSelector);
   console.log(malla);
 
@@ -28,6 +30,7 @@ function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado,
       tel_E: parseInt(state.tel_E.value),
       tel_L: parseInt(state.tel_L.value),
       lab_independiente: state.lab_independiente.checked,
+      nivel: state.nivel.value,
       mallaId: malla.id,
     }
     const historial = {
@@ -41,6 +44,7 @@ function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado,
     .then(axios.spread((data1, data2)=>{
       setEdit(false)
       setEstado(!estado)
+      setEstadoM(!estadoM)
     }))
     .catch(error => {
       console.log(error);
@@ -57,11 +61,12 @@ function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado,
     cupos_pasados: asignatura.historial.cupos_pasados,
     tasa_reprobacion: asignatura.historial.tasa_reprobacion,
     lab_independiente: asignatura.lab_independiente,
+    nivel: infoAsignatura.nivel
   }
 
   return (
     <>
-      <AsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm}/>
+      <AsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} edit={true}/>
     </>
   );
 }

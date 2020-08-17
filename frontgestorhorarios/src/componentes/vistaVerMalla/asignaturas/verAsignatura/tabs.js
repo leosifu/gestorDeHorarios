@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function TabsAsignatura({infoAsignatura, asignatura, estado, setEstado, user,
-  userRedux, currentProceso, }) {
+  userRedux, currentProceso, estadoM, setEstadoM, }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -67,7 +67,7 @@ export default function TabsAsignatura({infoAsignatura, asignatura, estado, setE
       <TabPanel value={value} index={0}>
         <InfoAsignatura infoAsignatura={infoAsignatura} asignatura={asignatura} estado={estado}
           setEstado={setEstado} user={user} userRedux={userRedux} userRedux={userRedux}
-          currentProceso={currentProceso}/>
+          currentProceso={currentProceso} estadoM={estadoM} setEstadoM={setEstadoM}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <ListaCoord asignatura={asignatura} infoAsignatura={infoAsignatura} estado={estado}

@@ -38,6 +38,16 @@ const HorarioProfesor = ({selectedUser, }) => {
 
   const [asignaturas, setAsignaturas] = useState([]);
 
+  const [widths, setWidths] = useState([
+    [68, 68, 68, 68, 68, 68, 68],
+    [68, 68, 68, 68, 68, 68, 68],
+    [68, 68, 68, 68, 68, 68, 68],
+    [68, 68, 68, 68, 68, 68, 68],
+    [68, 68, 68, 68, 68, 68, 68],
+    [68, 68, 68, 68, 68, 68, 68],
+    [68, 68, 68, 68, 68, 68, 68]
+  ]);
+
   useEffect(()=>{
     clientAxios(user.idToken).get(`/api/getHorario/${selectedUser ? selectedUser : user.id}/${proceso.id}`)
     .then(res => {
@@ -90,7 +100,7 @@ const HorarioProfesor = ({selectedUser, }) => {
   return (
     <DndProvider backend={HTML5Backend}>
       <Horario data={data} setData={setData} asignaturas={asignaturas} setAsignaturas={setAsignaturas}
-        user={user} userRedux={userRedux} dontDrag={true}/>
+        user={user} userRedux={userRedux} dontDrag={true} widths={widths} setWidths={setWidths}/>
     </DndProvider>
   )
 }

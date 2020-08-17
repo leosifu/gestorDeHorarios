@@ -19,7 +19,7 @@ const MallaSelector = createSelector(
   malla => malla.malla
 )
 
-function GetDataHorario({nivel, user, currentProceso, userRedux, dontDrag, }) {
+function GetDataHorario({nivel, user, currentProceso, userRedux, dontDrag, selected, verTope, tope, }) {
 
   const malla = useSelector(MallaSelector);
 
@@ -30,6 +30,8 @@ function GetDataHorario({nivel, user, currentProceso, userRedux, dontDrag, }) {
   const [asignaturas, setAsignaturas] = useState([]);
 
   useEffect(()=>{
+    console.log(malla);
+    console.log(currentProceso);
     clientAxios(user.idToken).get(`/api/asignatura/${malla.id}/${nivel}/${currentProceso.id}`)
     .then(res => {
       const data = res.data
@@ -53,6 +55,7 @@ function GetDataHorario({nivel, user, currentProceso, userRedux, dontDrag, }) {
       }))
       var bloques = []
       bloquesMatrix.map(bloqueM=>bloques = bloques.concat(...bloqueM))
+      console.log(bloques);
       setData(bloques)
     })
     .catch((error)=>{
@@ -62,7 +65,8 @@ function GetDataHorario({nivel, user, currentProceso, userRedux, dontDrag, }) {
 
   return (
     <Horario data={data} setData={setData} asignaturas={asignaturas} setAsignaturas={setAsignaturas}
-      user={user} userRedux={userRedux} dontDrag={dontDrag}/>
+      user={user} userRedux={userRedux} dontDrag={dontDrag} selected={selected} verTope={verTope}
+      tope={tope}/>
   )
 }
 

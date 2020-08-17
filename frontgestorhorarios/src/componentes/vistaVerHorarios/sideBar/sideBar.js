@@ -22,9 +22,6 @@ import { createSelector } from 'reselect';
 import {setLoading} from '../../../redux/actions'
 import {setMallaRedux} from '../../../redux/actions';
 
-import Horario from '../Horarios/horario'
-import Topes from '../topes'
-
 const drawerWidth = 100;
 
 const useStyles = makeStyles(theme => ({
@@ -50,7 +47,11 @@ const useStyles = makeStyles(theme => ({
   horario:{
     margin:10
   },
-  spacing:8,
+  button: {
+    position: 'sticky',
+    top: '90%',
+    left: '90%'
+  },
 }));
 
 const UserSelector = createSelector(
@@ -63,65 +64,11 @@ const ProcesoSelector = createSelector(
   proceso => proceso.currentProceso
 );
 
-export default function SideBar() {
+export default function SideBar({niveles, setNivel, }) {
 
   const classes = useStyles();
-  const dispatch = useDispatch();
-
-  const {mallaId} = useParams();
-  const userRedux = useSelector(UserSelector);
-  const currentProceso = useSelector(ProcesoSelector);
-  const user = userRedux.user;
-
-  const [niveles, setNiveles] = useState([])
-
-  const [nivel, setNivel] = useState(1)
-
-  const [state, setState] = useState([])
-
-  const [topes, setTopes] = useState(false)
-
-  useEffect(()=>{
-    console.log(mallaId);
-    if (currentProceso.id !== -1) {
-      clientAxios(user.idToken).get(`/api/malla/${mallaId}/${currentProceso.id}`)
-      .then(res => {
-        console.log(res.data[0]);  // app.put('/api/malla/estado/:id', verify('admin', 'coordinador'), mallaController.cambiarEstadoMalla)
-
-        dispatch(setMallaRedux(res.data[0]));
-        console.log("asdasd");
-        var niveles = res.data[0].niveles
-        setNiveles(niveles)
-        var nivelC = []
-        niveles.map(niv=>{nivelC.push(false)})
-        console.log(nivelC);
-        setState(nivelC)
-        dispatch(setLoading(false))
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentProceso])
-
-  function handleClick1(){
-    setTopes(true)
-  }
-
-  function handleClick2(){
-    setTopes(false)
-  }
-
-  const handleChange = name => event => {
-    var stateAux = state.slice()
-    var isTrue = (event.target.value == 'false')
-    stateAux[name] = isTrue
-    console.log(stateAux);
-    setState(stateAux)
-  };
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-
       <Drawer
         className={classes.drawer}
         variant="permanent"
@@ -134,57 +81,12 @@ export default function SideBar() {
         <List>
           {niveles.map((nivel, index) => (
             <ListItem button key={"Nivel" + nivel.nivel} onClick={event=>setNivel(nivel.nivel)}>
-              {index % 2 === 0 && <Divider />}
+              <Divider />
               <ListItemText primary={"Nivel " + nivel.nivel} />
             </ListItem>
           ))}
         </List>
         <Divider />
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-          <Grid container >
-            <DndProvider backend={HTML5Backend}>
-              <Grid item xs={10}>
-                {
-                  topes && state.map((niv, i)=>(
-                      niv && <div style={{position:'absolute', opacity: 0.3, width:'70%', zIndex: 1}}>
-                        <Horario nivel={i+1} user={user} currentProceso={currentProceso}
-                          userRedux={userRedux} dontDrag={true}/>
-                      </div>
-                  ))
-                }
-                <div style={{position:'absolute', opacity: 1, width:'70%', zIndex: 0}}>
-                  <Horario nivel={nivel} user={user} currentProceso={currentProceso}
-                    userRedux={userRedux}/>
-                </div>
-              </Grid>
-              <Grid item xs={2} style={{zIndex: 100}}>
-                {
-                  topes ?
-                  <>
-                    <Button variant="contained" color="primary" className={classes.button}
-                      onClick={handleClick2}>
-                      Finalizar
-                    </Button>
-                    <Topes niveles={state} handleChange={handleChange} />
-                  </>
-                  :
-                  <>
-                    {
-                      userRedux.status === 'login' &&
-                      (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
-                      <Button variant="contained" color="primary" className={classes.button}
-                        onClick={handleClick1}>
-                        Ver Topes
-                      </Button>
-                    }
-                  </>
-                }
-              </Grid>
-            </DndProvider>
-          </Grid>
-      </main>
-    </div>
   );
 }

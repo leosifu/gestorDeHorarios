@@ -107,7 +107,7 @@ export default function ListadoCarreras(){
         </Grid>
         {
           userRedux.status === 'login' &&
-          (user.roles.includes('admin') || user.roles.includes('coordinador')) ?
+          (user.roles.length > 0) ?
           <Grid item xs={procesos.length > 0 ? 3 : 0}>
             <SelectProceso procesos={procesos} date={date} setDate={setDate}
               currentProceso={currentProceso}/>

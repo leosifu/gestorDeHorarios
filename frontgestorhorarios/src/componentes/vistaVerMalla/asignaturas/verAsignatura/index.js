@@ -24,7 +24,7 @@ const MallaSelector = createSelector(
 )
 
 const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, setActivo,
-  mallaId, user, currentProceso, userRedux, }) =>{
+  mallaId, user, currentProceso, userRedux, estadoM, setEstadoM, }) =>{
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -121,7 +121,8 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
         style={{height:630}}
       >
        <TabsAsignatura infoAsignatura={infoAsignatura} asignatura={asignatura} estado={estado}
-        setEstado={setEstado} user={user} userRedux={userRedux} currentProceso={currentProceso}/>
+        setEstado={setEstado} user={user} userRedux={userRedux} currentProceso={currentProceso}
+        estadoM={estadoM} setEstadoM={setEstadoM}/>
       </Dialog>
     </>
   )

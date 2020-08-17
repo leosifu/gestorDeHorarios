@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Coordinacion({coordinacion, estado, setEstado, user, userRedux, }){
+function Coordinacion({coordinacion, estado, setEstado, user, userRedux, currentProceso, }){
   const classes = useStyles();
 
   const [asociar, setAsociar] = useState(false);
@@ -73,7 +73,7 @@ function Coordinacion({coordinacion, estado, setEstado, user, userRedux, }){
                 phone: profesor.phone,
                 rut: profesor.rut,
                 updatedAt: profesor.updatedAt
-              }))}/>
+              }))} currentProceso={currentProceso}/>
           }
         </>
         :

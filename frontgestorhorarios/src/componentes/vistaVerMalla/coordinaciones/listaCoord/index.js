@@ -58,7 +58,7 @@ function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independien
       </Typography>
       {coordinaciones.map(coordinacion=>
         <Coordinacion coordinacion={coordinacion} key={coordinacion.id} estado={estado}
-          setEstado={setEstado} user={user} userRedux={userRedux}/>
+          setEstado={setEstado} user={user} userRedux={userRedux} currentProceso={currentProceso}/>
       )}
 
       {crear ?

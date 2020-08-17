@@ -14,7 +14,8 @@ const MallaSelector = createSelector(
   malla => malla.malla
 );
 
-function EditCoordinacion({coordinacion, estado, setEstado, user, profesores, setEdit, }){
+function EditCoordinacion({coordinacion, estado, setEstado, user, profesores, setEdit,
+  currentProceso, }){
 
   const malla = useSelector(MallaSelector);
 
@@ -48,7 +49,7 @@ function EditCoordinacion({coordinacion, estado, setEstado, user, profesores, se
 
   return (
     <CoordinacionForm camposCord={data} onSubmitForm={onSubmitForm} setEstado={setEstado}
-      estado={estado} profesoresSelect={profesoresSelect} user={user}
+      estado={estado} profesoresSelect={profesoresSelect} user={user} currentProceso={currentProceso}
       setProfesoresSelect={setProfesoresSelect} profesores={profesores} edit={true}/>
   );
 }

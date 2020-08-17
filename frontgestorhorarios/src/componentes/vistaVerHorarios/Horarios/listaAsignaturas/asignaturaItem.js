@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsignaturaItem({asignatura, data, userRedux, }){
+function AsignaturaItem({asignatura, data, userRedux, handleMostrarCoordinacion, }){
 
   const classes = useStyles();
 
@@ -72,8 +72,9 @@ function AsignaturaItem({asignatura, data, userRedux, }){
               if(coordBloques.length>0){
                 return(
                   <ListItem button className={classes.nested} key={coord[0].id}>
-                    <Bloque coord={coordBloques[0]} tipo={"lista"}
-                      num={coordBloques.length} userRedux={userRedux}/>
+                    <Bloque coord={coordBloques[0]} tipo={"lista"} num={coordBloques.length}
+                      handleMostrarCoordinacion={handleMostrarCoordinacion}
+                      userRedux={userRedux}/>
                   </ListItem>
                 )
               }
@@ -81,7 +82,9 @@ function AsignaturaItem({asignatura, data, userRedux, }){
                 return(
                   <ListItem button className={classes.nested} key={coord[0].id}>
                     <BloqueListaAsign nombre_coord={coord[0].nombre_coord} cod_coord={coord[0].cod_coord}
-                      num={0} color={coord[0].color}/>
+                      num={0} color={coord[0].color} coordinacionId={coord[0].coordinacionId}
+                      mostrar={coord[0].mostrar}
+                      handleMostrarCoordinacion={handleMostrarCoordinacion}/>
                   </ListItem>
                 )
               }

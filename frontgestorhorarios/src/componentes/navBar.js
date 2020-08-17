@@ -1,16 +1,19 @@
 import React, {useState, useEffect} from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 import clientAxios from '../config/axios'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect'
+import { createSelector } from 'reselect';
+import { push } from 'connected-react-router';
 import {getProcesos, handleLoginUser, handleLogoutUser, handleLoginFailed, } from '../redux/actions'
 
 import firebase from 'firebase';
@@ -21,12 +24,19 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
   },
 }));
+
+function HomeIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
+  );
+}
 
 export default function NavBar() {
 
@@ -34,6 +44,12 @@ export default function NavBar() {
   const dispatch = useDispatch();
 
   const [log, setLog] = useState(false);
+  const [user, setUser] = useState({
+    log: false,
+    user: {
+      roles: [],
+    }
+  })
 
   useEffect(() => {
     login();
@@ -45,23 +61,33 @@ export default function NavBar() {
     .then(res => {
       const userData = res.data;
       const roles = userData.roles.map(rol => rol.rol);
-      dispatch(handleLoginUser({
+      const loginUser = {
         email: authUser.email,
         photoURL: authUser.photoURL,
         name: authUser.displayName,
         idToken: userData.token,
         roles: roles,
         id: userData.id
-      }))
+      }
+      dispatch(handleLoginUser(loginUser));
+      setUser({
+        log: true,
+        user: loginUser
+      })
     })
     .catch(error => {
-      dispatch(handleLoginUser({
+      const loginUser = {
         email: authUser.email,
         photoURL: authUser.photoURL,
         name: authUser.displayName,
         idToken: token,
         roles: []
-      }))
+      }
+      dispatch(handleLoginUser(loginUser))
+      setUser({
+        log: true,
+        user: loginUser
+      })
     })
     setLog(true);
   }
@@ -98,7 +124,7 @@ export default function NavBar() {
         .then(
           result => {
             var token = result.credential.idToken;
-            setLog(true);
+            // setLog(true);
             login();
           }
         )
@@ -112,23 +138,42 @@ export default function NavBar() {
       .then(result => {
         console.log('Te has desconectado correctamente');
         dispatch(handleLogoutUser());
-        setLog(false);
+        // setLog(false);
+        setUser({
+          login: false,
+          user: {
+            roles: []
+          }
+        })
       })
       .catch(error => console.log(`Error ${error.code}: ${error.message}`));
+  }
+
+  const goAdmin = () => {
+    dispatch(push('/administracion'))
+  }
+
+  const goHome = () => {
+    dispatch(push('/'))
   }
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu"
+            onClick={goHome}>
+            <HomeIcon fontSize="large" />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            News
+            Aca va el titulo
           </Typography>
           {
-            log?
+            user.user.roles.includes('admin') &&
+            <Button onClick={goAdmin} color="inherit">Administración</Button>
+          }
+          {
+            user.log?
             <Button onClick={handleLogout} color="inherit">Log out</Button>
             :
             <Button onClick={handleAuth} color="inherit">Login</Button>

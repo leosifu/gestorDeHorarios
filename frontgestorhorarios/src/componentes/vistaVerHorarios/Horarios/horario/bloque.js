@@ -14,6 +14,7 @@ const useStyles = makeStyles({
   card: {
     width: '100%',
     height: '100%',
+    minWidth: 0
   },
   bullet: {
     display: 'inline-block',
@@ -31,8 +32,10 @@ const useStyles = makeStyles({
   }
 });
 
-export default function Bloque({coord, onDrop, tipo, num, userRedux, dontDrag, }) {
-  const {nombre_coord, cod_coord, id, color, num_asociacion, profesores} = coord
+export default function Bloque({coord, onDrop, tipo, num, userRedux, dontDrag,
+  handleMostrarCoordinacion, }) {
+  const {nombre_coord, cod_coord, id, color, num_asociacion, profesores, coordinacionId, mostrar} = coord
+  // console.log(coord.coordinacionId);
   const ref = useRef(null)
   const classes = useStyles();
   const [ , drag] = useDrag({
@@ -73,7 +76,8 @@ export default function Bloque({coord, onDrop, tipo, num, userRedux, dontDrag, }
       return(
         <div ref={ref} className={classes.card}>
           <BloqueListaAsign coord={coord} nombre_coord={nombre_coord} cod_coord={cod_coord} num={num}
-            color={color}/>
+            color={color} coordinacionId={coord.coordinacionId} mostrar={mostrar}
+            handleMostrarCoordinacion={handleMostrarCoordinacion}/>
         </div>
       )
     case "tabla":

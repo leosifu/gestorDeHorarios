@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function InfoAsignatura({infoAsignatura, asignatura, estado, setEstado, user,
-  userRedux, }){
+  userRedux, estadoM, setEstadoM, }){
 
   const classes = useStyles();
 
@@ -51,7 +51,8 @@ export default function InfoAsignatura({infoAsignatura, asignatura, estado, setE
               userRedux.status === 'login' &&
               (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
               <EditAsignatura infoAsignatura={infoAsignatura} user={user}
-                asignatura={asignatura} setEdit={setEdit} estado={estado} setEstado={setEstado}/>
+                asignatura={asignatura} setEdit={setEdit} estado={estado} setEstado={setEstado}
+                estadoM={estadoM} setEstadoM={setEstadoM}/>
             }
           </>
           :

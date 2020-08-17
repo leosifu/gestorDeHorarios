@@ -33,6 +33,7 @@ const InfoCoordinacion = ({}) => {
 
   const classes = useStyles();
   const dispatch = useDispatch();
+  
   const dialogInfoCoordinacion = useSelector(DialogInfoCoordinacionSelector);
 
   const {coordinacion, open} = dialogInfoCoordinacion;
