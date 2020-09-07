@@ -1,6 +1,7 @@
 const initialState={
   malla: {
     id: 0,
+    Carrera: {},
   },
 }
 

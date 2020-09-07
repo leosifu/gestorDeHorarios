@@ -1,11 +1,14 @@
 import React, { useState, useCallback, useEffect } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import {Table, TableCell, TableHead, TableRow, Paper, Grid, } from '@material-ui/core';
+import clientAxios from '../../../../config/axios';
 
 import update from 'immutability-helper'
 
-import clientAxios from '../../../../config/axios';
+import { makeStyles } from '@material-ui/core/styles';
+import {Table, TableCell, TableHead, TableRow, Paper, Grid, } from '@material-ui/core';
+
+import { useDispatch, } from 'react-redux';
+import {setLoading, handleNotifications, } from '../../../../redux/actions';
 
 import HeaderCell from './headerCell'
 import ListaAsignaturas from '../listaAsignaturas';
@@ -35,13 +38,9 @@ function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, d
   selected, tope, }) {
 
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [bloques, setBloques] = useState([]);
-  const [widths, setWidths] = useState([68, 68, 68, 68, 68, 68, 68]);
-
-  useEffect(() => {
-    console.log(widths);
-  }, [widths])
 
   useEffect(()=>{
     var matrix = []
@@ -77,41 +76,48 @@ function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, d
       }
       clientAxios(user.idToken).post(`/api/bloque/${item.id}`, datoBloque)
       .then(res => {
-        console.log(res.data);
-      })
-      const index = data.indexOf(dato)
-      var prevPos = dato.num_bloque
-      if (nuevoBloque === prevPos) {
-        return
-      }
-      const repetidos = data.filter(dato=>dato.num_bloque===nuevoBloque)
-      repetidos.push(dato)
-      var matrixAux = data.slice()
-      if (repetidos.length===1) {
-        if(!matrixAux[index].asignado){
-          matrixAux[index].asignado = true
+        const index = data.indexOf(dato)
+        var prevPos = dato.num_bloque
+        if (nuevoBloque === prevPos) {
+          return
         }
-        matrixAux[index].num_bloque = nuevoBloque
-        matrixAux[index].size = 1
-      }
-      else {
-        if(!matrixAux[index].asignado){
-          matrixAux[index].asignado = true
+        const repetidos = data.filter(dato=>dato.num_bloque===nuevoBloque)
+        repetidos.push(dato)
+        var matrixAux = data.slice()
+        if (repetidos.length===1) {
+          if(!matrixAux[index].asignado){
+            matrixAux[index].asignado = true
+          }
+          matrixAux[index].num_bloque = nuevoBloque
+          matrixAux[index].size = 1
         }
-        matrixAux[index].num_bloque = nuevoBloque
-        repetidos.map((rep, i)=>{
+        else {
+          if(!matrixAux[index].asignado){
+            matrixAux[index].asignado = true
+          }
+          matrixAux[index].num_bloque = nuevoBloque
+          repetidos.map((rep, i)=>{
+            var index2 = data.indexOf(rep)
+            matrixAux[index2].size = repetidos.length
+            return true
+          })
+        }
+        var posAnt = data.filter(dato=>dato.num_bloque===prevPos)
+        posAnt.map((rep, i)=>{
           var index2 = data.indexOf(rep)
-          matrixAux[index2].size = repetidos.length
+          matrixAux[index2].size = repetidos.length-1
           return true
         })
-      }
-      var posAnt = data.filter(dato=>dato.num_bloque===prevPos)
-      posAnt.map((rep, i)=>{
-        var index2 = data.indexOf(rep)
-        matrixAux[index2].size = repetidos.length-1
-        return true
+        setData(matrixAux)
       })
-      setData(matrixAux)
+      .catch(error => {
+        console.log(error);
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al cargar el horario'}
+        ));
+      })
     }, [data]
   )
 
@@ -124,27 +130,32 @@ function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, d
     }
     clientAxios(user.idToken).post(`/api/bloque/${item.id}`, datoBloque)
     .then(res => {
-      console.log(res.data);
-    })
-    setData(
-      update(data,{
-        [index]:{
-          asignado:{
-            $set: false
-          },
-          num_bloque:{
-            $set: -1
+      setData(
+        update(data,{
+          [index]:{
+            asignado:{
+              $set: false
+            },
+            num_bloque:{
+              $set: -1
+            }
           }
-        }
-      })
-    )
+        })
+      )
+    })
+    .catch(error => {
+      console.log(error);
+      dispatch(setLoading(false));
+      dispatch(handleNotifications(true, {
+        status: 'error',
+        message: 'Ocurrió un error al cargar el horario'}
+      ));
+    })
   }, [data])
 
   const handleMostrarCoordinacion = (coordinacionId) => {
     const copyData = data.slice();
-    console.log(coordinacionId);
     const changeMostrar = copyData.map(bloque => {
-      console.log(bloque);
       if (bloque.coordinacionId === coordinacionId) {
         return ({
           ...bloque,
@@ -155,7 +166,6 @@ function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, d
         return bloque;
       }
     });
-    console.log(changeMostrar);
     setData(changeMostrar);
   }
 
@@ -183,7 +193,7 @@ function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, d
                 </TableRow>
               </TableHead>
               <TablaHorarios bloques={bloques} handleDrop={handleDrop} userRedux={userRedux}
-                dontDrag={dontDrag} widths={widths}/>
+                dontDrag={dontDrag}/>
             </Table>
           </Paper>
         </Grid>

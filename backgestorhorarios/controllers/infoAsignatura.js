@@ -55,12 +55,12 @@ module.exports = {
         include: [{model:Asignatura, as:'Asignatura',
           include:[{model:HistorialM, as:'historial'},{model:Asignatura, as:'requisitos',
             include:[{model: Malla, as:'mallas', where:{id: req.params.mallaId}}]},
-            {model:Coordinacion, as:'coordinaciones',
-              include:[{model: Bloque, as:'bloques'}, {model: Usuario, as: 'profesores'}]
+            {model:Coordinacion, as:'coordinaciones', include:[{model: Usuario, as: 'profesores'}]
           }]
         }]
       })
       .then(infoA=>{
+        console.log(infoA);
         for (var i = 0; i < infoA.dataValues.Asignatura.dataValues.requisitos.length; i++) {
           var req = infoA.dataValues.Asignatura.dataValues.requisitos[i]
           var cod_asignatura = req.mallas[0].InfoAsignatura.dataValues.cod_asignatura
@@ -96,5 +96,21 @@ module.exports = {
         where:{asignaturaId:req.asignaturaId, mallaId: req.mallaId}
       })
       .catch(error=> res.status(400).send(error))
+  },
+  async deleteAsignaturaFromMalla(req, res){
+    try {
+      const {mallaId, asignaturaId} = req.params;
+      const infoAsignaturaDelete = await InfoAsignatura.findOne({
+        where: {
+          mallaId: mallaId,
+          asignaturaId: asignaturaId
+        }
+      });
+      await infoAsignaturaDelete.destroy();
+      return res.status(201).send({message: 'Asignatura eliminada.'});
+    } catch (e) {
+      console.log(e);
+      return res.status(400).send({message: 'Hubo un error al eliminar la asignatura.'})
+    }
   }
 }

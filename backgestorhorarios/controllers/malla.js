@@ -3,12 +3,13 @@ const Asignatura = require('../models').Asignatura
 const Historial = require('../models').Historial
 const Coordinacion = require('../models').Coordinacion
 const Proceso = require('../models').Proceso
+const Carrera = require('../models').Carrera
 
 module.exports = {
   create(req,res){
     return Malla
       .create({
-        res_malla: req.body.res_malla,
+        fecha_resolucion: req.body.fecha_resolucion,
         cod_malla: req.body.cod_malla,
         n_niveles: req.body.n_niveles,
         carreraId: req.body.carreraId,
@@ -40,7 +41,7 @@ module.exports = {
   update(req, res){
     return Malla
       .update({
-        res_malla: req.body.res_malla,
+        fecha_resolucion: req.body.fecha_resolucion,
         cod_malla: req.body.cod_malla,
         n_niveles: req.body.n_niveles,
       },{
@@ -51,14 +52,15 @@ module.exports = {
   },
   findMallaById(req,res){
     const {mallaId, procesoId} = req.params;
-    console.log(mallaId);
-    console.log(procesoId);
     return Malla
       .findAll({
         where: {id:mallaId},
         include: [{
           model:Asignatura,
           as:'asignaturas',
+        }, {
+          model: Carrera,
+          as: 'Carrera'
         }]
       })
       .then(malla =>{
@@ -108,5 +110,17 @@ module.exports = {
         console.log(error);
         res.status(400).send(error)
       })
+  },
+  async deleteMalla(req, res){
+    try {
+      const {mallaId} = req.params;
+      const mallaDelete = await Malla.findOne({
+        where: {id: mallaId}
+      })
+      await mallaDelete.destroy();
+      return res.status(201).send({message: 'Malla eliminada'})
+    } catch (e) {
+      return res.status(400).send({message: 'Error al eliminar la malla'})
+    }
   }
 }

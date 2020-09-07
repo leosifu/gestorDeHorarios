@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab,
+import {Dialog, DialogActions, DialogContent, DialogTitle, Fab, Grid,
   Tooltip, } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import clientAxios from '../../../../config/axios'
 
 import { useDispatch } from 'react-redux';
-import {setLoading} from '../../../../redux/actions'
+import {setLoading, handleNotifications, } from '../../../../redux/actions';
 
 import AlertUnauthorized from '../../../utils/alertUnauthorized'
 
@@ -47,36 +47,44 @@ function CrearCarrera({open, setOpen, user, }) {
 
   function onSubmitForm(state) {
     dispatch(setLoading(true))
-    const data = {
-      nombre_carrera: state.nombre_carrera.value,
-      jornada: state.jornada.value
+    if (!state.nombre_carrera.value || !state.jornada.value) {
+      dispatch(setLoading(false));
+      dispatch(handleNotifications(true, {
+        status: 'info',
+        message: 'Datos ingresados incompletos o incorrectos'}
+      ));
     }
-    clientAxios(user.idToken).post('/api/carrera', data)
-    .then(res => {
-      console.log(res.data);
-      setOpen(false)
-      dispatch(setLoading(false))
-    })
-    .catch(error => {
-      console.log(error);
-      if (error.response) {
-        if (error.response.status === 401) {
-          console.log('wii');
-          AlertUnauthorized()
-        }
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+    else {
+      const data = {
+        nombre_carrera: state.nombre_carrera.value,
+        jornada: state.jornada.value
       }
-      dispatch(setLoading(false))
-    })
-
+      clientAxios(user.idToken).post('/api/carrera', data)
+      .then(res => {
+        console.log(res.data);
+        setOpen(false);
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'success',
+          message: 'Carrera Creada'}
+        ));
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al crear la carrera'}
+        ));
+      })
+    }
   }
 
   return (
     <React.Fragment>
       <Tooltip title="Crear Carrera">
-        <Fab color="primary" size="small" aria-label="add" className={classes.margin} onClick={handleClickOpen}>
+        <Fab color="primary" size="small" aria-label="add" style={{backgroundColor: '#EA7600'}}
+          onClick={handleClickOpen}>
           <AddIcon />
         </Fab>
       </Tooltip>
@@ -87,16 +95,14 @@ function CrearCarrera({open, setOpen, user, }) {
         aria-labelledby="max-width-dialog-title"
       >
         <DialogTitle id="max-width-dialog-title">
-          Crear Carrera
+          <Grid container>
+            <Grid item xs={8}>
+              Crear Carrera
+            </Grid>
+          </Grid>
         </DialogTitle>
-        <DialogContent>
-          <CarreraForm nombre_carrera={''} jornada={"Vespertino"} open={open} setOpen={setOpen} onSubmitForm={onSubmitForm}/>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Close
-          </Button>
-        </DialogActions>
+        <CarreraForm nombre_carrera={''} jornada={"Vespertino"} open={open} setOpen={setOpen}
+          onSubmitForm={onSubmitForm} handleClose={handleClose} type={'crear'}/>
       </Dialog>
     </React.Fragment>
   );

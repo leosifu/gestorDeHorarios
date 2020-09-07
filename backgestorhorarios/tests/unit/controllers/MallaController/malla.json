@@ -1,0 +1,151 @@
+{
+  "allByCarrera": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": [
+          {
+            "id": 1,
+            "cod_malla": 1353,
+            "fecha_resolucion": "23/08/2015",
+            "n_niveles": 8,
+            "carreraId": 1,
+            "procesoId": 1
+          },
+          {
+            "id": 1,
+            "cod_malla": 1363,
+            "fecha_resolucion": "23/08/2016",
+            "n_niveles": 12,
+            "carreraId": 1,
+            "procesoId": 1
+          }
+        ]
+      }
+    }
+  },
+  "singleMallaByProceso": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data":
+          {
+            "id": 1,
+            "cod_malla": 1353,
+            "fecha_resolucion": "23/08/2015",
+            "n_niveles": 8,
+            "carreraId": 1,
+            "procesoId": 1,
+            "niveles": [{
+              "nivel": 1,
+              "asignaturas": []
+              },
+              {
+                "nivel": 2,
+                "asignaturas": []
+              }
+            ],
+            "Carrera": {
+              "id": 1,
+              "nombre_carrera": "Ingeniería de Ejecución en Computación e Informática",
+              "jornada": "Diurno"
+            }
+          }
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That proceso does not exist."
+      }
+    }
+  },
+  "add": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": [
+          {
+            "id": 3,
+            "fecha_resolucion": "23/08/2017",
+            "cod_malla": 1333,
+            "n_niveles": 12,
+            "carreraId": 1,
+            "procesoId": 1
+          }
+        ]
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 400,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "update": {
+    "success": {
+      "res": {
+        "statusCode": 200,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": [
+          {
+            "id": 3,
+            "fecha_resolucion": "23/08/2018",
+            "cod_malla": 1313,
+            "n_niveles": 12,
+            "carreraId": 1,
+            "procesoId": 1
+          }
+        ]
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That malla does not exist."
+      }
+    }
+  }
+}

@@ -10,10 +10,9 @@ import Button from '@material-ui/core/Button';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import {setMallaRedux, setLoading} from '../../../redux/actions';
+import {setMallaRedux, setLoading, handleNotifications, } from '../../../redux/actions';
 
 import Asignatura from './asignatura';
-import NotificacionForm from '../notificacionForm';
 
 const useStyles = makeStyles({
   root: {
@@ -34,12 +33,24 @@ const useStyles = makeStyles({
   button: {
     position: 'absolute',
     top: '90%',
-    left: '90%'
+    left: '90%',
+    backgroundColor: '#EA7600',
+    color: '#FFF',
+    '&:hover':{
+      backgroundColor: '#DE7C00',
+      boxShadow: 'none',
+    }
   },
   button2: {
     position: 'absolute',
     top: '90%',
-    left: '80%'
+    left: '80%',
+    backgroundColor: '#EA7600',
+    color: '#FFF',
+    '&:hover':{
+      backgroundColor: '#DE7C00',
+      boxShadow: 'none',
+    }
   },
 });
 
@@ -76,16 +87,22 @@ function VerMalla(props) {
   const firstUpdate = useRef(true);
 
   useEffect(()=>{
+    dispatch(setLoading(true));
     if (currentProceso.id !== -1) {
       clientAxios(user.idToken).get(`/api/malla/${mallaId}/${currentProceso.id}`)
       .then(res => {
-        console.log(res.data[0]);
+        console.log(res.data);
         dispatch(setMallaRedux(res.data[0]));
         setNiveles(res.data[0].niveles);
         dispatch(setLoading(false))
       })
       .catch((error)=>{
         console.log(error);
+        dispatch(setLoading(false))
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al cargar la malla'}
+        ));
       })
     }
   },[estado, mallaId, currentProceso])
@@ -97,14 +114,17 @@ function VerMalla(props) {
     }
     clientAxios(user.idToken).get(`/api/asignaturaReq/${activo}/${mallaId}/${currentProceso.id}`)
     .then(res => {
-      console.log(res.data[0]);
       setActivo(res.data[0].id)
       var req = res.data[0].requisitos.map(requisito => requisito.id)
       setRequisitos(req)
     })
     .catch((error)=>{
-
       console.log(error);
+      dispatch(setLoading(false))
+      dispatch(handleNotifications(true, {
+        status: 'error',
+        message: 'Ocurrió un error al cargar los requisitos'}
+      ));
     })
   },[activo])
 
@@ -127,7 +147,15 @@ function VerMalla(props) {
       }
       clientAxios(user.idToken).post('/api/dependencia', data)
       .then(res => {
-        console.log(res.data);
+
+      })
+      .catch((error)=>{
+        console.log(error);
+        dispatch(setLoading(false))
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al agregar el requisito'}
+        ));
       })
     }
     else {
@@ -137,7 +165,15 @@ function VerMalla(props) {
       }
       clientAxios(user.idToken).delete('/api/dependencia', {data: data})
       .then(res => {
-        console.log(res.data);
+
+      })
+      .catch((error)=>{
+        console.log(error);
+        dispatch(setLoading(false))
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al eliminar el requisito'}
+        ));
       })
       copiaRequisitos.splice(copiaRequisitos.indexOf(algo), 1)
 
@@ -179,7 +215,7 @@ function VerMalla(props) {
                 </Link>
               }
               {
-                currentProceso.status === 'creating' ?
+                currentProceso.estado === 'creating' ?
                 (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
                 <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${mallaId}`}>
                   <Button variant="contained" color="primary" className={classes.button}>
@@ -202,7 +238,6 @@ function VerMalla(props) {
           }
         </>
       }
-      <NotificacionForm />
     </Paper>
   );
 }

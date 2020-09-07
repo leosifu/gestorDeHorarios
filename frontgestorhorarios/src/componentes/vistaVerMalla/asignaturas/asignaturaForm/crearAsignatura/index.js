@@ -44,7 +44,7 @@ function CrearAsignatura({open, setOpen, estado, setEstado, nivel, mallaId, user
   return (
     <React.Fragment>
       <IconButton className={classes.centrarIcon} onClick={handleClickOpen}>
-        <AddCircleOutlineOutlinedIcon fontSize='large' style={{color:"blue"}}/>
+        <AddCircleOutlineOutlinedIcon fontSize='large' style={{color:"#002F6C"}}/>
       </IconButton>
       <Dialog
         fullWidth={true}

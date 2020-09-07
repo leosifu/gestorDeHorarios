@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router'
 
-import {Card, CardContent, CardActions, Button, ButtonGroup, Grid} from '@material-ui/core';
+import {Card, CardContent, CardActions, ButtonGroup, Grid} from '@material-ui/core';
 
-import ActualizarMalla from '../formularios/formMalla/actualizarMalla'
+import PrimaryButton from '../../utils/PrimaryButton';
+
+import ActualizarMalla from '../formularios/formMalla/actualizarMalla';
 
 function Malla({ malla, estado, setEstado, user, userRedux, }){
 
@@ -35,7 +37,8 @@ function Malla({ malla, estado, setEstado, user, userRedux, }){
             userRedux.status === 'login' &&
             (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
             <Grid item xs={2}>
-              <ActualizarMalla malla={malla} open={open} setOpen={setOpen} estado={estado} setEstado={setEstado}/>
+              <ActualizarMalla malla={malla} open={open} setOpen={setOpen} estado={estado}
+                setEstado={setEstado} user={user}/>
             </Grid>
           }
         </Grid>
@@ -46,10 +49,10 @@ function Malla({ malla, estado, setEstado, user, userRedux, }){
           color="primary"
           aria-label="full-width contained primary button group"
         >
-          <Button onClick={redirectMalla}>Ver Malla</Button>
+          <PrimaryButton className='primaryButton' onClick={redirectMalla} title='Ver Malla'/>
           {
             userRedux.status === 'login' &&
-            <Button onClick={redirectHorario}>Horarios</Button>
+            <PrimaryButton onClick={redirectHorario} title={'Horarios'} />
           }
         </ButtonGroup>
       </CardActions>

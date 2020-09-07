@@ -8,7 +8,7 @@ import clientAxios from '../../../../config/axios'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect'
-import {setLoading} from '../../../../redux/actions'
+import {setLoading, handleNotifications, } from '../../../../redux/actions'
 
 import TabsAsignatura from './tabs'
 
@@ -40,6 +40,7 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
   const [infoAsignatura, setInfoAsignatura] = useState({})
 
   useEffect(()=>{
+    dispatch(setLoading(true));
     clientAxios(user.idToken)
     .get(`/api/asignaturaInfo/${malla.id}/${asignaturaId}/${currentProceso.id}`)
     .then(res => {
@@ -50,11 +51,15 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
     })
     .catch((error)=>{
       console.log(error);
+      dispatch(setLoading(false))
+      dispatch(handleNotifications(true, {
+        status: 'error',
+        message: 'Ocurrió un error al cargar la asignatura'}
+      ));
     })
   },[estado])
 
   const handleClickMenu = event => {
-    console.log(asignatura);
     setActivo(asignatura.id)
     setAnchorEl(event.currentTarget);
   };

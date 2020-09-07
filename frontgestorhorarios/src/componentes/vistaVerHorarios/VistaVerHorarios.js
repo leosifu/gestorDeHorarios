@@ -48,14 +48,15 @@ const useStyles = makeStyles(theme => ({
   horario:{
     margin:10
   },
-  button: {
-    position: 'sticky',
-    top: '90%',
-    left: '90%'
-  },
   button1: {
     top: '10%',
-    left: '90%'
+    left: '90%',
+    backgroundColor: '#EA7600',
+    color: '#FFF',
+    '&:hover':{
+      backgroundColor: '#DE7C00',
+      boxShadow: 'none',
+    }
   },
 }));
 
@@ -90,21 +91,15 @@ const VistaVerHorarios = () => {
   const [numNiveles, setNumNiveles] = useState(0);
 
   useEffect(()=>{
-    console.log(mallaId);
     if (currentProceso.id !== -1) {
       clientAxios(user.idToken).get(`/api/malla/${mallaId}/${currentProceso.id}`)
       .then(res => {
-        console.log(res.data[0]);
         dispatch(setMallaRedux(res.data[0]));
-        console.log("asdasd");
         var niveles = res.data[0].niveles
-        console.log(niveles);
         setNiveles(niveles)
-        console.log(niveles.length);
         setNumNiveles(niveles.length)
         var nivelC = []
         niveles.map(niv=>{nivelC.push(false)})
-        console.log(nivelC);
         setState(nivelC)
         dispatch(setLoading(false))
       })
@@ -115,6 +110,7 @@ const VistaVerHorarios = () => {
   function handleClick1(){
     const data = {
       nivel: nivel,
+
     }
     dispatch(handleDialogTopes(true, data))
   }

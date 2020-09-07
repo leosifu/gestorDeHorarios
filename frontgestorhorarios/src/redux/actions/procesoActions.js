@@ -35,6 +35,9 @@ export const getProcesos = (idToken) => {
         // dispatch(push(`/nuevoProceso`));
       }
     })
+    .catch(error => {
+      console.log(error);
+    })
   }
 }
 

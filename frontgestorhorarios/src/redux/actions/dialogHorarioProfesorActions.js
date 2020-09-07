@@ -1,6 +1,5 @@
 export const handleDialogHorarioProfesor = (open, selectedUser) => {
   if (open) {
-    console.log(selectedUser);
     return dispatch => dispatch(openDialogCreate(selectedUser))
   }
   else {

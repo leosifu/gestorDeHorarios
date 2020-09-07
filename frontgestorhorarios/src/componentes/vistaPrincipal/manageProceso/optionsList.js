@@ -8,7 +8,7 @@ import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
 
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
-import {handleDialogUpdateProceso, } from '../../../redux/actions';
+import {handleDialogUpdateProceso, setLoading, handleNotifications} from '../../../redux/actions';
 
 import Swal from 'sweetalert2';
 
@@ -59,22 +59,19 @@ export default function OptionsList({currentProceso, user, }) {
         clientAxios(user.idToken).delete(`/api/procesos/${currentProceso.id}`)
         .then(res=>{
           console.log(res);
-          Swal.fire({
-            title: 'Proceso Eliminado',
-            type: 'warning',
-            confirmButtonColor: '#000',
-            confirmButtonText: 'Aceptar'
-          })
+          dispatch(setLoading(false));
+          dispatch(handleNotifications(true, {
+            status: 'success',
+            message: 'Proceso eliminado correctamente'}
+          ));
         })
         .catch(error => {
           console.log(error);
-          console.error(error);
-          Swal.fire({
-            title: 'No se pudo eliminar el proceso',
-            type: 'warning',
-            confirmButtonColor: '#000',
-            confirmButtonText: 'Aceptar'
-          })
+          dispatch(setLoading(false));
+          dispatch(handleNotifications(true, {
+            status: 'error',
+            message: 'Ocurrió un error al eliminar el proceso'}
+          ));
         })
       }
     })
@@ -83,7 +80,7 @@ export default function OptionsList({currentProceso, user, }) {
   return (
     <div className={classes.root}>
       <Tooltip title="Opciones del Proceso">
-        <Fab color="primary" size="small" aria-label="add" className={classes.margin}
+        <Fab color="primary" size="small" aria-label="add" style={{backgroundColor: '#EA7600'}}
           onClick={handleClick}>
           <BrightnessHighIcon />
         </Fab>

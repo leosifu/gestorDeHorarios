@@ -2,12 +2,17 @@ import React from 'react'
 
 import clientAxios from '../../../../config/axios'
 
-import {Button} from '@material-ui/core';
+import { useDispatch, } from 'react-redux';
+import {setLoading, handleNotifications, } from '../../../../redux/actions';
+
+import PrimaryButton from '../../../utils/PrimaryButton';
 
 import DatosCoordForm from './coordinacionForm/datosCoordForm'
 import useForm from '../../../form/useForm'
 
-const SetCoordinacionForm = ({coordinacion, asignaturaAct, estado, setEstado, user, }) => {
+const SetCoordinacionForm = ({coordinacion, asignaturaAct, estado, setEstado, user, setCrear, }) => {
+
+  const dispatch = useDispatch();
 
   const stateSchema = {
     cod_coord: { value: coordinacion.cod_coord, error: '' },
@@ -16,14 +21,12 @@ const SetCoordinacionForm = ({coordinacion, asignaturaAct, estado, setEstado, us
 
   const validationStateSchema = {
     cod_coord: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid first name format.',
       },
     },
     nombre_coord: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
@@ -32,17 +35,40 @@ const SetCoordinacionForm = ({coordinacion, asignaturaAct, estado, setEstado, us
   };
 
   const onSubmitForm = event=>{
-    var data = {
-      asignaturaId: asignaturaAct.id,
-      coordinacionId: coordinacion.coordinacionId,
-      nombre_coord: state.nombre_coord.value,
-      cod_coord: state.cod_coord.value
+    dispatch(setLoading(true));
+    if (!state.cod_coord.value || !state.nombre_coord.value) {
+      dispatch(setLoading(false));
+      dispatch(handleNotifications(true, {
+        status: 'info',
+        message: 'Datos ingresados incompletos o incorrectos'}
+      ));
     }
-    clientAxios(user.idToken).post(`/api/asigncoord`, data)
-    .then(res=>{
-      console.log(res.data);
-      setEstado(!estado)
-    })
+    else {
+      const data = {
+        asignaturaId: asignaturaAct.id,
+        coordinacionId: coordinacion.coordinacionId,
+        nombre_coord: state.nombre_coord.value,
+        cod_coord: state.cod_coord.value
+      }
+      clientAxios(user.idToken).post(`/api/asigncoord`, data)
+      .then(res=>{
+        setEstado(!estado)
+        setCrear(false)
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'success',
+          message: 'Coordinación asignada'}
+        ));
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al asignar la coordinación'}
+        ));
+      })
+    }
   }
 
   const { state, handleOnChange, handleOnSubmit, disable } = useForm(
@@ -55,11 +81,10 @@ const SetCoordinacionForm = ({coordinacion, asignaturaAct, estado, setEstado, us
     <>
       <DatosCoordForm handleOnChange={handleOnChange} cod_coord={state.cod_coord}
         nombre_coord={state.nombre_coord} />
-      <Button
+      <PrimaryButton
         onClick={handleOnSubmit}
-        variant="contained" color="primary">
-        Asociar Coordinacion
-      </Button>
+        title={'Asociar Coordinacion'}
+      />
     </>
   )
 }

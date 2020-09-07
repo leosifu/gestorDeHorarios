@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react'
 
+import clientAxios from '../../../../config/axios';
+
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
 
-import clientAxios from '../../../../config/axios';
+import { useDispatch, } from 'react-redux';
+import {setLoading, handleNotifications, } from '../../../../redux/actions';
 
 import SetCoordinacionForm from './setCoordinacionForm';
 
@@ -21,9 +23,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsociarCoord({asignaturaAct, estado, setEstado, user, }){
+function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, }){
 
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [carrera, setCarrera] = useState(0);
   const [malla, setMalla] = useState(0)
@@ -58,32 +61,70 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, }){
   }
 
   useEffect(()=>{
+    dispatch(setLoading(true));
     clientAxios(user.idToken).get('/api/carreras')
     .then(res=>{
       setCarreras(res.data)
+      dispatch(setLoading(false))
+    })
+    .catch(error=>{
+      console.log(error);
+      dispatch(setLoading(false))
+      dispatch(handleNotifications(true, {
+        status: 'error',
+        message: 'Ocurrió un error al cargar las carreras'}
+      ));
     })
   }, [])
 
   useEffect(()=>{
+    dispatch(setLoading(true));
     clientAxios(user.idToken).get(`/api/mallas/${carrera}`)
     .then(res=>{
       setMallas(res.data)
+      dispatch(setLoading(false))
+    })
+    .catch(error=>{
+      console.log(error);
+      dispatch(setLoading(false))
+      dispatch(handleNotifications(true, {
+        status: 'error',
+        message: 'Ocurrió un error al cargar las mallas'}
+      ));
     })
   }, [carrera])
 
   useEffect(()=>{
+    dispatch(setLoading(true));
     clientAxios(user.idToken).get(`/api/asignaturas/${malla}`)
     .then(res=>{
-      console.log(res.data);
       setAsignaturas(res.data)
+      dispatch(setLoading(false))
+    })
+    .catch(error=>{
+      console.log(error);
+      dispatch(setLoading(false))
+      dispatch(handleNotifications(true, {
+        status: 'error',
+        message: 'Ocurrió un error al cargar las asignaturas'}
+      ));
     })
   }, [malla])
 
   useEffect(()=>{
+    dispatch(setLoading(true));
     clientAxios(user.idToken).get(`/api/coordinacions/${asignatura}`)
     .then(res=>{
-      console.log(res.data);
       setCoordinaciones(res.data)
+      dispatch(setLoading(false))
+    })
+    .catch(error=>{
+      console.log(error);
+      dispatch(setLoading(false))
+      dispatch(handleNotifications(true, {
+        status: 'error',
+        message: 'Ocurrió un error al cargar las coordinaciones'}
+      ));
     })
   }, [asignatura])
 
@@ -191,7 +232,7 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, }){
       {
         (coordinacion!==0) &&
           <SetCoordinacionForm coordinacion={coordinacionSelect} asignaturaAct={asignaturaAct}
-            estado={estado} setEstado={setEstado} user={user}/>
+            estado={estado} setEstado={setEstado} user={user} setCrear={setCrear}/>
       }
 
     </>

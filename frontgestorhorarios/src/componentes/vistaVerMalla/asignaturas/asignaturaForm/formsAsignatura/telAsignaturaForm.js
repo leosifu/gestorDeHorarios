@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+
+import TextField from '../../../../utils/TextField';
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -41,7 +42,7 @@ function TelAsignaturaForm({handleOnChange, tel_T, tel_E, tel_L, lab_independien
             label="Teoría"
             name="tel_T"
             type="number"
-            className={classes.textFieldNumber}
+            style={{width: 100}}
             value={tel_T.value}
             onChange={handleOnChange}
             margin="normal"
@@ -55,7 +56,7 @@ function TelAsignaturaForm({handleOnChange, tel_T, tel_E, tel_L, lab_independien
             label="Ejercicios"
             name="tel_E"
             type="number"
-            className={classes.textFieldNumber}
+            style={{width: 100}}
             value={tel_E.value}
             onChange={handleOnChange}
             margin="normal"
@@ -69,7 +70,7 @@ function TelAsignaturaForm({handleOnChange, tel_T, tel_E, tel_L, lab_independien
             label="Laboratorio"
             name="tel_L"
             type="number"
-            className={classes.textFieldNumber}
+            style={{width: 100}}
             value={tel_L.value}
             onChange={handleOnChange}
             margin="normal"

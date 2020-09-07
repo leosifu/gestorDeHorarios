@@ -48,7 +48,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function TabsAsignatura({infoAsignatura, asignatura, estado, setEstado, user,
   userRedux, currentProceso, estadoM, setEstadoM, }) {
+
   const classes = useStyles();
+
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {

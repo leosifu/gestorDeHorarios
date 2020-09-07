@@ -9,11 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     jornada:{
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    carrera_activa:{
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
-      allowNull: false,
     }
   }, {});
   Carrera.associate = function(models) {

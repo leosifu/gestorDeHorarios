@@ -1,13 +1,14 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid,
+import {Dialog, DialogActions, DialogContent, DialogTitle, Grid,
   FormControlLabel, Switch} from '@material-ui/core';
 
 import clientAxios from '../../../config/axios';
 
 import { useDispatch } from 'react-redux';
-import {setLoading, handleDialogUpdateProceso, getProcesos, } from '../../../redux/actions';
+import {setLoading, handleDialogUpdateProceso, getProcesos,
+  handleNotifications, } from '../../../redux/actions';
 
 import ProcesoForm from './ProcesoForm';
 
@@ -34,22 +35,41 @@ function EditarProceso({proceso, estado, setEstado, dialogUpdateProceso, user, }
 
   const onSubmitForm = (state) => {
     dispatch(setLoading(true))
-    const data = {
-      año: state.año.value,
-      semestre: state.semestre.value,
-      estado: state.estado.value
+    if ((!state.semestre.value || state.semestre.value < 0)
+      || (!state.año.value || state.año.value < 0)) {
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'info',
+          message: 'Datos ingresados incompletos o incorrectos'}
+        ));
     }
-    console.log(data);
-    clientAxios(user.idToken).put(`/api/procesos/${proceso.id}`, data)
-    .then(res=>{
-      console.log(res);
-      dispatch(getProcesos(user.idToken));
-      dispatch(handleDialogUpdateProceso(false));
-      setEstado(!estado);
-    })
-    .catch(error=>{
-      console.log(error);
-    })
+    else {
+      const data = {
+        año: state.año.value,
+        semestre: state.semestre.value,
+        estado: state.estado.value
+      }
+      clientAxios(user.idToken).put(`/api/procesos/${proceso.id}`, data)
+      .then(res=>{
+        console.log(res);
+        dispatch(getProcesos(user.idToken));
+        dispatch(handleDialogUpdateProceso(false));
+        setEstado(!estado);
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'success',
+          message: 'Proceso actualizado'}
+        ));
+      })
+      .catch(error=>{
+        console.log(error);
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al actualizar el proceso'}
+        ));
+      })
+    }
   }
 
   const handleClose = () => {

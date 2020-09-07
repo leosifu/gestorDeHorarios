@@ -2,12 +2,16 @@ import React, {useState, useEffect, } from 'react';
 
 import clientAxios from '../../config/axios';
 
-import {Button, TextField, Dialog, DialogActions, DialogContent,
+import {Dialog, DialogActions, DialogContent,
   DialogTitle, Grid, FormControlLabel, Checkbox, FormGroup} from '@material-ui/core';
+
+import PrimaryButton from '../utils/PrimaryButton';
+import TextField from '../utils/TextField';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import {handleDialogCreate, handleDialogHorarioProfesor, } from '../../redux/actions'
+import {handleDialogCreate, handleDialogHorarioProfesor, handleNotifications,
+  setLoading, } from '../../redux/actions';
 
 const DialosUsuarioSelector = createSelector(
   state => state.dialogUsuario,
@@ -54,38 +58,69 @@ const AdministrarUsuario = ({changed, setChanged, currentProceso, }) => {
   }
 
   const handleCLick = () => {
-    const data = {
-      usuarioData: userState,
-      rolesData: Object.keys(userRoles).filter(rol => userRoles[rol]),
-      procesoId: currentProceso.id
-    }
-    if (dialogUsuario.type === 'edit') {
-      clientAxios().put(`/api/editUsuario/${userState.id}`, data)
-      .then(res => {
-        console.log(res.data);
-        dispatch(handleDialogCreate(false));
-        setChanged(!changed);
-      })
-      .catch(error => {
-        console.log(error);
-      })
+    dispatch(setLoading(true));
+    if (!userState.name || !userState.lastName || !userState.email || !userState.rut) {
+      dispatch(setLoading(false));
+      dispatch(handleNotifications(true, {
+        status: 'info',
+        message: 'Datos ingresados incompletos o incorrectos'}
+      ));
     }
     else {
-      clientAxios().post(`/api/createUsuario`, data)
-      .then(res => {
-        console.log(res.data);
-        dispatch(handleDialogCreate(false))
-        setChanged(!changed);
-      })
-      .catch(error => {
-        console.log(error);
-      })
+      const data = {
+        usuarioData: userState,
+        rolesData: Object.keys(userRoles).filter(rol => userRoles[rol]),
+        procesoId: currentProceso.id
+      }
+      if (dialogUsuario.type === 'edit') {
+        clientAxios().put(`/api/editUsuario/${userState.id}`, data)
+        .then(res => {
+          console.log(res.data);
+          dispatch(handleDialogCreate(false));
+          setChanged(!changed);
+          dispatch(setLoading(false));
+          dispatch(handleNotifications(true, {
+            status: 'success',
+            message: 'Usuario actualizado correctamente'}
+          ));
+        })
+        .catch(error => {
+          console.log(error);
+          dispatch(setLoading(false));
+          dispatch(handleNotifications(true, {
+            status: 'error',
+            message: 'Ocurrió un error al actualizar el usuario'}
+          ));
+        })
+      }
+      else {
+        clientAxios().post(`/api/createUsuario`, data)
+        .then(res => {
+          console.log(res.data);
+          dispatch(handleDialogCreate(false))
+          setChanged(!changed);
+          dispatch(setLoading(false));
+          dispatch(handleNotifications(true, {
+            status: 'success',
+            message: 'Usuario creado correctamente'}
+          ));
+        })
+        .catch(error => {
+          console.log(error);
+          dispatch(setLoading(false));
+          dispatch(handleNotifications(true, {
+            status: 'error',
+            message: 'Ocurrió un error al crear el usuario'}
+          ));
+        })
+      }
     }
   }
 
   return (
     <div>
-      <Dialog open={dialogUsuario.open} onClose={() => dispatch(handleDialogCreate(false))} aria-labelledby="form-dialog-title">
+      <Dialog open={dialogUsuario.open} onClose={() => dispatch(handleDialogCreate(false))}
+        aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">
           {
             `${dialogUsuario.type === 'edit' ? 'Editando': 'Creando'} Usuario`
@@ -156,7 +191,15 @@ const AdministrarUsuario = ({changed, setChanged, currentProceso, }) => {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => dispatch(handleDialogCreate(false))} color="primary">
+          <PrimaryButton onClick={() => dispatch(handleDialogCreate(false))} title='Cerrar' />
+          {
+            userState.id > 0 &&
+            <PrimaryButton onClick={() => dispatch(handleDialogHorarioProfesor(true, userState))}
+              title='Ver Horario' />
+          }
+          <PrimaryButton onClick={() => handleCLick()}
+            title={dialogUsuario.type === 'edit' ? 'Actualizar Usuario' : 'Crear Usuario'} />
+          {/*<Button onClick={() => dispatch(handleDialogCreate(false))} color="primary">
             Cerrar
           </Button>
           <Button onClick={() => dispatch(handleDialogHorarioProfesor(true, userState.id))}
@@ -165,7 +208,7 @@ const AdministrarUsuario = ({changed, setChanged, currentProceso, }) => {
           </Button>
           <Button onClick={() => handleCLick()} color="primary">
             {dialogUsuario.type === 'edit' ? 'Actualizar Usuario' : 'Crear Usuario'}
-          </Button>
+          </Button>*/}
         </DialogActions>
       </Dialog>
     </div>

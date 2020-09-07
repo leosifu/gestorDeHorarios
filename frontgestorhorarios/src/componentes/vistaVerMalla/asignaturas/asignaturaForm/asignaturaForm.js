@@ -1,15 +1,19 @@
 import React from 'react';
 
+import Swal from 'sweetalert2';
+
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+
+import PrimaryButton from '../../../utils/PrimaryButton';
+import SecondaryButton from '../../../utils/SecondaryButton';
+import TextField from '../../../utils/TextField';
 
 import useForm from '../../../form/useForm'
 import AsignarAsignaturaForm from './formsAsignatura/asignarAsignaturaForm'
@@ -61,7 +65,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, }) => {
+const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, eliminarAsignatura, }) => {
 
   const [stateC, ] = React.useState({
     checked: camposAsignatura.lab_independiente,
@@ -78,17 +82,16 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, }) => {
     lab_independiente: { value: stateC.checked, checked:camposAsignatura.lab_independiente,
       error: '' },
     nivel: { value: camposAsignatura.nivel, error: '' },
+    desinscripciones: {value: camposAsignatura.desinscripciones, error: ''}
   };
   const validationStateSchema = {
     cod_asignatura: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid first name format.',
       },
     },
     nombre_asignatura: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
@@ -113,14 +116,18 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, }) => {
       },
     },
     cupos_pasados: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
       },
     },
     tasa_reprobacion: {
-      required: true,
+      validator: {
+        regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
+        error: 'Invalid last name format.',
+      },
+    },
+    desinscripciones: {
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
@@ -139,12 +146,6 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, }) => {
     onSubmitForm
   );
 
-  var sumaTel = true
-
-  if (state.tel_T.value + state.tel_E.value + state.tel_L.value>0) {
-    sumaTel = false
-  }
-
   const classes = useStyles();
   return (
     <>
@@ -152,12 +153,6 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, }) => {
 
         <AsignarAsignaturaForm handleOnChange={handleOnChange} cod_asignatura={state.cod_asignatura}
           nombre_asignatura={state.nombre_asignatura} />
-
-        <TelAsignaturaForm handleOnChange={handleOnChange} tel_T={state.tel_T} tel_E={state.tel_E}
-          tel_L={state.tel_L} lab_independiente={state.lab_independiente} />
-
-        <HistorialForm handleOnChange={handleOnChange} cupos_pasados={state.cupos_pasados}
-          tasa_reprobacion={state.tasa_reprobacion} />
 
         {
           edit &&
@@ -167,7 +162,6 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, }) => {
             label="Nivel"
             name="nivel"
             type="number"
-            className={classes.textFieldNumber}
             value={state.nivel.value}
             onChange={handleOnChange}
             margin="normal"
@@ -175,9 +169,23 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, }) => {
           />
         }
 
+        <TelAsignaturaForm handleOnChange={handleOnChange} tel_T={state.tel_T} tel_E={state.tel_E}
+          tel_L={state.tel_L} lab_independiente={state.lab_independiente} />
+
+        <HistorialForm handleOnChange={handleOnChange} cupos_pasados={state.cupos_pasados}
+          tasa_reprobacion={state.tasa_reprobacion} desinscripciones={state.desinscripciones}/>
+
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleOnSubmit} disabled={disable?true:(sumaTel?true:false)}
+        {
+          tipo !== 0 &&
+          <PrimaryButton onClick={eliminarAsignatura} title={'Eliminar Asignatura'}/>
+        }
+        <PrimaryButton onClick={handleOnSubmit} title={
+          tipo === 0 ? 'Crear asignatura' : 'Guardar cambios'
+        }
+        />
+        {/*<Button onClick={handleOnSubmit} disabled={disable?true:(sumaTel?true:false)}
           variant="contained" color="primary" className={classes.button}>
           {
             tipo===0?
@@ -185,7 +193,8 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, }) => {
             :
             <>Guardar Cambios</>
           }
-        </Button>
+        </Button>*/}
+        <SecondaryButton onClick={handleOnSubmit} title={'Cancelar'} />
       </DialogActions>
     </>
   );

@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 
-import clientAxios from '../../config/axios';
-
 import { makeStyles } from '@material-ui/core/styles';
-import {Typography, TextField, Grid, Paper, List, ListItem,
+import {Typography, Grid, Paper, List, ListItem,
   ListItemText, } from '@material-ui/core';
+
+import TextField from '../utils/TextField';
 
 import { useDispatch, } from 'react-redux';
 import {handleDialogEdit, } from '../../redux/actions'

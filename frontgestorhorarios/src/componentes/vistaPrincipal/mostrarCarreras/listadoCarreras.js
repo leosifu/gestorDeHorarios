@@ -4,7 +4,7 @@ import axios from 'axios'
 import clientAxios from '../../../config/axios'
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Grid, Button, Fab, Typography, } from '@material-ui/core';
+import {Grid, Fab, Typography, } from '@material-ui/core';
 
 import CSVReader from 'react-csv-reader'
 import {useDropzone} from 'react-dropzone'
@@ -12,7 +12,7 @@ import XLSX from 'xlsx';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect'
-import {setLoading, setProcesoActivo, } from '../../../redux/actions'
+import {setLoading, setProcesoActivo, handleNotifications, } from '../../../redux/actions'
 
 import Carrera from './carrera'
 import CrearCarrera from '../formularios/formCarrera/crearCarrera'
@@ -52,7 +52,6 @@ export default function ListadoCarreras(){
   const dialogUpdateProceso = useSelector(DialogProcesoSelector);
 
   const user = userRedux.user;
-  console.log(user);
 
   const currentProceso = procesosData.currentProceso;
   const procesos = procesosData.procesos;
@@ -65,6 +64,7 @@ export default function ListadoCarreras(){
   const [date, setDate] = useState({});
 
   useEffect(() => {
+    dispatch(setLoading(true));
     if (currentProceso.id !== -1) {
       clientAxios(user.idToken).get(`/api/carrera/${currentProceso.id}`)
       .then(res1 => {
@@ -79,10 +79,19 @@ export default function ListadoCarreras(){
             diur.push(carreras[i])
           }
         }
+        console.log('termino separar');
         setCarrerasV(vesp)
         setCarrerasD(diur)
+        dispatch(setLoading(false));
       })
-      dispatch(setLoading(false))
+      .catch(error=>{
+        console.log(error);
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al cargar las carreras proceso'}
+        ));
+      })
     }
     else {
       if (procesosData.error) {
@@ -122,23 +131,24 @@ export default function ListadoCarreras(){
         {
           userRedux.status === 'login' &&
           (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
-          <>
             <Grid item xs={1}>
               <CrearCarrera open={openC} setOpen={setOpenC} user={user}/>
             </Grid>
-            <Grid item xs={1}>
-              <OptionsList currentProceso={currentProceso} user={user}/>
-            </Grid>
-          </>
+        }
+        {
+          userRedux.status === 'login' && user.roles.includes('admin') &&
+          <Grid item xs={1}>
+            <OptionsList currentProceso={currentProceso} user={user}/>
+          </Grid>
         }
       </Grid>
       <Grid container>
-        {carrerasD.map((carrera)=>(
+        {carrerasD.map((carrera)=>
           <Grid item xs={6}  key={carrera.id}>
             <Carrera carrera={carrera} estado={estado} setEstado={setEstado} user={user}
               userRedux={userRedux}/>
           </Grid>
-        ))}
+        )}
       </Grid>
       <Grid container>
         <Grid item xs={12}>
@@ -146,12 +156,12 @@ export default function ListadoCarreras(){
         </Grid>
       </Grid>
       <Grid container>
-        {carrerasV.map((carrera)=>(
+        {carrerasV.map((carrera)=>
           <Grid item xs={6}  key={carrera.id}>
             <Carrera carrera={carrera} estado={estado} setEstado={setEstado} user={user}
               userRedux={userRedux}/>
           </Grid>
-        ))}
+        )}
       </Grid>
       {/*<input type="file" onChange={e=>handleUpload(e)} />*/}
 

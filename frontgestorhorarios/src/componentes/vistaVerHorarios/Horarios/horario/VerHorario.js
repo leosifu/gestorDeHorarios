@@ -23,13 +23,6 @@ const VerHorario = ({nivel, user, currentProceso, userRedux, dontDrag, verTope, 
             userRedux={userRedux} dontDrag={dontDrag} verTope={verTope}/>
         </div>
       </Grid>
-      {/*<Grid item xs={topes ? 2 : 0}>
-        {
-          topes &&
-          <Topes niveles={state} handleChange={handleChange} />
-        }
-      </Grid>*/}
-
     </DndProvider>
   )
 }

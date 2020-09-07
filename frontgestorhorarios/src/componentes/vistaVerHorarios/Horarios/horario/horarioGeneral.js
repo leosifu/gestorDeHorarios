@@ -6,6 +6,7 @@ import clientAxios from '../../../../config/axios';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import {setLoading, handleNotifications, } from '../../../../redux/actions';
 
 import Horario from './horario';
 
@@ -21,6 +22,8 @@ const MallaSelector = createSelector(
 
 function GetDataHorario({nivel, user, currentProceso, userRedux, dontDrag, selected, verTope, tope, }) {
 
+  const dispatch = useDispatch();
+
   const malla = useSelector(MallaSelector);
 
   const [data, setData] = useState([]);
@@ -30,36 +33,66 @@ function GetDataHorario({nivel, user, currentProceso, userRedux, dontDrag, selec
   const [asignaturas, setAsignaturas] = useState([]);
 
   useEffect(()=>{
-    console.log(malla);
-    console.log(currentProceso);
+    dispatch(setLoading(true));
     clientAxios(user.idToken).get(`/api/asignatura/${malla.id}/${nivel}/${currentProceso.id}`)
     .then(res => {
       const data = res.data
-      var asignaturas = data.map(asignatura=>({nombre_asignatura: asignatura.nombre_asignatura,
+      console.log(res.data);
+      const asignaturas = data.map(asignatura=>({nombre_asignatura: asignatura.nombre_asignatura,
         cod_asignatura: asignatura.cod_asignatura, asignaturaId: asignatura.id}))
       setAsignaturas(asignaturas)
-      var bloquesMatrix = data.map((asignatura, i)=>asignatura.coordinaciones.map(coordinacion=>{
-        const color = getRandomColor();
-        coordinacion.bloques.map(bloque=>{
-          bloque.asignaturaId = asignatura.id
-          bloque.profesores = coordinacion.profesores
-          bloque.cod_asignatura = asignatura.cod_asignatura
-          bloque.nombre_coord = coordinacion.InfoCoordinacion.nombre_coord
-          bloque.cod_coord = coordinacion.InfoCoordinacion.cod_coord
-          bloque.mostrar = true
-          bloque.size = 1
-          bloque.color = color
-          return bloque
-        })
-        return coordinacion.bloques
-      }))
+      const bloquesMatrix = data.map((asignatura, i)=>{
+        if (asignatura.coordinaciones.length > 0) {
+          let nombreBloque, areDistinct = false;
+          if (asignatura.nombre_asignatura === asignatura.coordinaciones[0].InfoCoordinacion.nombre_coord) {
+            areDistinct = false;
+            nombreBloque = asignatura.coordinaciones[0].InfoCoordinacion.nombre_coord
+          }
+          else {
+            const coordinacionesNames = asignatura.coordinaciones.map(coord =>
+              coord.InfoCoordinacion.nombre_coord)
+              if (coordinacionesNames.every( (val, i, arr) => val === arr[0] ) ) {
+                areDistinct = false;
+                nombreBloque = asignatura.nombre_asignatura;
+              }
+              else {
+                areDistinct = true;
+              }
+            }
+            const coordinacionesAsign = asignatura.coordinaciones.map(coordinacion=>{
+              const color = getRandomColor();
+              const Bloques = coordinacion.bloques.map(bloque=>{
+                bloque.asignaturaId = asignatura.id
+                bloque.profesores = coordinacion.profesores
+                bloque.cod_asignatura = asignatura.cod_asignatura
+                bloque.nombre_coord = areDistinct ?
+                  coordinacion.InfoCoordinacion.nombre_coord : nombreBloque;
+                bloque.cod_coord = coordinacion.InfoCoordinacion.cod_coord
+                bloque.mostrar = true
+                bloque.size = 1
+                bloque.color = color
+                return bloque
+              })
+              return Bloques
+            })
+            return coordinacionesAsign
+        }
+        else {
+          return []
+        }
+      })
       var bloques = []
       bloquesMatrix.map(bloqueM=>bloques = bloques.concat(...bloqueM))
-      console.log(bloques);
-      setData(bloques)
+      setData(bloques);
+      dispatch(setLoading(false));
     })
     .catch((error)=>{
       console.log(error);
+      dispatch(setLoading(false));
+      dispatch(handleNotifications(true, {
+        status: 'error',
+        message: 'Ocurrió un error al cargar el horario'}
+      ));
     })
   },[nivel, malla.id])
 

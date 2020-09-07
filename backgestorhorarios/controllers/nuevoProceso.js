@@ -34,7 +34,6 @@ module.exports = {
     const MallasDataValues = Mallas.map(malla=>malla.dataValues)
     // console.log(MallasDataValues);
     const MallasData = MallasDataValues.map(malla=>({
-      res_malla: malla.res_malla,
       cod_malla: malla.cod_malla,
       fecha_resolucion: malla.fecha_resolucion,
       n_niveles: malla.n_niveles,
@@ -140,8 +139,8 @@ module.exports = {
     const NuevasInfoAsignaturasData = NuevasInfoAsignaturas.map(infoA=>infoA.dataValues)
 
     //Crear Coordinaciones
-    const CoordinacionesByAsignatura = Asignaturas.map(asignatura=>asignatura.coordinaciones.map(coordinacion=>
-      coordinacion.dataValues))
+    const CoordinacionesByAsignatura = Asignaturas.map(asignatura=>
+      asignatura.coordinaciones.map(coordinacion=>coordinacion.dataValues))
     const Coordinaciones = [...new Set([].concat(...CoordinacionesByAsignatura))]
     const Coords = Array.from(new Set(Coordinaciones.map(coordinacion=>coordinacion.id)))
     .map(id=>{
@@ -154,7 +153,6 @@ module.exports = {
         bloques: coord.bloques.map(bloque=>bloque.dataValues),
         infoCoordinacion: coord.InfoCoordinacion.dataValues,
         asignaciones: coord.profesores.map(profesor => {
-          console.log(profesor);
           return profesor.dataValues.Asignacion.dataValues
         })
       }
@@ -167,7 +165,7 @@ module.exports = {
     const NuevasCoordinacionesData = NuevasCoordinaciones.map(coordinacion=>coordinacion.dataValues)
 
     //Crear InfoCoordinaciones
-    const InfoCoordinaciones = Coords.map(coordinacion=>coordinacion.infoCoordinacion)
+    const InfoCoordinaciones = Coordinaciones.map(coordinacion=>coordinacion.InfoCoordinacion.dataValues)
     const InfoCoordinacionesData = InfoCoordinaciones.map(infoC=>{
       let asignaturaId = infoC.asignaturaId
       let asignaturaFind = Asignaturas.find(asignatura=>asignatura.id === asignaturaId)
@@ -188,7 +186,8 @@ module.exports = {
         infoC_id: newAsignaturaId + '~' + infoC.cod_coord + '~' + infoC.nombre_coord
       })
     })
-    const NuevasInfoCoordinacion = await InfoCoordinacion.bulkCreate(InfoCoordinacionesData)
+    const InfoCoordinacionesDataFiltered = _.uniqWith(InfoCoordinacionesData, _.isEqual);
+    const NuevasInfoCoordinacion = await InfoCoordinacion.bulkCreate(InfoCoordinacionesDataFiltered)
     const NuevasInfoCoordinacionesData = NuevasInfoCoordinacion.map(infoC=>infoC.dataValues)
 
     //Crear Bloques
@@ -256,7 +255,8 @@ module.exports = {
     //   return result;
     // }, []);
     const NuevasAsignaciones = await Asignacion.bulkCreate(AsignacionesData);
-    const NuevasAsignacionesData = NuevasAsignaciones.map(asignacion => asignacion => asignacion.dataValues)
+    const NuevasAsignacionesData = NuevasAsignaciones.map(asignacion => asignacion =>
+      asignacion.dataValues)
 
     return res.status(201).send(NuevasMallas)
   }

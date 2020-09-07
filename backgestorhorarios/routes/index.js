@@ -28,6 +28,7 @@ module.exports = (app) => {
   // app.get('/api/carrera/:id', carreraController.findByCarreraId)
   app.post('/api/carrera', verify('admin', 'coordinador'), carreraController.create)
   app.put('/api/carrera/:id', verify('admin', 'coordinador'), carreraController.update)
+  app.delete('/api/carrera/:carreraId', verify('admin'), carreraController.deleteCarrera)
 
   //API malla
   // app.get('/api/malla', mallaController.findAll)
@@ -36,6 +37,7 @@ module.exports = (app) => {
   app.get('/api/malla/:mallaId/:procesoId', checkProceso(), mallaController.findMallaById)
   app.post('/api/malla', verify('admin', 'coordinador'), mallaController.create)
   app.put('/api/malla/:id', verify('admin', 'coordinador'), mallaController.update)
+  app.delete('/api/malla/:mallaId', verify('admin', 'coordinador'), mallaController.deleteMalla)
 
   //API infoAsignatura
   app.get('/api/asignatura/:mallaId/:nivel/:procesoId', checkProceso(), verify(),
@@ -45,6 +47,8 @@ module.exports = (app) => {
   app.post('/api/infoAsignatura', verify('admin', 'coordinador'), infoasignaturaController.create)
   app.get('/api/asignaturas/:id', verify('admin', 'coordinador'),
     infoasignaturaController.findAsignaturas)
+  app.delete('/api/infoAsignatura/:mallaId/:asignaturaId', verify('admin', 'coordinador'),
+    infoasignaturaController.deleteAsignaturaFromMalla)
 
   //API asignatura
   //app.get('/api/asignH/:id', asignaturaController.actualizarHistorial)
@@ -65,6 +69,8 @@ module.exports = (app) => {
   //app.post('/api/coordinacion', coordinacionController.create)
   app.get('/api/coordinacions/:id', verify('admin', 'coordinador'), infocoordController.findCoords)
   app.post('/api/asigncoord', verify('admin', 'coordinador'), infocoordController.create)
+  app.delete('/api/infoCoordinacion/:asignaturaId/:coordinacionId', verify('admin', 'coordinador'),
+    infocoordController.deleteCoordinacionFromAsignatura)
 
   //Api coordinacion
   app.post('/api/coordinacion', verify('admin', 'coordinador'), coordinacionController.create)
@@ -87,7 +93,7 @@ module.exports = (app) => {
 
   //Api proceso
   app.get('/api/procesos', procesoController.findAll)
-  app.post('/api/procesos', verify('admin', 'coordinador'), procesoController.create)
+  app.post('/api/procesos', verify('admin'), procesoController.create)
   app.put('/api/procesos/:procesoId', verify('admin'), procesoController.changeProcesoStatus)
   app.delete('/api/procesos/:procesoId', verify('admin'), procesoController.EliminarProceso)
 

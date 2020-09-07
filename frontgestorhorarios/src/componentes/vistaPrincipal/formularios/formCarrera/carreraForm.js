@@ -1,10 +1,13 @@
 import React from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
+import {Radio, RadioGroup, FormControlLabel, FormLabel, DialogContent,
+  DialogActions, } from '@material-ui/core';
+
+import TextField from '../../../utils/TextField';
+import PrimaryButton from '../../../utils/PrimaryButton';
+import SecondaryButton from '../../../utils/SecondaryButton';
+
 import useForm from '../../../form/useForm'
 
 const useStyles = makeStyles(theme => ({
@@ -28,29 +31,27 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const CarreraForm = ({nombre_carrera, jornada, onSubmitForm}) => {
+const CarreraForm = ({nombre_carrera, jornada, onSubmitForm, type, handleClose, }) => {
+
   const stateSchema = {
     nombre_carrera: { value: nombre_carrera, error: '' },
     jornada: { value: jornada ? jornada:"Vespertino", error: '' },
   };
+
   const validationStateSchema = {
     nombre_carrera: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
       },
     },
     jornada: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
       },
     },
   };
-
-
 
   const { state, handleOnChange, handleOnSubmit, disable } = useForm(
     stateSchema,
@@ -60,14 +61,13 @@ const CarreraForm = ({nombre_carrera, jornada, onSubmitForm}) => {
 
   const classes = useStyles();
   return (
-    <div>
-      <form onSubmit={handleOnSubmit}>
+    <>
+      <DialogContent>
         <TextField
           error={state.nombre_carrera.error ? true:false}
           id="standard-required"
           label="Nombre de la carrera"
           name="nombre_carrera"
-          className={classes.textField}
           value={state.nombre_carrera.value}
           onChange={handleOnChange}
           margin="normal"
@@ -76,13 +76,18 @@ const CarreraForm = ({nombre_carrera, jornada, onSubmitForm}) => {
         <br/>
         <br/>
         <FormLabel component="legend">Jornada</FormLabel>
-        <RadioGroup aria-label="Jornada" name="jornada" value={state.jornada.value} onChange={handleOnChange}>
+        <RadioGroup aria-label="Jornada" name="jornada" value={state.jornada.value}
+          onChange={handleOnChange}>
           <FormControlLabel value="Vespertino" control={<Radio />} label="Vespertino" />
           <FormControlLabel value="Diurno" control={<Radio />} label="Diurno" />
         </RadioGroup>
-        <input type="submit" name="submit" disabled={disable} />
-      </form>
-    </div>
+      </DialogContent>
+      <DialogActions>
+        <PrimaryButton onClick={handleOnSubmit}
+          title={type === 'crear' ? 'Crear Carrera' : 'Actualizar Carrera'} />
+        <SecondaryButton onClick={handleClose} title={'Cerrar'} />
+      </DialogActions>
+    </>
   );
 };
 

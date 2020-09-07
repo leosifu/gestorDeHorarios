@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+
+import TextField from '../../../../utils/TextField';
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -10,15 +11,12 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
     width: '45%',
   },
-  textFieldNumber:{
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 100,
-  },
 }));
 
-function HistorialForm({handleOnChange, cupos_pasados, tasa_reprobacion}){
+function HistorialForm({handleOnChange, cupos_pasados, tasa_reprobacion, desinscripciones, }){
+
   const classes = useStyles();
+  
   return(
     <>
       <Typography variant="h6" component="h3" className={classes.campoDes}>
@@ -30,7 +28,7 @@ function HistorialForm({handleOnChange, cupos_pasados, tasa_reprobacion}){
         label="Cupos del semestre pasado"
         name="cupos_pasados"
         type="number"
-        className={classes.textField}
+        style={{width: '45%'}}
         value={cupos_pasados.value}
         onChange={handleOnChange}
         margin="normal"
@@ -42,8 +40,20 @@ function HistorialForm({handleOnChange, cupos_pasados, tasa_reprobacion}){
         label="Tasa de reprobación de la asignatura"
         name="tasa_reprobacion"
         type="number"
-        className={classes.textField}
+        style={{width: '45%'}}
         value={tasa_reprobacion.value}
+        onChange={handleOnChange}
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        error={desinscripciones.error ? true:false}
+        id="standard-required"
+        label="Desinscripciones de la asignatura"
+        name="desinscripciones"
+        type="number"
+        style={{width: '45%'}}
+        value={desinscripciones.value}
         onChange={handleOnChange}
         margin="normal"
         variant="outlined"

@@ -1,24 +1,21 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {TextField, Button, DialogActions, } from '@material-ui/core';
+import {DialogActions, } from '@material-ui/core';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
-import useForm from '../../form/useForm'
+import PrimaryButton from '../../utils/PrimaryButton'
+import TextField from '../../utils/TextField'
 
+import useForm from '../../form/useForm'
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
   },
   dense: {
     marginTop: 19,
@@ -43,14 +40,12 @@ const ProcesoForm = ({año, semestre, estado, onSubmitForm, edit, activa}) => {
 
   const validationStateSchema = {
     año: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
       },
     },
     semestre: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
@@ -77,7 +72,6 @@ const ProcesoForm = ({año, semestre, estado, onSubmitForm, edit, activa}) => {
           label="Año del Proceso"
           name="año"
           type="number"
-          className={classes.textField}
           value={state.año.value}
           onChange={handleOnChange}
           margin="normal"
@@ -88,7 +82,6 @@ const ProcesoForm = ({año, semestre, estado, onSubmitForm, edit, activa}) => {
           label="Semestre del Proceso"
           name="semestre"
           type="number"
-          className={classes.textField}
           value={state.semestre.value}
           onChange={handleOnChange}
           margin="normal"
@@ -103,9 +96,7 @@ const ProcesoForm = ({año, semestre, estado, onSubmitForm, edit, activa}) => {
           </RadioGroup>
         </FormControl>
         <DialogActions>
-          <Button onClick={handleOnSubmit} color="primary">
-            Actualizar Malla
-          </Button>
+          <PrimaryButton onClick={handleOnSubmit} title={'Actualizar Proceso'} />
         </DialogActions>
       </form>
     </div>

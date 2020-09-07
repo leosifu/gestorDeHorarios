@@ -106,6 +106,7 @@ module.exports = {
             name: claims.name,
             roles: []
           }
+          console.log(UsuarioData);
           const payload = {
             ...UsuarioData,
             check: true
@@ -122,7 +123,7 @@ module.exports = {
             check:  true
           };
           const token = jwt.sign(payload, process.env.KEY, {
-            expiresIn: 1440
+            expiresIn: '12h'
           });
           const UsuarioData = {...UsuarioFind.dataValues, token: token}
           return(res.status(201).send(UsuarioData))
@@ -163,7 +164,6 @@ module.exports = {
       const {procesoId} = req.body;
       const AllProfesoresDuplicated = [].concat(...profesoresData);
       const AllProfesores = AllProfesoresDuplicated.map(profesor => {
-        console.log(profesor);
         const ProfesorNombreCompleto = profesor.NOMBREPROFESOR.replace(',', '');
         const ProfesorAllNombre = ProfesorNombreCompleto.split(' ');
         const ProfesorNombreFormat = ProfesorAllNombre.map(nombre => toTitleCase(nombre));

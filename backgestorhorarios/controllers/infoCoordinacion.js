@@ -80,4 +80,20 @@ module.exports = {
       .then(infoC=>res.status(201).send(infoC)
       )
   },
+  async deleteCoordinacionFromAsignatura(req, res){
+    try {
+      const {coordinacionId, asignaturaId} = req.params;
+      const infoCoordinacionDelete = await InfoCoordinacion.findOne({
+        where: {
+          coordinacionId: coordinacionId,
+          asignaturaId: asignaturaId
+        }
+      });
+      await infoCoordinacionDelete.destroy();
+      return res.status(201).send({message: 'Coordinación eliminada.'});
+    } catch (e) {
+      console.log(e);
+      return res.status(400).send({message: 'Hubo un error al eliminar la coordinación.'})
+    }
+  }
 }

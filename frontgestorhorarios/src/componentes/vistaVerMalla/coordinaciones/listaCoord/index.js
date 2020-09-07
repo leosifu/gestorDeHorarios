@@ -42,6 +42,7 @@ const useStyles = makeStyles(theme => ({
 
 function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independiente, estado,
   setEstado, user, userRedux, currentProceso, }){
+
   const classes = useStyles();
 
   const [crear, setCrear] = useState(false)

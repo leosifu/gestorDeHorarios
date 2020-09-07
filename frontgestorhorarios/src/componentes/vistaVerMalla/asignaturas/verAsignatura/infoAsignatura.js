@@ -133,7 +133,7 @@ export default function InfoAsignatura({infoAsignatura, asignatura, estado, setE
                 Tasa de reprobación:{asignatura.historial.tasa_reprobacion + '%'}
               </Typography>
               <Typography className={classes.campoDes}>
-                Desinscripciones actuales: 10
+                Desinscripciones actuales: {asignatura.historial.desinscripciones}
               </Typography>
             </Box>
           }

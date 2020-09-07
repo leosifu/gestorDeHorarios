@@ -9,7 +9,7 @@ import clientAxios from '../../../config/axios';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import {setLoading, } from '../../../redux/actions';
+import {setLoading, handleNotifications, } from '../../../redux/actions';
 import _ from 'lodash'
 
 import Horario from '../Horarios/horario/horario';
@@ -38,21 +38,11 @@ const HorarioProfesor = ({selectedUser, }) => {
 
   const [asignaturas, setAsignaturas] = useState([]);
 
-  const [widths, setWidths] = useState([
-    [68, 68, 68, 68, 68, 68, 68],
-    [68, 68, 68, 68, 68, 68, 68],
-    [68, 68, 68, 68, 68, 68, 68],
-    [68, 68, 68, 68, 68, 68, 68],
-    [68, 68, 68, 68, 68, 68, 68],
-    [68, 68, 68, 68, 68, 68, 68],
-    [68, 68, 68, 68, 68, 68, 68]
-  ]);
-
   useEffect(()=>{
+    dispatch(setLoading(true));
     clientAxios(user.idToken).get(`/api/getHorario/${selectedUser ? selectedUser : user.id}/${proceso.id}`)
     .then(res => {
       const data = res.data
-      console.log(data);
       // var asignaturas = data.map(asignatura=>({nombre_asignatura: asignatura.nombre_asignatura,
       //   cod_asignatura: asignatura.cod_asignatura, asignaturaId: asignatura.asignaturaId}))
       // const UniqueAsignaturas = _.uniqWith(asignaturas, _.isEqual);
@@ -81,26 +71,36 @@ const HorarioProfesor = ({selectedUser, }) => {
           return coordinacion.bloques
         })
       })
-      console.log(AsignaturasConBloques);
       const UniqueAsignaturas = _.uniqWith(AsignaturasConBloques, _.isEqual);
-      setAsignaturas(UniqueAsignaturas)
+      const UniqueAsignaturasIDS = []
+      UniqueAsignaturas.forEach(item => {
+        let i = UniqueAsignaturasIDS.findIndex(x=>x.asignaturaId === item.asignaturaId);
+        if (i < 0) {
+          UniqueAsignaturasIDS.push(item)
+        }
+      })
+      setAsignaturas(UniqueAsignaturasIDS);
       var bloques = []
       bloquesMatrix.map(bloqueM=>bloques = bloques.concat(...bloqueM))
-      console.log(bloques);
       const UniqueBloques = Array.from(new Set(bloques.map(bloque => bloque.id)))
         .map(id => bloques.find(bloque => bloque.id === id))
       setData(UniqueBloques)
       dispatch(setLoading(false));
     })
-    .catch((error)=>{
+    .catch(error=>{
       console.log(error);
+      dispatch(setLoading(false));
+      dispatch(handleNotifications(true, {
+        status: 'error',
+        message: 'Ocurrió un error al cargar el horario'}
+      ));
     })
   },[proceso.id])
 
   return (
     <DndProvider backend={HTML5Backend}>
       <Horario data={data} setData={setData} asignaturas={asignaturas} setAsignaturas={setAsignaturas}
-        user={user} userRedux={userRedux} dontDrag={true} widths={widths} setWidths={setWidths}/>
+        user={user} userRedux={userRedux} dontDrag={true}/>
     </DndProvider>
   )
 }

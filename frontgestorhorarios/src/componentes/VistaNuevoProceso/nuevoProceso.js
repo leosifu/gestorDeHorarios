@@ -1,16 +1,20 @@
 import React, {useState, useEffect} from 'react';
+import {Redirect} from 'react-router-dom';
 
 import axios from 'axios';
 import clientAxios from '../../config/axios';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, Typography, TextField, Grid, } from '@material-ui/core';
+import {Typography, Grid, } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+
+import PrimaryButton from '../utils/PrimaryButton';
+import TextField from '../utils/TextField';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { push } from 'connected-react-router';
-import {setLoading, setProcesoActivo, getProcesos, } from '../../redux/actions'
+import {setLoading, setProcesoActivo, getProcesos, handleNotifications, } from '../../redux/actions'
 
 import SelectProceso from './selectProceso';
 import ShowCarrera from './showCarrera';
@@ -34,7 +38,7 @@ const ProcesosSelector = createSelector(
 
 const UserSelector = createSelector(
   state => state.user,
-  user => user.user
+  user => user
 );
 
 export default function NuevoProceso() {
@@ -44,7 +48,9 @@ export default function NuevoProceso() {
 
   const currentProceso = useSelector(ProcesoSelector);
   const procesos = useSelector(ProcesosSelector);
-  const user = useSelector(UserSelector);
+  const userRedux = useSelector(UserSelector);
+
+  const {user} = userRedux;
 
   const [carrerasV, setCarrerasV] = useState([]);
   const [carrerasD, setCarrerasD] = useState([]);
@@ -56,10 +62,6 @@ export default function NuevoProceso() {
   const [procesoselects, setProcesoselects] = useState(currentProceso);
   const [allSelects, setAllSelects] = useState([]);
   const [uploadFile, setUploadFile] = useState(null);
-
-  useEffect(() => {
-    console.log(uploadFile);
-  }, [uploadFile])
 
   useEffect(() => {
     const procesoFind = procesos.find(proceso => proceso.año === date.age &&
@@ -98,34 +100,57 @@ export default function NuevoProceso() {
       })
     }
     dispatch(setLoading(false))
-  }, [procesoselects])
+  }, [procesoselects]);
+
+  if (userRedux.status !== 'login' || !user.roles.includes('admin')) {
+    return (
+      <Redirect to='/' />
+    )
+  }
 
   const changeProcesoData = (event) => {
     setProcesoData({...procesoData, [event.target.id]: event.target.value})
   }
 
   const crearProceso = async () => {
-    if (procesoData.año < 1 || procesoData < 1 || (!uploadFile)) {
-
+    dispatch(setLoading(true));
+    if (procesoData.año < 1 || procesoData.semestre < 1 || (!uploadFile)) {
+      dispatch(setLoading(false));
+      dispatch(handleNotifications(true, {
+        status: 'info',
+        message: 'Datos ingresados incompletos o incorrectos'}
+      ));
     }
     else {
-      dispatch(setLoading(true));
-      const mallasSelected = [].concat(...allSelects.map(carrera => carrera.selects));
-      const NuevoProceso = await clientAxios(user.idToken).post('/api/procesos', procesoData);
-      let formData = new FormData();
-      formData.append('file', uploadFile);
-      formData.append('procesoId', NuevoProceso.data.id);
-      const SubirProfesores = await axios.post(`http://localhost:8000/api/profesores`,
-        formData,
-        {headers: {'Authorization': `Bearer ${user.idToken}`,
+      try {
+        const mallasSelected = [].concat(...allSelects.map(carrera => carrera.selects));
+        const NuevoProceso = await clientAxios(user.idToken).post('/api/procesos', procesoData);
+        let formData = new FormData();
+        formData.append('file', uploadFile);
+        formData.append('procesoId', NuevoProceso.data.id);
+        const SubirProfesores = await axios.post(`http://localhost:8000/api/profesores`,
+          formData,
+          {headers: {'Authorization': `Bearer ${user.idToken}`,
           'Content-Type': 'multipart/form-data'}})
-      const data = {
-        procesoId: NuevoProceso.data.id,
-        mallas: mallasSelected
+        const data = {
+          procesoId: NuevoProceso.data.id,
+          mallas: mallasSelected
+        }
+        const DuplicarDatos = await clientAxios(user.idToken).post('/api/nuevoProceso', data);
+        dispatch(getProcesos(user.idToken))
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'success',
+          message: 'Proceso creado correctamente'}
+        ));
+        dispatch(push('/'))
+      } catch (e) {
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al crear el proceso'}
+        ));
       }
-      const DuplicarDatos = await clientAxios(user.idToken).post('/api/nuevoProceso', data);
-      dispatch(getProcesos(user.idToken))
-      dispatch(push('/'))
     }
   }
 
@@ -184,10 +209,10 @@ export default function NuevoProceso() {
           </Grid>
         </Grid>
         <Grid item xs={4}>
-          <ProfesoresUploader uploadFile={uploadFile} setUploadFile={setUploadFile}/>
-          <Button onClick={crearProceso}>
-            Crear Proceso
-          </Button>
+          <div style={{marginBottom: 20}}>
+            <ProfesoresUploader uploadFile={uploadFile} setUploadFile={setUploadFile}/>
+          </div>
+          <PrimaryButton onClick={crearProceso} title='Crear Proceso' />
         </Grid>
       </Grid>
 

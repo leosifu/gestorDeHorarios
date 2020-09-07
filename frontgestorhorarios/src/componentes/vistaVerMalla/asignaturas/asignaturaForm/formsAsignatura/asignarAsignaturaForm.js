@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+
+import TextField from '../../../../utils/TextField';
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -29,7 +30,7 @@ function AsignarAsignaturaForm({handleOnChange, cod_asignatura, nombre_asignatur
         id="standard-name"
         label="Código de la asignatura"
         name="cod_asignatura"
-        className={classes.textField}
+        style={{width: '45%'}}
         value={cod_asignatura.value}
         onChange={handleOnChange}
         type="number"
@@ -41,7 +42,7 @@ function AsignarAsignaturaForm({handleOnChange, cod_asignatura, nombre_asignatur
         id="standard-name"
         label="Nombre de la asignatura"
         name="nombre_asignatura"
-        className={classes.textField}
+        style={{width: '45%'}}
         value={nombre_asignatura.value}
         onChange={handleOnChange}
         margin="normal"

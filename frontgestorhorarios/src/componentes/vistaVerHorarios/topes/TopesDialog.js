@@ -23,6 +23,7 @@ import VistaTopes from './VistaTopes';
 const useStyles = makeStyles((theme) => ({
   appBar: {
     position: 'relative',
+    backgroundColor: '#EA7600'
   },
   title: {
     marginLeft: theme.spacing(2),
@@ -30,25 +31,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DialogTopesSelector = createSelector(
-  state => state.dialogTopes,
-  dialogTopes => dialogTopes
-);
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const TopesDialog = ({userRedux, numNiveles, currentProceso}) => {
+const DialogTopesSelector = createSelector(
+  state => state.dialogTopes,
+  dialogTopes => dialogTopes
+);
+
+const MallaSelector = createSelector(
+  state => state.malla,
+  malla => malla.malla
+);
+
+const TopesDialog = ({userRedux, numNiveles, currentProceso, }) => {
 
   const classes = useStyles();
 
   const dispatch = useDispatch();
 
+  const malla = useSelector(MallaSelector);
   const dialogTopes = useSelector(DialogTopesSelector);
   const {open, data} = dialogTopes;
-
-  console.log(userRedux);
 
   return (
     <div>
@@ -57,7 +63,7 @@ const TopesDialog = ({userRedux, numNiveles, currentProceso}) => {
         <AppBar className={classes.appBar}>
           <Toolbar>
             <Typography variant="h6" className={classes.title}>
-              Sound
+              {`${malla.Carrera.nombre_carrera} ${malla.cod_malla} ${currentProceso.semestre}/${currentProceso.año}`}
             </Typography>
             <Button autoFocus color="inherit" onClick={() => dispatch(handleDialogTopes())}>
               Cerrar

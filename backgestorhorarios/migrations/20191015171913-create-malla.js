@@ -8,10 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      res_malla: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       cod_malla: {
         type: Sequelize.STRING,
         allowNull: false,

@@ -2,7 +2,7 @@ const Historial = require('../models').Historial
 const Asignatura = require('../models').Asignatura
 const AsignaturaC = require('./asignatura')
 
-function actualizarCupos(id, cupos_pasados, tasa_reprobacion){
+function actualizarCupos(id, cupos_pasados, tasa_reprobacion, desinscripciones){
   Asignatura.findOne({
     where:{id:id},
     include: [{model:Asignatura, as:'requisitos', include:[{model: Historial, as: 'historial'}]},
@@ -13,14 +13,15 @@ function actualizarCupos(id, cupos_pasados, tasa_reprobacion){
     //console.log('\n');
     //console.log(asignatura.dataValues.requisitos);
     var requisitos = asignatura.dataValues.requisitos
-    var estimados = Math.ceil(cupos_pasados*tasa_reprobacion/100)
+    var estimados = Math.ceil(desinscripciones + (cupos_pasados - desinscripciones)*tasa_reprobacion/100)
     for (var i = 0; i < requisitos.length; i++) {
       var requisito = requisitos[i].dataValues
       //console.log('\n');
       //console.log(requisito);
       var historial = requisito.historial.dataValues
       //console.log('Historial: \n');
-      estimados = estimados + Math.ceil(historial.cupos_pasados*(100-historial.tasa_reprobacion)/100)
+      estimados = estimados + Math.ceil((historial.cupos_pasados-historial.desinscripciones)*
+        (100-historial.tasa_reprobacion)/100)
     }
     var asignaturas = asignatura.dataValues.asignaturas
     Historial.update({
@@ -32,7 +33,8 @@ function actualizarCupos(id, cupos_pasados, tasa_reprobacion){
       for (var i = 0; i < asignaturas.length; i++) {
         var asignatura = asignaturas[i].dataValues
         var historial = asignatura.historial.dataValues
-        actualizarCupos(asignatura.id, historial.cupos_pasados, historial.tasa_reprobacion)
+        actualizarCupos(asignatura.id, historial.cupos_pasados, historial.tasa_reprobacion,
+          historial.desinscripciones)
       }
     })
     //console.log('\n');
@@ -49,11 +51,13 @@ function update(req, res){
     .update({
       cupos_pasados: req.body.cupos_pasados,
       tasa_reprobacion: req.body.tasa_reprobacion,
+      desinscripciones: req.body.desinscripciones
     },{
         where:{asignaturaId:req.params.id}
   })
   .then(historial=>{
-    actualizarCupos(req.params.id, req.body.cupos_pasados, req.body.tasa_reprobacion)
+    actualizarCupos(req.params.id, req.body.cupos_pasados, req.body.tasa_reprobacion,
+      req.body.desinscripciones)
     return (res.json(historial))
   })
   .catch(error=> {
@@ -92,7 +96,7 @@ module.exports = {
       })
       .then(historial=>{
         actualizarCupos(id, historial.dataValues.cupos_pasados,
-          historial.dataValues.tasa_reprobacion)
+          historial.dataValues.tasa_reprobacion, historial.dataValues.desinscripciones)
       })
   },
   update,

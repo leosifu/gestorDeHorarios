@@ -1,15 +1,18 @@
 import React, {useState, useEffect} from 'react';
+import {Redirect} from 'react-router-dom';
 
 import axios from 'axios';
 import clientAxios from '../../config/axios';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, Typography, TextField, Grid, } from '@material-ui/core';
+import {Typography, Grid, } from '@material-ui/core';
+
+import PrimaryButton from '../utils/PrimaryButton';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { push } from 'connected-react-router';
-import {setLoading, handleDialogCreate, } from '../../redux/actions'
+import {setLoading, handleDialogCreate, handleNotifications, } from '../../redux/actions'
 
 import VerUsuarios from './VerUsuarios';
 import AdministrarUsuario from './AdministrarUsuario';
@@ -24,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 
 const UserSelector = createSelector(
   state => state.user,
-  user => user.user
+  user => user
 );
 
 const ProcesosSelector = createSelector(
@@ -37,11 +40,12 @@ const Administracion = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const user = useSelector(UserSelector);
+  const userRedux = useSelector(UserSelector);
   const procesosData = useSelector(ProcesosSelector);
 
   const currentProceso = procesosData.currentProceso;
   const procesos = procesosData.procesos;
+  const {user} = userRedux;
 
   const [profesores, setProfesores] = useState([]);
   const [coordinadores, setCoordinadores] = useState([]);
@@ -51,32 +55,42 @@ const Administracion = () => {
 
   useEffect(() => {
     dispatch(setLoading(true));
-    console.log(currentProceso);
-    axios.all([
-      clientAxios(user.idToken).get(`/api/usuarios`),
-      clientAxios(user.idToken).get(`/api/profesores/${currentProceso.id}`)
-    ])
-    .then(axios.spread((data1, data2)=>{
-      const CheckProfe = data1.data.coordinadores.map(usuario => {
-        const FindUsuario = data2.data.find(profe => usuario.id === profe.id);
-        if (FindUsuario) {
-          return usuario
-        }
-        else {
-          console.log({...usuario, roles: usuario.roles.filter(rol => rol !== "profe")});
-          return ({...usuario, roles: usuario.roles.filter(rol => rol !== "profe")})
-        }
-      });
-      setCoordinadores(CheckProfe);
-      setNoRole(data1.data.noRole);
-      console.log(data2);
-      setProfesores(data2.data);
-    }))
-    .catch(error => {
-      console.log(error);
-    })
+    if (userRedux.status !== 'login' || !user.roles.includes('admin')) {
+      axios.all([
+        clientAxios(user.idToken).get(`/api/usuarios`),
+        clientAxios(user.idToken).get(`/api/profesores/${currentProceso.id}`)
+      ])
+      .then(axios.spread((data1, data2)=>{
+        const CheckProfe = data1.data.coordinadores.map(usuario => {
+          const FindUsuario = data2.data.find(profe => usuario.id === profe.id);
+          if (FindUsuario) {
+            return usuario
+          }
+          else {
+            return ({...usuario, roles: usuario.roles.filter(rol => rol !== "profe")})
+          }
+        });
+        setCoordinadores(CheckProfe);
+        setNoRole(data1.data.noRole);
+        setProfesores(data2.data);
+      }))
+      .catch(error => {
+        console.log(error);
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al cargar los usuarios'}
+        ));
+      })
+    }
     dispatch(setLoading(false));
   }, [changed, currentProceso]);
+
+  if (userRedux.status !== 'login' || !user.roles.includes('admin')) {
+    return (
+      <Redirect to='/' />
+    )
+  }
 
   const handleOpen = () => {
     dispatch(handleDialogCreate(true))
@@ -91,9 +105,7 @@ const Administracion = () => {
       <VerHorarioProfesor />
       <Grid container>
         <Grid item xs={8}>
-          <Button onClick={handleOpen}>
-            Agregar Nuevo Usuario
-          </Button>
+          <PrimaryButton onClick={handleOpen} title='Agregar Nuevo Usuario' />
         </Grid>
         <Grid item xs={4}>
           <SelectProceso procesos={procesos} date={date} setDate={setDate}

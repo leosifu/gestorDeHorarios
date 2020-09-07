@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import clsx from 'clsx';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Card, CardContent, CardActions, Collapse, IconButton, Typography, Grid, Button,
+import {Card, CardContent, CardActions, Collapse, IconButton, Typography, Grid,
   } from '@material-ui/core';
 
 import { red } from '@material-ui/core/colors';
@@ -43,11 +43,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Carrera({carrera, estado, setEstado, user, userRedux, }) {
+
   const classes = useStyles();
+
   const [expanded, setExpanded] = useState(false);
-
   const [openM, setOpenM] = useState(false);
-
   const [openC, setOpenC] = useState(false);
 
   const handleExpandClick = () => {
@@ -78,7 +78,6 @@ export default function Carrera({carrera, estado, setEstado, user, userRedux, })
           </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {/*<Button component={Link1} to={"/procesos/" + carrera.id}>Procesos</Button>*/}
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,

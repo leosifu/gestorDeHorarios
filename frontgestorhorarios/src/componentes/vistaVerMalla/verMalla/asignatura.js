@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     fontSize: 12,
+    color: '#B1B1B1'
   },
   oval:{
     m: 1,
@@ -83,7 +84,7 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleCl
                 }
               </Grid>
             </Grid>
-            <Typography align="center" style={{fontSize:14, color: 'orange', height: 110}}
+            <Typography align="center" style={{fontSize:14, color: '#EA7600', height: 110}}
               onClick={event => {return handleClick(event, asignatura.id)}}>
               {asignatura.InfoAsignatura.nombre_asignatura}
             </Typography>

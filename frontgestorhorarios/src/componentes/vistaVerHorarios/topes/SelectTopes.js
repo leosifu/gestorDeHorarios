@@ -44,12 +44,15 @@ function Topes({topes, handleChange, niveles, selectNivel, }){
         multiple
         // onChange={handleChange}
         input={<Input />}
-        renderValue={(selected) => 'Nivel ' + selected.join(', ')}
+        renderValue={(selected) => {
+          const selectsAux = selected.map(select => select + 1)
+          return ('Nivel ' + selectsAux.join(', '))
+        }}
       >
         {niveles.map((nivel, i) =>
-            <MenuItem key={'Nivel' + (i+1)} value={i} name={i}>
-              <Checkbox checked={topes.indexOf(i) > -1} onChange={() => handleChange(i+1)}/>
-              <ListItemText primary={nivel} onClick={() => selectNivel(i+1)}/>
+            <MenuItem key={nivel} value={i} name={i}>
+              <Checkbox checked={topes.indexOf(i) > -1} onChange={() => handleChange(i)}/>
+              <ListItemText primary={nivel} onClick={() => selectNivel(i)}/>
             </MenuItem>
           )
         }

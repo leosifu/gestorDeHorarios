@@ -88,8 +88,7 @@ module.exports = {
       })
   },
   findAsignaturasByNivel(req, res){
-    var id = req.params.id
-    var nivel = req.params.nivel
+    const {id, nivel} = req.params;
     return Asignatura
       .findAll({
         where: {mallaId:id, nivel: nivel},
@@ -136,59 +135,6 @@ module.exports = {
             })
             return(res.status(400));
           }
-          // var telTotalAct = tel_T + tel_E + tel_L
-          // var telTotalPrev = asignaturaAct.tel_T + asignaturaAct.tel_E + asignaturaAct.tel_L
-          // var telAct = [tel_T, tel_E, tel_L]
-          // var telAnt = [asignaturaAct.tel_T, asignaturaAct.tel_E, asignaturaAct.tel_L]
-          // //Copia3 papu
-          // var iguales = telAnt.length === telAct.length && telAnt.every(function(value, index)
-          //   { return value === telAct[index]});
-          // var lab_independiente = (req.body.lab_independiente === 'true')
-          // var labIgual = asignaturaAct.lab_independiente===req.body.lab_independiente
-          // if (iguales && labIgual) {
-          //   return res.status(201).send(asignatura)
-          // }
-          // if (req.lab_independiente!==asignaturaAct.lab_independiente) {
-          // }
-          // if (req.body.lab_independiente) {
-          //   //Se separa el lab de la teoría
-          //   //Se recorren todas las coordinaciones, y segun el tipo que sean, se le suman o restan
-          //   //bloques, segun el tel que le corresponda
-          //   var reqT = {
-          //     asignaturaId: asignaturaAct.id,
-          //     tipo: '',
-          //     tel: 0,
-          //     telAnt: 0,
-          //   }
-          //   if(tel_T != asignaturaAct.tel_T || req.body.lab_independiente!=asignaturaAct.lab_independiente){
-          //     reqT.tipo = 'Teoría'
-          //     reqT.tel = tel_T
-          //     reqT.telAnt = asignaturaAct.tel_T
-          //     InfoCoordinacion.actualizarTel(reqT)
-          //   }
-          //   if (tel_E != asignaturaAct.tel_E|| req.body.lab_independiente!=asignaturaAct.lab_independiente) {
-          //     reqT.tipo = 'Ejercicios'
-          //     reqT.tel = tel_E
-          //     reqT.telAnt = asignaturaAct.tel_E
-          //     InfoCoordinacion.actualizarTel(reqT)
-          //   }
-          //   if (tel_L != asignaturaAct.tel_L || req.body.lab_independiente!=asignaturaAct.lab_independiente) {
-          //     reqT.tipo = 'Laboratorio'
-          //     reqT.tel = tel_L
-          //     reqT.telAnt = asignaturaAct.tel_L
-          //     InfoCoordinacion.actualizarTel(reqT)
-          //   }
-          // }
-          // else {
-          //   //Se juntan el lab con la teoría
-          //   var reqT = {
-          //     asignaturaId: asignaturaAct.id,
-          //     tipo: '',
-          //     tel: tel_L + tel_E + tel_T,
-          //     telAnt: asignaturaAct.tel_L + asignaturaAct.tel_E + asignaturaAct.tel_L,
-          //   }
-          //   InfoCoordinacion.actualizarTel(reqT)
-          // }
         return res.status(201).send(asignatura)
       })
 
@@ -197,5 +143,5 @@ module.exports = {
       console.log(error);
       return(res.status(400).send(error))
     })
-  }
+  },
 }

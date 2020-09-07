@@ -34,6 +34,7 @@ const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, }) => {
   }, [numNiveles]);
 
   const handleChange = nivel => {
+    console.log(nivel);
     let topesAux = topes.slice();
     let nivelIndex = topesAux.indexOf(nivel);
     if (nivelIndex > -1) {

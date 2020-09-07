@@ -1,7 +1,10 @@
 import React, {useRef, useState} from 'react'
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Typography, Box, Button, DialogActions, Grid, } from '@material-ui/core';
+import {Typography, Box, DialogActions, Grid, } from '@material-ui/core';
+
+import PrimaryButton from '../../../../utils/PrimaryButton';
+import SecondaryButton from '../../../../utils/SecondaryButton';
 
 import useForm from '../../../../form/useForm';
 import DatosCoordForm from './datosCoordForm';
@@ -15,11 +18,6 @@ const useStyles = makeStyles(theme => ({
   sector:{
     margin: 20,
     padding: 10
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '45%',
   },
   formControl: {
     margin: theme.spacing(1),
@@ -35,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfesoresSelect, user,
-  profesores, edit, currentProceso, }){
+  profesores, edit, currentProceso, cancelarEdit, eliminarCoordinacion, }){
   const classes = useStyles();
   const [age, setAge] = useState('');
 
@@ -54,14 +52,12 @@ function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfes
 
   const validationStateSchema = {
     cod_coord: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid first name format.',
       },
     },
     nombre_coord: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
@@ -74,7 +70,6 @@ function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfes
       },
     },
     num_bloques: {
-      required: true,
       validator: {
         regEx: /^[0-9]$/,
         error: 'Invalid last name format.',
@@ -106,22 +101,20 @@ function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfes
         <EspecCoordForm handleOnChange={handleOnChange} tipo_coord={state.tipo_coord}
           num_bloques={state.num_bloques}/>
 
+          <DialogActions>
         {
           edit ?
-          <DialogActions>
-            <Button onClick={handleOnSubmit} disabled={isDisabled} variant="contained"
-              color="primary" className={classes.button}>
-              Editar Coordinación
-            </Button>
-          </DialogActions>
+            <>
+              <PrimaryButton onClick={eliminarCoordinacion} disabled={isDisabled}
+                title={'Eliminar Coordinación'} />
+              <PrimaryButton onClick={handleOnSubmit} disabled={isDisabled}
+                title={'Editar Coordinación'} />
+              <SecondaryButton onClick={cancelarEdit} disabled={isDisabled} title={'Cancelar'} />
+            </>
           :
-          <DialogActions>
-            <Button onClick={handleOnSubmit} disabled={disable} variant="contained"
-              color="primary" className={classes.button}>
-              Crear Coordinación
-            </Button>
-          </DialogActions>
+            <PrimaryButton onClick={handleOnSubmit} disabled={disable} title={'Crear Coordinación'} />
         }
+        </DialogActions>
       </Box>
     </>
   )

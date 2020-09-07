@@ -1,11 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Malla = sequelize.define('Malla', {
-    res_malla: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      // unique: true,
-    },
     cod_malla: {
       type:DataTypes.STRING,
       allowNull: false,
@@ -13,14 +8,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     fecha_resolucion:{
       type:DataTypes.DATE,
+      allowNull: false,
     },
     n_niveles: {
       type: DataTypes.INTEGER,
-    },
-    activa: {
-      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: false,
     }
   }, {});
   Malla.associate = function(models) {

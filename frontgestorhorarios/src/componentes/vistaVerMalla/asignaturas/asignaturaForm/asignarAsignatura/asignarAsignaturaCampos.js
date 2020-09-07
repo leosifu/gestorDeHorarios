@@ -1,12 +1,10 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import Divider from '@material-ui/core/Divider';
+
+import PrimaryButton from '../../../../utils/PrimaryButton';
 
 import useForm from '../../../../form/useForm'
 import AsignarAsignaturaForm from '../formsAsignatura/asignarAsignaturaForm'
@@ -15,16 +13,6 @@ const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '45%',
-  },
-  textFieldNumber:{
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 100,
   },
   dense: {
     marginTop: 19,
@@ -64,14 +52,12 @@ const AsignarAsignaturaCampos = ({camposAsignatura, onSubmitForm}) => {
   };
   const validationStateSchema = {
     cod_asignatura: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid first name format.',
       },
     },
     nombre_asignatura: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
@@ -93,10 +79,7 @@ const AsignarAsignaturaCampos = ({camposAsignatura, onSubmitForm}) => {
           nombre_asignatura={state.nombre_asignatura} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleOnSubmit}
-          variant="contained" color="primary" className={classes.button}>
-          Asignar Asignatura
-        </Button>
+        <PrimaryButton onClick={handleOnSubmit} title={'Asignar Asignatura'} />
       </DialogActions>
     </>
   );

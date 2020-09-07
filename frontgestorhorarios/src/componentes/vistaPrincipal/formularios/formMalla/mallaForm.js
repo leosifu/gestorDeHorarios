@@ -1,18 +1,35 @@
 import React from 'react';
+
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+import { createMuiTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import { DialogContent, DialogActions, } from '@material-ui/core';
+
+import TextField from '../../../utils/TextField';
+import PrimaryButton from '../../../utils/PrimaryButton';
+import SecondaryButton from '../../../utils/SecondaryButton';
+
 import useForm from '../../../form/useForm'
 
+const defaultMaterialTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#EA7600',
+      secondary: '#ee9133'
+    },
+  },
+});
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
   },
   dense: {
     marginTop: 19,
@@ -22,32 +39,26 @@ const useStyles = makeStyles(theme => ({
   },
   margin: {
     margin: theme.spacing(1),
-  },
+  }
 }));
 
-const MallaForm = ({cod_malla, res_malla, n_niveles, año, semestre, estado, setEstado, onSubmitForm}) => {
+const MallaForm = ({cod_malla, fecha_resolucion, n_niveles, año, semestre, estado, setEstado,
+  onSubmitForm, type, handleClose, setSelectedDate, }) => {
+
+  const classes = useStyles();
+
   const stateSchema = {
-    res_malla: { value: res_malla, error: '' },
     cod_malla: { value: cod_malla, error: '' },
     n_niveles: { value: n_niveles, error: '' },
   };
   const validationStateSchema = {
-    res_malla: {
-      required: true,
-      validator: {
-        regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
-        error: 'Invalid first name format.',
-      },
-    },
     cod_malla: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
       },
     },
     n_niveles: {
-      required: true,
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
@@ -61,49 +72,59 @@ const MallaForm = ({cod_malla, res_malla, n_niveles, año, semestre, estado, set
     onSubmitForm
   );
 
-  const classes = useStyles();
   return (
-    <div>
-      <form onSubmit={handleOnSubmit}>
-        <TextField
-          error = {state.res_malla.error ? true : false}
-          id="standard-name"
-          label="Resolución de la malla"
-          name="res_malla"
-          className={classes.textField}
-          value={state.res_malla.value}
-          onChange={handleOnChange}
-          margin="normal"
-          variant="outlined"
-        />
+    <>
+      <DialogContent>
         <TextField
           error={state.cod_malla.error ? true:false}
           id="standard-required"
           label="Código de la malla"
           name="cod_malla"
-          className={classes.textField}
           value={state.cod_malla.value}
           onChange={handleOnChange}
           margin="normal"
           variant="outlined"
         />
-        <div className="flex">
-          <TextField
-            error={state.n_niveles.error ? true:false}
-            id="standard-required"
-            label="Número de niveles"
-            name="n_niveles"
-            type="number"
-            className={classes.textField}
-            value={state.n_niveles.value}
-            onChange={handleOnChange}
-            margin="normal"
-            variant="outlined"
-          />
-        </div>
-        <input type="submit" name="submit" disabled={disable} />
-      </form>
-    </div>
+        <ThemeProvider theme={defaultMaterialTheme}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              disableToolbar
+              variant="outlined"
+              format="dd/MM/yyyy"
+              margin="normal"
+              id="date-picker-inline"
+              label="Resolución de la malla"
+              value={fecha_resolucion}
+              onChange={setSelectedDate}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+              name="fecha_resolucion"
+              className={classes.textField}
+              style={{width: '40%', marginLeft: 30}}
+            />
+          </MuiPickersUtilsProvider>
+        </ThemeProvider>
+        <TextField
+          error={state.n_niveles.error ? true:false}
+          id="standard-required"
+          label="Número de niveles"
+          name="n_niveles"
+          type="number"
+          value={state.n_niveles.value}
+          onChange={handleOnChange}
+          margin="normal"
+          variant="outlined"
+        />
+      </DialogContent>
+      <DialogActions>
+        <DialogActions>
+          <PrimaryButton onClick={handleOnSubmit}
+            title={type === 'crear' ? 'Crear Malla' : 'Actualizar Malla'} />
+          <SecondaryButton onClick={handleClose} title={'Cerrar'} />
+        </DialogActions>
+      </DialogActions>
+    </>
   );
 };
 

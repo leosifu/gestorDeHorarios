@@ -44,14 +44,24 @@ module.exports = {
     return Carrera
       .update({
         nombre_carrera: req.body.nombre_carrera,
-        jornada: req.body.jornada,
-        carrera_activa: req.body.carrera_activa,
-        mostrar_carrera: req.body.mostrar_carrera
+        jornada: req.body.jornada
       },{
         where:{id:req.params.id}
       })
       .then(carrera => res.status(201).send(carrera))
       .catch(error=> res.status(400).send(error))
   },
-
+  async deleteCarrera(req, res){
+    try {
+      const {carreraId} = req.params;
+      const carreraDestroy = await Carrera.findOne({
+        where: {id: carreraId}
+      });
+      await carreraDestroy.destroy();
+      return res.status(201).send({message: 'Carrera eliminada.'});
+    } catch (e) {
+      console.log(e);
+      return res.status(400).send({message: 'Error al eliminar carrera.'});
+    }
+  }
 }

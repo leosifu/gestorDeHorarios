@@ -21,16 +21,14 @@ const useStyles = makeStyles(theme => ({
 
 function ListaAsignaturas({asignaturas, data, dropLista, userRedux, handleMostrarCoordinacion, }) {
 
+  const classes = useStyles();
+  
   const ref = useRef(null)
 
   const [, drop] = useDrop({
     accept: ItemTypes.BOX,
     drop: dropLista,
   })
-
-  console.log(asignaturas);
-
-  const classes = useStyles();
 
   drop(ref)
 

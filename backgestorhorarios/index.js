@@ -8,6 +8,11 @@ const http = require('http');
 // Set up the express app
 var cors = require('cors');
 
+// var iconv = require('iconv-lite')
+// const encodings = require('iconv-lite/encodings')
+// iconv.encodings = encodings;
+// require('iconv-lite').encodingExists('cesu8')
+
 const admin = require('./firebase-admin/admin');
 const app = express();
 // Log requests to the console.
@@ -18,20 +23,21 @@ app.set('llave', process.env.KEY);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var models = require("./models")
-models.sequelize.sync().then(function(){
-    console.log("Conecta2");
-}).catch(function(error){
-  console.log(error);
-  console.log("Problemas al conectar con la DB");
-})
-require('./routes')(app)
-// Setup a default catch-all route that sends back a welcome message in JSON format.
-app.get('*', (req, res) => res.status(200).send({
-message: 'Welcome to the beginning of nothingness.',
-}));
-const port = parseInt(process.env.PORT, 10) || 8000;
-app.set('port', port);
-const server = http.createServer(app);
-server.listen(port);
+// var models = require("./models")
+// models.sequelize.sync().then(function(){
+//     console.log("Conecta2");
+// }).catch(function(error){
+//   console.log(error);
+//   console.log("Problemas al conectar con la DB");
+// })
+// require('./routes')(app)
+// // Setup a default catch-all route that sends back a welcome message in JSON format.
+// app.get('*', (req, res) => res.status(200).send({
+// message: 'Welcome to the beginning of nothingness.',
+// }));
+require('mysql2/node_modules/iconv-lite').encodingExists('cesu8');
+// const port = parseInt(process.env.PORT, 10) || 8000;
+// app.set('port', port);
+// const server = http.createServer(app);
+// server.listen(port);
 module.exports = app;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import clientAxios from '../../../../config/axios'
 
@@ -8,8 +8,8 @@ import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect'
-import {setLoading} from '../../../../redux/actions'
+import { createSelector } from 'reselect';
+import {setLoading, handleNotifications, } from '../../../../redux/actions';
 
 import MallaForm from './mallaForm'
 
@@ -41,6 +41,8 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado, user, }) {
 
   const currentProceso = useSelector(ProcesoSelector);
 
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -51,30 +53,46 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado, user, }) {
 
   function onSubmitForm(state) {
     dispatch(setLoading(true))
-    console.log(currentProceso);
-    const data = {
-      carreraId,
-      cod_malla: state.cod_malla.value,
-      res_malla: state.res_malla.value,
-      n_niveles: state.n_niveles.value,
-      procesoId: currentProceso.id
+    if (!state.cod_malla.value || (state.n_niveles.value < 1)) {
+      dispatch(setLoading(false));
+      dispatch(handleNotifications(true, {
+        status: 'info',
+        message: 'Datos ingresados incompletos o incorrectos'}
+      ));
     }
-    clientAxios(user.idToken).post('/api/malla', data)
-    .then(res => {
-      console.log(res.data);
-      setOpen(false)
-      setEstado(!estado)
-    })
-    .catch((error)=>{
-      alert("error al crear la malla")
-    })
-    console.log(data);
+    else {
+      const data = {
+        carreraId,
+        cod_malla: state.cod_malla.value,
+        fecha_resolucion: selectedDate,
+        n_niveles: state.n_niveles.value,
+        procesoId: currentProceso.id
+      }
+      clientAxios(user.idToken).post('/api/malla', data)
+      .then(res => {
+        setOpen(false);
+        setEstado(!estado);
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'success',
+          message: 'Malla creada'}
+        ));
+      })
+      .catch((error)=>{
+        setOpen(false);
+        dispatch(setLoading(false));
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al crear la malla'}
+        ));
+      });
+    }
   }
 
   return (
     <>
       <Tooltip title="Agregar Malla">
-        <Fab color="primary" size="small" aria-label="add" className={classes.margin}
+        <Fab color="primary" size="small" aria-label="add" style={{backgroundColor: '#EA7600'}}
           onClick={handleClickOpen}>
           <AddIcon />
         </Fab>
@@ -86,15 +104,9 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado, user, }) {
         aria-labelledby="max-width-dialog-title"
       >
         <DialogTitle id="max-width-dialog-title">Crear Malla</DialogTitle>
-        <DialogContent>
-          <MallaForm cod_malla={''} res_malla={''} n_niveles={0} estado={estado} año={0} semestre={0}
-            setEstado={setEstado} onSubmitForm={onSubmitForm}/>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Close
-          </Button>
-        </DialogActions>
+        <MallaForm cod_malla={''} fecha_resolucion={selectedDate} n_niveles={0} estado={estado}
+          año={0} semestre={0} setEstado={setEstado} onSubmitForm={onSubmitForm} type={'crear'}
+          handleClose={handleClose} setSelectedDate={setSelectedDate}/>
       </Dialog>
     </>
   );

@@ -10,12 +10,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-
-import clientAxios from '../../../config/axios'
-
-import { DndProvider } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -46,12 +40,7 @@ const useStyles = makeStyles(theme => ({
   },
   horario:{
     margin:10
-  },
-  button: {
-    position: 'sticky',
-    top: '90%',
-    left: '90%'
-  },
+  }
 }));
 
 const UserSelector = createSelector(

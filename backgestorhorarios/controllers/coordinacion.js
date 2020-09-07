@@ -56,6 +56,7 @@ module.exports = {
     try {
       const coordinacionId = req.params.id;
       const {num_bloques, tipo_coord} = req.body;
+      console.log(req.body.profesores);
       const profesores = req.body.profesores.map(profesor => profesor.id)
       const FindCoordinacion = await Coordinacion.findOne({
         where: {id: coordinacionId},
@@ -88,14 +89,24 @@ module.exports = {
           i = i + 1
         }
       }
-      const ProfesoresCoordinacion = await Asignacion.findAll({
-        where: {
-          coordinacionId: coordinacionId,
-          [Op.not]: [{
-            usuarioId: profesores
-          }]
-        }
-      });
+      let ProfesoresCoordinacion = []
+      if (profesores.length === 0) {
+        ProfesoresCoordinacion = await Asignacion.findAll({
+          where: {
+            coordinacionId: coordinacionId,
+          }
+        });
+      }
+      else {
+        ProfesoresCoordinacion = await Asignacion.findAll({
+          where: {
+            coordinacionId: coordinacionId,
+            [Op.not]: [{
+              usuarioId: profesores
+            }]
+          }
+        });
+      }
       for (var i = 0; i < ProfesoresCoordinacion.length; i++) {
         const DeleteAsignacion = ProfesoresCoordinacion[i]
         await DeleteAsignacion.destroy();
@@ -109,6 +120,7 @@ module.exports = {
           where: AsignarProfesores[i]
         });
       }
+      console.log('FIIIIIIIIIN');
       return res.status(201).send(FindCoordinacion)
     } catch (e) {
       console.log(e);

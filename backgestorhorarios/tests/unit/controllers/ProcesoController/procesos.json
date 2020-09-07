@@ -1,0 +1,132 @@
+{
+  "all": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": [
+          {
+            "id": 1,
+            "año": 2020,
+            "añoSemestre": "2020~1",
+            "estado": "active",
+            "semestre": 1
+          },
+          {
+            "id": 2,
+            "año": 2020,
+            "añoSemestre": "2020~2",
+            "estado": "creating",
+            "semestre": 2
+          },
+          {
+            "id": 3,
+            "año": 2019,
+            "añoSemestre": "2019~2",
+            "estado": "finished",
+            "semestre": 2
+          }
+        ]
+      }
+    }
+  },
+  "add": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": [
+          {
+            "id": 4,
+            "año": 2020,
+            "añoSemestre": "2020~1",
+            "estado": "creating",
+            "semestre": 1
+          }
+        ]
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 400,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "update": {
+    "success": {
+      "res": {
+        "statusCode": 200,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": [
+          {
+            "id": 1,
+            "año": 2020,
+            "añoSemestre": "2020~1",
+            "estado": "finished",
+            "semestre": 1
+          }
+        ]
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That proceso does not exist."
+      }
+    }
+  },
+  "delete": {
+    "success": {
+      "res": {
+        "statusCode": 200,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "message": "Proceso eliminated."
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That proceso does not exist."
+      }
+    }
+  }
+}

@@ -13,6 +13,10 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
+import {handleNotifications, } from '../../redux/actions';
+
 const variantIcon = {
   success: CheckCircleIcon,
   warning: WarningIcon,
@@ -84,42 +88,50 @@ const useStyles2 = makeStyles(theme => ({
   },
 }));
 
-export default function NotificacionForm() {
+const NotificationSelector = createSelector(
+  state => state.notifications,
+  notifications => notifications
+);
+
+export default function Notification() {
+
   const classes = useStyles2();
-  const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
+
+  const notification = useSelector(NotificationSelector);
+  const {open, status, message} = notification;
 
   const handleClick = () => {
-    setOpen(true);
+    // setOpen(true);
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    // if (reason === 'clickaway') {
+    //   return;
+    // }
 
-    setOpen(false);
+    // setOpen(false);
+    dispatch(handleNotifications(false, {
+      status: '',
+      message: ''
+    }))
   };
 
   return (
-    <div>
-      <Button variant="outlined" className={classes.margin} onClick={handleClick}>
-        Open success snackbar
-      </Button>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        open={open}
-        autoHideDuration={2000}
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      open={open}
+      autoHideDuration={2000}
+      onClose={handleClose}
+    >
+      <MySnackbarContentWrapper
         onClose={handleClose}
-      >
-        <MySnackbarContentWrapper
-          onClose={handleClose}
-          variant="success"
-          message="This is a success message asdas!"
-        />
-      </Snackbar>
-    </div>
+        variant={status}
+        message={message}
+      />
+    </Snackbar>
   );
 }

@@ -18,12 +18,14 @@ import {getProcesos, handleLoginUser, handleLogoutUser, handleLoginFailed, } fro
 
 import firebase from 'firebase';
 
+
 const useStyles = makeStyles(theme => ({
   root: {
     zIndex: 1,
-    flexGrow: 1,
+    flexGrow: 1
   },
-  menuButton: {
+  appBar: {
+    backgroundColor: '#EA7600'
   },
   title: {
     flexGrow: 1,
@@ -53,10 +55,13 @@ export default function NavBar() {
 
   useEffect(() => {
     login();
+    console.log(process.env);
+    console.log(window.REACT_APP_NAVBAR_COLOR);
+    console.log(window.REACT_APP_ENVIRONMENT);
+    console.log(window.REACT_APP_API_URL);
   }, []);
 
   const loginRequest = (token, userData, authUser) => {
-    console.log(token);
     clientAxios(token).post(`api/login`, userData)
     .then(res => {
       const userData = res.data;
@@ -159,7 +164,7 @@ export default function NavBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar className={classes.appBar} position="static">
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu"
             onClick={goHome}>
