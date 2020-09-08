@@ -69,8 +69,8 @@ module.exports = {
             .cod_asignatura = cod_asignatura
           infoA.dataValues.Asignatura.dataValues.requisitos[i].dataValues
             .nombre_asignatura = nombre_asignatura
+          return(res.json(infoA))
         }
-        return (res.json(infoA))
       })
       .catch(error=> {
         console.log(error);
