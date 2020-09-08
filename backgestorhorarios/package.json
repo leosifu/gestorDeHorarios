@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "publishToHeroku": "cd ../ && git subtree push --prefix backgestorhorarios heroku-back-gestorhorarios master || true"
   },
