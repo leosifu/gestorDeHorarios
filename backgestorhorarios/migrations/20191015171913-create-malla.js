@@ -15,13 +15,12 @@ module.exports = {
       fecha_resolucion:{
         type: Sequelize.DATE,
       },
-      n_niveles: {
-        type: Sequelize.INTEGER,
-      },
-      activa: {
+      cod_resolucion: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: true,
+      },
+      n_niveles: {
+        type: Sequelize.INTEGER,
       },
       carreraId:{
         type: Sequelize.INTEGER,

@@ -11,9 +11,6 @@ module.exports = {
       num_bloque: {
         type: Sequelize.INTEGER
       },
-      sala: {
-        type: Sequelize.STRING
-      },
       asignado: {
         type: Sequelize.BOOLEAN
       },

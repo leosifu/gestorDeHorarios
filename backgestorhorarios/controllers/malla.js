@@ -12,6 +12,7 @@ module.exports = {
         fecha_resolucion: req.body.fecha_resolucion,
         cod_malla: req.body.cod_malla,
         n_niveles: req.body.n_niveles,
+        cod_resolucion: req.body.cod_resolucion,
         carreraId: req.body.carreraId,
         procesoId: req.body.procesoId
       })
@@ -43,6 +44,7 @@ module.exports = {
       .update({
         fecha_resolucion: req.body.fecha_resolucion,
         cod_malla: req.body.cod_malla,
+        cod_resolucion: req.body.cod_resolucion,
         n_niveles: req.body.n_niveles,
       },{
         where:{id:req.params.id}

@@ -28,7 +28,6 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }], {});
-      console.log('asdad');
 
       await queryInterface.bulkInsert('Rols', [{
         rol: 'admin',
@@ -43,17 +42,14 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }], {});
-      console.log('asdasd');
 
       const users = await queryInterface.sequelize.query(
         'SELECT id from Usuarios;'
       );
-      console.log(users);
 
       const roles = await queryInterface.sequelize.query(
         'SELECT id from Rols;'
       );
-      console.log(roles);
 
       await queryInterface.bulkInsert('RolUsuarios', [{
         usuarioId: users[0][0].id,

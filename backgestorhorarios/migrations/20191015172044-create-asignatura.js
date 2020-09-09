@@ -17,10 +17,6 @@ module.exports = {
       tel_L: {
         type: Sequelize.INTEGER
       },
-      lab_independiente:{
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -14,6 +14,9 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+      lastName: {
+        type: Sequelize.STRING
+      },
       rut: {
         type: Sequelize.STRING
       },

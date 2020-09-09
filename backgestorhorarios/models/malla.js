@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.DATE,
       allowNull: false,
     },
+    cod_resolucion: {
+      type:DataTypes.INTEGER,
+      allowNull: false,
+    },
     n_niveles: {
       type: DataTypes.INTEGER,
       allowNull: false,
