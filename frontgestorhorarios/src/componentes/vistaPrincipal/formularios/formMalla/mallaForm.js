@@ -43,16 +43,23 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const MallaForm = ({cod_malla, fecha_resolucion, n_niveles, año, semestre, estado, setEstado,
-  onSubmitForm, type, handleClose, setSelectedDate, }) => {
+  onSubmitForm, type, handleClose, setSelectedDate, cod_resolucion, }) => {
 
   const classes = useStyles();
 
   const stateSchema = {
     cod_malla: { value: cod_malla, error: '' },
     n_niveles: { value: n_niveles, error: '' },
+    cod_resolucion: { value: cod_resolucion, error: '' },
   };
   const validationStateSchema = {
     cod_malla: {
+      validator: {
+        regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
+        error: 'Invalid last name format.',
+      },
+    },
+    cod_resolucion: {
       validator: {
         regEx: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*/,
         error: 'Invalid last name format.',
@@ -112,6 +119,16 @@ const MallaForm = ({cod_malla, fecha_resolucion, n_niveles, año, semestre, esta
           name="n_niveles"
           type="number"
           value={state.n_niveles.value}
+          onChange={handleOnChange}
+          margin="normal"
+          variant="outlined"
+        />
+        <TextField
+          error={state.cod_resolucion.error ? true:false}
+          id="standard-required"
+          label="Código de resolución"
+          name="cod_resolucion"
+          value={state.cod_resolucion.value}
           onChange={handleOnChange}
           margin="normal"
           variant="outlined"

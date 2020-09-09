@@ -54,7 +54,7 @@ function ActualizarMalla({malla, open, setOpen, estado, setEstado, user, }) {
 
   function onSubmitForm(state) {
     dispatch(setLoading(true));
-    if (!state.cod_malla.value || (state.n_niveles.value < 1)) {
+    if (!state.cod_malla.value || (state.n_niveles.value < 1) || !state.cod_malla.value) {
       dispatch(setLoading(false));
       dispatch(handleNotifications(true, {
         status: 'info',
@@ -63,6 +63,7 @@ function ActualizarMalla({malla, open, setOpen, estado, setEstado, user, }) {
     }
     else {
       const data = {
+        cod_resolucion: state.cod_resolucion.value,
         cod_malla: state.cod_malla.value,
         fecha_resolucion: selectedDate,
         n_niveles: state.n_niveles.value
@@ -150,7 +151,8 @@ function ActualizarMalla({malla, open, setOpen, estado, setEstado, user, }) {
         </DialogTitle>
         <MallaForm cod_malla={malla.cod_malla} fecha_resolucion={selectedDate}
           n_niveles={malla.n_niveles} estado={estado} setEstado={setEstado} onSubmitForm={onSubmitForm}
-          handleClose={handleClose} setSelectedDate={setSelectedDate} />
+          handleClose={handleClose} setSelectedDate={setSelectedDate}
+          cod_resolucion={malla.cod_resolucion} />
       </Dialog>
     </React.Fragment>
   );

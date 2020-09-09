@@ -53,7 +53,7 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado, user, }) {
 
   function onSubmitForm(state) {
     dispatch(setLoading(true))
-    if (!state.cod_malla.value || (state.n_niveles.value < 1)) {
+    if (!state.cod_malla.value || (state.n_niveles.value < 1) || !state.cod_resolucion.value) {
       dispatch(setLoading(false));
       dispatch(handleNotifications(true, {
         status: 'info',
@@ -64,6 +64,7 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado, user, }) {
       const data = {
         carreraId,
         cod_malla: state.cod_malla.value,
+        cod_resolucion: state.cod_resolucion.value,
         fecha_resolucion: selectedDate,
         n_niveles: state.n_niveles.value,
         procesoId: currentProceso.id
@@ -106,7 +107,7 @@ function CrearMalla({carreraId, open, setOpen, estado, setEstado, user, }) {
         <DialogTitle id="max-width-dialog-title">Crear Malla</DialogTitle>
         <MallaForm cod_malla={''} fecha_resolucion={selectedDate} n_niveles={0} estado={estado}
           año={0} semestre={0} setEstado={setEstado} onSubmitForm={onSubmitForm} type={'crear'}
-          handleClose={handleClose} setSelectedDate={setSelectedDate}/>
+          handleClose={handleClose} setSelectedDate={setSelectedDate} cod_resolucion={''}/>
       </Dialog>
     </>
   );

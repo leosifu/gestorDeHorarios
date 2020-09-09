@@ -112,15 +112,16 @@ const Administracion = () => {
             currentProceso={currentProceso}/>
         </Grid>
       </Grid>
-      <Grid container>
+      <Grid container
+        spacing={0}
+        alignItems="center"
+        justify="center"
+      >
         <Grid item xs={4}>
           <VerUsuarios title={'Coordinadores'} usuarios={coordinadores}/>
         </Grid>
         <Grid item xs={4}>
           <VerUsuarios title={'Profesores'} usuarios={profesores}/>
-        </Grid>
-        <Grid item xs={4}>
-          <VerUsuarios title={'Sin Rol'} usuarios={noRole}/>
         </Grid>
       </Grid>
     </div>
