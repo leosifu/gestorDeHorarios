@@ -22,9 +22,9 @@ const sequelize = new Sequelize(process.env.DB_SCHEMA || 'scheduleManager',
                                       host: process.env.DB_HOST || 'localhost',
                                       port: process.env.DB_PORT || 3306,
                                       dialect: 'mysql',
-                                      dialectOptions: {
-                                          socketPath: "/var/run/mysqld/mysqld.sock"
-                                      },
+                                      // dialectOptions: {
+                                      //     socketPath: "/var/run/mysqld/mysqld.sock"
+                                      // },
                                   }
                                 );
 
