@@ -60,7 +60,6 @@ module.exports = {
         }]
       })
       .then(infoA=>{
-        console.log(infoA);
         for (var i = 0; i < infoA.dataValues.Asignatura.dataValues.requisitos.length; i++) {
           var req = infoA.dataValues.Asignatura.dataValues.requisitos[i]
           var cod_asignatura = req.mallas[0].InfoAsignatura.dataValues.cod_asignatura
@@ -69,8 +68,8 @@ module.exports = {
             .cod_asignatura = cod_asignatura
           infoA.dataValues.Asignatura.dataValues.requisitos[i].dataValues
             .nombre_asignatura = nombre_asignatura
-          return(res.json(infoA))
         }
+        return(res.json(infoA))
       })
       .catch(error=> {
         console.log(error);
