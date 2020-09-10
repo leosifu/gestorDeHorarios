@@ -38,6 +38,7 @@ module.exports = {
       fecha_resolucion: malla.fecha_resolucion,
       n_niveles: malla.n_niveles,
       carreraId: malla.carreraId,
+      cod_resolucion: malla.cod_resolucion,
       // procesoId: NuevoProcesoValues.id
       procesoId: req.body.procesoId
     }))

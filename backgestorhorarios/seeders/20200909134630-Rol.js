@@ -34,11 +34,11 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }, {
-        rol: 'coordinador',
+        rol: 'profe',
         createdAt: new Date(),
         updatedAt: new Date()
       }, {
-        rol: 'profe',
+        rol: 'coordinador',
         createdAt: new Date(),
         updatedAt: new Date()
       }], {});
