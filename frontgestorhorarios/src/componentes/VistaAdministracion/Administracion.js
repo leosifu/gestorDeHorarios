@@ -55,7 +55,7 @@ const Administracion = () => {
 
   useEffect(() => {
     dispatch(setLoading(true));
-    if (userRedux.status !== 'login' || !user.roles.includes('admin')) {
+    if (userRedux.status !== 'login' || user.roles.includes('admin')) {
       axios.all([
         clientAxios(user.idToken).get(`/api/usuarios`),
         clientAxios(user.idToken).get(`/api/profesores/${currentProceso.id}`)
