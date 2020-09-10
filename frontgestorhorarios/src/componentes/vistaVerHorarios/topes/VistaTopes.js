@@ -13,7 +13,7 @@ import SelectTopes from './SelectTopes';
 const useStyles = makeStyles(theme => ({
   header: {
     paddingRight: 100,
-    paddingLeft: 100
+    paddingLeft: 100,
   },
 }));
 
@@ -34,7 +34,6 @@ const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, }) => {
   }, [numNiveles]);
 
   const handleChange = nivel => {
-    console.log(nivel);
     let topesAux = topes.slice();
     let nivelIndex = topesAux.indexOf(nivel);
     if (nivelIndex > -1) {
@@ -53,8 +52,8 @@ const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, }) => {
   return (
     <>
       <Grid container className={classes.header}>
-        <Grid item xs={6}>
-          <Typography>
+        <Grid item xs={6} style={{paddingTop: 35}}>
+          <Typography variant="h6">
             Nivel: {nivel}
           </Typography>
         </Grid>
