@@ -8,7 +8,7 @@ const Usuario = require('../models').Usuario
 //const AsignaturaC = require('./asignatura')
 
 module.exports = {
-  create(req, res){
+  createInfoAsignatura(req, res){
     const infoA_id = req.body.mallaId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
     return InfoAsignatura
       .create({

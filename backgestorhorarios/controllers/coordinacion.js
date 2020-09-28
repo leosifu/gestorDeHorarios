@@ -8,7 +8,7 @@ const Asignacion = require('../models').Asignacion
 const bloqueController = require('./bloque')
 
 module.exports = {
-  create(req, res){
+  createCoordinacion(req, res){
     return Coordinacion
       .create({
         tipo_coord: req.body.tipo_coord,

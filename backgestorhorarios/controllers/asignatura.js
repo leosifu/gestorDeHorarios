@@ -13,7 +13,7 @@ const InfoCoordinacion = require('./infoCoordinacion')
 // }
 
 module.exports = {
-  create(req,res){
+  createAsignatura(req,res){
     return Asignatura
       .create({
         tel_T: req.body.tel_T,
@@ -98,7 +98,7 @@ module.exports = {
         return(res.json(asignatura))
       })
   },
-  update(req, res){
+  updateAsignatura(req, res){
     Asignatura.findAll({where: {id: req.params.aId}})
     .then(asignaturaPrevia => {
       var tel_T = parseInt(req.body.tel_T)

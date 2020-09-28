@@ -44,11 +44,11 @@ module.exports = {
       }], {});
 
       const users = await queryInterface.sequelize.query(
-        'SELECT id from Usuarios;'
+        'SELECT id from "Usuarios";'
       );
 
       const roles = await queryInterface.sequelize.query(
-        'SELECT id from Rols;'
+        'SELECT id from "Rols";'
       );
 
       await queryInterface.bulkInsert('RolUsuarios', [{

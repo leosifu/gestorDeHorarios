@@ -1,5 +1,4 @@
 const app = require('../../../../index')
-const jwt = require('jsonwebtoken');
 const mallasFake = require('./malla.json');
 
 const sinon = require('sinon')
@@ -61,25 +60,14 @@ describe('controllers/carreraController', () => {
       const obj = mallasFake.singleMallaByProceso.success;
       this.get.yields(null, obj.res, JSON.stringify(obj.body));
       axios.get(`${base}/api/malla/:mallaId/:procesoId`, (err, res, body) => {
-        // there should be a 200 status code
         res.statusCode.should.eql(201);
-        // the response should be JSON
         res.headers['content-type'].should.contain('application/json');
-        // parse response body
         body = JSON.parse(body);
-        // the JSON response body should have a
-        // key-value pair of {"status": "success"}
         body.status.should.eql('success');
-        // the JSON response body should have a
-        // key-value pair of {"data": [3 movie objects]}
-        // body.data.length.should.eql(2);
-        // the first object in the data array should
-        // have the right keys
         body.data.should.include.keys(
           'id', 'cod_malla', 'fecha_resolucion', 'n_niveles', 'carreraId', 'procesoId', 'Carrera',
           'niveles'
         );
-        // the first object should have the right value for name
         body.data.cod_malla.should.eql(1353);
         body.data.fecha_resolucion.should.eql("23/08/2015");
         body.data.n_niveles.should.eql(8);
@@ -167,7 +155,7 @@ describe('controllers/carreraController', () => {
   });
 
   describe('PUT /api/malla/:id', () => {
-    it('should return the movie that was updated', (done) => {
+    it('should return the carrera that was updated', (done) => {
       const options = {
         body: {
           fecha_resolucion: '23/08/2018',
@@ -191,7 +179,7 @@ describe('controllers/carreraController', () => {
         done();
       });
     });
-    it('should throw an error if the movie does not exist', (done) => {
+    it('should throw an error if the carrera does not exist', (done) => {
       const options = {
         body: {
           fecha_resolucion: '23/08/2018',

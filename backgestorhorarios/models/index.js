@@ -15,18 +15,25 @@ const db = {};
 //   sequelize = new Sequelize(config.database, config.username, config.password, config);
 // }
 
-const sequelize = new Sequelize(process.env.DB_SCHEMA || 'scheduleManager',
-                                process.env.DB_USER || 'root',
-                                process.env.DB_PASSWORD || '123456',
-                                  {
-                                      host: process.env.DB_HOST || 'localhost',
-                                      port: process.env.DB_PORT || 3306,
-                                      dialect: 'mysql',
-                                      // dialectOptions: {
-                                      //     socketPath: "/var/run/mysqld/mysqld.sock"
-                                      // },
-                                  }
-                                );
+let sequelize;
+if (config.use_env_variable) {
+  console.log(config.use_env_variable);
+  console.log('asdasdasdasd');
+  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+  console.log('qweqweqweqwe');
+  sequelize = new Sequelize(process.env.DB_SCHEMA || 'scheduleManager',
+  process.env.DB_USER || 'leopoldonx',
+  process.env.DB_PASSWORD || '123456',
+  {
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'postgres',
+    // dialectOptions: {
+    //     socketPath: "/var/run/mysqld/mysqld.sock"
+    // },
+  }
+);
+}
 
 fs
   .readdirSync(__dirname)

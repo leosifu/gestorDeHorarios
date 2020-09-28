@@ -46,7 +46,7 @@ function actualizarCupos(id, cupos_pasados, tasa_reprobacion, desinscripciones){
   })
 }
 
-function update(req, res){
+function updateHistorial(req, res){
   return Historial
     .update({
       cupos_pasados: req.body.cupos_pasados,
@@ -99,7 +99,7 @@ module.exports = {
           historial.dataValues.tasa_reprobacion, historial.dataValues.desinscripciones)
       })
   },
-  update,
+  updateHistorial,
   actualizarCupos,
 
 }

@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+  dev:
+    build: .
+    container_name: back-gestorhorarios
+    command: npm start
+    ports:
+      - 8000:8000
+    links:
+      - db
+    working_dir: /app/
+    environment:
+      DATABASE_URL: postgres://leopoldonx:123456@db:5432/ScheduleManager
+    env_file: .env
+  db:
+    image: postgres:9.5.23-alpine
+    restart: always
+    container_name: db-gestorhorarios
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_DB: ScheduleManager
+      POSTGRES_USER: leopoldonx
+      POSTGRES_PASSWORD: 123456
+    volumes:
+      - ~/dbdata:/var/lib/postgresql/data
+    

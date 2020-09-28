@@ -24,10 +24,10 @@ module.exports = (app) => {
   }))
   //API carrera
   app.get('/api/carreras', verify('admin', 'coordinador'), carreraController.findCarreras)
-  app.get('/api/carrera/:procesoId', checkProceso(), carreraController.findAll)
+  app.get('/api/carrera/:procesoId', checkProceso(), carreraController.findAllCarrerasByProceso)
   // app.get('/api/carrera/:id', carreraController.findByCarreraId)
-  app.post('/api/carrera', verify('admin', 'coordinador'), carreraController.create)
-  app.put('/api/carrera/:id', verify('admin', 'coordinador'), carreraController.update)
+  app.post('/api/carrera', verify('admin', 'coordinador'), carreraController.createCarrera)
+  app.put('/api/carrera/:id', verify('admin', 'coordinador'), carreraController.updateCarrera)
   app.delete('/api/carrera/:carreraId', verify('admin'), carreraController.deleteCarrera)
 
   //API malla
@@ -35,8 +35,8 @@ module.exports = (app) => {
   app.get('/api/mallas/:id', verify('admin', 'coordinador'), mallaController.findMallas)
   // app.get('/api/mallas/:id/:año/:semestre', mallaController.findMallaByAño)
   app.get('/api/malla/:mallaId/:procesoId', checkProceso(), mallaController.findMallaById)
-  app.post('/api/malla', verify('admin', 'coordinador'), mallaController.create)
-  app.put('/api/malla/:id', verify('admin', 'coordinador'), mallaController.update)
+  app.post('/api/malla', verify('admin', 'coordinador'), mallaController.createMalla)
+  app.put('/api/malla/:id', verify('admin', 'coordinador'), mallaController.updateMalla)
   app.delete('/api/malla/:mallaId', verify('admin', 'coordinador'), mallaController.deleteMalla)
 
   //API infoAsignatura
@@ -44,7 +44,8 @@ module.exports = (app) => {
     infoasignaturaController.findAsignaturasByNivel)
   app.get('/api/asignaturaInfo/:mallaId/:aId/:procesoId', checkProceso(),
     infoasignaturaController.findAsignatura)
-  app.post('/api/infoAsignatura', verify('admin', 'coordinador'), infoasignaturaController.create)
+  app.post('/api/infoAsignatura', verify('admin', 'coordinador'),
+    infoasignaturaController.createInfoAsignatura)
   app.get('/api/asignaturas/:id', verify('admin', 'coordinador'),
     infoasignaturaController.findAsignaturas)
   app.delete('/api/infoAsignatura/:mallaId/:asignaturaId', verify('admin', 'coordinador'),
@@ -54,8 +55,9 @@ module.exports = (app) => {
   //app.get('/api/asignH/:id', asignaturaController.actualizarHistorial)
   app.get('/api/asignaturaReq/:id/:mallaId/:procesoId', checkProceso(),
     asignaturaController.getRequisitos)
-  app.post('/api/asignatura', verify('admin', 'coordinador'), asignaturaController.create)
-  app.put('/api/asignatura/:aId/:mId', verify('admin', 'coordinador'), asignaturaController.update)
+  app.post('/api/asignatura', verify('admin', 'coordinador'), asignaturaController.createAsignatura)
+  app.put('/api/asignatura/:aId/:mId', verify('admin', 'coordinador'),
+    asignaturaController.updateAsignatura)
 
   //Api dependencia
   app.post('/api/dependencia', verify('admin', 'coordinador'), dependenciaController.crearDependencia)
@@ -63,9 +65,9 @@ module.exports = (app) => {
     dependenciaController.removeDependencia)
 
   //Api historial
-  app.put('/api/historial/:id', verify('admin', 'coordinador'), historialController.update)
+  app.put('/api/historial/:id', verify('admin', 'coordinador'), historialController.updateHistorial)
 
-  //Api AsignCoord
+  //Api InfoCoordinacion
   //app.post('/api/coordinacion', coordinacionController.create)
   app.get('/api/coordinacions/:id', verify('admin', 'coordinador'), infocoordController.findCoords)
   app.post('/api/asigncoord', verify('admin', 'coordinador'), infocoordController.create)
@@ -73,7 +75,7 @@ module.exports = (app) => {
     infocoordController.deleteCoordinacionFromAsignatura)
 
   //Api coordinacion
-  app.post('/api/coordinacion', verify('admin', 'coordinador'), coordinacionController.create)
+  app.post('/api/coordinacion', verify('admin', 'coordinador'), coordinacionController.createCoordinacion)
   app.put('/api/coordinacion/:id', coordinacionController.updateCoordinacion)
 
   //Api bloque
@@ -81,11 +83,11 @@ module.exports = (app) => {
 
   //Api usuarios
   app.post('/api/login', usuarioController.login)
-  app.get('/api/profesores', verify('admin', 'coordinador'), usuarioController.getProfesores)
+  // app.get('/api/profesores', verify('admin', 'coordinador'), usuarioController.getProfesores)
   app.get('/api/usuarios', verify('admin'), usuarioController.getUsuarios)
   app.get('/api/profesores/:procesoId', verify('admin', 'coordinador'),
     usuarioController.getProfesores)
-  app.post('/api/profesores', verify('admin', 'coordinador'), upload.single('file'),
+  app.post('/api/profesores', upload.single('file'),
     usuarioController.createProfesores)
   app.post('/api/createUsuario', usuarioController.addUsuario)
   app.put('/api/editUsuario/:id', usuarioController.editUsuario)

@@ -2,7 +2,7 @@ const Carrera = require('../models').Carrera
 const Malla = require('../models').Malla
 
 module.exports = {
-  create(req,res){
+  createCarrera(req,res){
     return Carrera
       .create({
         nombre_carrera: req.body.nombre_carrera,
@@ -21,7 +21,7 @@ module.exports = {
       .then(carrera =>res.status(201).send(carrera))
       .catch(error=> res.status(400).send(error))
   },
-  findAll(req,res){
+  findAllCarrerasByProceso(req,res){
     const {procesoId} = req.params;
     return Carrera
       .findAll({
@@ -40,7 +40,7 @@ module.exports = {
       .then(carrera =>res.json(carrera))
       .catch(error=> res.status(400).send(error))
   },
-  update(req,res){
+  updateCarrera(req,res){
     return Carrera
       .update({
         nombre_carrera: req.body.nombre_carrera,

@@ -43,7 +43,7 @@ describe('controllers/carreraController', () => {
         // key-value pair of {"status": "success"}
         body.status.should.eql('success');
         // the JSON response body should have a
-        // key-value pair of {"data": [3 movie objects]}
+        // key-value pair of {"data": [3 carrera objects]}
         body.data.length.should.eql(2);
         // the first object in the data array should
         // have the right keys
@@ -72,7 +72,7 @@ describe('controllers/carreraController', () => {
         // key-value pair of {"status": "success"}
         body.status.should.eql('success');
         // the JSON response body should have a
-        // key-value pair of {"data": [3 movie objects]}
+        // key-value pair of {"data": [3 carrera objects]}
         body.data.length.should.eql(2);
         // the first object in the data array should
         // have the right keys
@@ -149,7 +149,7 @@ describe('controllers/carreraController', () => {
   });
 
   describe('PUT /api/carrera/:id', () => {
-    it('should return the movie that was updated', (done) => {
+    it('should return the carrera that was updated', (done) => {
       const options = {
         body: { jornada: 'Diurno' },
         json: true,
@@ -171,13 +171,47 @@ describe('controllers/carreraController', () => {
       });
     });
 
-    it('should throw an error if the movie does not exist', (done) => {
+    it('should throw an error if the carrera does not exist', (done) => {
       const options = {
         body: { rating: 9 },
         json: true,
         url: `${base}/api/carrera/999`
       };
       const obj = carrerasFake.update.failure;
+      this.put.yields(null, obj.res, JSON.stringify(obj.body));
+      axios.put(options, (err, res, body) => {
+        res.statusCode.should.equal(404);
+        res.headers['content-type'].should.contain('application/json');
+        body = JSON.parse(body);
+        body.status.should.eql('error');
+        body.message.should.eql('That carrera does not exist.');
+        done();
+      });
+    });
+  });
+
+  describe('DELETE /api/carrera/:id', () => {
+    it('should return the carrera that was deleted', (done) => {
+      const options = {
+        url: `${base}/api/carrera/2`
+      };
+      const obj = carrerasFake.delete.success;
+      this.put.yields(null, obj.res, JSON.stringify(obj.body));
+      axios.put(options, (err, res, body) => {
+        res.statusCode.should.equal(201);
+        res.headers['content-type'].should.contain('application/json');
+        body = JSON.parse(body);
+        body.status.should.eql('success');
+        body.message.should.eql('Carrera eliminada');
+        done();
+      });
+    });
+
+    it('should throw an error if the carrera does not exist', (done) => {
+      const options = {
+        url: `${base}/api/carrera/999`
+      };
+      const obj = carrerasFake.delete.failure;
       this.put.yields(null, obj.res, JSON.stringify(obj.body));
       axios.put(options, (err, res, body) => {
         res.statusCode.should.equal(404);

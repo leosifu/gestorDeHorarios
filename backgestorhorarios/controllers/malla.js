@@ -6,7 +6,7 @@ const Proceso = require('../models').Proceso
 const Carrera = require('../models').Carrera
 
 module.exports = {
-  create(req,res){
+  createMalla(req,res){
     return Malla
       .create({
         fecha_resolucion: req.body.fecha_resolucion,
@@ -39,7 +39,7 @@ module.exports = {
       .then(malla =>res.json(malla))
       .catch(error=> res.status(400).send(error))
   },
-  update(req, res){
+  updateMalla(req, res){
     return Malla
       .update({
         fecha_resolucion: req.body.fecha_resolucion,

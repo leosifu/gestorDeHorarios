@@ -7,11 +7,13 @@ const Rol = require('../models').Rol;
 const verify = (...roles) => async (req, res, next) => {
   try {
     let idToken = req.get('Authorization');
+    console.log(idToken);
     if (!idToken) {
       return res.status(401).json({ message: 'Usuario no Autorizado'})
     }
     // console.log(idToken);
     const token = idToken.split(' ');
+    console.log(token);
     // console.log('token', token[1]);
     if (token) {
       jwt.verify(token[1], process.env.KEY, async(err, usuarioData) => {

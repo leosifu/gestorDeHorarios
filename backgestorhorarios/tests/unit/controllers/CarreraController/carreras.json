@@ -12,12 +12,12 @@
         "data": [
           {
             "id": 1,
-            "nombre_carrera": "Ingeniería de Ejecución en Computación e Informática",
+            "nombre_carrera": "Ingenieria de Ejecucion en Computacion e Informatica",
             "jornada": "Diurno"
           },
           {
             "id": 2,
-            "nombre_carrera": "Ingeniería Civil Informática",
+            "nombre_carrera": "Ingenieria Civil Informatica",
             "jornada": "Vespertino"
           }
         ]
@@ -37,7 +37,7 @@
         "data": [
           {
             "id": 1,
-            "nombre_carrera": "Ingeniería de Ejecución en Computación e Informática",
+            "nombre_carrera": "Ingenieria de Ejecucion en Computacion e Informatica",
             "jornada": "Diurno",
             "mallas": [
               {
@@ -49,7 +49,7 @@
           },
           {
             "id": 2,
-            "nombre_carrera": "Ingeniería Civil Informática",
+            "nombre_carrera": "Ingenieria Civil Informatica",
             "jornada": "Vespertino",
             "mallas": [
               {
@@ -120,10 +120,36 @@
         "data": [
           {
             "id": 2,
-            "nombre_carrera": "Ingeniería Civil Informática",
+            "nombre_carrera": "Ingenieria Civil Informatica",
             "jornada": "Diurno"
           }
         ]
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That carrera does not exist."
+      }
+    }
+  },
+  "delete": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "message": "Carrera eliminada"
       }
     },
     "failure": {

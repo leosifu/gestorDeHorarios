@@ -22,7 +22,6 @@ app.set('llave', process.env.KEY);
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 // var models = require("./models")
 // models.sequelize.sync().then(function(){
 //     console.log("Conecta2");
