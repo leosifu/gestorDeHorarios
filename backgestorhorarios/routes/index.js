@@ -103,6 +103,6 @@ module.exports = (app) => {
   app.post('/api/nuevoProceso', verify('admin', 'coordinador'), nuevoProcesoController.createProceso)
 
   app.get('/loaderio-70c73b14f16459b34ea12d239c03846b', (req, res, next) => {
-    res.sendFile('../loaderio-70c73b14f16459b34ea12d239c03846b.txt')
+    res.sendFile('./loaderio-70c73b14f16459b34ea12d239c03846b.txt')
 })
 }
