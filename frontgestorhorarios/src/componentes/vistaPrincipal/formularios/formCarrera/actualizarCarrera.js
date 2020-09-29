@@ -88,8 +88,8 @@ function ActualizarCarrera({carrera, open, setOpen, estado, setEstado, user, }) 
       text: 'No se podrá recuperar',
       type: 'warning',
       showCancelButton: true,
-      cancelButtonColor: '#d33',
-      confirmButtonColor: '#000',
+      cancelButtonColor: '#B1B1B1',
+      confirmButtonColor: '#EC7700',
       cancelButtonText: 'Cerrar',
       confirmButtonText: 'Aceptar'
     })
