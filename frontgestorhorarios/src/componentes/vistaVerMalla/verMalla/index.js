@@ -91,7 +91,6 @@ function VerMalla(props) {
     if (currentProceso.id !== -1) {
       clientAxios(user.idToken).get(`/api/malla/${mallaId}/${currentProceso.id}`)
       .then(res => {
-        console.log(res.data);
         dispatch(setMallaRedux(res.data[0]));
         setNiveles(res.data[0].niveles);
         dispatch(setLoading(false))

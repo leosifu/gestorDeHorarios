@@ -10,7 +10,7 @@ import Bloque from '../horario/bloque'
 const useStyles = makeStyles(theme => ({
   grilla:{
     width: 200,
-    height: 90,
+    height: 100,
     padding: '0 0 0 0'
   },
   hora:{

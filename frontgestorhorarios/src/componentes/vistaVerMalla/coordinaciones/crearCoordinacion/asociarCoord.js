@@ -132,30 +132,33 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, }){
 
   return(
     <>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">
-          Carrera
-        </InputLabel>
-        <Select
-          multiple
-          native
-          inputProps={{
-            id: 'select-multiple-nativ',
-          }}
-          id="demo-simple-select-outlined"
-          value={carrera}
-          onChange={handleChangeCarrera}
-          labelWidth={30}
-        >
-          {
-            carreras.map(carrera=>(
-              <option value={carrera.id}>{carrera.nombre_carrera}</option>
-            ))
-          }
-        </Select>
-      </FormControl>
       {
-        (carrera!==0)&&
+        carreras.length > 0 &&
+        <FormControl variant="outlined" className={classes.formControl}>
+          <InputLabel id="demo-simple-select-outlined-label">
+            Carrera
+          </InputLabel>
+          <Select
+            multiple
+            native
+            inputProps={{
+              id: 'select-multiple-nativ',
+            }}
+            id="demo-simple-select-outlined"
+            value={carrera}
+            onChange={handleChangeCarrera}
+            labelWidth={30}
+          >
+            {
+              carreras.map(carrera=>(
+                <option value={carrera.id}>{carrera.nombre_carrera}</option>
+              ))
+            }
+          </Select>
+        </FormControl>
+      }
+      {
+        (carrera!==0)&& mallas.length > 0 &&
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Malla
@@ -180,7 +183,7 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, }){
           </FormControl>
       }
       {
-        (malla!==0) &&
+        (malla!==0) && asignaturas.length > 0 &&
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Asignatura
@@ -205,7 +208,7 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, }){
           </FormControl>
       }
       {
-        (asignatura !== 0) &&
+        (asignatura !== 0) && coordinaciones.length > 0 &&
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="demo-simple-select-outlined-label">
             Coordinación

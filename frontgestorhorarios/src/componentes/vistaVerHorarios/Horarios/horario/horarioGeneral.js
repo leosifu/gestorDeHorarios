@@ -37,7 +37,6 @@ function GetDataHorario({nivel, user, currentProceso, userRedux, dontDrag, selec
     clientAxios(user.idToken).get(`/api/asignatura/${malla.id}/${nivel}/${currentProceso.id}`)
     .then(res => {
       const data = res.data
-      console.log(res.data);
       const asignaturas = data.map(asignatura=>({nombre_asignatura: asignatura.nombre_asignatura,
         cod_asignatura: asignatura.cod_asignatura, asignaturaId: asignatura.id}))
       setAsignaturas(asignaturas)

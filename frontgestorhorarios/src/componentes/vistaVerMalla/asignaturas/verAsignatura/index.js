@@ -44,7 +44,6 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
     clientAxios(user.idToken)
     .get(`/api/asignaturaInfo/${malla.id}/${asignaturaId}/${currentProceso.id}`)
     .then(res => {
-      console.log(res.data);
       setInfoAsignatura(res.data)
       setAsignatura(res.data.Asignatura)
       dispatch(setLoading(false))

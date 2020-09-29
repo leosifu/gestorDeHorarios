@@ -3,6 +3,7 @@ import {Redirect} from 'react-router-dom';
 
 import axios from 'axios';
 import clientAxios from '../../config/axios';
+import baseUrl from '../../config/urls';
 
 import { makeStyles } from '@material-ui/core/styles';
 import {Typography, Grid, } from '@material-ui/core';
@@ -128,10 +129,16 @@ export default function NuevoProceso() {
         let formData = new FormData();
         formData.append('file', uploadFile);
         formData.append('procesoId', NuevoProceso.data.id);
-        const SubirProfesores = await axios.post(`http://localhost:8000/api/profesores`,
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user.idToken}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+        const SubirProfesores = await axios.post(`${baseUrl}api/profesores`,
           formData,
-          {headers: {'Authorization': `Bearer ${user.idToken}`,
-          'Content-Type': 'multipart/form-data'}})
+          config
+        )
         const data = {
           procesoId: NuevoProceso.data.id,
           mallas: mallasSelected

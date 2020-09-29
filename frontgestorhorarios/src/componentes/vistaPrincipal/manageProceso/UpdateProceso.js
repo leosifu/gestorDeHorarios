@@ -51,7 +51,6 @@ function EditarProceso({proceso, estado, setEstado, dialogUpdateProceso, user, }
       }
       clientAxios(user.idToken).put(`/api/procesos/${proceso.id}`, data)
       .then(res=>{
-        console.log(res);
         dispatch(getProcesos(user.idToken));
         dispatch(handleDialogUpdateProceso(false));
         setEstado(!estado);

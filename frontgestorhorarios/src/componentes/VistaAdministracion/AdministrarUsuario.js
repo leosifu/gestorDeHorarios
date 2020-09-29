@@ -75,7 +75,6 @@ const AdministrarUsuario = ({changed, setChanged, currentProceso, }) => {
       if (dialogUsuario.type === 'edit') {
         clientAxios().put(`/api/editUsuario/${userState.id}`, data)
         .then(res => {
-          console.log(res.data);
           dispatch(handleDialogCreate(false));
           setChanged(!changed);
           dispatch(setLoading(false));

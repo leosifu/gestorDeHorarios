@@ -43,7 +43,6 @@ const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado
 
   function onSubmitForm(state){
     dispatch(setLoading(true));
-    console.log(state);
     if (!state.cod_coord.value || !state.nombre_coord.value ||
       (!state.num_bloques.value || state.num_bloques.value < 0)) {
       dispatch(setLoading(false));

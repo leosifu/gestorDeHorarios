@@ -35,7 +35,6 @@ const useStyles = makeStyles({
 export default function Bloque({coord, onDrop, tipo, num, userRedux, dontDrag,
   handleMostrarCoordinacion, }) {
   const {nombre_coord, cod_coord, id, color, num_asociacion, profesores, coordinacionId, mostrar} = coord
-  // console.log(coord.coordinacionId);
   const ref = useRef(null)
   const classes = useStyles();
   const [ , drag] = useDrag({
@@ -65,7 +64,6 @@ export default function Bloque({coord, onDrop, tipo, num, userRedux, dontDrag,
   }
 
   if (!dontDrag && userRedux.status === 'login') {
-    // console.log('wiii');
     if (userRedux.user.roles.includes('admin') || userRedux.user.roles.includes('coordinador')) {
       drop(drag(ref))
     }

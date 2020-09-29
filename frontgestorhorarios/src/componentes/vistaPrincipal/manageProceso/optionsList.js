@@ -8,7 +8,8 @@ import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
 
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
-import {handleDialogUpdateProceso, setLoading, handleNotifications} from '../../../redux/actions';
+import {handleDialogUpdateProceso, setLoading, handleNotifications,
+  getProcesos} from '../../../redux/actions';
 
 import Swal from 'sweetalert2';
 
@@ -58,7 +59,7 @@ export default function OptionsList({currentProceso, user, }) {
       if (result.value) {
         clientAxios(user.idToken).delete(`/api/procesos/${currentProceso.id}`)
         .then(res=>{
-          console.log(res);
+          dispatch(getProcesos(user.idToken));
           dispatch(setLoading(false));
           dispatch(handleNotifications(true, {
             status: 'success',

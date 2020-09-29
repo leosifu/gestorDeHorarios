@@ -79,7 +79,6 @@ export default function ListadoCarreras(){
             diur.push(carreras[i])
           }
         }
-        console.log('termino separar');
         setCarrerasV(vesp)
         setCarrerasD(diur)
         dispatch(setLoading(false));
@@ -118,13 +117,16 @@ export default function ListadoCarreras(){
           userRedux.status === 'login' &&
           (user.roles.length > 0) ?
           <Grid item xs={procesos.length > 0 ? 3 : 0}>
-            <SelectProceso procesos={procesos} date={date} setDate={setDate}
+            {
+              currentProceso.año !== -1 &&
+              <SelectProceso procesos={procesos} date={date} setDate={setDate}
               currentProceso={currentProceso}/>
+            }
           </Grid>
           :
           <Grid item xs={3} style={{textAlign: 'right'}}>
             <Typography>
-              {`${currentProceso.semestre}/${currentProceso.año}`}
+              {`Semestre ${currentProceso.semestre}/${currentProceso.año}`}
             </Typography>
           </Grid>
         }

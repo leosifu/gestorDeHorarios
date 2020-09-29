@@ -30,6 +30,10 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
+  logo: {
+    width: '10%',
+    height: '10%'
+  }
 }));
 
 function HomeIcon(props) {
@@ -55,10 +59,6 @@ export default function NavBar() {
 
   useEffect(() => {
     login();
-    console.log(process.env);
-    console.log(window.REACT_APP_NAVBAR_COLOR);
-    console.log(window.REACT_APP_ENVIRONMENT);
-    console.log(window.REACT_APP_API_URL);
   }, []);
 
   const loginRequest = (token, userData, authUser) => {
@@ -141,7 +141,6 @@ export default function NavBar() {
   function handleLogout () {
     firebase.auth().signOut()
       .then(result => {
-        console.log('Te has desconectado correctamente');
         dispatch(handleLogoutUser());
         // setLog(false);
         setUser({
@@ -166,12 +165,15 @@ export default function NavBar() {
     <div className={classes.root}>
       <AppBar className={classes.appBar} position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu"
-            onClick={goHome}>
-            <HomeIcon fontSize="large" />
-          </IconButton>
+          <img src="https://starejs.informatica.usach.cl/images/usach.png"
+            alt="Italian Trulli" className={classes.logo}/>
+          <Button onClick={goHome} color="inherit">
+            <Typography variant="h6" className={classes.title}>
+              Planificación DIINF
+            </Typography>
+          </Button>
           <Typography variant="h6" className={classes.title}>
-            Aca va el titulo
+
           </Typography>
           {
             user.user.roles.includes('admin') &&
