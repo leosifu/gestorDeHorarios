@@ -1,0 +1,111 @@
+{
+  "allByAsignatura": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": [
+          {
+            "asignaturaId": 1,
+            "cod_coord": "A1",
+            "coordinacionId": 1,
+            "infoC_id": "1~A1~Estructura de Computadores",
+            "nombre_coord": "Estructura de Computadores",
+            "Coordinacion": {
+              "id": 1,
+              "num_bloques": 3,
+              "tipo_coord": "Teoría"
+            }
+          },
+          {
+            "asignaturaId": 1,
+            "cod_coord": "B1",
+            "coordinacionId": 2,
+            "infoC_id": "1~B2~Estructura de Computadores",
+            "nombre_coord": "Estructura de Computadores",
+            "Coordinacion": {
+              "id": 1,
+              "num_bloques": 3,
+              "tipo_coord": "Teoría"
+            }
+          }
+        ]
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That infoCoordinacion does not exist."
+      }
+    }
+  },
+  "add": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": {
+          "asignaturaId": 1,
+          "cod_coord": "C3",
+          "coordinacionId": 3,
+          "infoC_id": "1~C3~Estructura de Computadores",
+          "nombre_coord": "Estructura de Computadores"
+        }
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 400,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "delete": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "message": "InfoCoordinacion eliminada"
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That infoCoordinacion does not exist."
+      }
+    }
+  }
+}

@@ -14,7 +14,7 @@ import clientAxios from '../config/axios'
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { push } from 'connected-react-router';
-import {getProcesos, handleLoginUser, handleLogoutUser, handleLoginFailed, } from '../redux/actions'
+import {getProcesos, handleLoginUser, handleLogoutUser, handleLoginFailed, clearProcesosUser, } from '../redux/actions'
 
 import firebase from 'firebase';
 
@@ -62,6 +62,7 @@ export default function NavBar() {
   }, []);
 
   const loginRequest = (token, userData, authUser) => {
+    console.log(userData);
     clientAxios(token).post(`api/login`, userData)
     .then(res => {
       const userData = res.data;
@@ -141,6 +142,8 @@ export default function NavBar() {
   function handleLogout () {
     firebase.auth().signOut()
       .then(result => {
+        dispatch(push('/'));
+        dispatch(clearProcesosUser());
         dispatch(handleLogoutUser());
         // setLog(false);
         setUser({
@@ -161,6 +164,10 @@ export default function NavBar() {
     dispatch(push('/'))
   }
 
+  const goMiHorario = () => {
+    dispatch(push('/horarioProfesor'))
+  }
+
   return (
     <div className={classes.root}>
       <AppBar className={classes.appBar} position="static">
@@ -175,6 +182,10 @@ export default function NavBar() {
           <Typography variant="h6" className={classes.title}>
 
           </Typography>
+          {
+            user.user.roles.includes('profe') &&
+            <Button onClick={goMiHorario} color="inherit">Mi Horario</Button>
+          }
           {
             user.user.roles.includes('admin') &&
             <Button onClick={goAdmin} color="inherit">Administración</Button>

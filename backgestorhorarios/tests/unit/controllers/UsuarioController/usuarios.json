@@ -1,0 +1,258 @@
+{
+  "login": {
+    "successFind": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": {
+          "id": 1,
+          "email": "pruebaFind@usach.cl",
+          "name": "prueba",
+          "lastName": "Find",
+          "rut": "11.111.111-1",
+          "roles": ["admin"]
+        }
+      }
+    },
+    "successNotFind": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": {
+          "id": 2,
+          "email": "pruebaNotFind@usach.cl",
+          "name": "pruebaNotFind",
+          "roles": []
+        }
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 401,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "Invalid user."
+      }
+    }
+  },
+  "getUsuarios": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": [
+          {
+            "id": 1,
+            "email": "pruebaFind1@usach.cl",
+            "name": "prueba1",
+            "lastName": "Find1",
+            "rut": "11.111.111-1",
+            "roles": ["coord"]
+          },
+          {
+            "id": 2,
+            "email": "pruebaFind2@usach.cl",
+            "name": "prueba2",
+            "lastName": "Find2",
+            "rut": "11.111.222-1",
+            "roles": ["coord"]
+          },
+          {
+            "id": 3,
+            "email": "pruebaFind3@usach.cl",
+            "name": "prueba3",
+            "lastName": "Find3",
+            "rut": "11.111.333-1",
+            "roles": ["coord"]
+          }
+        ]
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 401,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "Unauthorized user."
+      }
+    }
+  },
+  "getProfesores": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": [
+          {
+            "id": 4,
+            "email": "pruebaFind4@usach.cl",
+            "name": "prueba4",
+            "lastName": "Find4",
+            "rut": "11.111.444-1",
+            "roles": ["profe"]
+          },
+          {
+            "id": 5,
+            "email": "pruebaFind5@usach.cl",
+            "name": "prueba5",
+            "lastName": "Find5",
+            "rut": "11.111.555-1",
+            "roles": ["profe"]
+          },
+          {
+            "id": 6,
+            "email": "pruebaFind6@usach.cl",
+            "name": "prueba6",
+            "lastName": "Find6",
+            "rut": "11.111.666-1",
+            "roles": ["profe"]
+          }
+        ]
+      }
+    },
+    "failureUser": {
+      "res": {
+        "statusCode": 401,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "Unauthorized user."
+      }
+    },
+    "failureProceso": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "Proceso does not exist."
+      }
+    }
+  },
+  "add": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": {
+          "id": 7,
+          "email": "pruebaFind7@usach.cl",
+          "name": "prueba7",
+          "lastName": "Find7",
+          "rut": "11.111.777-1",
+          "roles": ["profe"]
+        }
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 400,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "update": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": {
+          "id": 7,
+          "email": "pruebaFind7@usach.cl",
+          "name": "prueba7",
+          "lastName": "Find7",
+          "rut": "11.111.777-1",
+          "roles": ["profe", "coord"]
+        }
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That usuario does not exist."
+      }
+    }
+  },
+  "delete": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "message": "Carrera eliminada"
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That carrera does not exist."
+      }
+    }
+  }
+}

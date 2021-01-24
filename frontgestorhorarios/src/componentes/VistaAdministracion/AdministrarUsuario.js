@@ -18,7 +18,7 @@ const DialosUsuarioSelector = createSelector(
   dialogUsuario => dialogUsuario
 );
 
-const AdministrarUsuario = ({changed, setChanged, currentProceso, }) => {
+const AdministrarUsuario = ({changed, setChanged, currentProceso, user, }) => {
 
   const dispatch = useDispatch();
   const dialogUsuario = useSelector(DialosUsuarioSelector);
@@ -73,7 +73,7 @@ const AdministrarUsuario = ({changed, setChanged, currentProceso, }) => {
         procesoId: currentProceso.id
       }
       if (dialogUsuario.type === 'edit') {
-        clientAxios().put(`/api/editUsuario/${userState.id}`, data)
+        clientAxios(user.idToken).put(`/api/editUsuario/${userState.id}`, data)
         .then(res => {
           dispatch(handleDialogCreate(false));
           setChanged(!changed);
@@ -93,7 +93,7 @@ const AdministrarUsuario = ({changed, setChanged, currentProceso, }) => {
         })
       }
       else {
-        clientAxios().post(`/api/createUsuario`, data)
+        clientAxios(user.idToken).post(`/api/createUsuario`, data)
         .then(res => {
           console.log(res.data);
           dispatch(handleDialogCreate(false))

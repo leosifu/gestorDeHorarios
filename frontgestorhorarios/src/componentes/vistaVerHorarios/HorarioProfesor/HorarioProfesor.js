@@ -2,6 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 
 import { useParams} from "react-router";
 
+import {Grid, } from '@material-ui/core';
+
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
@@ -13,10 +15,11 @@ import {setLoading, handleNotifications, } from '../../../redux/actions';
 import _ from 'lodash'
 
 import Horario from '../Horarios/horario/horario';
+import SelectProceso from '../../VistaNuevoProceso/selectProceso'
 
 const ProcesoSelector = createSelector(
   state => state.proceso,
-  proceso => proceso.currentProceso
+  proceso => proceso
 );
 
 const UserSelector = createSelector(
@@ -31,10 +34,14 @@ const HorarioProfesor = ({selectedUser, }) => {
   const dispatch = useDispatch();
 
   const userRedux = useSelector(UserSelector);
-  const proceso = useSelector(ProcesoSelector);
+  const procesosData = useSelector(ProcesoSelector);
   const user = userRedux.user;
 
+  const procesos = procesosData.procesos;
+  const proceso = procesosData.currentProceso;
+
   const [data, setData] = useState([]);
+  const [date, setDate] = useState({});
 
   const [asignaturas, setAsignaturas] = useState([]);
 
@@ -98,10 +105,20 @@ const HorarioProfesor = ({selectedUser, }) => {
   },[proceso.id])
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Horario data={data} setData={setData} asignaturas={asignaturas} setAsignaturas={setAsignaturas}
-        user={user} userRedux={userRedux} dontDrag={true}/>
-    </DndProvider>
+    <>
+      <Grid container>
+        <Grid item xs={10}>
+          <DndProvider backend={HTML5Backend}>
+          <Horario data={data} setData={setData} asignaturas={asignaturas} setAsignaturas={setAsignaturas}
+          user={user} userRedux={userRedux} dontDrag={true}/>
+          </DndProvider>
+        </Grid>
+        <Grid item xs={2}>
+          <SelectProceso procesos={procesos} date={date} setDate={setDate}
+            currentProceso={proceso}/>
+        </Grid>
+      </Grid>
+    </>
   )
 }
 

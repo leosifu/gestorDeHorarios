@@ -127,7 +127,9 @@ export default function NuevoProceso() {
         const mallasSelected = [].concat(...allSelects.map(carrera => carrera.selects));
         const NuevoProceso = await clientAxios(user.idToken).post('/api/procesos', procesoData);
         let formData = new FormData();
+        console.log(uploadFile);
         formData.append('file', uploadFile);
+        console.log(formData);
         formData.append('procesoId', NuevoProceso.data.id);
         const config = {
           headers: {
@@ -135,15 +137,19 @@ export default function NuevoProceso() {
             'Content-Type': 'multipart/form-data'
           }
         }
-        const SubirProfesores = await axios.post(`${baseUrl}api/profesores`,
+        console.log('sigo aca....');
+        const SubirProfesores = await axios.post(`${baseUrl}/api/profesores`,
           formData,
           config
         )
+        console.log('pues aca igual...');
         const data = {
           procesoId: NuevoProceso.data.id,
           mallas: mallasSelected
         }
+        console.log('todavia voy...');
         const DuplicarDatos = await clientAxios(user.idToken).post('/api/nuevoProceso', data);
+        console.log('termineeeee');
         dispatch(getProcesos(user.idToken))
         dispatch(setLoading(false));
         dispatch(handleNotifications(true, {
@@ -152,6 +158,7 @@ export default function NuevoProceso() {
         ));
         dispatch(push('/'))
       } catch (e) {
+        console.log(e);
         dispatch(setLoading(false));
         dispatch(handleNotifications(true, {
           status: 'error',

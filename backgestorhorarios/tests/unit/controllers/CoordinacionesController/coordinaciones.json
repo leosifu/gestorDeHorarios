@@ -1,0 +1,102 @@
+{
+  "add": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": {
+          "id": 3,
+          "num_bloques": 3,
+          "tipo_coord": "Teoría",
+          "InfoCoordinacion": {
+            "asignaturaId": 1,
+            "cod_coord": "C3",
+            "coordinacionId": 3,
+            "infoC_id": "1~C3~Estructura de Computadores",
+            "nombre_coord": "Estructura de Computadores"
+          },
+          "bloques": [
+            {
+              "id": 7,
+              "asignado": false,
+              "coordinacionId": 3,
+              "num_bloque": 1
+            },
+            {
+              "id": 8,
+              "asignado": false,
+              "coordinacionId": 3,
+              "num_bloque": 2
+            },
+            {
+              "id": 9,
+              "asignado": false,
+              "coordinacionId": 3,
+              "num_bloque": 3
+            }
+          ],
+          "profesores": [
+            {
+              "id": 1,
+              "email": "CorreoTest@usach.cl",
+              "name": "NombreTest",
+              "lastName": "Apellido Test",
+              "rut": "11.111.111-1",
+              "Asignacion": {
+                "usuarioId": 1,
+                "coordinacionId": 1
+              }
+            }
+          ]
+        }
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That coordinacion does not exist."
+      }
+    }
+  },
+  "update": {
+    "success": {
+      "res": {
+        "statusCode": 200,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": {
+          "id": 3,
+          "num_bloques": 3,
+          "tipo_coord": "Ejercicios"
+        }
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That coordinacion does not exist."
+      }
+    }
+  }
+}

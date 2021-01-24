@@ -51,9 +51,9 @@ function Topes({topes, handleChange, niveles, selectNivel, }){
         }}
       >
         {niveles.map((nivel, i) =>
-            <MenuItem key={nivel} value={i} name={i}>
-              <Checkbox checked={topes.indexOf(i) > -1} onChange={() => handleChange(i)}/>
-              <ListItemText primary={nivel} onClick={() => selectNivel(i)}/>
+            <MenuItem key={nivel} value={i+1} name={i}>
+              <Checkbox checked={topes.indexOf(i+1) > -1} onChange={() => handleChange(i+1)}/>
+              <ListItemText primary={nivel} onClick={() => selectNivel(i+1)}/>
             </MenuItem>
           )
         }

@@ -29,6 +29,12 @@ export default (state = initialState, action) => {
         error: true
       }
       break;
+    case 'resetProceso':
+      return {
+        ...state,
+        ...initialState
+      }
+      break;
     default:
       return state;
   }

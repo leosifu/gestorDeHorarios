@@ -101,7 +101,7 @@ const Administracion = () => {
       <h2>
         Administracion de Usuarios
       </h2>
-      <AdministrarUsuario changed={changed} setChanged={setChanged} currentProceso={currentProceso}/>
+      <AdministrarUsuario changed={changed} setChanged={setChanged} currentProceso={currentProceso} user={user}/>
       <VerHorarioProfesor />
       <Grid container>
         <Grid item xs={8}>

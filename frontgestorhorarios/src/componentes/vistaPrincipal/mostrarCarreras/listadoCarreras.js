@@ -93,11 +93,9 @@ export default function ListadoCarreras(){
       })
     }
     else {
-      if (procesosData.error) {
-        setCarrerasV([]);
-        setCarrerasD([]);
-        dispatch(setLoading(false));
-      }
+      setCarrerasV([]);
+      setCarrerasD([]);
+      dispatch(setLoading(false));
     }
   }, [openC, estado, procesosData, user])
 
@@ -122,12 +120,16 @@ export default function ListadoCarreras(){
               <SelectProceso procesos={procesos} date={date} setDate={setDate}
               currentProceso={currentProceso}/>
             }
-          </Grid>
+            </Grid>
           :
           <Grid item xs={3} style={{textAlign: 'right'}}>
-            <Typography>
-              {`Semestre ${currentProceso.semestre}/${currentProceso.año}`}
-            </Typography>
+            {
+              currentProceso.semestre !== -1 &&
+              <Typography>
+                `Semestre ${currentProceso.semestre}/${currentProceso.año}`
+              </Typography>
+            }
+
           </Grid>
         }
         {

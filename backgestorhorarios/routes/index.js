@@ -89,8 +89,8 @@ module.exports = (app) => {
     usuarioController.getProfesores)
   app.post('/api/profesores', upload.single('file'),
     usuarioController.createProfesores)
-  app.post('/api/createUsuario', usuarioController.addUsuario)
-  app.put('/api/editUsuario/:id', usuarioController.editUsuario)
+  app.post('/api/createUsuario', verify('admin'), usuarioController.addUsuario)
+  app.put('/api/editUsuario/:id', verify('admin'), usuarioController.editUsuario)
   app.get('/api/getHorario/:usuarioId/:procesoId', usuarioController.getHorario)
 
   //Api proceso
@@ -100,9 +100,6 @@ module.exports = (app) => {
   app.delete('/api/procesos/:procesoId', verify('admin'), procesoController.EliminarProceso)
 
   //Api nuevoProceso
-  app.post('/api/nuevoProceso', verify('admin', 'coordinador'), nuevoProcesoController.createProceso)
+  app.post('/api/nuevoProceso', verify('admin'), nuevoProcesoController.createProceso)
 
-  app.get('/loaderio-70c73b14f16459b34ea12d239c03846b', (req, res, next) => {
-    res.sendFile('./loaderio-70c73b14f16459b34ea12d239c03846b.txt')
-})
 }

@@ -14,16 +14,10 @@ const UserSelector = createSelector(
   user => user
 );
 
-const ProcesosSelector = createSelector(
-  state => state.proceso,
-  proceso => proceso
-);
-
 function Auth({children}) {
 
   const dispatch = useDispatch();
   const userData = useSelector(UserSelector);
-  const procesosData = useSelector(ProcesosSelector);
 
   const user = userData.user;
 

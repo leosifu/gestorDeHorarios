@@ -68,3 +68,12 @@ const getProcesosFailed = () => ({
   type: 'getProcesosFailed',
   payload: {}
 });
+
+export const clearProcesosUser = () => {
+  return dispatch => dispatch(resetProceso());
+}
+
+const resetProceso = () => ({
+  type: 'resetProceso',
+  payload: {}
+})

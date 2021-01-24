@@ -53,6 +53,19 @@ describe('controllers/carreraController', () => {
         done();
       });
     });
+
+    it('should return an error if proceso does not exist', (done) => {
+      const obj = mallasFake.singleMallaByProceso.failure;
+      this.get.yields(null, obj.res, JSON.stringify(obj.body));
+      axios.get(`${base}/api/malla/:mallaId/:procesoId`, (err, res, body) => {
+        res.statusCode.should.equal(404);
+        res.headers['content-type'].should.contain('application/json');
+        body = JSON.parse(body);
+        body.status.should.eql('error');
+        body.message.should.eql('That proceso does not exist.');
+        done();
+      });
+    });
   });
 
   describe('GET /api/malla/:mallaId/:procesoId', () => {

@@ -1,0 +1,111 @@
+{
+  "asignaturasAndRequisitos": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": {
+          "id": 2,
+          "cod_asignatura": 13253,
+          "nombre_asignatura": "Paradigmas de Programación",
+          "tel_T": 4,
+          "tel_E": 0,
+          "tel_L": 2,
+          "requisitos": [
+            {
+              "id": 1,
+              "cod_asignatura": 13273,
+              "nombre_asignatura": "Estructura de Computadores",
+              "tel_T": 2,
+              "tel_E": 1,
+              "tel_L": 4
+            }
+          ]
+        }
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That asignatura does not exist."
+      }
+    }
+  },
+  "add": {
+    "success": {
+      "res": {
+        "statusCode": 201,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": {
+          "id": 3,
+          "cod_asignatura": 12354,
+          "nombre_asignatura": "Análisis de Algoritmos y Estructura de Datos",
+          "tel_T": 4,
+          "tel_E": 0,
+          "tel_L": 2
+        }
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 400,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "update": {
+    "success": {
+      "res": {
+        "statusCode": 200,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": {
+          "id": 3,
+          "cod_asignatura": 12345,
+          "nombre_asignatura": "Análisis de Algoritmos y Estructura de Datos",
+          "tel_T": 4,
+          "tel_E": 0,
+          "tel_L": 2
+        }
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That asignatura does not exist."
+      }
+    }
+  }
+}

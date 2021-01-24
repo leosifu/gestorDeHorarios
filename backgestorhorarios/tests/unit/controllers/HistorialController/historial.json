@@ -1,0 +1,35 @@
+{
+  "update": {
+    "success": {
+      "res": {
+        "statusCode": 200,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "success",
+        "data": {
+          "id": 1,
+          "cupos_pasados": 30,
+          "tasa_reprobacion": 10,
+          "desinscripciones": 5,
+          "cupos_estimados": 22,
+          "asignaturaId": 1
+        }
+      }
+    },
+    "failure": {
+      "res": {
+        "statusCode": 404,
+        "headers": {
+          "content-type": "application/json"
+        }
+      },
+      "body": {
+        "status": "error",
+        "message": "That historial does not exist."
+      }
+    }
+  }
+}
