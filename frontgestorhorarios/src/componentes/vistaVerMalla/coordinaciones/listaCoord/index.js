@@ -57,7 +57,7 @@ function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independien
       <Typography variant="h4" component="h3" className={classes.titulo}>
         Coordinaciones
       </Typography>
-      {coordinaciones.map(coordinacion=>
+      {coordinaciones?.map(coordinacion=>
         <Coordinacion coordinacion={coordinacion} key={coordinacion.id} estado={estado}
           setEstado={setEstado} user={user} userRedux={userRedux} currentProceso={currentProceso}/>
       )}

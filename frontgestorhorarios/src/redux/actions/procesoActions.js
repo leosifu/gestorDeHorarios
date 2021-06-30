@@ -10,9 +10,9 @@ export const getProcesos = (idToken) => {
       if (res.data.length > 0) {
         const reverseProcesos = res.data.reverse();
         dispatch(setAllProcesos(reverseProcesos));
-        const currentProcesoLocalStorage = localStorage.getItem('currentProcess')
+        const currentProcesoLocalStorage = localStorage.getItem('currentProcess');
         if (currentProcesoLocalStorage) {
-          const procesoActivo = res.data.find(proceso => proceso.id === currentProcesoLocalStorage);
+          const procesoActivo = res.data.find(proceso => parseInt(proceso.id) === parseInt(currentProcesoLocalStorage));
           if (procesoActivo) {
             dispatch(setProcesoActivo(procesoActivo));
           }

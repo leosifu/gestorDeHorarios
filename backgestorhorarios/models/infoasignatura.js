@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false
     },
-    mallaId: {
+    carreraId: {
       type: DataTypes.INTEGER,
     },
     asignaturaId: {
@@ -27,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   InfoAsignatura.associate = function(models) {
     // associations can be defined here
-    InfoAsignatura.belongsTo(models.Malla,{
-      foreignKey: 'mallaId'
+    InfoAsignatura.belongsTo(models.NewCarrera,{
+      foreignKey: 'carreraId'
     })
     InfoAsignatura.belongsTo(models.Asignatura,{
       foreignKey: 'asignaturaId'

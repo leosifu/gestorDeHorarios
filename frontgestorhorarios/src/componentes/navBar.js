@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
 
+import clsx from 'clsx';
+
 import { makeStyles } from '@material-ui/core/styles';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -8,13 +11,14 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 
 import SvgIcon from '@material-ui/core/SvgIcon';
+import MenuIcon from '@material-ui/icons/Menu';
 
 import clientAxios from '../config/axios'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { push } from 'connected-react-router';
-import {getProcesos, handleLoginUser, handleLogoutUser, handleLoginFailed, clearProcesosUser, } from '../redux/actions'
+import {getProcesos, handleLoginUser, handleLogoutUser, handleLoginFailed, clearProcesosUser, handleRightBar, } from '../redux/actions'
 
 import firebase from 'firebase';
 
@@ -33,8 +37,21 @@ const useStyles = makeStyles(theme => ({
   logo: {
     width: '10%',
     height: '10%'
-  }
+  },
+  hide: {
+    display: 'none',
+  },
 }));
+
+const RightBarSelector = createSelector(
+  state => state.rightBar,
+  rightBar => rightBar
+);
+
+const ProcesosSelector = createSelector(
+  state => state.proceso,
+  proceso => proceso
+);
 
 function HomeIcon(props) {
   return (
@@ -48,6 +65,11 @@ export default function NavBar() {
 
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const rightBar = useSelector(RightBarSelector);
+  const procesosData = useSelector(ProcesosSelector);
+
+  const currentProceso = procesosData.currentProceso;
 
   const [log, setLog] = useState(false);
   const [user, setUser] = useState({
@@ -156,6 +178,8 @@ export default function NavBar() {
       .catch(error => console.log(`Error ${error.code}: ${error.message}`));
   }
 
+  const openDrawer = () => dispatch(handleRightBar(true));
+
   const goAdmin = () => {
     dispatch(push('/administracion'))
   }
@@ -168,6 +192,10 @@ export default function NavBar() {
     dispatch(push('/horarioProfesor'))
   }
 
+  const goAdminProcesos = () => {
+    dispatch(push('/nuevoProceso'));
+  }
+
   return (
     <div className={classes.root}>
       <AppBar className={classes.appBar} position="static">
@@ -176,26 +204,42 @@ export default function NavBar() {
             alt="Italian Trulli" className={classes.logo}/>
           <Button onClick={goHome} color="inherit">
             <Typography variant="h6" className={classes.title}>
-              Planificación DIINF
+              {`Planificación Horarios DIINF `}
+              {
+                currentProceso.semestre >= 0 &&
+                `${currentProceso.semestre}/${currentProceso.año}`
+              }
             </Typography>
           </Button>
           <Typography variant="h6" className={classes.title}>
 
           </Typography>
-          {
+          {/*
             user.user.roles.includes('profe') &&
             <Button onClick={goMiHorario} color="inherit">Mi Horario</Button>
           }
           {
             user.user.roles.includes('admin') &&
-            <Button onClick={goAdmin} color="inherit">Administración</Button>
+            <>
+              <Button onClick={goAdminProcesos} color="inherit">Administración de procesos</Button>
+              <Button onClick={goAdmin} color="inherit">Administración de usuarios</Button>
+            </>
           }
-          {
+          {/*
             user.log?
             <Button onClick={handleLogout} color="inherit">Log out</Button>
             :
             <Button onClick={handleAuth} color="inherit">Login</Button>
-          }
+          */}
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="end"
+            onClick={openDrawer}
+            className={clsx(rightBar.open && classes.hide)}
+          >
+            <MenuIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
     </div>

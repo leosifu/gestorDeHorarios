@@ -7,11 +7,9 @@ import HTML5Backend from 'react-dnd-html5-backend'
 
 import HorarioGeneral from './horarioGeneral'
 
-const VerHorario = ({nivel, user, currentProceso, userRedux, dontDrag, verTope, }) => {
+const VerHorario = ({nivel, user, currentProceso, userRedux, dontDrag, verTope, topes, carreraId, niveles, setNivel, }) => {
 
   const [state, setState] = useState([])
-
-  const [topes, setTopes] = useState(false)
 
   const widthHorario = verTope ? '100%' : '82%';
 
@@ -20,7 +18,9 @@ const VerHorario = ({nivel, user, currentProceso, userRedux, dontDrag, verTope, 
       <Grid item xs={12}>
         <div style={{position:'absolute', opacity: 1, width: widthHorario, zIndex: 0}}>
           <HorarioGeneral nivel={nivel} user={userRedux.user} currentProceso={currentProceso}
-            userRedux={userRedux} dontDrag={dontDrag} verTope={verTope}/>
+            userRedux={userRedux} dontDrag={dontDrag} topes={topes} verTope={verTope} carreraId={carreraId}
+            niveles={niveles} setNivel={setNivel}
+          />
         </div>
       </Grid>
     </DndProvider>

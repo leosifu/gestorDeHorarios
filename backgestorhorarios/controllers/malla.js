@@ -4,6 +4,7 @@ const Historial = require('../models').Historial
 const Coordinacion = require('../models').Coordinacion
 const Proceso = require('../models').Proceso
 const Carrera = require('../models').Carrera
+const NewCarrera = require('../models').NewCarrera
 
 module.exports = {
   createMalla(req,res){
@@ -52,38 +53,59 @@ module.exports = {
       .then(malla => res.status(201).send(malla))
       .catch(error=> res.status(400).send(error))
   },
-  findMallaById(req,res){
-    const {mallaId, procesoId} = req.params;
-    return Malla
-      .findAll({
-        where: {id:mallaId},
+  async findMallaById(req,res){
+    try {
+      const {carreraId, procesoId} = req.params;
+      const carrera = await NewCarrera
+      .findOne({
+        where: {id:carreraId},
         include: [{
           model:Asignatura,
           as:'asignaturas',
-        }, {
-          model: Carrera,
-          as: 'Carrera'
         }]
-      })
-      .then(malla =>{
-        if (!malla) {
-          return res.status(404).send({message: 'Malla no encontrada'})
-        }
-        const asignaturas = malla[0].dataValues.asignaturas
-        var niveles = []
-        for (var i = 1; i <= malla[0].dataValues.n_niveles; i++) {
-          var algo1 = asignaturas.filter(asignatura=>asignatura.InfoAsignatura.dataValues.nivel == i)
-          var obj = {"nivel": i, asignaturas: algo1}
-          niveles.push(obj)
-        }
-        malla[0].dataValues["niveles"] = niveles
-        delete malla[0].dataValues.asignaturas
-        return (res.json(malla))
-      })
-      .catch(error=> {
-        console.log(error);
-        return res.status(400).send(error)
-      })
+      });
+      console.log(carrera);
+      const asignaturas = carrera.dataValues.asignaturas
+      let niveles = [];
+      for (var i = 1; i <= carrera.dataValues.n_niveles; i++) {
+        var algo1 = asignaturas.filter(asignatura=>asignatura.InfoAsignatura.dataValues.nivel == i)
+        var obj = {"nivel": i, asignaturas: algo1}
+        niveles.push(obj)
+      }
+      carrera.dataValues["niveles"] = niveles
+      delete carrera.dataValues.asignaturas
+      return (res.json(carrera))
+    } catch (error) {
+      console.log(error);
+      return res.status(400).send(error)
+    }
+    // return NewCarrera
+    //   .findAll({
+    //     where: {id:carreraId},
+    //     include: [{
+    //       model:Asignatura,
+    //       as:'asignaturas',
+    //     }]
+    //   })
+    //   .then(malla => {
+    //     if (!malla) {
+    //       return res.status(404).send({message: 'Malla no encontrada'})
+    //     }
+    //     const asignaturas = malla[0].dataValues.asignaturas
+    //     var niveles = []
+    //     for (var i = 1; i <= malla[0].dataValues.n_niveles; i++) {
+    //       var algo1 = asignaturas.filter(asignatura=>asignatura.InfoAsignatura.dataValues.nivel == i)
+    //       var obj = {"nivel": i, asignaturas: algo1}
+    //       niveles.push(obj)
+    //     }
+    //     malla[0].dataValues["niveles"] = niveles
+    //     delete malla[0].dataValues.asignaturas
+    //     return (res.json(malla))
+    //   })
+    //   .catch(error=> {
+    //     console.log(error);
+    //     return res.status(400).send(error)
+    //   })
   },
   findMallaByAño(req, res){
     const {id, año, semestre} = req.params

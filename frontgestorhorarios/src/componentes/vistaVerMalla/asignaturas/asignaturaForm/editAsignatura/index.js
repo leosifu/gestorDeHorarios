@@ -17,14 +17,17 @@ const MallaSelector = createSelector(
 );
 
 function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado, user,
-  estadoM, setEstadoM, }){
+  estadoM, setEstadoM, carreraId, }){
 
   const dispatch = useDispatch();
 
   const malla = useSelector(MallaSelector);
+  console.log(infoAsignatura);
+  console.log(asignatura);
 
   function onSubmitForm(state) {
     dispatch(setLoading(true));
+    console.log(state);
     if (!state.cod_asignatura.value || !state.nombre_asignatura.value ||
       (!state.nivel.value || state.nivel.value < 0) ||
       (state.tel_T.value + state.tel_E.value + state.tel_L.value < 1)) {
@@ -43,7 +46,7 @@ function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado,
         tel_L: parseInt(state.tel_L.value),
         lab_independiente: state.lab_independiente.checked,
         nivel: state.nivel.value,
-        mallaId: malla.id,
+        carreraId: carreraId,
       }
       const historial = {
         cupos_pasados: state.cupos_pasados.value || 0,
@@ -51,7 +54,7 @@ function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado,
         desinscripciones: state.desinscripciones.value || 0
       }
       axios.all([
-        clientAxios(user.idToken).put(`/api/asignatura/${asignatura.id}/${malla.id}`, data),
+        clientAxios(user.idToken).put(`/api/asignatura/${asignatura.id}/${carreraId}`, data),
         clientAxios(user.idToken).put(`/api/historial/${asignatura.id}`, historial)
       ])
       .then(axios.spread((data1, data2)=>{
@@ -82,10 +85,10 @@ function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado,
     tel_T: asignatura.tel_T,
     tel_E: asignatura.tel_E,
     tel_L: asignatura.tel_L,
-    cupos_pasados: asignatura.historial.cupos_pasados,
-    tasa_reprobacion: asignatura.historial.tasa_reprobacion,
-    desinscripciones: asignatura.historial.desinscripciones,
-    lab_independiente: asignatura.lab_independiente,
+    cupos_pasados: asignatura?.historial.cupos_pasados,
+    tasa_reprobacion: asignatura?.historial.tasa_reprobacion,
+    desinscripciones: asignatura?.historial.desinscripciones,
+    lab_independiente: asignatura?.lab_independiente,
     nivel: infoAsignatura.nivel
   }
 
@@ -102,7 +105,7 @@ function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado,
     })
     .then(result=>{
       if (result.value) {
-        clientAxios(user.idToken).delete(`/api/infoAsignatura/${malla.id}/${asignatura.id}`)
+        clientAxios(user.idToken).delete(`/api/infoAsignatura/${carreraId}/${asignatura.id}`)
         .then(res => {
           setEdit(false)
           setEstadoM(!estadoM)

@@ -13,6 +13,7 @@ import { createSelector } from 'reselect';
 import {setMallaRedux, setLoading, handleNotifications, } from '../../../redux/actions';
 
 import Asignatura from './asignatura';
+import DialogAsignatura from '../dialogs/dialogAsignatura';
 
 const useStyles = makeStyles({
   root: {
@@ -25,8 +26,8 @@ const useStyles = makeStyles({
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
     position:'static',
-
-    overflowY: 'scroll',
+    // overflowY: 'hidden',
+    height: '100%',
 
 
   },
@@ -69,7 +70,7 @@ function VerMalla(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const {mallaId} = useParams();
+  const {carreraId} = useParams();
   const userRedux = useSelector(UserSelector);
   const currentProceso = useSelector(ProcesoSelector);
   const user = userRedux.user;
@@ -89,10 +90,11 @@ function VerMalla(props) {
   useEffect(()=>{
     dispatch(setLoading(true));
     if (currentProceso.id !== -1) {
-      clientAxios(user.idToken).get(`/api/malla/${mallaId}/${currentProceso.id}`)
+      clientAxios(user.idToken).get(`/api/carrera/${carreraId}/${currentProceso.id}`)
       .then(res => {
+        console.log(res);
         dispatch(setMallaRedux(res.data[0]));
-        setNiveles(res.data[0].niveles);
+        setNiveles(res.data.niveles);
         dispatch(setLoading(false))
       })
       .catch((error)=>{
@@ -104,15 +106,16 @@ function VerMalla(props) {
         ));
       })
     }
-  },[estado, mallaId, currentProceso])
+  },[estado, carreraId, currentProceso])
 
   useEffect(()=>{
     if (firstUpdate.current) {
       firstUpdate.current = false;
       return;
     }
-    clientAxios(user.idToken).get(`/api/asignaturaReq/${activo}/${mallaId}/${currentProceso.id}`)
+    clientAxios(user.idToken).get(`/api/asignaturaReq/${activo}/${carreraId}/${currentProceso.id}`)
     .then(res => {
+      console.log('qwe');
       setActivo(res.data[0].id)
       var req = res.data[0].requisitos.map(requisito => requisito.id)
       setRequisitos(req)
@@ -125,11 +128,11 @@ function VerMalla(props) {
         message: 'Ocurrió un error al cargar los requisitos'}
       ));
     })
-  },[activo])
+  }, [activo])
 
-  function handleClick1(event, algo){
-    event.preventDefault()
-    setActivo(algo)
+  const handleClick1 = (event, algo) => {
+    event.preventDefault();
+    setActivo(algo);
   }
 
   function handleClick2(event, algo){
@@ -138,7 +141,7 @@ function VerMalla(props) {
     if(algo === activo){
       return
     }
-    if (copiaRequisitos.indexOf(algo)===-1) {
+    if (copiaRequisitos.indexOf(algo) === -1) {
       copiaRequisitos.push(algo)
       const data = {
         asignaturaId: activo,
@@ -185,59 +188,65 @@ function VerMalla(props) {
   }
 
   return (
-    <Paper className={classes.root}>
-      <GridList className={classes.gridList} cols={4}>
-        {niveles && niveles.map(nivel => (
-            <div style={{height:590}} key={nivel.nivel}>
-              <GridListTile style={{ height: 'auto', overflow:'auto', padding:0 }}>
-                <Asignatura activo={activo} setActivo={setActivo} requisitos={requisitos}
-                  handleClick={edit===1?handleClick2:handleClick1} nivel={nivel.nivel}
-                  asignaturas={nivel.asignaturas} edit={edit} setEdit={setEdit}
-                  currentProceso={currentProceso} mallaId={mallaId} user={user}
-                  estado={estado} setEstado={setEstado} userRedux={userRedux}/>
-              </GridListTile>
-            </div>
-        ))
-      }
-      </GridList>
-      {
-        userRedux.status === 'login' &&
-        <>
-          {edit === 0 ?
-            <>
-              {
-                user.roles.includes('profe') &&
-                <Link style={{ textDecoration: 'none', color:'white' }} to={`/horarioProfesor`}>
-                  <Button variant="contained" color="primary" className={classes.button2}>
-                      Mi Horario
-                  </Button>
-                </Link>
-              }
-              {
-                currentProceso.estado === 'creating' ?
-                (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
-                <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${mallaId}`}>
-                  <Button variant="contained" color="primary" className={classes.button}>
-                      Horarios
-                  </Button>
-                </Link>
-                :
-                <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${mallaId}`}>
-                  <Button variant="contained" color="primary" className={classes.button}>
-                      Horarios
-                  </Button>
-                </Link>
-              }
-            </>
-            :
-            <Button variant="contained" color="primary" className={classes.button}
-              onClick={guardarRequisitos}>
-              Guardar Requisitos
-            </Button>
-          }
-        </>
-      }
-    </Paper>
+    <>
+      <DialogAsignatura user={user} userRedux={userRedux} currentProceso={currentProceso}
+        estadoM={estado} setEstadoM={setEstado} carreraId={carreraId}
+      />
+      <Paper className={classes.root}>
+        <GridList className={classes.gridList} cols={4}>
+          {niveles && niveles.map(nivel => (
+              <div style={{height: '100%'}} key={nivel.nivel}>
+                <GridListTile style={{ height: 'auto', overflow:'auto', padding:0 }}>
+                  <Asignatura activo={activo} setActivo={setActivo} requisitos={requisitos}
+                    handleClick={edit === 1 ? handleClick2 : handleClick1} nivel={nivel.nivel}
+                    asignaturas={nivel.asignaturas} edit={edit} setEdit={setEdit}
+                    currentProceso={currentProceso} carreraId={carreraId} user={user}
+                    estado={estado} setEstado={setEstado} userRedux={userRedux} carreraId={carreraId}
+                  />
+                </GridListTile>
+              </div>
+          ))
+        }
+        </GridList>
+        {
+          userRedux.status === 'login' &&
+          <>
+            {edit === 0 ?
+              <>
+                {/*
+                  user.roles.includes('profe') &&
+                  <Link style={{ textDecoration: 'none', color:'white' }} to={`/horarioProfesor`}>
+                    <Button variant="contained" color="primary" className={classes.button2}>
+                        Mi Horario
+                    </Button>
+                  </Link>
+                */}
+                {
+                  currentProceso.estado === 'creating' ?
+                  (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+                  <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${carreraId}`}>
+                    <Button variant="contained" color="primary" className={classes.button}>
+                        Horarios
+                    </Button>
+                  </Link>
+                  :
+                  <Link style={{ textDecoration: 'none', color:'white' }} to={`/horario/${carreraId}`}>
+                    <Button variant="contained" color="primary" className={classes.button}>
+                        Horarios
+                    </Button>
+                  </Link>
+                }
+              </>
+              :
+              <Button variant="contained" color="primary" className={classes.button}
+                onClick={guardarRequisitos}>
+                Guardar Requisitos
+              </Button>
+            }
+          </>
+        }
+      </Paper>
+    </>
   );
 }
 

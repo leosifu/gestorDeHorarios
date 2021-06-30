@@ -25,10 +25,10 @@ module.exports = {
         var data = {
           cod_asignatura: req.body.cod_asignatura,
           nombre_asignatura: req.body.nombre_asignatura,
-          mallaId: req.body.mallaId,
+          carreraId: req.body.carreraId,
           asignaturaId: asignatura.dataValues.id,
           nivel: req.body.nivel,
-          infoA_id: req.body.mallaId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
+          infoA_id: req.body.carreraId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
         }
         const NewInfoAsignatura = await InfoAsignatura.create(data)
         if (!NewInfoAsignatura) {
@@ -37,7 +37,7 @@ module.exports = {
         }
         const dataHistorial = {
           ...req.body.historial,
-          cupos_estimados: req.body.historial.cupos_pasados * req.body.historial.tasa_reprobacion/100,
+          cupos_estimados: Math.round(req.body.historial.cupos_pasados * req.body.historial.tasa_reprobacion/100),
           asignaturaId: asignatura.dataValues.id
         }
         const NewHistorial = await Historial.create(dataHistorial)
@@ -106,11 +106,11 @@ module.exports = {
       var tel_L = parseInt(req.body.tel_L)
       var infoA = {
         asignaturaId: req.params.aId,
-        mallaId: req.params.mId,
+        carreraId: req.params.carreraId,
         cod_asignatura: req.body.cod_asignatura,
         nombre_asignatura: req.body.nombre_asignatura,
         nivel: req.body.nivel,
-        infoA_id: req.params.mId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
+        infoA_id: req.params.carreraId + '~' + req.body.cod_asignatura + '~' + req.body.nombre_asignatura
       }
       return Asignatura
         .update({
@@ -121,10 +121,10 @@ module.exports = {
         },{
           where:{id:req.params.aId}
         })
-        .then(async asignatura=>{
+        .then(async asignatura => {
           var asignaturaAct = asignaturaPrevia[0].dataValues
           const UpdatedInfoAsignatura = await InfoAsignatura.update(infoA, {
-            where:{asignaturaId:req.params.aId, mallaId: req.params.mId}
+            where:{asignaturaId:req.params.aId, carreraId: req.params.carreraId}
           })
           if (!UpdatedInfoAsignatura) {
             asignatura.update({

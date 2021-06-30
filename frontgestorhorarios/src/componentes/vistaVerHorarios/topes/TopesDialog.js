@@ -41,18 +41,12 @@ const DialogTopesSelector = createSelector(
   dialogTopes => dialogTopes
 );
 
-const MallaSelector = createSelector(
-  state => state.malla,
-  malla => malla.malla
-);
-
-const TopesDialog = ({userRedux, numNiveles, currentProceso, }) => {
+const TopesDialog = ({userRedux, numNiveles, currentProceso, carrera, }) => {
 
   const classes = useStyles();
 
   const dispatch = useDispatch();
 
-  const malla = useSelector(MallaSelector);
   const dialogTopes = useSelector(DialogTopesSelector);
   const {open, data} = dialogTopes;
 
@@ -63,7 +57,7 @@ const TopesDialog = ({userRedux, numNiveles, currentProceso, }) => {
         <AppBar className={classes.appBar}>
           <Toolbar>
             <Typography variant="h6" className={classes.title}>
-              {`${malla.Carrera.nombre_carrera} ${malla.cod_malla} ${currentProceso.semestre}/${currentProceso.año}`}
+              {`${carrera.nombre} ${currentProceso.semestre}/${currentProceso.año}`}
             </Typography>
             <Button autoFocus color="inherit" onClick={() => dispatch(handleDialogTopes())}>
               Cerrar
@@ -71,7 +65,8 @@ const TopesDialog = ({userRedux, numNiveles, currentProceso, }) => {
           </Toolbar>
         </AppBar>
         <VistaTopes numNiveles={numNiveles} userRedux={userRedux} nivel={data.nivel}
-          currentProceso={currentProceso}/>
+          currentProceso={currentProceso} carreraId={carrera.id}
+        />
       </Dialog>
     </div>
   );

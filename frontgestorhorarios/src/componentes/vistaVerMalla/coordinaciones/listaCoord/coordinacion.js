@@ -38,6 +38,19 @@ const useStyles = makeStyles(theme => ({
     marginTop:'7%',
     marginLeft: '43%'
   },
+  miniTitle: {
+    fontWeight: 'bold',
+    marginRight: 5
+  },
+  dates: {
+    display: 'flex',
+    marginBottom: 10,
+    padding: 10,
+  },
+  profes: {
+    marginBottom: 10,
+    padding: 10,
+  },
 }));
 
 function Coordinacion({coordinacion, estado, setEstado, user, userRedux, currentProceso, }){
@@ -79,9 +92,14 @@ function Coordinacion({coordinacion, estado, setEstado, user, userRedux, current
         <Box className={classes.sector} borderRadius={1} boxShadow={2} key={coordinacion.id}>
           <Grid container>
             <Grid item xs={10}>
-              <Typography className={classes.campoDes}>
-                Código de la coordinación: {coordinacion.InfoCoordinacion.cod_coord}
-              </Typography>
+              <div className={classes.dates}>
+                <Typography className={classes.miniTitle}>
+                  {`Código de la coordinación:`}
+                </Typography>
+                <Typography >
+                  {`${coordinacion.InfoCoordinacion.cod_coord}`}
+                </Typography>
+              </div>
             </Grid>
             {
               userRedux.status === 'login' &&
@@ -93,22 +111,34 @@ function Coordinacion({coordinacion, estado, setEstado, user, userRedux, current
               </Grid>
             }
           </Grid>
-          <Typography className={classes.campoDes}>
-            Nombre de la coordinación: {coordinacion.InfoCoordinacion.nombre_coord}
-          </Typography>
-          <Typography className={classes.campoDes}>
-            Tipo: {coordinacion.tipo_coord}
-          </Typography>
-          <Typography className={classes.campoDes}>
-            Profesor Asignado:
+          <div className={classes.dates}>
+            <Typography className={classes.miniTitle}>
+              {`Nombre de la coordinación:`}
+            </Typography>
+            <Typography >
+              {`${coordinacion.InfoCoordinacion.nombre_coord}`}
+            </Typography>
+          </div>
+          <div className={classes.dates}>
+            <Typography className={classes.miniTitle}>
+              {`Tipo:`}
+            </Typography>
+            <Typography >
+              {`${coordinacion.tipo_coord}`}
+            </Typography>
+          </div>
+          <div className={classes.profes}>
+            <Typography className={classes.miniTitle}>
+              {`Profesor Asignado:`}
+            </Typography>
             {
               coordinacion.profesores.map(profesor =>
                 <div key={profesor.id}>
-                  {` ${profesor.name} ${profesor.lastName}\n`}
+                {` ${profesor.name} ${profesor.lastName}\n`}
                 </div>
               )
             }
-          </Typography>
+          </div>
         </Box>
       }
     </>

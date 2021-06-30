@@ -46,7 +46,7 @@ function Topes({topes, handleChange, niveles, selectNivel, }){
         // onChange={handleChange}
         input={<Input />}
         renderValue={(selected) => {
-          const selectsAux = selected.map(select => select + 1)
+          const selectsAux = selected.map(select => select)
           return ('Nivel ' + selectsAux.join(', '))
         }}
       >

@@ -5,7 +5,7 @@ import clientAxios from '../../../../config/axios';
 import update from 'immutability-helper'
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Table, TableCell, TableHead, TableRow, Paper, Grid, } from '@material-ui/core';
+import {Table, TableCell, TableHead, TableRow, Paper, Grid, FormControl, InputLabel, Select, } from '@material-ui/core';
 
 import { useDispatch, } from 'react-redux';
 import {setLoading, handleNotifications, } from '../../../../redux/actions';
@@ -28,6 +28,10 @@ const useStyles = makeStyles(theme => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
 }));
 
 const getRandomColor = () => "hsl(" + Math.random() * 360 + ", 100%, 75%)";
@@ -35,7 +39,7 @@ const getRandomColor = () => "hsl(" + Math.random() * 360 + ", 100%, 75%)";
 const dias = ['Hora', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
 
 function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, dontDrag, verTope,
-  selected, tope, }) {
+  selected, tope, niveles, nivel, setNivel, }) {
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -176,6 +180,23 @@ function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, d
         {
           !tope &&
           <Grid item xs={2} style={{zIndex: 30}}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel htmlFor="outlined-age-native-simple">Nivel Actual</InputLabel>
+              <Select
+                native
+                value={nivel}
+                onChange={e => setNivel(e.target.value)}
+                label="Nivel Actual"
+                inputProps={{
+                  name: 'age',
+                  id: 'outlined-age-native-simple',
+                }}
+              >
+                {niveles.map((nivelO, index) =>
+                  <option value={nivelO.nivel}>{`Ǹivel ${nivelO.nivel}`}</option>
+                )}
+              </Select>
+            </FormControl>
             <ListaAsignaturas asignaturas={asignaturas} data={data} dropLista={dropLista}
               userRedux={userRedux} handleMostrarCoordinacion={handleMostrarCoordinacion}/>
           </Grid>

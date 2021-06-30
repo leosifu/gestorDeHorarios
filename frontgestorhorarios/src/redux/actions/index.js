@@ -8,3 +8,6 @@ export * from './dialogUpdateProcesoActions';
 export * from './dialogInfoCoordinacionActions';
 export * from './dialogTopesActions';
 export * from './notificationsActions';
+export * from './dialogCarreraActions';
+export * from './dialogAsignaturaActions';
+export * from './rightBarActions';

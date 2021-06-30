@@ -1,4 +1,4 @@
-const carreraController = require('../controllers').carrera
+const carreraController = require('../controllers').newcarrera
 const mallaController = require('../controllers').malla
 const asignaturaController = require('../controllers').asignatura
 const historialController = require('../controllers').historial
@@ -25,6 +25,7 @@ module.exports = (app) => {
   //API carrera
   app.get('/api/carreras', verify('admin', 'coordinador'), carreraController.findCarreras)
   app.get('/api/carrera/:procesoId', checkProceso(), carreraController.findAllCarrerasByProceso)
+  app.get('/api/carrera/:carreraId/:procesoId', checkProceso(), carreraController.getAsignaturasByCarrera)
   // app.get('/api/carrera/:id', carreraController.findByCarreraId)
   app.post('/api/carrera', verify('admin', 'coordinador'), carreraController.createCarrera)
   app.put('/api/carrera/:id', verify('admin', 'coordinador'), carreraController.updateCarrera)
@@ -34,21 +35,21 @@ module.exports = (app) => {
   // app.get('/api/malla', mallaController.findAll)
   app.get('/api/mallas/:id', verify('admin', 'coordinador'), mallaController.findMallas)
   // app.get('/api/mallas/:id/:año/:semestre', mallaController.findMallaByAño)
-  app.get('/api/malla/:mallaId/:procesoId', checkProceso(), mallaController.findMallaById)
+  app.get('/api/malla/:carreraId/:procesoId', checkProceso(), mallaController.findMallaById)
   app.post('/api/malla', verify('admin', 'coordinador'), mallaController.createMalla)
   app.put('/api/malla/:id', verify('admin', 'coordinador'), mallaController.updateMalla)
   app.delete('/api/malla/:mallaId', verify('admin', 'coordinador'), mallaController.deleteMalla)
 
   //API infoAsignatura
-  app.get('/api/asignatura/:mallaId/:nivel/:procesoId', checkProceso(), verify(),
+  app.get('/api/asignatura/:carreraId/:nivel/:procesoId', checkProceso(), verify(),
     infoasignaturaController.findAsignaturasByNivel)
-  app.get('/api/asignaturaInfo/:mallaId/:aId/:procesoId', checkProceso(),
+  app.get('/api/asignaturaInfo/:carreraId/:aId/:procesoId', checkProceso(),
     infoasignaturaController.findAsignatura)
   app.post('/api/infoAsignatura', verify('admin', 'coordinador'),
     infoasignaturaController.createInfoAsignatura)
-  app.get('/api/asignaturas/:id', verify('admin', 'coordinador'),
+  app.get('/api/asignaturas/:carreraId', verify('admin', 'coordinador'),
     infoasignaturaController.findAsignaturas)
-  app.delete('/api/infoAsignatura/:mallaId/:asignaturaId', verify('admin', 'coordinador'),
+  app.delete('/api/infoAsignatura/:carreraId/:asignaturaId', verify('admin', 'coordinador'),
     infoasignaturaController.deleteAsignaturaFromMalla)
 
   //API asignatura
@@ -56,7 +57,7 @@ module.exports = (app) => {
   app.get('/api/asignaturaReq/:id/:mallaId/:procesoId', checkProceso(),
     asignaturaController.getRequisitos)
   app.post('/api/asignatura', verify('admin', 'coordinador'), asignaturaController.createAsignatura)
-  app.put('/api/asignatura/:aId/:mId', verify('admin', 'coordinador'),
+  app.put('/api/asignatura/:aId/:carreraId', verify('admin', 'coordinador'),
     asignaturaController.updateAsignatura)
 
   //Api dependencia

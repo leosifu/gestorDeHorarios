@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function CrearAsignatura({open, setOpen, estado, setEstado, nivel, mallaId, user, }){
+function CrearAsignatura({open, setOpen, estado, setEstado, nivel, carreraId, user, }){
 
   const classes = useStyles();
 
@@ -56,7 +56,7 @@ function CrearAsignatura({open, setOpen, estado, setEstado, nivel, mallaId, user
           Crear Asignatura
         </DialogTitle>
         <Eleccion open={open} setOpen={setOpen} nivel={nivel} estado={estado} setEstado={setEstado}
-          mallaId={mallaId} user={user}/>
+          carreraId={carreraId} user={user}/>
       </Dialog>
     </React.Fragment>
   );

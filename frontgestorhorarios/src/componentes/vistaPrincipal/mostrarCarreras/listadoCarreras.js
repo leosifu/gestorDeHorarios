@@ -126,7 +126,7 @@ export default function ListadoCarreras(){
             {
               currentProceso.semestre !== -1 &&
               <Typography>
-                `Semestre ${currentProceso.semestre}/${currentProceso.año}`
+                {`Semestre ${currentProceso.semestre}/${currentProceso.año}`}
               </Typography>
             }
 

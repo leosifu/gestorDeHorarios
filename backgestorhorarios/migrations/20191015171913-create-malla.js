@@ -39,7 +39,7 @@ module.exports = {
           key: 'id',
           as: 'procesoId'
         }
-      }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

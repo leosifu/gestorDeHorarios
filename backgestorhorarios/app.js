@@ -3,7 +3,7 @@ const http = require('http');
 
 var models = require("./models")
 models.sequelize.sync().then(function(){
-    console.log("Conecta2");
+    console.log("Conecta3");
 }).catch(function(error){
   console.log(error);
   console.log("Problemas al conectar con la DB");

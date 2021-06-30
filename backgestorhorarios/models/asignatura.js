@@ -16,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Asignatura.associate = function(models) {
     // associations can be defined here
-    Asignatura.belongsToMany(models.Malla,{
+    Asignatura.belongsToMany(models.NewCarrera,{
       through: models.InfoAsignatura,
       foreignKey: 'asignaturaId',
-      as: 'mallas'
+      as: 'carreras'
     })
     /*Asignatura.hasMany(models.Coordinacion,{
       foreignKey: 'asignaturaId',

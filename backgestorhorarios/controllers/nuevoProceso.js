@@ -1,4 +1,5 @@
 const Malla = require('../models').Malla
+const NewCarrera = require('../models').NewCarrera
 const InfoAsignatura = require('../models').InfoAsignatura
 const Asignatura = require('../models').Asignatura
 const Historial = require('../models').Historial
@@ -16,8 +17,8 @@ const _ = require('lodash');
 module.exports = {
   async createProceso(req, res){
     try {
-      const Mallas = await Malla.findAll({
-        where: {id: req.body.mallas},
+      const NewCarreras = await NewCarrera.findAll({
+        where: {id: req.body.carreras},
         include: [{model: Asignatura, as: 'asignaturas',
           include: [{model:Asignatura, as:'requisitos'},
             {model:Coordinacion, as:'coordinaciones',
@@ -25,22 +26,20 @@ module.exports = {
             {model:Historial, as:'historial'}]
         }]
       })
-      const MallasDataValues = Mallas.map(malla=>malla.dataValues)
+      const NewCarrerasDataValues = NewCarreras.map(malla=>malla.dataValues)
       // console.log(MallasDataValues);
-      const MallasData = MallasDataValues.map(malla=>({
-        cod_malla: malla.cod_malla,
-        fecha_resolucion: malla.fecha_resolucion,
-        n_niveles: malla.n_niveles,
-        carreraId: malla.carreraId,
-        cod_resolucion: malla.cod_resolucion,
+      const NewCarrerasData = NewCarrerasDataValues.map(carrera => ({
+        nombre: carrera.nombre,
+        jornada: carrera.jornada,
+        año: carrera.año,
+        n_niveles: carrera.n_niveles,
         // procesoId: NuevoProcesoValues.id
         procesoId: req.body.procesoId
       }))
       // console.log(MallasData);
-      const NuevasMallas = await Malla.bulkCreate(MallasData)
-      const NuevasMallasData = NuevasMallas.map(malla=>malla.dataValues)
-      const AsignaturasByMalla = Mallas.map(malla=>malla.dataValues.asignaturas.map(asignatura=>
-        asignatura.dataValues))
+      const NuevasCarreras = await NewCarrera.bulkCreate(NewCarrerasData)
+      const NuevasCarrerasData = NuevasCarreras.map(carrera => carrera.dataValues)
+      const AsignaturasByMalla = NewCarreras.map(carrera => carrera.dataValues.asignaturas.map(asignatura => asignatura.dataValues));
 
       //Cear Asignaturas
       const Asignaturas = [].concat(...AsignaturasByMalla);
@@ -109,11 +108,11 @@ module.exports = {
       //Crear InfoAsignaturas
       const InfoAsignaturas = Asignaturas.map(asignatura=>asignatura.InfoAsignatura.dataValues)
       const InfoAsignaturasData = InfoAsignaturas.map(infoA=>{
-        let mallaId = infoA.mallaId
-        let mallaFind = MallasDataValues.find(malla=>malla.id === mallaId)
-        let mallaIndex = MallasDataValues.indexOf(mallaFind)
-        let newMalla = NuevasMallasData[mallaIndex]
-        let nuevaMallaId = newMalla.id
+        let carreraId = infoA.carreraId
+        let carreraFind = NewCarrerasDataValues.find(malla=>malla.id === carreraId)
+        let carreraIndex = NewCarrerasDataValues.indexOf(carreraFind)
+        let newCarrera = NuevasCarrerasData[carreraIndex]
+        let nuevaCarreraId = newCarrera.id
 
         let asignaturaId = infoA.asignaturaId
         let asignaturaFind = Asignaturas.find(asignatura=>asignatura.id === asignaturaId)
@@ -121,12 +120,12 @@ module.exports = {
         let newAsignatura = NuevasAsignaturasData[asignaturaIndex]
         let newAsignaturaId = newAsignatura.id
         return ({
-          mallaId: nuevaMallaId,
+          carreraId: nuevaCarreraId,
           asignaturaId: newAsignaturaId,
           cod_asignatura: infoA.cod_asignatura,
           nivel: infoA.nivel,
           nombre_asignatura: infoA.nombre_asignatura,
-          infoA_id: nuevaMallaId + '~' + infoA.cod_asignatura + '~' + infoA.nombre_asignatura
+          infoA_id: nuevaCarreraId + '~' + infoA.cod_asignatura + '~' + infoA.nombre_asignatura
         })
       })
       const InfoAsignaturasDataFiltered = _.uniqWith(InfoAsignaturasData, _.isEqual);
@@ -253,9 +252,10 @@ module.exports = {
       const NuevasAsignacionesData = NuevasAsignaciones.map(asignacion => asignacion =>
         asignacion.dataValues)
 
-      return res.status(201).send(NuevasMallas)
+      return res.status(201).send(NuevasCarreras)
     } catch (e) {
       console.log(e);
+      return res.status(400).send(e);
     }
     // const NuevoProceso = await Proceso.create({
     //   año: req.body.año,

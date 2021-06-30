@@ -1,4 +1,5 @@
 const carrera = require('./carrera')
+const newcarrera = require('./newcarrera')
 const malla = require('./malla')
 const asignatura = require('./asignatura')
 const dependencia = require('./dependencia')
@@ -23,5 +24,6 @@ module.exports = {
   bloque,
   nuevoProceso,
   usuario,
-  proceso
+  proceso,
+  newcarrera
 }

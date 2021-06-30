@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import store, {history} from './redux/store';
 
+import VistaPrincipal from './componentes/vistaPrincipal/VistaPrincipal';
 import VistaVerHorarios from './componentes/vistaVerHorarios/VistaVerHorarios'
 import App from './App'
 import ListadoCarreras from './componentes/vistaPrincipal/mostrarCarreras/listadoCarreras'
@@ -19,9 +20,9 @@ const AppRoutes = () =>
     <ConnectedRouter history={history}>
       <App>
         <Switch>
-          <Route exact path="/" component={ListadoCarreras}/>
-          <Route exact path="/horario/:mallaId" component={VistaVerHorarios} />
-          <Route exact path="/malla/:mallaId" component={VerMalla} />
+          <Route exact path="/" component={VistaPrincipal}/>
+          <Route exact path="/horario/:carreraId" component={VistaVerHorarios} />
+          <Route exact path="/malla/:carreraId" component={VerMalla} />
           {/*<Route exact path="/procesos/:carreraId" component={Procesos} />*/}
           <Route exact path="/nuevoProceso" component={NuevoProceso} />
           <Route exact path="/administracion" component={Administracion} />

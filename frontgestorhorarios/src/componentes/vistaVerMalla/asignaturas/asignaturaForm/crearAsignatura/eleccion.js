@@ -18,7 +18,7 @@ const MallaSelector = createSelector(
   malla => malla.malla
 );
 
-const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel, user, }) =>{
+const Eleccion = ({open, setOpen, estado, setEstado, carreraId, nivel, user, }) =>{
 
   const dispatch = useDispatch();
   const malla = useSelector(MallaSelector);
@@ -54,13 +54,15 @@ const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel, user, }) =>
         tel_L: parseInt(state.tel_L.value),
         nivel: nivel,
         lab_independiente: state.lab_independiente.checked,
-        mallaId: mallaId,
+        carreraId: carreraId,
         historial: {
           cupos_pasados: state.cupos_pasados.value || 0,
           tasa_reprobacion: state.tasa_reprobacion.value || 0,
           desinscripciones: state.desinscripciones.value || 0
         }
       }
+      // console.log(data);
+      // dispatch(setLoading(false))
       clientAxios(user.idToken).post(`/api/asignatura`, data)
       .then(res => {
         console.log(res.data);
@@ -104,7 +106,7 @@ const Eleccion = ({open, setOpen, estado, setEstado, mallaId, nivel, user, }) =>
   }
   else if (eleccion === 2) {
     return(
-      <AsignarAsignatura nivel={nivel} mallaId={mallaId} estado={estado} setEstado={setEstado}
+      <AsignarAsignatura nivel={nivel} carreraId={carreraId} estado={estado} setEstado={setEstado}
         open={open} setOpen={setOpen} user={user}/>
     )
   }

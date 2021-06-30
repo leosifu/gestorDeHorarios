@@ -23,14 +23,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, user, }){
+function AsignarAsignatura({nivel, carreraId, estado, setEstado, open, setOpen, user, }){
 
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [carrera, setCarrera] = useState(0);
-  const [malla, setMalla] = useState(0)
-  const [asignatura, setAsignatura] = useState(0)
+  const [carrera, setCarrera] = useState(-1);
+  const [malla, setMalla] = useState(-1)
+  const [asignatura, setAsignatura] = useState(-1)
   const [asignaturaCod, setAsignaturaCod] = useState(0)
   const [asignaturaNombre, setAsignaturaNombre] = useState('')
 
@@ -41,12 +41,12 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, us
   const handleChangeCarrera = event => {
     setCarrera(event.target.value);
     setMalla(0)
-    setAsignatura(0)
+    setAsignatura(-1)
   };
 
   const handleChangeMalla = event => {
     setMalla(event.target.value);
-    setAsignatura(0)
+    setAsignatura(-1)
   };
 
   const handleChangeAsignatura = event => {
@@ -68,13 +68,14 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, us
     else {
       const data = {
         asignaturaId: asignatura,
-        mallaId: mallaId,
         nombre_asignatura: state.nombre_asignatura.value,
+        carreraId: carreraId,
         cod_asignatura: state.cod_asignatura.value,
         nivel: nivel
       }
+      console.log(data);
       clientAxios(user.idToken).post(`/api/infoAsignatura`, data)
-      .then(res=>{
+      .then(res => {
         setEstado(!estado);
         setOpen(false);
         dispatch(setLoading(false));
@@ -94,12 +95,14 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, us
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
+
     dispatch(setLoading(true));
     clientAxios(user.idToken).get('/api/carreras')
-    .then(res=>{
+    .then(res => {
       console.log(res.data);
-      setCarreras(res.data);
+      console.log(carreraId);
+      setCarreras(res.data.filter(carrera => parseInt(carrera.id) !== parseInt(carreraId)));
       dispatch(setLoading(false));
     })
     .catch(error=>{
@@ -110,43 +113,45 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, us
         message: 'Ocurrió un error al cargar las carreras'}
       ));
     })
-  }, [])
+  }, [open]);
 
-  useEffect(()=>{
-    dispatch(setLoading(true));
-    clientAxios(user.idToken).get(`/api/mallas/${carrera}`)
-    .then(res=>{
-      console.log(res.data);
-      setMallas(res.data);
-      dispatch(setLoading(false));
-    })
-    .catch(error=>{
-      console.log(error);
-      dispatch(setLoading(false))
-      dispatch(handleNotifications(true, {
-        status: 'error',
-        message: 'Ocurrió un error al cargar las mallas'}
-      ));
-    })
+  // useEffect(() => {
+  //   dispatch(setLoading(true));
+  //   clientAxios(user.idToken).get(`/api/mallas/${carrera}`)
+  //   .then(res=>{
+  //     console.log(res.data);
+  //     setMallas(res.data);
+  //     dispatch(setLoading(false));
+  //   })
+  //   .catch(error=>{
+  //     console.log(error);
+  //     dispatch(setLoading(false))
+  //     dispatch(handleNotifications(true, {
+  //       status: 'error',
+  //       message: 'Ocurrió un error al cargar las mallas'}
+  //     ));
+  //   })
+  // }, [carrera])
+
+  useEffect(() => {
+    if (carrera > -1) {
+      dispatch(setLoading(true));
+      clientAxios(user.idToken).get(`/api/asignaturas/${carrera}`)
+      .then(res => {
+        console.log(res.data);
+        setAsignaturas(res.data);
+        dispatch(setLoading(false));
+      })
+      .catch(error=>{
+        console.log(error);
+        dispatch(setLoading(false))
+        dispatch(handleNotifications(true, {
+          status: 'error',
+          message: 'Ocurrió un error al cargar las asignaturas'}
+        ));
+      })
+    }
   }, [carrera])
-
-  useEffect(()=>{
-    dispatch(setLoading(true));
-    clientAxios(user.idToken).get(`/api/asignaturas/${malla}`)
-    .then(res=>{
-      console.log(res.data);
-      setAsignaturas(res.data);
-      dispatch(setLoading(false));
-    })
-    .catch(error=>{
-      console.log(error);
-      dispatch(setLoading(false))
-      dispatch(handleNotifications(true, {
-        status: 'error',
-        message: 'Ocurrió un error al cargar las asignaturas'}
-      ));
-    })
-  }, [malla])
 
   var camposAsignatura = {
     cod_asignatura: asignaturaCod,
@@ -170,13 +175,13 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, us
           </MenuItem>
           {
             carreras.map(carrera=>(
-              <MenuItem value={carrera.id}>{carrera.nombre_carrera}</MenuItem>
+              <MenuItem value={carrera.id}>{carrera.nombre}</MenuItem>
             ))
           }
         </Select>
       </FormControl>
-      {
-        (carrera!==0)?
+      {/*
+        carrera !== 0 &&
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Malla
@@ -197,10 +202,9 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, us
               }
             </Select>
           </FormControl>
-        :<div/>
-      }
+      */}
       {
-        (malla!==0)?
+        carrera > -1 &&
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Asignatura
@@ -215,16 +219,15 @@ function AsignarAsignatura({nivel, mallaId, estado, setEstado, open, setOpen, us
                 <em>Seleccione Asignatura</em>
               </MenuItem>
               {
-                asignaturas.map(asignatura=>(
+                asignaturas?.map(asignatura =>
                   <MenuItem value={asignatura.asignaturaId}>{asignatura.nombre_asignatura}</MenuItem>
-                ))
+                )
               }
             </Select>
           </FormControl>
-        :<div/>
       }
       {
-        (asignatura!==0)&&
+        asignatura > -1 &&
         <AsignarAsignaturaCampos camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} />
       }
     </>

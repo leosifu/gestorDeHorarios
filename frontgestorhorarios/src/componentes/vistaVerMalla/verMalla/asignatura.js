@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleClick,
-  edit, setEdit, activo, setActivo, mallaId, user, currentProceso, userRedux, }) {
+  edit, setEdit, activo, setActivo, mallaId, user, currentProceso, userRedux, carreraId, }) {
 
   const classes = useStyles();
 
@@ -65,14 +65,14 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleCl
       <Typography color="textSecondary" style={{position:'sticky'}} align="center">
         Nivel: {nivel}
       </Typography>
-      {asignaturas.map(asignatura=>(
+      {asignaturas.map(asignatura => (
         <Card className={classes.card} key={asignatura.id} style={ borde(asignatura.id) }>
           <CardContent style={{paddingLeft:0, paddingRight: 0}}>
             <Grid container style={{paddingLeft:16, paddingRight: 16}}>
               <Grid item xs={11}>
                 <Typography className={classes.title} color="textSecondary" align="center"
                   onClick={event => {return handleClick(event, asignatura.id)}}>
-                  Código: {asignatura.InfoAsignatura.cod_asignatura}
+                  Código: {asignatura.InfoAsignatura?.cod_asignatura}
                 </Typography>
               </Grid>
               <Grid item xs={1}>
@@ -80,13 +80,15 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleCl
                   <VerAsignatura cod_asignatura={asignatura.InfoAsignatura.cod_asignatura}
                     asignaturaId={asignatura.id} edit={edit} setEdit={setEdit}
                     activo={activo} setActivo={setActivo} user={user} userRedux={userRedux}
-                    currentProceso={currentProceso} estadoM={estado} setEstadoM={setEstado}/>
+                    currentProceso={currentProceso} estadoM={estado} setEstadoM={setEstado}
+                    carreraId={carreraId}
+                  />
                 }
               </Grid>
             </Grid>
             <Typography align="center" style={{fontSize:14, color: '#EA7600', height: 110}}
               onClick={event => {return handleClick(event, asignatura.id)}}>
-              {asignatura.InfoAsignatura.nombre_asignatura}
+              {asignatura.InfoAsignatura?.nombre_asignatura}
             </Typography>
           </CardContent>
         </Card>
@@ -97,7 +99,7 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleCl
         <Card className={classes.card} style={{ display:'flex', justifyContent:'center' }}>
           <Box borderRadius="50%" border={1} className={classes.oval}>
             <CrearAsignatura nivel={nivel} open={open} setOpen={setOpen} estado={estado}
-              setEstado={setEstado} mallaId={mallaId} user={user}/>
+              setEstado={setEstado} carreraId={carreraId} user={user}/>
           </Box>
         </Card>
         :

@@ -8,7 +8,7 @@ import clientAxios from '../../../../config/axios'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect'
-import {setLoading, handleNotifications, } from '../../../../redux/actions'
+import {setLoading, handleNotifications, handleDialogAsignatura, } from '../../../../redux/actions'
 
 import TabsAsignatura from './tabs'
 
@@ -24,7 +24,7 @@ const MallaSelector = createSelector(
 )
 
 const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, setActivo,
-  mallaId, user, currentProceso, userRedux, estadoM, setEstadoM, }) =>{
+  mallaId, user, currentProceso, userRedux, estadoM, setEstadoM, carreraId, }) =>{
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -34,32 +34,8 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
   const [anchorEl, setAnchorEl] = useState(null);
   const open2 = Boolean(anchorEl);
 
-  const [estado, setEstado] = useState(false)
-
-  const [asignatura, setAsignatura] = useState([])
-  const [infoAsignatura, setInfoAsignatura] = useState({})
-
-  useEffect(()=>{
-    dispatch(setLoading(true));
-    clientAxios(user.idToken)
-    .get(`/api/asignaturaInfo/${malla.id}/${asignaturaId}/${currentProceso.id}`)
-    .then(res => {
-      setInfoAsignatura(res.data)
-      setAsignatura(res.data.Asignatura)
-      dispatch(setLoading(false))
-    })
-    .catch((error)=>{
-      console.log(error);
-      dispatch(setLoading(false))
-      dispatch(handleNotifications(true, {
-        status: 'error',
-        message: 'Ocurrió un error al cargar la asignatura'}
-      ));
-    })
-  },[estado])
-
   const handleClickMenu = event => {
-    setActivo(asignatura.id)
+    setActivo(asignaturaId);
     setAnchorEl(event.currentTarget);
   };
 
@@ -69,7 +45,11 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
 
   const handleClickOpen = () => {
     setAnchorEl(null);
-    setOpen(true);
+    const data = {
+      asignaturaId: asignaturaId
+    }
+    dispatch(handleDialogAsignatura(true, data));
+    // setOpen(true);
   };
 
   const handleClose = () => {
@@ -116,7 +96,7 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
           </MenuItem>
         }
       </Menu>
-      <Dialog
+      {/*<Dialog
         fullWidth={true}
         maxWidth={"sm"}
         open={open}
@@ -127,7 +107,7 @@ const VerAsignatura = ({cod_asignatura, asignaturaId, edit, setEdit, activo, set
        <TabsAsignatura infoAsignatura={infoAsignatura} asignatura={asignatura} estado={estado}
         setEstado={setEstado} user={user} userRedux={userRedux} currentProceso={currentProceso}
         estadoM={estadoM} setEstadoM={setEstadoM}/>
-      </Dialog>
+      </Dialog>*/}
     </>
   )
 }

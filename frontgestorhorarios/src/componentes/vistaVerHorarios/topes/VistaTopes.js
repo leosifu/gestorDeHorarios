@@ -13,11 +13,11 @@ import SelectTopes from './SelectTopes';
 const useStyles = makeStyles(theme => ({
   header: {
     paddingRight: 100,
-    paddingLeft: 100,
+    paddingLeft: 20,
   },
 }));
 
-const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, }) => {
+const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, carreraId, }) => {
 
   const classes = useStyles();
 
@@ -42,7 +42,7 @@ const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, }) => {
     else {
       topesAux.push(nivel);
     }
-    setTopes(topesAux)
+    setTopes(topesAux || [])
   };
 
   const selectNivel = nivel => {
@@ -67,7 +67,8 @@ const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, }) => {
       <Grid container>
         <Grid item xs={10}>
           <VerHorario nivel={nivel} user={userRedux.user} currentProceso={currentProceso}
-            userRedux={userRedux} verTope={true} dontDrag={true}/>
+            userRedux={userRedux} verTope={true} dontDrag={true} topes={topes} carreraId={carreraId}
+          />
         </Grid>
       </Grid>
       <Grid container>
@@ -75,7 +76,7 @@ const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, }) => {
         </Grid>
         <Grid item xs={10}>
           <DndProvider backend={HTML5Backend}>
-          {
+          {/*
             topes.map(niv=>
               <div style={{position:'absolute', opacity: 0.3, width:'100%', zIndex: 1}} key={'Niv' + niv}>
                 <HorarioGeneral nivel={niv} user={userRedux.user} currentProceso={currentProceso}
@@ -83,7 +84,7 @@ const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, }) => {
                   tope={true}/>
               </div>
             )
-          }
+          */}
           </DndProvider>
         </Grid>
       </Grid>

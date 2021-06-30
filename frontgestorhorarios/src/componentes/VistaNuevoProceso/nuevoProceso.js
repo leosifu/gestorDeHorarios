@@ -6,7 +6,7 @@ import clientAxios from '../../config/axios';
 import baseUrl from '../../config/urls';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Typography, Grid, } from '@material-ui/core';
+import {Typography, Grid, List, } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import PrimaryButton from '../utils/PrimaryButton';
@@ -24,6 +24,10 @@ import ProfesoresUploader from './profesoresUploader';
 const useStyles = makeStyles(theme => ({
   root: {
     margin: '100px 100px 100px 100px'
+  },
+  listaCarreras: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
   },
 }));
 
@@ -55,6 +59,7 @@ export default function NuevoProceso() {
 
   const [carrerasV, setCarrerasV] = useState([]);
   const [carrerasD, setCarrerasD] = useState([]);
+  const [carreras, setCarreras] = useState([]);
   const [procesoData, setProcesoData] = useState({
     año: 0,
     semestre: 0
@@ -73,35 +78,29 @@ export default function NuevoProceso() {
     else {
       setProcesoselects(currentProceso);
     }
-  }, [date])
+    dispatch(setLoading());
+  }, [date, procesos, currentProceso]);
 
   useEffect(() => {
-    if (currentProceso.id !== -1) {
-      clientAxios(user.idToken).get(`/api/carrera/${procesoselects.id}`)
-      .then(res1 => {
-        const carreras = res1.data
-        let vesp = []
-        let diur = []
-        let newSelect = [];
-        for (var i = 0; i < carreras.length; i++) {
-          newSelect.push({
-            nombre_carrera: carreras[i].nombre_carrera,
-            selects: []
-          });
-          if (carreras[i].jornada === "Vespertino") {
-            vesp.push(carreras[i])
-          }
-          else{
-            diur.push(carreras[i])
-          }
+    const fetchData = async () => {
+      try {
+        if (procesoselects.id !== -1) {
+          const {data} = await clientAxios(user.idToken).get(`/api/carrera/${procesoselects.id}`);
+          console.log(data);
+          setCarreras(data);
         }
-        setAllSelects(newSelect);
-        setCarrerasV(vesp);
-        setCarrerasD(diur);
-      })
+      } catch (e) {
+          console.log(e);
+      } finally {
+        dispatch(setLoading(false));
+      }
     }
-    dispatch(setLoading(false))
+    fetchData();
   }, [procesoselects]);
+
+  useEffect(() => {
+    console.log(allSelects);
+  }, [allSelects])
 
   if (userRedux.status !== 'login' || !user.roles.includes('admin')) {
     return (
@@ -113,7 +112,10 @@ export default function NuevoProceso() {
     setProcesoData({...procesoData, [event.target.id]: event.target.value})
   }
 
+
   const crearProceso = async () => {
+    console.log(procesoData);
+    console.log(allSelects);
     dispatch(setLoading(true));
     if (procesoData.año < 1 || procesoData.semestre < 1 || (!uploadFile)) {
       dispatch(setLoading(false));
@@ -145,7 +147,7 @@ export default function NuevoProceso() {
         console.log('pues aca igual...');
         const data = {
           procesoId: NuevoProceso.data.id,
-          mallas: mallasSelected
+          carreras: allSelects
         }
         console.log('todavia voy...');
         const DuplicarDatos = await clientAxios(user.idToken).post('/api/nuevoProceso', data);
@@ -156,7 +158,7 @@ export default function NuevoProceso() {
           status: 'success',
           message: 'Proceso creado correctamente'}
         ));
-        dispatch(push('/'))
+        dispatch(push('/'));
       } catch (e) {
         console.log(e);
         dispatch(setLoading(false));
@@ -203,23 +205,17 @@ export default function NuevoProceso() {
       <br />
       <Grid container>
         <Grid item xs={8}>
-          <Grid container>
-            {
-              carrerasD.map(carrera => (
-                <Grid item xs={4}>
-                  <ShowCarrera carrera={carrera} allSelects={allSelects}
-                    setAllSelects={setAllSelects} />
-                </Grid>
-              ))
-            }
-            {
-              carrerasV.map(carrera =>
-                <Grid item xs={4}>
-                  <ShowCarrera carrera={carrera} allSelects={allSelects}
-                    setAllSelects={setAllSelects} />
-                </Grid>
-              )
-            }
+          <Grid container justify="center">
+            <List dense className={classes.listaCarreras}>
+              {
+                carreras.map(carrera => (
+                  <Grid item xs={4}>
+                    <ShowCarrera carrera={carrera} allSelects={allSelects}
+                      setAllSelects={setAllSelects} />
+                  </Grid>
+                ))
+              }
+            </List>
           </Grid>
         </Grid>
         <Grid item xs={4}>

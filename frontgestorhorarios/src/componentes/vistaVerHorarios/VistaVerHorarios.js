@@ -75,7 +75,7 @@ const VistaVerHorarios = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const {mallaId} = useParams();
+  const {carreraId} = useParams();
   const userRedux = useSelector(UserSelector);
   const currentProceso = useSelector(ProcesoSelector);
   const user = userRedux.user;
@@ -90,13 +90,19 @@ const VistaVerHorarios = () => {
 
   const [numNiveles, setNumNiveles] = useState(0);
 
+  const [carrera, setCarrera] = useState({});
+
   useEffect(()=>{
     if (currentProceso.id !== -1) {
-      clientAxios(user.idToken).get(`/api/malla/${mallaId}/${currentProceso.id}`)
+      clientAxios(user.idToken).get(`/api/malla/${carreraId}/${currentProceso.id}`)
       .then(res => {
-        dispatch(setMallaRedux(res.data[0]));
-        var niveles = res.data[0].niveles
-        setNiveles(niveles)
+        console.log(res.data);
+        let carreraData = {...res.data};
+        delete carreraData.niveles;
+        setCarrera(carreraData);
+        // dispatch(setMallaRedux(res.data));
+        const niveles = res.data.niveles
+        setNiveles(niveles);
         setNumNiveles(niveles.length)
         var nivelC = []
         niveles.map(niv=>{nivelC.push(false)})
@@ -130,14 +136,16 @@ const VistaVerHorarios = () => {
   return (
     <div className={classes.root}>
 
-      <TopesDialog userRedux={userRedux} numNiveles={numNiveles} currentProceso={currentProceso}/>
+      <TopesDialog carrera={carrera} userRedux={userRedux} numNiveles={numNiveles} currentProceso={currentProceso}/>
 
-      <SideBar niveles={niveles} setNivel={setNivel} />
+      {/*<SideBar niveles={niveles} setNivel={setNivel} />*/}
 
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Grid container >
-            <VerHorario nivel={nivel} user={user} currentProceso={currentProceso} userRedux={userRedux} />
+            <VerHorario nivel={nivel} user={user} currentProceso={currentProceso} userRedux={userRedux}
+              carreraId={carreraId} niveles={niveles} nivel={nivel} setNivel={setNivel}
+            />
             {/*<DndProvider backend={HTML5Backend}>
               <Grid item xs={12}>
                 <div style={{position:'absolute', opacity: 1, width: '82%', zIndex: 0}}>

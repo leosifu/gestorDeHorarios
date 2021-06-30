@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import {AppBar, Tabs, Tab, Typography, Box,} from '@material-ui/core';
+
 import ListaCoord from '../../coordinaciones/listaCoord'
 import InfoAsignatura from './infoAsignatura'
+import HistorialAsignatura from './historialAsignatura'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function TabsAsignatura({infoAsignatura, asignatura, estado, setEstado, user,
-  userRedux, currentProceso, estadoM, setEstadoM, }) {
+  userRedux, currentProceso, estadoM, setEstadoM, carreraId, }) {
 
   const classes = useStyles();
 
@@ -63,19 +62,26 @@ export default function TabsAsignatura({infoAsignatura, asignatura, estado, setE
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" centered
           style={{backgroundColor:'orange'}}>
           <Tab label="Información" {...a11yProps(0)} />
-          <Tab label="Coordinaciones" {...a11yProps(1)} />
+          <Tab label="Historial" {...a11yProps(1)} />
+          <Tab label="Coordinaciones" {...a11yProps(2)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
         <InfoAsignatura infoAsignatura={infoAsignatura} asignatura={asignatura} estado={estado}
           setEstado={setEstado} user={user} userRedux={userRedux} userRedux={userRedux}
-          currentProceso={currentProceso} estadoM={estadoM} setEstadoM={setEstadoM}/>
+          currentProceso={currentProceso} estadoM={estadoM} setEstadoM={setEstadoM}
+          carreraId={carreraId}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
+        <HistorialAsignatura asignatura={asignatura} />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
         <ListaCoord asignatura={asignatura} infoAsignatura={infoAsignatura} estado={estado}
           setEstado={setEstado} userRedux={userRedux} coordinaciones={asignatura.coordinaciones}
           lab_independiente={asignatura.lab_independiente} user={user}
-          currentProceso={currentProceso}/>
+          currentProceso={currentProceso}
+        />
       </TabPanel>
     </div>
   );

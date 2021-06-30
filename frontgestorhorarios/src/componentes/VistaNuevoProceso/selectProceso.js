@@ -68,7 +68,7 @@ const SelectProceso = ({procesos, date, setDate, currentProceso, }) => {
   return(
     <>
       <Typography>
-        {estados[currentProceso.estado]}
+        {`Seleccionar Proceso`}
       </Typography>
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor="age-native-simple">Año</InputLabel>

@@ -19,12 +19,12 @@ module.exports = {
       nivel:{
         type: Sequelize.INTEGER,
       },
-      mallaId: {
+      carreraId: {
         type: Sequelize.INTEGER,
         references:{
-          model: 'Mallas',
+          model: 'NewCarreras',
           key: 'id',
-          as: 'mallaId'
+          as: 'carreraId'
         }
       },
       asignaturaId: {

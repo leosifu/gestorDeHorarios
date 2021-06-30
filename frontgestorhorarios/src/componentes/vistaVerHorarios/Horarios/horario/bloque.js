@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 
 export default function Bloque({coord, onDrop, tipo, num, userRedux, dontDrag,
   handleMostrarCoordinacion, }) {
-  const {nombre_coord, cod_coord, id, color, num_asociacion, profesores, coordinacionId, mostrar} = coord
+  const {nombre_coord, cod_coord, id, color, num_asociacion, profesores, coordinacionId, mostrar, imTope} = coord
   const ref = useRef(null)
   const classes = useStyles();
   const [ , drag] = useDrag({
@@ -85,9 +85,9 @@ export default function Bloque({coord, onDrop, tipo, num, userRedux, dontDrag,
       }
       width = width + '%'
       return(
-        <Card ref={ref} style={{ backgroundColor, minHeight: 45, width }} padding="none">
+        <Card ref={ref} style={{ backgroundColor, minHeight: 45, width, opacity: imTope ? '0.3' : 1 }} padding="none">
           <BloqueTablaHorario coord={coord} nombre_coord={nombre_coord} cod_coord={cod_coord}
-            profesores={profesores} color={color}/>
+            profesores={profesores} color={color} />
         </Card>
       )
     default:
