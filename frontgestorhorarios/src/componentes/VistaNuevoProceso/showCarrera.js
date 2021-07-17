@@ -16,8 +16,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   process: {
-    margin: '5%',
-    width: '100%'
+    marginLeft: '5%',
+    marginBottom: '3%',
+    width: '100%',
+    maxWidth: 360
   }
 }));
 
@@ -87,7 +89,7 @@ const ShowCarrera = ({carrera, allSelects, setAllSelects, }) => {
 
   return(
     <Paper className={classes.process}>
-      <ListItem key={carrera.id} button>
+      <ListItem key={carrera.id}>
         <ListItemText id={carrera.id} primary={`${carrera.nombre} - ${carrera.jornada} (${carrera.año})`} />
         <ListItemSecondaryAction>
           <Checkbox

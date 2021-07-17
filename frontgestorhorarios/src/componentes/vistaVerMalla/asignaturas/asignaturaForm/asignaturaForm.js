@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, } from 'react';
 
 import Swal from 'sweetalert2';
 
@@ -65,9 +65,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, eliminarAsignatura, }) => {
+const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, eliminarAsignatura, cancelAction, }) => {
 
-  const [stateC, ] = React.useState({
+  const classes = useStyles();
+
+  const [stateC, ] = useState({
     checked: camposAsignatura.lab_independiente,
   });
 
@@ -146,7 +148,6 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, eliminarAsi
     onSubmitForm
   );
 
-  const classes = useStyles();
   return (
     <>
       <DialogContent>
@@ -170,10 +171,15 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, eliminarAsi
         }
 
         <TelAsignaturaForm handleOnChange={handleOnChange} tel_T={state.tel_T} tel_E={state.tel_E}
-          tel_L={state.tel_L} lab_independiente={state.lab_independiente} />
+          tel_L={state.tel_L} lab_independiente={state.lab_independiente}
+        />
 
-        <HistorialForm handleOnChange={handleOnChange} cupos_pasados={state.cupos_pasados}
-          tasa_reprobacion={state.tasa_reprobacion} desinscripciones={state.desinscripciones}/>
+        {
+          edit ||
+          <HistorialForm handleOnChange={handleOnChange} cupos_pasados={state.cupos_pasados}
+            tasa_reprobacion={state.tasa_reprobacion} desinscripciones={state.desinscripciones}
+          />
+        }
 
       </DialogContent>
       <DialogActions>
@@ -181,9 +187,8 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, eliminarAsi
           tipo !== 0 &&
           <PrimaryButton onClick={eliminarAsignatura} title={'Eliminar Asignatura'}/>
         }
-        <PrimaryButton onClick={handleOnSubmit} title={
-          tipo === 0 ? 'Crear asignatura' : 'Guardar cambios'
-        }
+
+        <PrimaryButton onClick={handleOnSubmit} title={tipo === 0 ? 'Crear asignatura' : 'Guardar cambios'}
         />
         {/*<Button onClick={handleOnSubmit} disabled={disable?true:(sumaTel?true:false)}
           variant="contained" color="primary" className={classes.button}>
@@ -194,7 +199,7 @@ const AsignaturaForm = ({camposAsignatura, onSubmitForm, tipo, edit, eliminarAsi
             <>Guardar Cambios</>
           }
         </Button>*/}
-        <SecondaryButton onClick={handleOnSubmit} title={'Cancelar'} />
+        <SecondaryButton onClick={cancelAction} title={'Cancelar'} />
       </DialogActions>
     </>
   );

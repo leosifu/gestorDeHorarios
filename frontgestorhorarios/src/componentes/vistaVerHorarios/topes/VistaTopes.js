@@ -1,7 +1,9 @@
 import React, {useState, useEffect, } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Typography, } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { Grid, Typography, ButtonGroup, Button, } from '@material-ui/core';
+
+import { green, } from '@material-ui/core/colors';
 
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -16,6 +18,16 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: 20,
   },
 }));
+
+const ColorButton = withStyles((theme) => ({
+  root: {
+    color: 'white',
+    backgroundColor: green[500],
+    '&:hover': {
+      backgroundColor: green[700],
+    },
+  },
+}))(Button);
 
 const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, carreraId, }) => {
 
@@ -49,25 +61,79 @@ const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, carreraId, })
     setSelected(nivel);
   }
 
+  const selectNivelButton = (niv) => {
+    const selectsAux = [...selected];
+    const indexNiv = selectsAux.indexOf(niv);
+    if (indexNiv < 0) {
+      selectsAux.push(niv);
+    }
+    else {
+      selectsAux.splice(indexNiv, 1);
+    }
+    setSelected(selectsAux);
+  }
+
   return (
     <>
       <Grid container className={classes.header}>
-        <Grid item xs={6} style={{paddingTop: 35}}>
-          <Typography variant="h6">
-            Nivel: {nivel}
+        {/*<Grid item xs={3} style={{paddingTop: 35}}>
+          <Typography variant="h5">
+            Nivel seleccionado: {nivel}
           </Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <Grid container alignItems="flex-start" justify="flex-end" direction="row">
-            <SelectTopes topes={topes} handleChange={handleChange} niveles={niveles}
-              selectNivel={selectNivel}/>
+        </Grid>*/}
+
+        {
+          <Grid item xs={9}>
+          <div  style={{display: 'flex', marginTop: 40}}>
+          <Typography variant="h5" style={{marginRight: 30}}>
+          Visualizar topes con
+          </Typography>
+          <div>
+          <ButtonGroup color="primary" size="large"  aria-label="outlined secondary button group">
+          {
+            niveles.map((nivelMap, i) => {
+              if (i === nivel) {
+                return (
+                  <ColorButton variant="contained">{nivelMap}</ColorButton>
+                )
+              }
+              return (
+                <Button variant={topes.includes(i+1) ? "contained" : "outlined"} onClick={() => handleChange(i+1)}>{nivelMap}</Button>
+              )
+            }
+          )
+        }
+        </ButtonGroup>
+        </div>
+        </div>
+
           </Grid>
-        </Grid>
+        }
+        {
+          /*
+          <Grid item xs={9}>
+            <Grid container alignItems="flex-start" direction="row">
+              <SelectTopes topes={topes} handleChange={handleChange} niveles={niveles}
+                nivelS={nivel} selectNivel={selectNivel}/>
+            </Grid>
+            <div style={{marginLeft: 20}}>
+              <ButtonGroup color="primary" size="large"  aria-label="outlined secondary button group">
+              {
+                niveles.map((nivelMap, i) =>
+                <Button variant={topes.includes(i+1) ? "contained" : "outlined"} onClick={() => handleChange(i+1)}>{nivelMap}</Button>
+                )
+              }
+              </ButtonGroup>
+            </div>
+          </Grid>
+          */
+        }
       </Grid>
       <Grid container>
         <Grid item xs={10}>
           <VerHorario nivel={nivel} user={userRedux.user} currentProceso={currentProceso}
             userRedux={userRedux} verTope={true} dontDrag={true} topes={topes} carreraId={carreraId}
+            tope={true}
           />
         </Grid>
       </Grid>
@@ -88,7 +154,6 @@ const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, carreraId, })
           </DndProvider>
         </Grid>
       </Grid>
-
     </>
   )
 }

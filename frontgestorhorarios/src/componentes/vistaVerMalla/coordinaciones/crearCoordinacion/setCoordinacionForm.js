@@ -2,15 +2,18 @@ import React from 'react'
 
 import clientAxios from '../../../../config/axios'
 
+import Grid from '@material-ui/core/Grid';
+
 import { useDispatch, } from 'react-redux';
 import {setLoading, handleNotifications, } from '../../../../redux/actions';
 
 import PrimaryButton from '../../../utils/PrimaryButton';
+import SecondaryButton from '../../../utils/SecondaryButton';
 
 import DatosCoordForm from './coordinacionForm/datosCoordForm'
 import useForm from '../../../form/useForm'
 
-const SetCoordinacionForm = ({coordinacion, asignaturaAct, estado, setEstado, user, setCrear, }) => {
+const SetCoordinacionForm = ({coordinacion, asignaturaAct, estado, setEstado, user, setCrear, cancelar, }) => {
 
   const dispatch = useDispatch();
 
@@ -80,11 +83,18 @@ const SetCoordinacionForm = ({coordinacion, asignaturaAct, estado, setEstado, us
   return(
     <>
       <DatosCoordForm handleOnChange={handleOnChange} cod_coord={state.cod_coord}
-        nombre_coord={state.nombre_coord} />
-      <PrimaryButton
-        onClick={handleOnSubmit}
-        title={'Asociar Coordinacion'}
+        nombre_coord={state.nombre_coord}
       />
+      <Grid container justify="flex-end">
+        <SecondaryButton
+          onClick={cancelar}
+          title={'Cancelar'}
+        />
+        <PrimaryButton
+          onClick={handleOnSubmit}
+          title={'Asociar Coordinacion'}
+        />
+      </Grid>
     </>
   )
 }

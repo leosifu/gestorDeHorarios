@@ -224,7 +224,8 @@ module.exports = {
       const {procesoId} = req.params;
       const ProfesoresByProceso = await Usuario.findAll({
         include: [{
-          model: Proceso, as: 'profesores', where: {id: procesoId}
+          model: Proceso, as: 'profesores'
+          // , where: {id: procesoId}
         }, {
           model: Rol, as: 'roles'
         }]

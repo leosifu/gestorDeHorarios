@@ -1,3 +1,7 @@
 .swal2-container {
   z-index: 1500 !important;
 }
+
+.dzu-dropzone {
+  max-width: 450px !important;
+}

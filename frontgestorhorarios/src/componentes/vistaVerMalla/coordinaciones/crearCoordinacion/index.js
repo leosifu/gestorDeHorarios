@@ -14,7 +14,7 @@ import CoordinacionForm from './coordinacionForm/coordinacionForm'
 import AsociarCoord from './asociarCoord'
 
 const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado, setEstado,
-  crear, setCrear, user, currentProceso, }) =>{
+  crear, setCrear, user, currentProceso, cancelar, carreraId, }) =>{
 
   const dispatch = useDispatch();
 
@@ -85,13 +85,16 @@ const EleccionCoord = ({nombre_asignatura, asignatura, lab_independiente, estado
     return(
       <CoordinacionForm camposCord={data} onSubmitForm={onSubmitForm} setEstado={setEstado}
         estado={estado} profesoresSelect={profesoresSelect} user={user}
-        setProfesoresSelect={setProfesoresSelect} currentProceso={currentProceso}/>
+        setProfesoresSelect={setProfesoresSelect} currentProceso={currentProceso}
+        cancelar={cancelar}
+      />
     )
   }
   else if (eleccion === 2) {
     return(
       <AsociarCoord asignaturaAct={asignatura} estado={estado} setEstado={setEstado} user={user}
-        currentProceso={currentProceso} setCrear={setCrear}/>
+        currentProceso={currentProceso} setCrear={setCrear} cancelar={cancelar} carreraId={carreraId}
+      />
     )
   }
   else {

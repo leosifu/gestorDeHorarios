@@ -18,7 +18,7 @@ const MallaSelector = createSelector(
   malla => malla.malla
 );
 
-const Eleccion = ({open, setOpen, estado, setEstado, carreraId, nivel, user, }) =>{
+const Eleccion = ({open, setOpen, estado, setEstado, carreraId, nivel, user, cancelAction, currentProceso, }) =>{
 
   const dispatch = useDispatch();
   const malla = useSelector(MallaSelector);
@@ -101,13 +101,16 @@ const Eleccion = ({open, setOpen, estado, setEstado, carreraId, nivel, user, }) 
   if (eleccion === 1) {
     return(
       <AsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} tipo={0}
-        estado={estado} setEstado={setEstado}/>
+        estado={estado} setEstado={setEstado} cancelAction={cancelAction}
+      />
     )
   }
   else if (eleccion === 2) {
     return(
       <AsignarAsignatura nivel={nivel} carreraId={carreraId} estado={estado} setEstado={setEstado}
-        open={open} setOpen={setOpen} user={user}/>
+        open={open} setOpen={setOpen} user={user} cancelAction={cancelAction}
+        currentProceso={currentProceso}
+      />
     )
   }
   else {

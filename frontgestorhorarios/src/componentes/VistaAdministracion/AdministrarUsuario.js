@@ -191,11 +191,11 @@ const AdministrarUsuario = ({changed, setChanged, currentProceso, user, }) => {
         </DialogContent>
         <DialogActions>
           <PrimaryButton onClick={() => dispatch(handleDialogCreate(false))} title='Cerrar' />
-          {
+          {/*
             userState.id > 0 &&
             <PrimaryButton onClick={() => dispatch(handleDialogHorarioProfesor(true, userState))}
               title='Ver Horario' />
-          }
+          */}
           <PrimaryButton onClick={() => handleCLick()}
             title={dialogUsuario.type === 'edit' ? 'Actualizar Usuario' : 'Crear Usuario'} />
           {/*<Button onClick={() => dispatch(handleDialogCreate(false))} color="primary">

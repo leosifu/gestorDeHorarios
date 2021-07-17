@@ -17,6 +17,7 @@ const _ = require('lodash');
 module.exports = {
   async createProceso(req, res){
     try {
+      const {fileUploaded} = req.body;
       const NewCarreras = await NewCarrera.findAll({
         where: {id: req.body.carreras},
         include: [{model: Asignatura, as: 'asignaturas',
@@ -26,7 +27,7 @@ module.exports = {
             {model:Historial, as:'historial'}]
         }]
       })
-      const NewCarrerasDataValues = NewCarreras.map(malla=>malla.dataValues)
+      const NewCarrerasDataValues = NewCarreras.map(malla => malla.dataValues)
       // console.log(MallasDataValues);
       const NewCarrerasData = NewCarrerasDataValues.map(carrera => ({
         nombre: carrera.nombre,
@@ -208,23 +209,23 @@ module.exports = {
       let AsignacionesData = []
       for (var i = 0; i < AllAsignaciones.length; i++) {
         const ProfeAsignacion = AllAsignaciones[i];
-        const ProfesorActivo = await UsuarioProceso.findAll({
-          where: {
-            procesoId: req.body.procesoId,
-            usuarioId: ProfeAsignacion.usuarioId
-          }
-        });
-        if (ProfesorActivo) {
-          let coordinacionId = ProfeAsignacion.coordinacionId
-          let coordinacionFind = Coords.find(coordinacion=>coordinacion.id === coordinacionId)
-          let coordinacionIndex = Coords.indexOf(coordinacionFind)
-          let newCoordinacion = NuevasCoordinacionesData[coordinacionIndex]
-          let newCoordinacionId = newCoordinacion.id
-          AsignacionesData.push({
-            usuarioId: ProfeAsignacion.usuarioId,
-            coordinacionId: newCoordinacionId
-          })
-        }
+        // const ProfesorActivo = await UsuarioProceso.findAll({
+        //   where: {
+        //     procesoId: req.body.procesoId,
+        //     usuarioId: ProfeAsignacion.usuarioId
+        //   }
+        // });
+        // if (ProfesorActivo) {
+        let coordinacionId = ProfeAsignacion.coordinacionId
+        let coordinacionFind = Coords.find(coordinacion=>coordinacion.id === coordinacionId)
+        let coordinacionIndex = Coords.indexOf(coordinacionFind)
+        let newCoordinacion = NuevasCoordinacionesData[coordinacionIndex]
+        let newCoordinacionId = newCoordinacion.id
+        AsignacionesData.push({
+          usuarioId: ProfeAsignacion.usuarioId,
+          coordinacionId: newCoordinacionId
+        })
+        // }
       }
       // const AsignacionesData = await AllAsignaciones.reduce(async(result, asignacion) =>{
       //   const ProfesorActivo = await UsuarioProceso.findAll({

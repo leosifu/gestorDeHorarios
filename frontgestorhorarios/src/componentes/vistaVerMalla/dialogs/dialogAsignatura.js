@@ -37,7 +37,7 @@ const DialogAsignatura = ({user, userRedux, currentProceso, estadoM, setEstadoM,
         setAsignatura(res.data.Asignatura)
         dispatch(setLoading(false))
       })
-      .catch((error)=>{
+      .catch((error) => {
         console.log(error);
         dispatch(setLoading(false))
         dispatch(handleNotifications(true, {
@@ -56,7 +56,6 @@ const DialogAsignatura = ({user, userRedux, currentProceso, estadoM, setEstadoM,
       maxWidth={"sm"}
       open={dialogAsignatura.open}
       onClose={handleClose}
-      style={{height:630}}
     >
      <TabsAsignatura infoAsignatura={infoAsignatura} asignatura={asignatura} estado={estado}
       setEstado={setEstado} user={user} userRedux={userRedux} currentProceso={currentProceso}

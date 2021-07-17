@@ -5,7 +5,7 @@ import clientAxios from '../../../../config/axios';
 import update from 'immutability-helper'
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Table, TableCell, TableHead, TableRow, Paper, Grid, FormControl, InputLabel, Select, } from '@material-ui/core';
+import {Table, TableCell, TableHead, TableRow, Paper, Grid, FormControl, InputLabel, Select, MenuItem, } from '@material-ui/core';
 
 import { useDispatch, } from 'react-redux';
 import {setLoading, handleNotifications, } from '../../../../redux/actions';
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    width: '80%'
   },
 }));
 
@@ -182,20 +182,24 @@ function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, d
           <Grid item xs={2} style={{zIndex: 30}}>
             <FormControl variant="outlined" className={classes.formControl}>
               <InputLabel htmlFor="outlined-age-native-simple">Nivel Actual</InputLabel>
-              <Select
-                native
-                value={nivel}
-                onChange={e => setNivel(e.target.value)}
-                label="Nivel Actual"
-                inputProps={{
-                  name: 'age',
-                  id: 'outlined-age-native-simple',
-                }}
-              >
-                {niveles.map((nivelO, index) =>
-                  <option value={nivelO.nivel}>{`Ǹivel ${nivelO.nivel}`}</option>
-                )}
-              </Select>
+              {
+                niveles && niveles.length > 0 &&
+                <Select
+                  native
+                  value={nivel}
+                  onChange={e => setNivel(e.target.value)}
+                  label="Nivel Actual"
+                  inputProps={{
+                    name: 'age',
+                    id: 'outlined-age-native-simple',
+                  }}
+                >
+                  {niveles.map((nivelO, index) =>
+                    <option value={nivelO.nivel}>{`Ǹivel ${nivelO.nivel}`}</option>
+                  )}
+                </Select>
+              }
+
             </FormControl>
             <ListaAsignaturas asignaturas={asignaturas} data={data} dropLista={dropLista}
               userRedux={userRedux} handleMostrarCoordinacion={handleMostrarCoordinacion}/>

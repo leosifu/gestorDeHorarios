@@ -99,31 +99,21 @@ const Administracion = () => {
   return (
     <div className={classes.root}>
       <h2>
-        Administracion de Usuarios
+        Usuarios autorizados para ingresar al sistema
       </h2>
       <AdministrarUsuario changed={changed} setChanged={setChanged} currentProceso={currentProceso} user={user}/>
       <VerHorarioProfesor />
-      <Grid container>
-        <Grid item xs={8}>
-          <PrimaryButton onClick={handleOpen} title='Agregar Nuevo Usuario' />
-        </Grid>
-        <Grid item xs={4}>
-          <SelectProceso procesos={procesos} date={date} setDate={setDate}
-            currentProceso={currentProceso}/>
-        </Grid>
-      </Grid>
-      <Grid container
-        spacing={0}
-        alignItems="center"
-        justify="center"
-      >
-        <Grid item xs={4}>
+      <div style={{marginTop: 20, display: 'flex'}}>
+        <div style={{marginRight: 30}}>
           <VerUsuarios title={'Coordinadores'} usuarios={coordinadores}/>
-        </Grid>
-        <Grid item xs={4}>
+        </div>
+        <div style={{marginLeft: 30}}>
           <VerUsuarios title={'Profesores'} usuarios={profesores}/>
-        </Grid>
-      </Grid>
+        </div>
+      </div>
+      <div style={{marginTop: 50}}>
+        <PrimaryButton onClick={handleOpen} title='Agregar Nuevo Usuario' />
+      </div>
     </div>
   )
 }

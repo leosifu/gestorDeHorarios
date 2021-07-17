@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useLayoutEffect, useState} from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {TableCell, } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -10,12 +10,22 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: '#EC7700',
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
 const HeaderCell = ({dia, i, }) => {
 
   const classes = useStyles();
 
   return(
-    <TableCell className={classes.encabezado} key={dia}>{dia}</TableCell>
+    <StyledTableCell className={classes.encabezado} key={dia}>{dia}</StyledTableCell>
   )
 }
 

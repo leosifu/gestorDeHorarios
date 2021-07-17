@@ -7,7 +7,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 
 import HorarioGeneral from './horarioGeneral'
 
-const VerHorario = ({nivel, user, currentProceso, userRedux, dontDrag, verTope, topes, carreraId, niveles, setNivel, }) => {
+const VerHorario = ({nivel, user, currentProceso, userRedux, dontDrag, verTope, topes, carreraId, niveles, setNivel, tope, }) => {
 
   const [state, setState] = useState([])
 

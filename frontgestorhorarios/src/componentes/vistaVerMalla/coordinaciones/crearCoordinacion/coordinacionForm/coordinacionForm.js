@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfesoresSelect, user,
-  profesores, edit, currentProceso, cancelarEdit, eliminarCoordinacion, }){
+  profesores, edit, currentProceso, cancelarEdit, eliminarCoordinacion, cancelar, }){
   const classes = useStyles();
   const [age, setAge] = useState('');
 
@@ -105,14 +105,17 @@ function CoordinacionForm({camposCord, onSubmitForm, profesoresSelect, setProfes
         {
           edit ?
             <>
+              <SecondaryButton onClick={cancelarEdit} disabled={isDisabled} title={'Cancelar'} />
               <PrimaryButton onClick={eliminarCoordinacion} disabled={isDisabled}
                 title={'Eliminar Coordinación'} />
               <PrimaryButton onClick={handleOnSubmit} disabled={isDisabled}
                 title={'Editar Coordinación'} />
-              <SecondaryButton onClick={cancelarEdit} disabled={isDisabled} title={'Cancelar'} />
             </>
           :
-            <PrimaryButton onClick={handleOnSubmit} disabled={disable} title={'Crear Coordinación'} />
+            <>
+              <SecondaryButton onClick={cancelar} disabled={isDisabled} title={'Cancelar'} />
+              <PrimaryButton onClick={handleOnSubmit} disabled={disable} title={'Crear Coordinación'} />
+            </>
         }
         </DialogActions>
       </Box>

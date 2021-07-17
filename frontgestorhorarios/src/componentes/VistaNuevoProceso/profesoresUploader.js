@@ -18,6 +18,7 @@ const ProfesoresUploader = ({uploadFile, setUploadFile, }) => {
   return (
 
     <Dropzone
+      style={{maxWidth: 500}}
       onChangeStatus={handleChangeStatus}
       inputContent="Subir listado de profesores"
       maxFiles={1}

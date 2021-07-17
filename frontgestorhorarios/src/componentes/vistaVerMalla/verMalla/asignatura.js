@@ -99,7 +99,9 @@ function Asignatura({nivel, requisitos, asignaturas, estado, setEstado, handleCl
         <Card className={classes.card} style={{ display:'flex', justifyContent:'center' }}>
           <Box borderRadius="50%" border={1} className={classes.oval}>
             <CrearAsignatura nivel={nivel} open={open} setOpen={setOpen} estado={estado}
-              setEstado={setEstado} carreraId={carreraId} user={user}/>
+              setEstado={setEstado} carreraId={carreraId} user={user}
+              currentProceso={currentProceso}
+            />
           </Box>
         </Card>
         :

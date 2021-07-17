@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function CrearAsignatura({open, setOpen, estado, setEstado, nivel, carreraId, user, }){
+function CrearAsignatura({open, setOpen, estado, setEstado, nivel, carreraId, user, currentProceso, }){
 
   const classes = useStyles();
 
@@ -42,7 +42,7 @@ function CrearAsignatura({open, setOpen, estado, setEstado, nivel, carreraId, us
   };
 
   return (
-    <React.Fragment>
+    <>
       <IconButton className={classes.centrarIcon} onClick={handleClickOpen}>
         <AddCircleOutlineOutlinedIcon fontSize='large' style={{color:"#002F6C"}}/>
       </IconButton>
@@ -56,9 +56,10 @@ function CrearAsignatura({open, setOpen, estado, setEstado, nivel, carreraId, us
           Crear Asignatura
         </DialogTitle>
         <Eleccion open={open} setOpen={setOpen} nivel={nivel} estado={estado} setEstado={setEstado}
-          carreraId={carreraId} user={user}/>
+          carreraId={carreraId} user={user} cancelAction={handleClose} currentProceso={currentProceso}
+        />
       </Dialog>
-    </React.Fragment>
+    </>
   );
 }
 

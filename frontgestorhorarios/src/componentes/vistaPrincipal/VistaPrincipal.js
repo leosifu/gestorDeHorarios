@@ -15,6 +15,7 @@ import {setLoading, setProcesoActivo, handleNotifications, handleRightBar, } fro
 import TablaCarreras from './tablaCarreras/tablaCarreras';
 import CreateCarreraModal from './modals/createCarreraModal/createCarreraModal';
 import SelectProceso from '../VistaNuevoProceso/selectProceso';
+import NuevoProcesoModal from '../VistaNuevoProceso/nuevoProcesoModal';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,6 +37,11 @@ const DialogCarreraSelector = createSelector(
 const DialogProcesoSelector = createSelector(
   state => state.dialogUpdateProceso,
   dialogUpdateProceso => dialogUpdateProceso
+);
+
+const DialogNuevoProcesoSelector = createSelector(
+  state => state.dialogNuevoProceso,
+  dialogNuevoProceso => dialogNuevoProceso
 );
 
 const UserSelector = createSelector(
@@ -70,6 +76,7 @@ const VistaPrincipal = () => {
   const userRedux = useSelector(UserSelector);
   const procesosData = useSelector(ProcesosSelector);
   const dialogCarrera = useSelector(DialogCarreraSelector);
+  const dialogNuevoProceso = useSelector(DialogNuevoProcesoSelector);
 
   const user = userRedux.user;
   const procesos = procesosData.procesos;
@@ -117,6 +124,7 @@ const VistaPrincipal = () => {
   return (
     <div className={classes.root}>
       <CreateCarreraModal dialogCarrera={dialogCarrera} user={user} currentProceso={currentProceso} setChanged={setChanged} />
+      <NuevoProcesoModal dialogNuevoProceso={dialogNuevoProceso} />
       {/*
       <Grid container>
         <Grid item xs={10}>
@@ -160,7 +168,7 @@ const VistaPrincipal = () => {
         </div>
         :
         <div style={{margin: 50}}>
-          
+
         </div>
       }
     </div>

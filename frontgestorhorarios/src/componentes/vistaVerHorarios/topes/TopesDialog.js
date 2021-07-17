@@ -57,7 +57,7 @@ const TopesDialog = ({userRedux, numNiveles, currentProceso, carrera, }) => {
         <AppBar className={classes.appBar}>
           <Toolbar>
             <Typography variant="h6" className={classes.title}>
-              {`${carrera.nombre} ${currentProceso.semestre}/${currentProceso.año}`}
+              {`${carrera.nombre} ${currentProceso.semestre}/${currentProceso.año}, nivel seleccionado: ${data.nivel}`}
             </Typography>
             <Button autoFocus color="inherit" onClick={() => dispatch(handleDialogTopes())}>
               Cerrar

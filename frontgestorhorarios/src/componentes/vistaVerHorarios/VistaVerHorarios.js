@@ -144,7 +144,7 @@ const VistaVerHorarios = () => {
         <div className={classes.toolbar} />
           <Grid container >
             <VerHorario nivel={nivel} user={user} currentProceso={currentProceso} userRedux={userRedux}
-              carreraId={carreraId} niveles={niveles} nivel={nivel} setNivel={setNivel}
+              carreraId={carreraId} niveles={niveles} nivel={nivel} setNivel={setNivel} tope={false}
             />
             {/*<DndProvider backend={HTML5Backend}>
               <Grid item xs={12}>

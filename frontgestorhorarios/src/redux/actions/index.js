@@ -11,3 +11,4 @@ export * from './notificationsActions';
 export * from './dialogCarreraActions';
 export * from './dialogAsignaturaActions';
 export * from './rightBarActions';
+export * from './dialogNuevoProcesoActions';

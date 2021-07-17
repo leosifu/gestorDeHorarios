@@ -45,11 +45,35 @@ export default function InfoAsignatura({infoAsignatura, asignatura, estado, setE
   const [edit, setEdit] = useState(false)
 
   function clickEdit(){
-    setEdit(true)
+    setEdit(true);
   }
+
+  const cancelAction = () => setEdit(false);
 
   return(
     <>
+    <Box className={classes.sector} borderRadius={1} boxShadow={2}>
+      <Grid container>
+        <Grid item xs={11}>
+          <Typography variant="h4" component="h3" className={classes.campoDes}>
+            {infoAsignatura.nombre_asignatura}
+          </Typography>
+        </Grid>
+        {
+          userRedux.status === 'login' &&
+          (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
+          <>
+            {
+              edit ||
+              <Grid item xs={1}>
+                <IconButton className={classes.centrarIcon} onClick={clickEdit}>
+                  <EditIcon style={{color:"blue"}}/>
+                </IconButton>
+              </Grid>
+            }
+          </>
+        }
+      </Grid>
       {
         edit?
           <>
@@ -59,28 +83,12 @@ export default function InfoAsignatura({infoAsignatura, asignatura, estado, setE
               <EditAsignatura infoAsignatura={infoAsignatura} user={user}
                 asignatura={asignatura} setEdit={setEdit} estado={estado} setEstado={setEstado}
                 estadoM={estadoM} setEstadoM={setEstadoM} carreraId={carreraId}
+                cancelAction={cancelAction}
               />
             }
           </>
           :
           <>
-          <Box className={classes.sector} borderRadius={1} boxShadow={2}>
-            <Grid container>
-              <Grid item xs={11}>
-                <Typography variant="h4" component="h3" className={classes.campoDes}>
-                  {infoAsignatura.nombre_asignatura}
-                </Typography>
-              </Grid>
-              {
-                userRedux.status === 'login' &&
-                (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
-                <Grid item xs={1}>
-                  <IconButton className={classes.centrarIcon} onClick={clickEdit}>
-                    <EditIcon style={{color:"blue"}}/>
-                  </IconButton>
-                </Grid>
-              }
-            </Grid>
             <div className={classes.dates}>
               <Typography className={classes.miniTitle}>
                 {`Código de la asignatura:`}
@@ -125,7 +133,6 @@ export default function InfoAsignatura({infoAsignatura, asignatura, estado, setE
                   <Typography className={classes.campoDes}>{requisito.nombre_asignatura}</Typography>
               )
             }
-          </Box>
           {/*
             userRedux.status === 'login' &&
             (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
@@ -149,6 +156,7 @@ export default function InfoAsignatura({infoAsignatura, asignatura, estado, setE
           */}
           </>
       }
+      </Box>
     </>
   )
 }

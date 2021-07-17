@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -50,7 +50,7 @@ export default function TabsAsignatura({infoAsignatura, asignatura, estado, setE
 
   const classes = useStyles();
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -74,13 +74,15 @@ export default function TabsAsignatura({infoAsignatura, asignatura, estado, setE
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <HistorialAsignatura asignatura={asignatura} />
+        <HistorialAsignatura asignatura={asignatura} estadoM={estadoM} setEstadoM={setEstadoM}
+          userRedux={userRedux} user={user}
+        />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <ListaCoord asignatura={asignatura} infoAsignatura={infoAsignatura} estado={estado}
           setEstado={setEstado} userRedux={userRedux} coordinaciones={asignatura.coordinaciones}
           lab_independiente={asignatura.lab_independiente} user={user}
-          currentProceso={currentProceso}
+          currentProceso={currentProceso} carreraId={carreraId}
         />
       </TabPanel>
     </div>

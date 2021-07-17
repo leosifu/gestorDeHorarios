@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function AsignarAsignatura({nivel, carreraId, estado, setEstado, open, setOpen, user, }){
+function AsignarAsignatura({nivel, carreraId, estado, setEstado, open, setOpen, user, currentProceso, }){
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -73,7 +73,6 @@ function AsignarAsignatura({nivel, carreraId, estado, setEstado, open, setOpen, 
         cod_asignatura: state.cod_asignatura.value,
         nivel: nivel
       }
-      console.log(data);
       clientAxios(user.idToken).post(`/api/infoAsignatura`, data)
       .then(res => {
         setEstado(!estado);
@@ -96,12 +95,10 @@ function AsignarAsignatura({nivel, carreraId, estado, setEstado, open, setOpen, 
   }
 
   useEffect(() => {
-
     dispatch(setLoading(true));
-    clientAxios(user.idToken).get('/api/carreras')
+    clientAxios(user.idToken).get(`/api/carrera/${currentProceso.id}`)
     .then(res => {
       console.log(res.data);
-      console.log(carreraId);
       setCarreras(res.data.filter(carrera => parseInt(carrera.id) !== parseInt(carreraId)));
       dispatch(setLoading(false));
     })

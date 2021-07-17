@@ -30,14 +30,14 @@ const GreenCheckbox = withStyles({
   checked: {},
 })(props => <Checkbox color="default" {...props} />);
 
-function Topes({topes, handleChange, niveles, selectNivel, }){
+function Topes({topes, handleChange, niveles, selectNivel, nivelS, }){
 
   const classes = useStyles();
 
   return(
     <>
     <FormControl className={classes.formControl}>
-      <InputLabel id="demo-mutiple-checkbox-label">Seleccionar Nivel</InputLabel>
+      <InputLabel id="demo-mutiple-checkbox-label">Visualizar topes con</InputLabel>
       <Select
         labelId="demo-mutiple-checkbox-label"
         id="demo-mutiple-checkbox"
@@ -52,7 +52,7 @@ function Topes({topes, handleChange, niveles, selectNivel, }){
       >
         {niveles.map((nivel, i) =>
             <MenuItem key={nivel} value={i+1} name={i}>
-              <Checkbox checked={topes.indexOf(i+1) > -1} onChange={() => handleChange(i+1)}/>
+              <Checkbox checked={topes.indexOf(i+1) > -1} disabled={nivelS === i} onChange={() => handleChange(i+1)}/>
               <ListItemText primary={nivel} onClick={() => selectNivel(i+1)}/>
             </MenuItem>
           )

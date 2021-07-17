@@ -41,16 +41,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independiente, estado,
-  setEstado, user, userRedux, currentProceso, }){
+  setEstado, user, userRedux, currentProceso, carreraId, }){
 
   const classes = useStyles();
 
-  const [crear, setCrear] = useState(false)
+  const [crear, setCrear] = useState(false);
 
   function handleClick(e){
     e.preventDefault()
     setCrear(true)
   }
+
+  const cancelar = () => setCrear(false);
 
   return(
     <>
@@ -59,7 +61,8 @@ function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independien
       </Typography>
       {coordinaciones?.map(coordinacion=>
         <Coordinacion coordinacion={coordinacion} key={coordinacion.id} estado={estado}
-          setEstado={setEstado} user={user} userRedux={userRedux} currentProceso={currentProceso}/>
+          setEstado={setEstado} user={user} userRedux={userRedux} currentProceso={currentProceso}
+        />
       )}
 
       {crear ?
@@ -67,9 +70,13 @@ function ListaCoord({coordinaciones, infoAsignatura, asignatura, lab_independien
           {
             userRedux.status === 'login' &&
             (user.roles.includes('admin') || user.roles.includes('coordinador')) &&
-            <CrearCoordinacion estado={estado} setEstado={setEstado} lab_independiente={lab_independiente}
-              nombre_asignatura={infoAsignatura.nombre_asignatura} asignatura={asignatura} crear={crear}
-              setCrear={setCrear} user={user} currentProceso={currentProceso}/>
+            <Box className={classes.sector} borderRadius={1} boxShadow={2}>
+              <CrearCoordinacion estado={estado} setEstado={setEstado} lab_independiente={lab_independiente}
+                nombre_asignatura={infoAsignatura.nombre_asignatura} asignatura={asignatura} crear={crear}
+                setCrear={setCrear} user={user} currentProceso={currentProceso} cancelar={cancelar}
+                carreraId={carreraId}
+              />
+            </Box>
           }
         </>
         :

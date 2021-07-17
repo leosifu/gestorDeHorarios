@@ -17,21 +17,22 @@ const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+    width: '93%'
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
 }));
 
-function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, }){
+function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, cancelar, currentProceso, carreraId, }){
 
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [carrera, setCarrera] = useState(0);
-  const [malla, setMalla] = useState(0)
-  const [asignatura, setAsignatura] = useState(0)
-  const [coordinacion, setCoordinacion] = useState(0)
+  const [carrera, setCarrera] = useState(-1);
+  const [malla, setMalla] = useState(-1)
+  const [asignatura, setAsignatura] = useState(-1)
+  const [coordinacion, setCoordinacion] = useState(-1)
   const [coordinacionSelect, setCoordinacionSelect] = useState({})
 
   const [carreras, setCarreras] = useState([])
@@ -60,11 +61,13 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, }){
       coordinacion.coordinacionId == event.target.value))
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setLoading(true));
-    clientAxios(user.idToken).get('/api/carreras')
-    .then(res=>{
-      setCarreras(res.data)
+    clientAxios(user.idToken).get(`/api/carrera/${currentProceso.id}`)
+    .then(res => {
+      console.log(res.data);
+      setCarreras(res.data.filter(carrera => parseInt(carrera.id) !== parseInt(carreraId)));
+      // setCarreras(res.data)
       dispatch(setLoading(false))
     })
     .catch(error=>{
@@ -75,28 +78,28 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, }){
         message: 'Ocurrió un error al cargar las carreras'}
       ));
     })
-  }, [])
+  }, []);
+
+  // useEffect(()=>{
+  //   dispatch(setLoading(true));
+  //   clientAxios(user.idToken).get(`/api/mallas/${carrera}`)
+  //   .then(res=>{
+  //     setMallas(res.data)
+  //     dispatch(setLoading(false))
+  //   })
+  //   .catch(error=>{
+  //     console.log(error);
+  //     dispatch(setLoading(false))
+  //     dispatch(handleNotifications(true, {
+  //       status: 'error',
+  //       message: 'Ocurrió un error al cargar las mallas'}
+  //     ));
+  //   })
+  // }, [carrera])
 
   useEffect(()=>{
     dispatch(setLoading(true));
-    clientAxios(user.idToken).get(`/api/mallas/${carrera}`)
-    .then(res=>{
-      setMallas(res.data)
-      dispatch(setLoading(false))
-    })
-    .catch(error=>{
-      console.log(error);
-      dispatch(setLoading(false))
-      dispatch(handleNotifications(true, {
-        status: 'error',
-        message: 'Ocurrió un error al cargar las mallas'}
-      ));
-    })
-  }, [carrera])
-
-  useEffect(()=>{
-    dispatch(setLoading(true));
-    clientAxios(user.idToken).get(`/api/asignaturas/${malla}`)
+    clientAxios(user.idToken).get(`/api/asignaturas/${carrera}`)
     .then(res=>{
       setAsignaturas(res.data)
       dispatch(setLoading(false))
@@ -109,7 +112,7 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, }){
         message: 'Ocurrió un error al cargar las asignaturas'}
       ));
     })
-  }, [malla])
+  }, [carrera])
 
   useEffect(()=>{
     dispatch(setLoading(true));
@@ -139,25 +142,23 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, }){
             Carrera
           </InputLabel>
           <Select
-            multiple
-            native
-            inputProps={{
-              id: 'select-multiple-nativ',
-            }}
             id="demo-simple-select-outlined"
             value={carrera}
             onChange={handleChangeCarrera}
             labelWidth={30}
           >
+            <MenuItem value={-1}>
+              <em>Seleccione Carrera</em>
+            </MenuItem>
             {
               carreras.map(carrera=>(
-                <option value={carrera.id}>{carrera.nombre_carrera}</option>
+                <MenuItem value={carrera.id}>{carrera.nombre}</MenuItem>
               ))
             }
           </Select>
         </FormControl>
       }
-      {
+      {/*
         (carrera!==0)&& mallas.length > 0 &&
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
@@ -181,28 +182,26 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, }){
               }
             </Select>
           </FormControl>
-      }
+      */}
       {
-        (malla!==0) && asignaturas.length > 0 &&
+        carrera > -1 &&
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="demo-simple-select-outlined-label">
               Asignatura
             </InputLabel>
             <Select
               id="demo-simple-select-outlined"
-              multiple
-              native
-              inputProps={{
-                id: 'select-multiple-nativ',
-              }}
               value={asignatura}
               onChange={handleChangeAsignatura}
               labelWidth={30}
             >
+              <MenuItem value={-1}>
+                <em>Seleccione Asignatura</em>
+              </MenuItem>
               {
-                asignaturas.map(asignatura=>(
-                  <option value={asignatura.asignaturaId}>{asignatura.nombre_asignatura}</option>
-                ))
+                asignaturas?.map(asignatura =>
+                  <MenuItem value={asignatura.asignaturaId}>{asignatura.nombre_asignatura}</MenuItem>
+                )
               }
             </Select>
           </FormControl>
@@ -215,27 +214,27 @@ function AsociarCoord({asignaturaAct, estado, setEstado, user, setCrear, }){
           </InputLabel>
           <Select
             id="demo-simple-select-outlined"
-            multiple
-            native
-            inputProps={{
-              id: 'select-multiple-nativ',
-            }}
             value={coordinacion}
             onChange={handleChangeCoordinacion}
             labelWidth={30}
           >
+            <MenuItem value={-1}>
+              <em>Seleccione Coordinacion</em>
+            </MenuItem>
             {
-              coordinaciones.map(coordinacion=>(
-                <option value={coordinacion.coordinacionId}>{coordinacion.nombre_coord}</option>
-              ))
+              coordinaciones?.map(coordinacion =>
+                <MenuItem value={coordinacion.coordinacionId}>{`${coordinacion.cod_coord} - ${coordinacion.nombre_coord}`}</MenuItem>
+              )
             }
           </Select>
         </FormControl>
       }
       {
-        (coordinacion!==0) &&
+        (coordinacion > -1) &&
           <SetCoordinacionForm coordinacion={coordinacionSelect} asignaturaAct={asignaturaAct}
-            estado={estado} setEstado={setEstado} user={user} setCrear={setCrear}/>
+            estado={estado} setEstado={setEstado} user={user} setCrear={setCrear}
+            cancelar={cancelar}
+          />
       }
 
     </>

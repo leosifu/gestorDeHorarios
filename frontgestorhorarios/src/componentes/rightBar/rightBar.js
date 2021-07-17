@@ -21,7 +21,8 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { push } from 'connected-react-router';
-import {handleRightBar, handleDialogCarrera, handleLoginUser, handleLogoutUser, handleLoginFailed, clearProcesosUser, } from '../../redux/actions';
+import {handleRightBar, handleDialogCarrera, handleLoginUser, handleLogoutUser, handleLoginFailed, clearProcesosUser,
+  handleDialogNuevoProceso, } from '../../redux/actions';
 
 import SelectProceso from '../VistaNuevoProceso/selectProceso';
 
@@ -211,6 +212,11 @@ const RightBar = () => {
     dispatch(handleDialogCarrera(true, 'create'));
   };
 
+  const openNuevoProcesoModal = () => {
+    dispatch(handleRightBar(false));
+    dispatch(handleDialogNuevoProceso(true));
+  };
+
   return (
     <Drawer anchor="right" open={rightBar?.open} onClose={rightBarStatus(false)}>
       <div
@@ -243,10 +249,13 @@ const RightBar = () => {
               <ListItemIcon>{<HomeIcon />}</ListItemIcon>
               <ListItemText primary={'Inicio'} />
             </ListItem>
-            <ListItem button onClick={goAdminProcesos}>
-              <ListItemIcon>{<ListAltIcon />}</ListItemIcon>
-              <ListItemText primary={'Administración de procesos'} />
-            </ListItem>
+            {
+              user.log && currentLocation === '' &&
+              <ListItem button onClick={openNuevoProcesoModal}>
+                <ListItemIcon>{<ListAltIcon />}</ListItemIcon>
+                <ListItemText primary={'Administración de procesos'} />
+              </ListItem>
+            }
             <ListItem button onClick={goAdmin}>
               <ListItemIcon>{<GroupIcon />}</ListItemIcon>
               <ListItemText primary={'Administración de usuarios'} />

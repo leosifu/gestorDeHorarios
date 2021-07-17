@@ -14,6 +14,7 @@ import notificationsReducer from './notificationsReducer';
 import dialogCarreraReducer from './dialogCarreraReducer';
 import dialogAsignaturaReducer from './dialogAsignaturaReducer';
 import rightBarReducer from './rightBarReducer';
+import dialogNuevoProcesoReducer from './dialogNuevoProcesoReducer';
 
 const createRootReducer = (history) => combineReducers({
   carrera: carreraReducer,
@@ -30,6 +31,7 @@ const createRootReducer = (history) => combineReducers({
   dialogAsignatura: dialogAsignaturaReducer,
   notifications: notificationsReducer,
   rightBar: rightBarReducer,
+  dialogNuevoProceso: dialogNuevoProcesoReducer,
   router: connectRouter(history)
 })
 

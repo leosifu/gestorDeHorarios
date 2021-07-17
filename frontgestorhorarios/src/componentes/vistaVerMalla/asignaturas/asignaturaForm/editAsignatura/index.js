@@ -17,17 +17,14 @@ const MallaSelector = createSelector(
 );
 
 function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado, user,
-  estadoM, setEstadoM, carreraId, }){
+  estadoM, setEstadoM, carreraId, cancelAction, }){
 
   const dispatch = useDispatch();
 
   const malla = useSelector(MallaSelector);
-  console.log(infoAsignatura);
-  console.log(asignatura);
 
   function onSubmitForm(state) {
     dispatch(setLoading(true));
-    console.log(state);
     if (!state.cod_asignatura.value || !state.nombre_asignatura.value ||
       (!state.nivel.value || state.nivel.value < 0) ||
       (state.tel_T.value + state.tel_E.value + state.tel_L.value < 1)) {
@@ -48,14 +45,8 @@ function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado,
         nivel: state.nivel.value,
         carreraId: carreraId,
       }
-      const historial = {
-        cupos_pasados: state.cupos_pasados.value || 0,
-        tasa_reprobacion: state.tasa_reprobacion.value || 0,
-        desinscripciones: state.desinscripciones.value || 0
-      }
       axios.all([
-        clientAxios(user.idToken).put(`/api/asignatura/${asignatura.id}/${carreraId}`, data),
-        clientAxios(user.idToken).put(`/api/historial/${asignatura.id}`, historial)
+        clientAxios(user.idToken).put(`/api/asignatura/${asignatura.id}/${carreraId}`, data)
       ])
       .then(axios.spread((data1, data2)=>{
         setEdit(false)
@@ -85,10 +76,7 @@ function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado,
     tel_T: asignatura.tel_T,
     tel_E: asignatura.tel_E,
     tel_L: asignatura.tel_L,
-    cupos_pasados: asignatura?.historial.cupos_pasados,
-    tasa_reprobacion: asignatura?.historial.tasa_reprobacion,
     desinscripciones: asignatura?.historial.desinscripciones,
-    lab_independiente: asignatura?.lab_independiente,
     nivel: infoAsignatura.nivel
   }
 
@@ -130,7 +118,8 @@ function EditAsignatura({infoAsignatura, asignatura, setEdit, estado, setEstado,
   return (
     <>
       <AsignaturaForm camposAsignatura={camposAsignatura} onSubmitForm={onSubmitForm} edit={true}
-        eliminarAsignatura={eliminarAsignatura} />
+        eliminarAsignatura={eliminarAsignatura} cancelAction={cancelAction}
+      />
     </>
   );
 }
