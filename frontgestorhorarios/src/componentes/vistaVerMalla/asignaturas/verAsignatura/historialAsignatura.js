@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const HistorialAsignatura = ({asignatura, userRedux, user, estadoM, setEstadoM, }) => {
+const HistorialAsignatura = ({asignatura, userRedux, user, estadoM, setEstadoM, estado, setEstado, }) => {
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -65,7 +65,8 @@ const HistorialAsignatura = ({asignatura, userRedux, user, estadoM, setEstadoM, 
     clientAxios(user.idToken).put(`/api/historial/${asignatura.id}`, historial)
     .then(res => {
       setEdit(false)
-      setEstadoM(!estadoM)
+      setEstadoM(!estadoM);
+      setEstado(!estado);
       dispatch(setLoading(false))
       dispatch(handleNotifications(true, {
         status: 'success',

@@ -130,10 +130,10 @@ module.exports = {
   },
   async deleteAsignaturaFromMalla(req, res){
     try {
-      const {mallaId, asignaturaId} = req.params;
+      const {carreraId, asignaturaId} = req.params;
       const infoAsignaturaDelete = await InfoAsignatura.findOne({
         where: {
-          mallaId: mallaId,
+          carreraId: carreraId,
           asignaturaId: asignaturaId
         }
       });

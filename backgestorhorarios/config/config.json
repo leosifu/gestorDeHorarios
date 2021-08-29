@@ -1,6 +1,11 @@
 {
   "development": {
-    "use_env_variable": "DATABASE_URL"
+    "username": "leopoldonx",
+    "password": "123456",
+    "database": "ScheduleManager",
+    "host": "127.0.0.1",
+    "dialect": "postgresql",
+    "operatorsAliases": false
   },
   "test": {
     "username": "root",
@@ -11,6 +16,28 @@
     "operatorsAliases": false
   },
   "production": {
-    "use_env_variable": "DATABASE_URL"
+    "username": "leopoldonx",
+    "password": "123456",
+    "database": "ScheduleManager",
+    "host": "127.0.0.1",
+    "dialect": "postgresql",
+    "operatorsAliases": false
+  },
+  "_comments": {
+    "development": {
+      "use_env_variable": "DATABASE_URL"
+    },
+    "test": {
+      "username": "root",
+      "password": "123456",
+      "database": "database_test",
+      "host": "127.0.0.1",
+      "dialect": "mysql",
+      "operatorsAliases": false
+    },
+    "production": {
+      "use_env_variable": "DATABASE_URL"
+    }
+
   }
 }

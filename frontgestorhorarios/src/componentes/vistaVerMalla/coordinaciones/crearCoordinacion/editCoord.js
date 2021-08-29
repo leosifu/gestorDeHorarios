@@ -17,7 +17,7 @@ const MallaSelector = createSelector(
 );
 
 function EditCoordinacion({coordinacion, estado, setEstado, user, profesores, setEdit,
-  currentProceso, }){
+  currentProceso, asignaturaId, }){
 
   const dispatch = useDispatch();
 
@@ -42,7 +42,7 @@ function EditCoordinacion({coordinacion, estado, setEstado, user, profesores, se
         profesores: profesoresSelect,
         num_bloques: state.num_bloques.value
       }
-      clientAxios(user.idToken).put(`/api/coordinacion/${coordinacion.id}`, data)
+      clientAxios(user.idToken).put(`/api/coordinacion/${coordinacion.id}/${asignaturaId}`, data)
       .then(res => {
         setEstado(!estado)
         setEdit(false)

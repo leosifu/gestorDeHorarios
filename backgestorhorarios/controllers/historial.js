@@ -9,27 +9,32 @@ function actualizarCupos(id, cupos_pasados, tasa_reprobacion, desinscripciones){
       {model: Asignatura, as:'asignaturas', include:[{model: Historial, as: 'historial'}]
     }]
   })
-  .then(asignatura=>{
+  .then(asignatura => {
     //console.log('\n');
     //console.log(asignatura.dataValues.requisitos);
     var requisitos = asignatura.dataValues.requisitos
-    var estimados = Math.ceil(desinscripciones + (cupos_pasados - desinscripciones)*tasa_reprobacion/100)
+    var estimados = Math.ceil(desinscripciones + (cupos_pasados - desinscripciones) * tasa_reprobacion/100)
+    console.log(estimados);
     for (var i = 0; i < requisitos.length; i++) {
       var requisito = requisitos[i].dataValues
-      //console.log('\n');
-      //console.log(requisito);
+      console.log('\n');
+      console.log(requisito.dataValues);
       var historial = requisito.historial.dataValues
-      //console.log('Historial: \n');
+      console.log('Historial:');
+      console.log(Math.ceil((historial.cupos_pasados-historial.desinscripciones)*
+        (100-historial.tasa_reprobacion)/100));
       estimados = estimados + Math.ceil((historial.cupos_pasados-historial.desinscripciones)*
-        (100-historial.tasa_reprobacion)/100)
+        (100-historial.tasa_reprobacion)/100);
+      console.log(`Estimados en ${i}: ${estimados}`);
     }
     var asignaturas = asignatura.dataValues.asignaturas
+    console.log(`Final: ${estimados}`);
     Historial.update({
       cupos_estimados: estimados
     },{
-      where:{asignaturaId:id}
+      where: {asignaturaId:id}
     })
-    .then(historial=>{
+    .then(historial => {
       for (var i = 0; i < asignaturas.length; i++) {
         var asignatura = asignaturas[i].dataValues
         var historial = asignatura.historial.dataValues

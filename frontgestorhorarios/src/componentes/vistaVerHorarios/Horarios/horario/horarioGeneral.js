@@ -44,8 +44,6 @@ function GetDataHorario({nivel, user, currentProceso, userRedux, dontDrag, selec
     )
     .then(axios.spread((...responses) => {
       const [activeLevel, ...topesLevels] = responses;
-      console.log(activeLevel);
-      console.log(topesLevels);
       const {data} = activeLevel;
       const resTopes = [];
       resTopes.push(...topesLevels.map(res => res.data));
@@ -53,10 +51,40 @@ function GetDataHorario({nivel, user, currentProceso, userRedux, dontDrag, selec
       // console.log(resTopes.flat());
       const dataTopes = resTopes.flat();
       // dataTopes.push(...resTopes.map(d => d));
-      console.log(dataTopes);
-      const asignaturas = data.map(asignatura => ({nombre_asignatura: asignatura.nombre_asignatura,
-        cod_asignatura: asignatura.cod_asignatura, asignaturaId: asignatura.id}));
-      setAsignaturas(asignaturas);
+      // const asignaturas = data.map((asignatura, i) => {
+      //   if (asignatura.coordinaciones.length > 0) {
+      //     let nombre_asignatura = false;
+      //     const allCoordinacionesbyAsignatura = asignatura.coordinaciones.map(coord => coord.InfoCoordinacion.nombre_coord);
+      //     if (allCoordinacionesbyAsignatura.length > 0) {
+      //       const uniqueCoords = [...new Set(allCoordinacionesbyAsignatura)];
+      //       const allCoords = uniqueCoords.map(coord => {
+      //         const findCoord = asignatura.coordinaciones.find(coordinacion => coordinacion.InfoCoordinacion.nombre_coord === coord);
+      //         return ({
+      //           nombre_asignatura: coord,
+      //           cod_asignatura: findCoord.InfoCoordinacion.cod_coord, asignaturaId: asignatura.id
+      //         })
+      //       })
+      //       return allCoords
+      //     }
+      //     else {
+      //       return {
+      //         nombre_asignatura: asignatura.nombre_asignatura,
+      //         cod_asignatura: asignatura.cod_asignatura, asignaturaId: asignatura.id
+      //       }
+      //     }
+      //   }
+      //   else {
+      //     return {
+      //       nombre_asignatura: asignatura.nombre_asignatura,
+      //       cod_asignatura: asignatura.cod_asignatura, asignaturaId: asignatura.id
+      //     }
+      //   }
+      // });
+      const asignaturasA = data.map(asignatura => ({
+        nombre_asignatura: asignatura.nombre_asignatura,
+        cod_asignatura: asignatura.cod_asignatura, asignaturaId: asignatura.id
+      }));
+      setAsignaturas(asignaturasA);
       const bloquesMatrix = data.map((asignatura, i) => {
         if (asignatura.coordinaciones.length > 0) {
           let nombreBloque, areDistinct = false;
@@ -138,10 +166,7 @@ function GetDataHorario({nivel, user, currentProceso, userRedux, dontDrag, selec
           return []
         }
       })
-      console.log(bloquesTopes);
-      console.log(bloquesTopes.flat().flat());
-      var bloques = [...bloquesMatrix.flat().flat(), ...bloquesTopes.flat().flat()];
-      console.log(bloques);
+      const bloques = [...bloquesMatrix.flat().flat(), ...bloquesTopes.flat().flat()];
       // bloquesMatrix.map(bloqueM => bloques = bloques.concat(...bloqueM));
 
       setData(bloques);

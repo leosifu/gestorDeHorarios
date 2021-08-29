@@ -77,7 +77,7 @@ module.exports = (app) => {
 
   //Api coordinacion
   app.post('/api/coordinacion', verify('admin', 'coordinador'), coordinacionController.createCoordinacion)
-  app.put('/api/coordinacion/:id', coordinacionController.updateCoordinacion)
+  app.put('/api/coordinacion/:coordinacionId/:asignaturaId', coordinacionController.updateCoordinacion)
 
   //Api bloque
   app.post('/api/bloque/:id', verify('admin', 'coordinador'), bloqueController.updateNumBloque)

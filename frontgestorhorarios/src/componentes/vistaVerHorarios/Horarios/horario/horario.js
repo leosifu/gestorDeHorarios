@@ -73,45 +73,64 @@ function Horario({data, setData, asignaturas, setAsignaturas, user, userRedux, d
   const handleDrop = useCallback(
     (x, y, item) => {
       let nuevoBloque = x*6 + y;
-      const dato = data.find(dato=>dato.id===item.id)
+      const dato = data.find(dato => dato.id === item.id)
       const datoBloque = {
         num_bloque: nuevoBloque,
         asignado: true
       }
       clientAxios(user.idToken).post(`/api/bloque/${item.id}`, datoBloque)
       .then(res => {
-        const index = data.indexOf(dato)
-        var prevPos = dato.num_bloque
+        const index = data.indexOf(dato);
+        console.log(data);
+        console.log(dato);
+        var prevPos = dato.num_bloque;
         if (nuevoBloque === prevPos) {
           return
         }
-        const repetidos = data.filter(dato=>dato.num_bloque===nuevoBloque)
-        repetidos.push(dato)
-        var matrixAux = data.slice()
-        if (repetidos.length===1) {
-          if(!matrixAux[index].asignado){
-            matrixAux[index].asignado = true
+        const repetidos = data.filter(dato => dato.num_bloque === nuevoBloque);
+        repetidos.push(dato);
+        var matrixAux = data.slice();
+        console.log(matrixAux);
+        console.log(repetidos);
+        if (repetidos.length === 1) {
+          if(!matrixAux[index].asignado) {
+            matrixAux[index].asignado = true;
           }
-          matrixAux[index].num_bloque = nuevoBloque
-          matrixAux[index].size = 1
+          matrixAux[index].num_bloque = nuevoBloque;
+          matrixAux[index].size = 1;
         }
         else {
-          if(!matrixAux[index].asignado){
-            matrixAux[index].asignado = true
+
+
+          if(!matrixAux[index].asignado) {
+            matrixAux[index].asignado = true;
           }
-          matrixAux[index].num_bloque = nuevoBloque
-          repetidos.map((rep, i)=>{
-            var index2 = data.indexOf(rep)
-            matrixAux[index2].size = repetidos.length
-            return true
+          matrixAux[index].num_bloque = nuevoBloque;
+          repetidos.map((rep, i) => {
+            var index2 = data.indexOf(rep);
+            matrixAux[index2].size = repetidos.length;
+            return true;
           })
         }
-        var posAnt = data.filter(dato=>dato.num_bloque===prevPos)
-        posAnt.map((rep, i)=>{
+        var posAnt = data.filter(dato => dato.num_bloque === prevPos);
+        posAnt.map((rep, i) => {
           var index2 = data.indexOf(rep)
           matrixAux[index2].size = repetidos.length-1
           return true
-        })
+        });
+
+        const findSames = data.filter(dat => dat.id === dato.id);
+        for (let i = 0; i < findSames.length; i++) {
+          const ind = data.indexOf(findSames[i]);
+          if(!matrixAux[ind].asignado) {
+            matrixAux[ind].asignado = true;
+          }
+          matrixAux[ind].num_bloque = nuevoBloque;
+          matrixAux[ind].size = 1;
+        }
+        console.log(findSames);
+
+
         setData(matrixAux)
       })
       .catch(error => {

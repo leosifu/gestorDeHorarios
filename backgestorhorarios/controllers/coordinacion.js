@@ -54,14 +54,23 @@ module.exports = {
   },
   async updateCoordinacion(req, res){
     try {
-      const coordinacionId = req.params.id;
+      const {coordinacionId, asignaturaId} = req.params;
       const {num_bloques, tipo_coord} = req.body;
-      console.log(req.body.profesores);
       const profesores = req.body.profesores.map(profesor => profesor.id)
       const FindCoordinacion = await Coordinacion.findOne({
         where: {id: coordinacionId},
         include: [{model: Bloque, as: 'bloques'}]
       });
+
+      await InfoCoordinacion
+        .update({
+          cod_coord: req.body.cod_coord,
+          nombre_coord: req.body.nombre_coord,
+          infoC_id: asignaturaId + '~' + req.body.cod_coord + '~' + req.body.nombre_coord
+        },{
+          where: {asignaturaId: asignaturaId, coordinacionId: coordinacionId}
+        })
+
       let PrevBloques = FindCoordinacion.dataValues.num_bloques;
       const Bloques = FindCoordinacion.dataValues.bloques.map(bloque => bloque.dataValues);
       const UpdatedCoordinacion = await FindCoordinacion.update({

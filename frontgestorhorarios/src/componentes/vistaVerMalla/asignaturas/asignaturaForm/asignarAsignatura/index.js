@@ -98,7 +98,6 @@ function AsignarAsignatura({nivel, carreraId, estado, setEstado, open, setOpen, 
     dispatch(setLoading(true));
     clientAxios(user.idToken).get(`/api/carrera/${currentProceso.id}`)
     .then(res => {
-      console.log(res.data);
       setCarreras(res.data.filter(carrera => parseInt(carrera.id) !== parseInt(carreraId)));
       dispatch(setLoading(false));
     })

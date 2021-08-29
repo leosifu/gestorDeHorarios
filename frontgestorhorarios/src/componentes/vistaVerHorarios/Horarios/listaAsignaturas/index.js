@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 function ListaAsignaturas({asignaturas, data, dropLista, userRedux, handleMostrarCoordinacion, }) {
 
   const classes = useStyles();
-  
+
   const ref = useRef(null)
 
   const [, drop] = useDrop({
@@ -30,7 +30,7 @@ function ListaAsignaturas({asignaturas, data, dropLista, userRedux, handleMostra
     drop: dropLista,
   })
 
-  drop(ref)
+  drop(ref);
 
   return (
     <List

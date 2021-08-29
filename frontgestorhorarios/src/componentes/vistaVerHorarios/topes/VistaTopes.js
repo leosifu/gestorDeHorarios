@@ -92,7 +92,7 @@ const VistaTopes = ({numNiveles, nivel, userRedux, currentProceso, carreraId, })
           <ButtonGroup color="primary" size="large"  aria-label="outlined secondary button group">
           {
             niveles.map((nivelMap, i) => {
-              if (i === nivel) {
+              if (i === (nivel - 1)) {
                 return (
                   <ColorButton variant="contained">{nivelMap}</ColorButton>
                 )

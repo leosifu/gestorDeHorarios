@@ -75,7 +75,7 @@ export default function TabsAsignatura({infoAsignatura, asignatura, estado, setE
       </TabPanel>
       <TabPanel value={value} index={1}>
         <HistorialAsignatura asignatura={asignatura} estadoM={estadoM} setEstadoM={setEstadoM}
-          userRedux={userRedux} user={user}
+          userRedux={userRedux} user={user} estado={estado} setEstado={setEstado}
         />
       </TabPanel>
       <TabPanel value={value} index={2}>

@@ -5,7 +5,6 @@ const Asignatura = require('../models').Asignatura
 module.exports = {
   async createCarrera(req, res){
     try {
-      console.log(req.body);
       const newCarrera = await NewCarrera.create({
         nombre: req.body.nombre,
         jornada: req.body.jornada,
@@ -103,7 +102,6 @@ module.exports = {
           as:'asignaturas',
         }]
       });
-      console.log(carrera);
       const asignaturas = carrera.dataValues.asignaturas
       let niveles = [];
       for (var i = 1; i <= carrera.dataValues.n_niveles; i++) {
