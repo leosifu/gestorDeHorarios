@@ -1,3 +1,6 @@
 node_modules/
 backgestorhorarios/.env
 frontgestorhorarios/.env
+frontgestorhorarios/.env.production
+frontgestorhorarios/package-lock.json
+backgestorhorarios/package-lock.json
