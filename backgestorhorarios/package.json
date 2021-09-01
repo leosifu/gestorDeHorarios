@@ -45,7 +45,7 @@
     "sequelize-cli": "^5.4.0",
     "sinon": "^9.0.3",
     "sinon-chai": "^3.5.0",
-    "xlsx": "^0.15.6"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
