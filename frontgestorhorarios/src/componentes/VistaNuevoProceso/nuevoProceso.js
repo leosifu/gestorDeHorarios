@@ -6,7 +6,7 @@ import clientAxios from '../../config/axios';
 import baseUrl from '../../config/urls';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Typography, Grid, List, Stepper, Step, StepLabel, } from '@material-ui/core';
+import {Typography, Grid, List, Stepper, Step, StepLabel, FormControl, MenuItem, Select, InputLabel, } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import PrimaryButton from '../utils/PrimaryButton';
@@ -36,7 +36,10 @@ const useStyles = makeStyles(theme => ({
   },
   buttons: {
     margin: '10px 30px 10px 30px'
-  }
+  },
+  formControl: {
+    width: 200,
+  },
 }));
 
 const ProcesoSelector = createSelector(
@@ -75,7 +78,7 @@ export default function NuevoProceso() {
   const [carreras, setCarreras] = useState([]);
   const [procesoData, setProcesoData] = useState({
     año: 0,
-    semestre: 0
+    semestre: 1
   });
   const [date, setDate] = useState({});
   const [procesoselects, setProcesoselects] = useState(currentProceso);
@@ -100,7 +103,6 @@ export default function NuevoProceso() {
       try {
         if (procesoselects.id !== -1) {
           const {data} = await clientAxios(user.idToken).get(`/api/carrera/${procesoselects.id}`);
-          console.log(data);
           setCarreras(data);
         }
       } catch (e) {
@@ -113,30 +115,24 @@ export default function NuevoProceso() {
     fetchData();
   }, [procesoselects]);
 
-  if (userRedux.status !== 'login' || !user.roles.includes('admin')) {
-    return (
-      <Redirect to='/' />
-    )
-  }
+  // if (userRedux.status !== 'login' || !user.roles.includes('admin')) {
+  //   return (
+  //     <Redirect to='/' />
+  //   )
+  // }
 
   const changeProcesoData = (event) => {
-    setProcesoData({...procesoData, [event.target.id]: event.target.value})
+    setProcesoData({...procesoData, [event.target.name]: event.target.value})
   }
 
-
   const crearProceso = async () => {
-    console.log(procesoData);
-    console.log(allSelects);
     dispatch(setLoading(true));
     try {
       const mallasSelected = [].concat(...allSelects.map(carrera => carrera.selects));
       const NuevoProceso = await clientAxios(user.idToken).post('/api/procesos', procesoData);
-      console.log('cree proceso...');
       if (uploadFile) {
         let formData = new FormData();
-        console.log(uploadFile);
         formData.append('file', uploadFile);
-        console.log(formData);
         formData.append('procesoId', NuevoProceso.data.id);
         const config = {
           headers: {
@@ -144,23 +140,18 @@ export default function NuevoProceso() {
             'Content-Type': 'multipart/form-data'
           }
         }
-        console.log('encontre archivo....');
         const SubirProfesores = await axios.post(`${baseUrl}/api/profesores`,
           formData,
           config
         )
       }
-      console.log('pues aca igual...');
       const data = {
         procesoId: NuevoProceso.data.id,
         // procesoId: 1,
         carreras: allSelects,
         fileUploaded : uploadFile ? true: false
       }
-      console.log('todavia voy...');
-      console.log(data);
       const DuplicarDatos = await clientAxios(user.idToken).post('/api/nuevoProceso', data);
-      console.log('termineeeee');
       dispatch(getProcesos(user.idToken))
       dispatch(setLoading(false));
       dispatch(handleNotifications(true, {
@@ -212,7 +203,7 @@ export default function NuevoProceso() {
                 <Grid container>
                   <Grid item xs={6}>
                     <TextField
-                      id="año"
+                      name="año"
                       label="Año"
                       variant="outlined"
                       value={procesoData.año}
@@ -221,14 +212,26 @@ export default function NuevoProceso() {
                     />
                   </Grid>
                   <Grid item xs={6}>
-                    <TextField
+                    <FormControl variant="outlined" name="semestre" className={classes.formControl}>
+                      <InputLabel id="demo-simple-select-outlined-label">Semestre</InputLabel>
+                      <Select
+                        value={procesoData.semestre}
+                        onChange={changeProcesoData}
+                        label="Semestre"
+                        name="semestre"
+                      >
+                        <MenuItem value={1}>1</MenuItem>
+                        <MenuItem value={2}>2</MenuItem>
+                      </Select>
+                    </FormControl>
+                    {/*<TextField
                       id="semestre"
                       label="Semestre"
                       variant="outlined"
                       value={procesoData.semestre}
                       onChange={changeProcesoData}
                       style={{width: 200}}
-                    />
+                    />*/}
                   </Grid>
                 </Grid>
               </div>

@@ -37,7 +37,8 @@ module.exports = {
         }
         const dataHistorial = {
           ...req.body.historial,
-          cupos_estimados: Math.round(req.body.historial.cupos_pasados * req.body.historial.tasa_reprobacion/100),
+          cupos_estimados: parseInt(Math.round(req.body.historial.cupos_pasados * req.body.historial.tasa_reprobacion/100)) +
+            parseInt(req.body.historial.desinscripciones),
           asignaturaId: asignatura.dataValues.id
         }
         const NewHistorial = await Historial.create(dataHistorial)

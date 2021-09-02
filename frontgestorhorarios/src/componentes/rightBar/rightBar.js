@@ -261,7 +261,7 @@ const RightBar = () => {
               <ListItemText primary={'Administración de usuarios'} />
             </ListItem>
             {
-              currentLocation ?
+              (currentLocation || currentProceso.id < 0) ?
               <div />
               :
               <>
@@ -276,7 +276,7 @@ const RightBar = () => {
           </List>
         }
         {
-          user.log && currentLocation === '' &&
+          user.log && currentLocation === '' && currentProceso.id > 0 &&
           <>
             <Divider />
             <List>
