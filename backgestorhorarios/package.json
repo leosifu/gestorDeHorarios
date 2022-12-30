@@ -50,7 +50,7 @@
   "devDependencies": {
     "cross-env": "^7.0.2",
     "jest": "^25.5.4",
-    "mocha": "^8.1.1",
+    "mocha": "^8.4.0",
     "nodemon": "^1.19.3",
     "sequelize-test-helpers": "^1.2.3",
     "supertest": "^4.0.2"
